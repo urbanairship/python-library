@@ -1,20 +1,28 @@
+"""Python module for using the Urban Airship API"""
+
 import httplib
 try:
     import json
 except ImportError:
     import simplejson as json
 
+
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 PUSH_URL = BASE_URL + '/push/'
 
+
 class Unauthorized(Exception):
-    pass
+    """Raised when we get a 401 from the server"""
 
 
 class AirshipFailure(Exception):
-    pass
+    """Raised when we get an error response from the server.
+
+    args are (status code, message)
+
+    """
 
 
 class Airship(object):
