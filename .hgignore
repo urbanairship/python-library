@@ -2,4 +2,5 @@ syntax: regexp
 
 \.pyc$
 ^dist
+^build
 ^MANIFEST$
