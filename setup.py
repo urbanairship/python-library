@@ -9,7 +9,7 @@ setup(
     url="http://urbanairship.com/",
     description="Python module for using the Urban Airship API",
     long_description=open('README.rst').read(),
-    py_modules="urbanairship.py",
+    py_modules=["urbanairship"],
     license='BSD License',
     classifiers=[
         'Development Status :: 3 - Alpha',
