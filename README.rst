@@ -19,9 +19,6 @@ basic push. More will be added soon.
 Usage
 =====
 
-.. sourcecode:: pycon
-
-    
     >>> import urbanairship
     >>> airship = urbanairship.Airship(application_key, master_secret)
     >>> airship.register('valid_token', alias='adam')
