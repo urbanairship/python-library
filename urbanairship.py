@@ -11,6 +11,7 @@ SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 PUSH_URL = BASE_URL + '/push/'
+BROADCAST_URL = BASE_URL + '/push/broadcast/'
 
 
 class Unauthorized(Exception):
@@ -72,4 +73,15 @@ class Airship(object):
             'application/json')
         if not status == 200:
             raise AirshipFailure(status, response)
+
+    def broadcast(self, payload, exclude_tokens=None):
+        """Broadcast this payload to all users"""
+        if exclude_tokens:
+            payload['exclude_tokens'] = exclude_tokens
+        body = json.dumps(payload)
+        status, response = self._request('POST', body, PUSH_URL,
+            'application/json')
+        if not status == 200:
+            raise AirshipFailure(status, response)
+
 
