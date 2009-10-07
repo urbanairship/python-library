@@ -48,11 +48,14 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None):
+    def register(self, device_token, alias=None, tags=None):
         """Register the device token with UA."""
         url = DEVICE_TOKEN_URL + device_token
-        if alias is not None:
-            body = json.dumps({'alias': alias})
+        if alias is not None or tags is not None:
+            payload = {'alias': alias}
+            if tags:
+                payload['tags']= tags
+            body = json.dumps(payload)
             content_type = 'application/json'
         else:
             body = ''
@@ -62,12 +65,14 @@ class Airship(object):
         if not status in (200, 201):
             raise AirshipFailure(status, response)
 
-    def push(self, payload, device_tokens=None, aliases=None):
+    def push(self, payload, device_tokens=None, aliases=None, tags=None):
         """Push this payload to the specified device tokens and tags."""
         if device_tokens:
             payload['device_tokens'] = device_tokens
         if aliases:
             payload['aliases'] = aliases
+        if tags:
+            payload['tags'] = tags
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
             'application/json')
