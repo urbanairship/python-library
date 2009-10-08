@@ -1,6 +1,7 @@
 """Python module for using the Urban Airship API"""
 
 import httplib
+import urllib
 try:
     import json
 except ImportError:
@@ -12,6 +13,7 @@ BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 PUSH_URL = BASE_URL + '/push/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
+FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
 
 
 class Unauthorized(Exception):
@@ -80,7 +82,7 @@ class Airship(object):
             raise AirshipFailure(status, response)
 
     def broadcast(self, payload, exclude_tokens=None):
-        """Broadcast this payload to all users"""
+        """Broadcast this payload to all users."""
         if exclude_tokens:
             payload['exclude_tokens'] = exclude_tokens
         body = json.dumps(payload)
@@ -89,4 +91,31 @@ class Airship(object):
         if not status == 200:
             raise AirshipFailure(status, response)
 
+    def feedback(self, since):
+        """Return device tokens marked inactive since this timestamp.
 
+        Returns a list of (device token, timestamp, alias) functions.
+
+        Example:
+            airship.feedback(datetime.datetime.utcnow()
+                - datetime.interval(days=1))
+
+        Note:
+            In order to parse the result, we need a sane date parser,
+            dateutil: http://labix.org/python-dateutil
+
+        """
+        url = FEEDBACK_URL + '?' + \
+            urllib.urlencode({'since': since.isoformat()})
+        status, response = self._request('GET', '', url)
+        if not status == 200:
+            raise AirshipFailure(status, response)
+        data = json.loads(response)
+        try:
+            from dateutil.parser import parse
+        except ImportError:
+            def parse(x):
+                return x
+        return [
+            (r['device_token'], parse(r['marked_inactive_on']), r['alias'])
+            for r in data]
