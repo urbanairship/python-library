@@ -13,8 +13,13 @@ you're using Python 2.5 or earlier, you'll need to install ``simplejson``.
 Functionality
 =============
 
-For this first release it only does two things: device token registration and
-basic push. More will be added soon.
+As of 0.2 the library handles these parts of the API:
+
+ * device token registration
+ * basic push
+ * registering and pushing with tags
+ * broadcast
+ * feedback service
 
 Usage
 =====
@@ -36,3 +41,4 @@ History
 =======
 
  * 0.1 Initial release
+ * 0.2 Added tags, broadcast, feedback
