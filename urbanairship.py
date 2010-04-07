@@ -82,13 +82,17 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None, tags=None):
+    def register(self, device_token, alias=None, tags=None, badge=None):
         """Register the device token with UA."""
         url = DEVICE_TOKEN_URL + device_token
-        if alias is not None or tags is not None:
-            payload = {'alias': alias}
-            if tags:
-                payload['tags']= tags
+        payload = {}
+        if alias is not None:
+            payload['alias'] = alias
+        if tags is not None:
+            payload['tags'] = tags
+        if badge is not None:
+            payload['badge'] = badge
+        if payload:
             body = json.dumps(payload)
             content_type = 'application/json'
         else:
