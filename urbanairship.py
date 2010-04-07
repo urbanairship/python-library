@@ -99,6 +99,12 @@ class Airship(object):
         if not status in (200, 201):
             raise AirshipFailure(status, response)
 
+    def deregister(self, device_token):
+        url = DEVICE_TOKEN_URL + device_token
+        status, response = self._request('DELETE', '', url, None)
+        if status != 204:
+            raise AirshipFailure(status, response)
+
     def get_devices(self):
         return AirshipDeviceList(self)
 
