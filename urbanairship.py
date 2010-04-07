@@ -110,6 +110,13 @@ class Airship(object):
         if status != 204:
             raise AirshipFailure(status, response)
 
+    def get_device_info(self, device_token):
+        url = DEVICE_TOKEN_URL + device_token
+        status, response = self._request('GET', '', url)
+        if status != 200:
+            raise AirshipFailure(status, response)
+        return json.loads(response)
+
     def get_devices(self):
         return AirshipDeviceList(self)
 
