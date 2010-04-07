@@ -28,6 +28,38 @@ class AirshipFailure(Exception):
     """
 
 
+class AirshipDeviceList(object):
+    def __init__(self, airship):
+        self._airship = airship
+        self._load_page(DEVICE_TOKEN_URL)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        try:
+            return self._token_iter.next()
+        except StopIteration:
+            self._fetch_next_page()
+            return self._token_iter.next()
+
+    def __len__(self):
+        return self._page['device_tokens_count']
+
+    def _fetch_next_page(self):
+        next_page = self._page.get('next_page')
+        if not next_page:
+            return
+        self._load_page(next_page)
+
+    def _load_page(self, url):
+        status, response = self._airship._request('GET', '', url)
+        if status != 200:
+            raise AirshipFailure(status, response)
+        self._page = page = json.loads(response)
+        self._token_iter = iter(page['device_tokens'])
+
+
 class Airship(object):
 
     def __init__(self, key, secret):
@@ -66,6 +98,9 @@ class Airship(object):
         status, response = self._request('PUT', body, url, content_type)
         if not status in (200, 201):
             raise AirshipFailure(status, response)
+
+    def get_devices(self):
+        return AirshipDeviceList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None):
         """Push this payload to the specified device tokens and tags."""
