@@ -98,6 +98,7 @@ class Airship(object):
         status, response = self._request('PUT', body, url, content_type)
         if not status in (200, 201):
             raise AirshipFailure(status, response)
+        return status == 201
 
     def deregister(self, device_token):
         url = DEVICE_TOKEN_URL + device_token
