@@ -86,7 +86,7 @@ class Airship(object):
         if exclude_tokens:
             payload['exclude_tokens'] = exclude_tokens
         body = json.dumps(payload)
-        status, response = self._request('POST', body, PUSH_URL,
+        status, response = self._request('POST', body, BROADCAST_URL,
             'application/json')
         if not status == 200:
             raise AirshipFailure(status, response)
