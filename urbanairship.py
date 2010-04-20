@@ -28,6 +28,44 @@ class AirshipFailure(Exception):
     """
 
 
+class AirshipDeviceList(object):
+    """Iterator that fetches and returns a list of device tokens
+
+    Follows pagination
+
+    """
+
+    def __init__(self, airship):
+        self._airship = airship
+        self._load_page(DEVICE_TOKEN_URL)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        try:
+            return self._token_iter.next()
+        except StopIteration:
+            self._fetch_next_page()
+            return self._token_iter.next()
+
+    def __len__(self):
+        return self._page['device_tokens_count']
+
+    def _fetch_next_page(self):
+        next_page = self._page.get('next_page')
+        if not next_page:
+            return
+        self._load_page(next_page)
+
+    def _load_page(self, url):
+        status, response = self._airship._request('GET', None, url)
+        if status != 200:
+            raise AirshipFailure(status, response)
+        self._page = page = json.loads(response)
+        self._token_iter = iter(page['device_tokens'])
+
+
 class Airship(object):
 
     def __init__(self, key, secret):
@@ -50,13 +88,17 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None, tags=None):
+    def register(self, device_token, alias=None, tags=None, badge=None):
         """Register the device token with UA."""
         url = DEVICE_TOKEN_URL + device_token
-        if alias is not None or tags is not None:
-            payload = {'alias': alias}
-            if tags:
-                payload['tags']= tags
+        payload = {}
+        if alias is not None:
+            payload['alias'] = alias
+        if tags is not None:
+            payload['tags'] = tags
+        if badge is not None:
+            payload['badge'] = badge
+        if payload:
             body = json.dumps(payload)
             content_type = 'application/json'
         else:
@@ -66,6 +108,27 @@ class Airship(object):
         status, response = self._request('PUT', body, url, content_type)
         if not status in (200, 201):
             raise AirshipFailure(status, response)
+        return status == 201
+
+    def deregister(self, device_token):
+        """Mark this device token as inactive"""
+        url = DEVICE_TOKEN_URL + device_token
+        status, response = self._request('DELETE', '', url, None)
+        if status != 204:
+            raise AirshipFailure(status, response)
+
+    def get_device_token_info(self, device_token):
+        """Retrieve information about this device token"""
+        url = DEVICE_TOKEN_URL + device_token
+        status, response = self._request('GET', None, url)
+        if status == 404:
+            return None
+        elif status != 200:
+            raise AirshipFailure(status, response)
+        return json.loads(response)
+
+    def get_device_tokens(self):
+        return AirshipDeviceList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None):
         """Push this payload to the specified device tokens and tags."""
