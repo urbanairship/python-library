@@ -29,6 +29,12 @@ class AirshipFailure(Exception):
 
 
 class AirshipDeviceList(object):
+    """Iterator that fetches and returns a list of device tokens
+
+    Follows pagination
+
+    """
+
     def __init__(self, airship):
         self._airship = airship
         self._load_page(DEVICE_TOKEN_URL)
@@ -53,7 +59,7 @@ class AirshipDeviceList(object):
         self._load_page(next_page)
 
     def _load_page(self, url):
-        status, response = self._airship._request('GET', '', url)
+        status, response = self._airship._request('GET', None, url)
         if status != 200:
             raise AirshipFailure(status, response)
         self._page = page = json.loads(response)
@@ -105,21 +111,23 @@ class Airship(object):
         return status == 201
 
     def deregister(self, device_token):
+        """Mark this device token as inactive"""
         url = DEVICE_TOKEN_URL + device_token
         status, response = self._request('DELETE', '', url, None)
         if status != 204:
             raise AirshipFailure(status, response)
 
-    def get_device_info(self, device_token):
+    def get_device_token_info(self, device_token):
+        """Retrieve information about this device token"""
         url = DEVICE_TOKEN_URL + device_token
-        status, response = self._request('GET', '', url)
+        status, response = self._request('GET', None, url)
         if status == 404:
             return None
         elif status != 200:
             raise AirshipFailure(status, response)
         return json.loads(response)
 
-    def get_devices(self):
+    def get_device_tokens(self):
         return AirshipDeviceList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None):
