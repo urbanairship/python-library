@@ -161,7 +161,7 @@ class Airship(object):
 
         Example:
             airship.feedback(datetime.datetime.utcnow()
-                - datetime.timestamp(days=1))
+                - datetime.timedelta(days=1))
 
         Note:
             In order to parse the result, we need a sane date parser,
