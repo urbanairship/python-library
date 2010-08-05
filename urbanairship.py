@@ -12,6 +12,7 @@ SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 PUSH_URL = BASE_URL + '/push/'
+BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
 
@@ -140,6 +141,26 @@ class Airship(object):
             payload['tags'] = tags
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
+            'application/json')
+        if not status == 200:
+            raise AirshipFailure(status, response)
+
+    def batch_push(self, payloads):
+        """Push the following payloads as a batch.
+
+        For payload details see:
+
+          http://urbanairship.com/docs/push.html#batch-push
+
+        Summary:
+          List of dictionaries, each with:
+            * 0 or more "device_tokens"
+            * 0 or more "aliases"
+            * "aps" payload.
+        """
+        body = json.dumps(payloads)
+
+        status, response = self._request('POST', body, BATCH_PUSH_URL,
             'application/json')
         if not status == 200:
             raise AirshipFailure(status, response)
