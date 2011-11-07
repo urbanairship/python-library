@@ -30,37 +30,29 @@ class AirshipFailure(Exception):
 
     """
 
+class AirshipList(object):
+    """Parent class that represents a list of iOS devices or
+
+    Android C2DM APIDs. Only meant to be used by subclasses.
+
+    """
+    def __init__(self, airship):
+      self._airship = airship
 
 
-class AirshipDeviceList(object):
+class AirshipDeviceList(AirshipList):
     """Iterator that fetches and returns a list of iOS device tokens
 
-    Follows pagination
+    Follows pagination.
 
     """
 
     def __init__(self, airship):
-        self._airship = airship
+        super(AirshipDeviceList, self).__init__(airship)
         self._load_page(DEVICE_TOKEN_URL)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        try:
-            return self._token_iter.next()
-        except StopIteration:
-            self._fetch_next_page()
-            return self._token_iter.next()
 
     def __len__(self):
         return self._page['device_tokens_count']
-
-    def _fetch_next_page(self):
-        next_page = self._page.get('next_page')
-        if not next_page:
-            return
-        self._load_page(next_page)
 
     def _load_page(self, url):
         status, response = self._airship._request('GET', None, url)
@@ -70,34 +62,18 @@ class AirshipDeviceList(object):
         self._token_iter = iter(page['device_tokens'])
 
 
-class AirshipAPIDsList(object):
+class AirshipAPIDsList(AirshipList):
     """Iterator that fetches and returns a list of Android
 
     C2DM APIDs.
   
     """
     def __init__(self, airship):
-        self._airship = airship
+        super(AirshipAPIDsList, self).__init__(airship)
         self._load_page(APIDS_TOKEN_URL)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        try:
-            return self._token_iter.next()
-        except StopIteration:
-            self._fetch_next_page()
-            return self._token_iter.next()
 
     def __len__(self):
         return self._page['apids_count']
-
-    def _fetch_next_page(self):
-        next_page = self._page.get('next_page')
-        if not next_page:
-          return
-        self._load_page(next_page)
 
     def _load_page(self, url):
         status, response = self._airship._request('GET', None, url)
