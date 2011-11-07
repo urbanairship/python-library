@@ -2,7 +2,7 @@ About
 =====
 
 This here is a library for using the `Urban Airship
-<http://urbanairship.com/>`_ web service API for iPhone push notifications.
+<http://urbanairship.com/>`_ web service API for iPhone and Android C2DM push notifications.
 
 Requirements
 ============
@@ -16,6 +16,7 @@ Functionality
 As of 0.3 the library handles these parts of the API:
 
  * device token registration
+ * APID token registration
  * basic push
  * registering and pushing with tags
  * broadcast
@@ -23,8 +24,8 @@ As of 0.3 the library handles these parts of the API:
  * device token deactivation (deregistration)
  * device token listing
 
-Usage
-=====
+iOS Usage
+=========
 
     >>> import urbanairship
     >>> airship = urbanairship.Airship(application_key, master_secret)
@@ -32,6 +33,14 @@ Usage
     >>> airship.push({'aps': {'alert': 'Hello'}}, aliases=['adam'],
     ...     device_tokens=['some_other_token'])
 
+Android C2DM Usage
+==================
+
+    >>> import urbanairship
+    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> airship.registerAPID('valid_token', alias='matt')
+    >>> airship.push({'apids': {'alert': 'Hello'}}, aliases=['matt'],
+    ...     device_tokens=['some_other_token'])
 
 Questions
 =========
