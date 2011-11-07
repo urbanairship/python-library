@@ -11,6 +11,7 @@ except ImportError:
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
+APIDS_TOKEN_URL = BASE_URL + '/apids/'
 PUSH_URL = BASE_URL + '/push/'
 BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
@@ -26,11 +27,13 @@ class AirshipFailure(Exception):
 
     args are (status code, message)
 
+
     """
 
 
+
 class AirshipDeviceList(object):
-    """Iterator that fetches and returns a list of device tokens
+    """Iterator that fetches and returns a list of iOS device tokens
 
     Follows pagination
 
@@ -65,6 +68,43 @@ class AirshipDeviceList(object):
             raise AirshipFailure(status, response)
         self._page = page = json.loads(response)
         self._token_iter = iter(page['device_tokens'])
+
+
+class AirshipAPIDsList(object):
+    """Iterator that fetches and returns a list of Android
+
+    C2DM APIDs.
+  
+    """
+    def __init__(self, airship):
+        self._airship = airship
+        self._load_page(APIDS_TOKEN_URL)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        try:
+            return self._token_iter.next()
+        except StopIteration:
+            self._fetch_next_page()
+            return self._token_iter.next()
+
+    def __len__(self):
+        return self._page['apids_count']
+
+    def _fetch_next_page(self):
+        next_page = self._page.get('next_page')
+        if not next_page:
+          return
+        self._load_page(next_page)
+
+    def _load_page(self, url):
+        status, response = self._airship._request('GET', None, url)
+        if status != 200:
+            raise AirshipFailure(status, response)
+        self._page = page = json.loads(response)
+        self._token_iter = iter(page['apids'])
 
 
 class Airship(object):
@@ -130,6 +170,9 @@ class Airship(object):
 
     def get_device_tokens(self):
         return AirshipDeviceList(self)
+
+    def get_apids(self):
+        return AirshipAPIDsList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None):
         """Push this payload to the specified device tokens and tags."""
