@@ -39,7 +39,7 @@ Android C2DM Usage
     >>> import urbanairship
     >>> airship = urbanairship.Airship(application_key, master_secret)
     >>> airship.registerAPID('valid_token', alias='matt')
-    >>> airship.push({'apids': {'alert': 'Hello'}}, aliases=['matt'],
+    >>> airship.push({'android': {'alert': 'Hello'}}, aliases=['matt'],
     ...     device_tokens=['some_other_token'])
 
 Questions

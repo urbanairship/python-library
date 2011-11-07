@@ -105,11 +105,9 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None, tags=None, badge=None, \
-        url=None):
+    def register(self, device_token, alias=None, tags=None, badge=None):
         """Register the device token with UA."""
-        if url == None:
-            url = DEVICE_TOKEN_URL + device_token
+        url = DEVICE_TOKEN_URL + device_token
         payload = {}
         if alias is not None:
             payload['alias'] = alias
@@ -129,10 +127,31 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return status == 201
 
-    def registerAPID(self, APID_token, alias=None, tags=None, badge=None):
+    def registerAPID(self, APID_token, c2dm_registration_id, alias=None, \
+        tags=None, badge=None):
         """Register APID token with UA."""
         url = APIDS_TOKEN_URL + APID_token
-        self.register(APID_token, alias, tags, badge, url)
+        payload = {}
+        if alias is not None:
+            payload['alias'] = alias
+        if tags is not None:
+            payload['tags'] = tags
+        if badge is not None:
+            payload['badge'] = badge
+        if c2dm_registration_id:
+            payload['c2dm_registration_id'] = c2dm_registration_id
+        if payload:
+            body = json.dumps(payload)
+            content_type = 'application/json'
+        else:
+            body = ''
+            content_type = None
+
+        status, response = self._request('PUT', body, url, content_type)
+        if not status in (200, 201):
+            raise AirshipFailure(status, response)
+        return status == 201
+
 
     def deregister(self, device_token, url=None):
         """Mark this device token as inactive"""
@@ -169,10 +188,12 @@ class Airship(object):
     def get_apids(self):
         return AirshipAPIDsList(self)
 
-    def push(self, payload, device_tokens=None, aliases=None, tags=None):
+    def push(self, payload, device_tokens=None, aliases=None, tags=None, APID_tokens=None):
         """Push this payload to the specified device tokens and tags."""
         if device_tokens:
             payload['device_tokens'] = device_tokens
+        if APID_tokens:
+            payload['apids'] = APID_tokens
         if aliases:
             payload['aliases'] = aliases
         if tags:
