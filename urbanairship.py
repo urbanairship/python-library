@@ -105,9 +105,11 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None, tags=None, badge=None):
+    def register(self, device_token, alias=None, tags=None, badge=None, \
+        url=None):
         """Register the device token with UA."""
-        url = DEVICE_TOKEN_URL + device_token
+        if url == None:
+            url = DEVICE_TOKEN_URL + device_token
         payload = {}
         if alias is not None:
             payload['alias'] = alias
@@ -127,22 +129,39 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return status == 201
 
-    def deregister(self, device_token):
+    def registerAPID(self, APID_token, alias=None, tags=None, badge=None):
+        """Register APID token with UA."""
+        url = APIDS_TOKEN_URL + APID_token
+        self.register(APID_token, alias, tags, badge, url)
+
+    def deregister(self, device_token, url=None):
         """Mark this device token as inactive"""
-        url = DEVICE_TOKEN_URL + device_token
+        if url == None:
+          url = DEVICE_TOKEN_URL + device_token
         status, response = self._request('DELETE', '', url, None)
         if status != 204:
             raise AirshipFailure(status, response)
 
-    def get_device_token_info(self, device_token):
+    def deregisterAPID(self, APID_token):
+        """Mark this APID token as inactive."""
+        url = APIDS_TOKEN_URL + APID_token
+        self.deregister(APID_token, url)
+
+    def get_device_token_info(self, device_token, url=None):
         """Retrieve information about this device token"""
-        url = DEVICE_TOKEN_URL + device_token
+        if url == None:
+          url = DEVICE_TOKEN_URL + device_token
         status, response = self._request('GET', None, url)
         if status == 404:
             return None
         elif status != 200:
             raise AirshipFailure(status, response)
         return json.loads(response)
+
+    def get_APID_token_info(self, APID_token):
+        """Retrieve information about this APID token"""
+        url = APIDS_TOKEN_URL + APID_token
+        return self.get_device_token_info(APID_token, url)
 
     def get_device_tokens(self):
         return AirshipDeviceList(self)
