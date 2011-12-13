@@ -24,17 +24,13 @@ class Unauthorized(Exception):
 
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
-
     args are (status code, message)
-
-
     """
+
 
 class AirshipList(object):
     """Parent class that represents a list of iOS devices or
-
     Android C2DM APIDs. Only meant to be used by subclasses.
-
     """
     def __init__(self, airship):
       self._airship = airship
@@ -42,11 +38,8 @@ class AirshipList(object):
 
 class AirshipDeviceList(AirshipList):
     """Iterator that fetches and returns a list of iOS device tokens
-
     Follows pagination.
-
     """
-
     def __init__(self, airship):
         super(AirshipDeviceList, self).__init__(airship)
         self._load_page(DEVICE_TOKEN_URL)
@@ -64,16 +57,14 @@ class AirshipDeviceList(AirshipList):
 
 class AirshipAPIDsList(AirshipList):
     """Iterator that fetches and returns a list of Android
-
     C2DM APIDs.
-  
     """
     def __init__(self, airship):
         super(AirshipAPIDsList, self).__init__(airship)
         self._load_page(APIDS_TOKEN_URL)
 
     def __len__(self):
-        return self._page['apids_count']
+        return len(self._page['apids'])
 
     def _load_page(self, url):
         status, response = self._airship._request('GET', None, url)
@@ -236,7 +227,6 @@ class Airship(object):
 
     def feedback(self, since):
         """Return device tokens marked inactive since this timestamp.
-
         Returns a list of (device token, timestamp, alias) functions.
 
         Example:
@@ -262,3 +252,4 @@ class Airship(object):
         return [
             (r['device_token'], parse(r['marked_inactive_on']), r['alias'])
             for r in data]
+

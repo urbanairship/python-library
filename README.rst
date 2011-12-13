@@ -42,6 +42,15 @@ Android C2DM Usage
     >>> airship.push({'android': {'alert': 'Hello'}}, aliases=['matt'],
     ...     device_tokens=['some_other_token'])
 
+
+Unit Tests Usage
+================
+
+ * copy keys-example.ini to keys.ini
+ * edit keys.ini with your test master secret and application secret keys
+ * run tests.py
+
+
 Questions
 =========
 
