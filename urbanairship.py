@@ -3,9 +3,9 @@
 import urllib
 import requests
 try:
-    import json
-except ImportError:
     import simplejson as json
+except ImportError:
+    import json
 
 
 SERVER = 'go.urbanairship.com'
@@ -173,7 +173,7 @@ class Airship(object):
     def get_apids(self):
         return AirshipAPIDsList(self)
 
-    def push(self, payload, device_tokens=None, aliases=None, tags=None, APID_tokens=None):
+    def push(self, payload, device_tokens=None, aliases=None, tags=None, schedule_for=None, APID_tokens=None):
         """Push this payload to the specified device tokens and tags."""
         if device_tokens:
             payload['device_tokens'] = device_tokens
@@ -183,6 +183,8 @@ class Airship(object):
             payload['aliases'] = aliases
         if tags:
             payload['tags'] = tags
+        if scheduled_for:
+            payload['schedule_for'] = schedule_for
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
             'application/json')
