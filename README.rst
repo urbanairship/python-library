@@ -13,7 +13,7 @@ you're using Python 2.5 or earlier, you'll need to install ``simplejson``.
 Functionality
 =============
 
-As of 0.4 the library handles these parts of the API:
+As of 0.41 the library handles these parts of the API:
 
  * device token registration
  * APID token registration
@@ -60,7 +60,8 @@ http://groups.google.com/group/urbanairship-dev
 History
 =======
 
- * 0.1 Initial release
- * 0.2 Added tags, broadcast, feedback
- * 0.3 Added deregister, device token list, other minor improvements
- * 0.4 Added Android C2DM APID support
+ * 0.1  Initial release
+ * 0.2  Added tags, broadcast, feedback
+ * 0.3  Added deregister, device token list, other minor improvements
+ * 0.4  Added Android C2DM APID support
+ * 0.41 Changed httplib to requests library (merged from Benjamin Smith's fork)
