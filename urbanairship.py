@@ -1,7 +1,7 @@
 """Python module for using the Urban Airship API"""
 
+import httplib
 import urllib
-import requests
 try:
     import simplejson as json
 except ImportError:
@@ -83,12 +83,19 @@ class Airship(object):
         self.auth_string = ('%s:%s' % (key, secret)).encode('base64')[:-1]
 
     def _request(self, method, body, url, content_type=None):
-        headers = {'content-type': content_type}
-        auth = (self.key, self.secret)
-        r = requests.request(method, url, data=body, auth=auth, headers=headers)
-        if r.status_code == 401:
+        h = httplib.HTTPSConnection(SERVER)
+        headers = {
+            'authorization': 'Basic %s' % self.auth_string,
+        }
+        if content_type:
+            headers['content-type'] = content_type
+        h.request(method, url, body=body, headers=headers)
+        resp = h.getresponse()
+
+        if resp.status == 401:
+            import pdb; pdb.set_trace()
             raise Unauthorized
-        return r.status_code, r.content
+        return resp.status, resp.read()
 
     def register(self, device_token, alias=None, tags=None, badge=None):
         """Register the device token with UA."""
@@ -183,7 +190,7 @@ class Airship(object):
             payload['aliases'] = aliases
         if tags:
             payload['tags'] = tags
-        if scheduled_for:
+        if schedule_for:
             payload['schedule_for'] = schedule_for
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
