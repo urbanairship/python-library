@@ -64,5 +64,4 @@ History
  * 0.2  Added tags, broadcast, feedback
  * 0.3  Added deregister, device token list, other minor improvements
  * 0.4  Added Android C2DM APID support
- * 0.41 Changed httplib to requests library (merged from Benjamin Smith's fork)
  * 0.42 Merged schedule_for fork into this branch (from hkukreja)
