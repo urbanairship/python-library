@@ -3,14 +3,15 @@
 import httplib
 import urllib
 try:
-    import json
-except ImportError:
     import simplejson as json
+except ImportError:
+    import json
 
 
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
+APIDS_TOKEN_URL = BASE_URL + '/apids/'
 PUSH_URL = BASE_URL + '/push/'
 BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
@@ -23,41 +24,28 @@ class Unauthorized(Exception):
 
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
-
     args are (status code, message)
-
     """
 
 
-class AirshipDeviceList(object):
-    """Iterator that fetches and returns a list of device tokens
-
-    Follows pagination
-
+class AirshipList(object):
+    """Parent class that represents a list of iOS devices or
+    Android C2DM APIDs. Only meant to be used by subclasses.
     """
-
     def __init__(self, airship):
-        self._airship = airship
+      self._airship = airship
+
+
+class AirshipDeviceList(AirshipList):
+    """Iterator that fetches and returns a list of iOS device tokens
+    Follows pagination.
+    """
+    def __init__(self, airship):
+        super(AirshipDeviceList, self).__init__(airship)
         self._load_page(DEVICE_TOKEN_URL)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        try:
-            return self._token_iter.next()
-        except StopIteration:
-            self._fetch_next_page()
-            return self._token_iter.next()
 
     def __len__(self):
         return self._page['device_tokens_count']
-
-    def _fetch_next_page(self):
-        next_page = self._page.get('next_page')
-        if not next_page:
-            return
-        self._load_page(next_page)
 
     def _load_page(self, url):
         status, response = self._airship._request('GET', None, url)
@@ -65,6 +53,25 @@ class AirshipDeviceList(object):
             raise AirshipFailure(status, response)
         self._page = page = json.loads(response)
         self._token_iter = iter(page['device_tokens'])
+
+
+class AirshipAPIDsList(AirshipList):
+    """Iterator that fetches and returns a list of Android
+    C2DM APIDs.
+    """
+    def __init__(self, airship):
+        super(AirshipAPIDsList, self).__init__(airship)
+        self._load_page(APIDS_TOKEN_URL)
+
+    def __len__(self):
+        return len(self._page['apids'])
+
+    def _load_page(self, url):
+        status, response = self._airship._request('GET', None, url)
+        if status != 200:
+            raise AirshipFailure(status, response)
+        self._page = page = json.loads(response)
+        self._token_iter = iter(page['apids'])
 
 
 class Airship(object):
@@ -84,9 +91,10 @@ class Airship(object):
             headers['content-type'] = content_type
         h.request(method, url, body=body, headers=headers)
         resp = h.getresponse()
-        if resp.status == 401:
-            raise Unauthorized
 
+        if resp.status == 401:
+            import pdb; pdb.set_trace()
+            raise Unauthorized
         return resp.status, resp.read()
 
     def register(self, device_token, alias=None, tags=None, badge=None):
@@ -111,16 +119,49 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return status == 201
 
-    def deregister(self, device_token):
+    def registerAPID(self, APID_token, c2dm_registration_id, alias=None, \
+        tags=None, badge=None):
+        """Register APID token with UA."""
+        url = APIDS_TOKEN_URL + APID_token
+        payload = {}
+        if alias is not None:
+            payload['alias'] = alias
+        if tags is not None:
+            payload['tags'] = tags
+        if badge is not None:
+            payload['badge'] = badge
+        if c2dm_registration_id:
+            payload['c2dm_registration_id'] = c2dm_registration_id
+        if payload:
+            body = json.dumps(payload)
+            content_type = 'application/json'
+        else:
+            body = ''
+            content_type = None
+
+        status, response = self._request('PUT', body, url, content_type)
+        if not status in (200, 201):
+            raise AirshipFailure(status, response)
+        return status == 201
+
+
+    def deregister(self, device_token, url=None):
         """Mark this device token as inactive"""
-        url = DEVICE_TOKEN_URL + device_token
+        if url == None:
+          url = DEVICE_TOKEN_URL + device_token
         status, response = self._request('DELETE', '', url, None)
         if status != 204:
             raise AirshipFailure(status, response)
 
-    def get_device_token_info(self, device_token):
+    def deregisterAPID(self, APID_token):
+        """Mark this APID token as inactive."""
+        url = APIDS_TOKEN_URL + APID_token
+        self.deregister(APID_token, url)
+
+    def get_device_token_info(self, device_token, url=None):
         """Retrieve information about this device token"""
-        url = DEVICE_TOKEN_URL + device_token
+        if url == None:
+          url = DEVICE_TOKEN_URL + device_token
         status, response = self._request('GET', None, url)
         if status == 404:
             return None
@@ -128,17 +169,29 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return json.loads(response)
 
+    def get_APID_token_info(self, APID_token):
+        """Retrieve information about this APID token"""
+        url = APIDS_TOKEN_URL + APID_token
+        return self.get_device_token_info(APID_token, url)
+
     def get_device_tokens(self):
         return AirshipDeviceList(self)
 
-    def push(self, payload, device_tokens=None, aliases=None, tags=None):
+    def get_apids(self):
+        return AirshipAPIDsList(self)
+
+    def push(self, payload, device_tokens=None, aliases=None, tags=None, schedule_for=None, APID_tokens=None):
         """Push this payload to the specified device tokens and tags."""
         if device_tokens:
             payload['device_tokens'] = device_tokens
+        if APID_tokens:
+            payload['apids'] = APID_tokens
         if aliases:
             payload['aliases'] = aliases
         if tags:
             payload['tags'] = tags
+        if schedule_for:
+            payload['schedule_for'] = schedule_for
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
             'application/json')
@@ -177,7 +230,6 @@ class Airship(object):
 
     def feedback(self, since):
         """Return device tokens marked inactive since this timestamp.
-
         Returns a list of (device token, timestamp, alias) functions.
 
         Example:
@@ -203,3 +255,4 @@ class Airship(object):
         return [
             (r['device_token'], parse(r['marked_inactive_on']), r['alias'])
             for r in data]
+
