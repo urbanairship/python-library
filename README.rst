@@ -26,18 +26,42 @@ As of 0.3 the library handles these parts of the API:
 Usage
 =====
 
+Simple iOS Push
+---------------
     >>> import urbanairship
     >>> airship = urbanairship.Airship(application_key, master_secret)
-    >>> airship.register('valid_token', alias='adam')
     >>> airship.push({'aps': {'alert': 'Hello'}}, aliases=['adam'],
     ...     device_tokens=['some_other_token'])
 
+Broadcast to iOS, Android, and BlackBerry devices
+-------------------------------------------------
+    >>> import urbanairship
+    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> airship.broadcast({
+    ...     'aps': {'alert': 'Hello iOS'},
+    ...     'android': {'alert': 'Hello Android'},
+    ...     'blackberry': {
+    ...         'body': 'Hello BlackBerry',
+    ...         'content-type': 'text/plain',
+    ...     },
+    ... })
+
+Sending a Rich Push message to a single user
+--------------------------------------------
+    >>> import urbanairship
+    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> richpush = airship.create_rich_push()
+    >>> richpush.add_recipents(users=["<user_id>"])
+    >>> richpush.set_message(
+    ...     "Hello, Rich Push User",
+    ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
+    >>> richpush.send()
 
 Questions
 =========
 
-The best place to ask questions is our developers mailing list:
-http://groups.google.com/group/urbanairship-dev
+The best place to ask questions is our support site:
+http://support.urbanairship.com/
 
 History
 =======

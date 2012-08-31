@@ -191,9 +191,9 @@ class Airship(object):
 
         Summary:
           List of dictionaries, each with:
-            * 0 or more "device_tokens"
-            * 0 or more "aliases"
-            * "aps" payload.
+            * 0 or more "device_tokens", "apids", or "device_pins"
+            * 0 or more "aliases" or "tags"
+            * "aps" payload, "android" payload, and/or "blackberry".
         """
         body = json.dumps(payloads)
 
@@ -242,10 +242,13 @@ class Airship(object):
             for r in data]
 
     def create_rich_push(self):
+        """Create a RichPush message."""
         return RichPush(self)
 
 
 class RichPush(object):
+    """A Rich Push message. Set recipients, message, and options, then send."""
+
     def __init__(self, airship):
         self._airship = airship
         self.users = []
@@ -257,7 +260,9 @@ class RichPush(object):
         self.push = None
         self.extra = None
 
-    def add_recipient(self, users=None, aliases=None, tags=None):
+    def add_recipients(self, users=None, aliases=None, tags=None):
+        """Add one or more user IDs, aliases, or tags."""
+
         if users is not None:
             self.users = users
         if aliases is not None:
@@ -266,6 +271,8 @@ class RichPush(object):
             self.tags = tags
 
     def set_message(self, title, message, content_type='text/html'):
+        """Set the Rich Push title and message body."""
+
         self.title = title
         self.message = message
         self.content_type = content_type
@@ -273,12 +280,21 @@ class RichPush(object):
             self.push = {"aps": {"alert": title}}
 
     def set_push(self, push):
+        """Specify the push notification payload to be delivered.
+
+        Default is to send an alert to iOS devices with the specified title.
+        """
+
         self.push = push
 
     def set_extra(self, **kw):
+        """Set extra key and values for the rich push message."""
+
         self.extra = kw
 
     def send(self):
+        """Send the rich push message."""
+
         if not self.users and not self.aliases and not self.tags:
             raise ValueError("No recipients specified")
         payload = {
@@ -303,6 +319,8 @@ class RichPush(object):
             raise AirshipFailure(status, response)
 
     def broadcast(self):
+        """Broadcast the rich push message to all users."""
+
         if self.users or self.aliases or self.tags:
             raise ValueError("Recipients cannot be specified for a broadcast")
         payload = {
