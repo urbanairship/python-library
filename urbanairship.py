@@ -17,8 +17,8 @@ PUSH_URL = BASE_URL + '/push/'
 BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
-RICH_PUSH_SEND_URL = BASE_URL + 'api/airmail/send/'
-RICH_PUSH_BROADCAST_URL = BASE_URL + 'api/airmail/send/broadcast/'
+RICH_PUSH_SEND_URL = BASE_URL + '/airmail/send/'
+RICH_PUSH_BROADCAST_URL = BASE_URL + '/airmail/send/broadcast/'
 
 
 class Unauthorized(Exception):
@@ -248,7 +248,7 @@ class Airship(object):
 class RichPush(object):
     def __init__(self, airship):
         self._airship = airship
-        self.user_ids = []
+        self.users = []
         self.aliases = []
         self.tags = []
         self.title = None
@@ -257,9 +257,9 @@ class RichPush(object):
         self.push = None
         self.extra = None
 
-    def add_recipient(self, user_ids=None, aliases=None, tags=None):
-        if user_ids is not None:
-            self.user_ids = user_ids
+    def add_recipient(self, users=None, aliases=None, tags=None):
+        if users is not None:
+            self.users = users
         if aliases is not None:
             self.aliases = aliases
         if tags is not None:
@@ -279,17 +279,17 @@ class RichPush(object):
         self.extra = kw
 
     def send(self):
-        if not self.user_ids and not self.aliases and not self.tags:
+        if not self.users and not self.aliases and not self.tags:
             raise ValueError("No recipients specified")
         payload = {
             "title": self.title,
             "message": self.message,
-            "content-type": self.content-type,
+            "content-type": self.content_type,
         }
         if self.push:
             payload['push'] = self.push
-        if self.user_ids:
-            payload['user_ids'] = self.user_ids
+        if self.users:
+            payload['users'] = self.users
         if self.aliases:
             payload['aliases'] = self.aliases
         if self.tags:
@@ -297,25 +297,25 @@ class RichPush(object):
         if self.extra:
             payload['extra'] = self.extra
         body = json.dumps(payload)
-        status, response = self._request('POST', body, RICH_PUSH_SEND_URL,
-            'application/json')
+        status, response = self._airship._request('POST', body,
+            RICH_PUSH_SEND_URL, 'application/json')
         if not status == 200:
             raise AirshipFailure(status, response)
 
     def broadcast(self):
-        if self.user_ids or self.aliases or self.tags:
+        if self.users or self.aliases or self.tags:
             raise ValueError("Recipients cannot be specified for a broadcast")
         payload = {
             "title": self.title,
             "message": self.message,
-            "content-type": self.content-type,
+            "content-type": self.content_type,
         }
         if self.push:
             payload['push'] = self.push
         if self.extra:
             payload['extra'] = self.extra
         body = json.dumps(payload)
-        status, response = self._request('POST', body, RICH_PUSH_BROADCAST_URL,
-            'application/json')
+        status, response = self._airship._request('POST', body,
+            RICH_PUSH_BROADCAST_URL, 'application/json')
         if not status == 200:
             raise AirshipFailure(status, response)
