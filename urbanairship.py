@@ -11,10 +11,14 @@ except ImportError:
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
+APID_URL = BASE_URL + '/apids/'
+DEVICE_PIN_URL = BASE_URL + '/device_pins/'
 PUSH_URL = BASE_URL + '/push/'
 BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
+RICH_PUSH_SEND_URL = BASE_URL + 'api/airmail/send/'
+RICH_PUSH_BROADCAST_URL = BASE_URL + 'api/airmail/send/broadcast/'
 
 
 class Unauthorized(Exception):
@@ -136,13 +140,38 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return json.loads(response)
 
+    def get_apid_info(self, apid):
+        """Retrieve information about this Android APID"""
+        url = APID_URL + apid
+        status, response = self._request('GET', None, url)
+        if status == 404:
+            return None
+        elif status != 200:
+            raise AirshipFailure(status, response)
+        return json.loads(response)
+
+    def get_device_pin_info(self, device_pin):
+        """Retrieve information about this BlackBerry PIN"""
+        url = DEVICE_PIN_URL + device_pin
+        status, response = self._request('GET', None, url)
+        if status == 404:
+            return None
+        elif status != 200:
+            raise AirshipFailure(status, response)
+        return json.loads(response)
+
     def get_device_tokens(self):
         return AirshipDeviceList(self)
 
-    def push(self, payload, device_tokens=None, aliases=None, tags=None):
-        """Push this payload to the specified device tokens and tags."""
+    def push(self, payload, device_tokens=None, aliases=None, tags=None,
+            apids=None, device_pins=None):
+        """Push this payload to the specified recipients."""
         if device_tokens:
             payload['device_tokens'] = device_tokens
+        if apids:
+            payload['apids'] = apids
+        if device_pins:
+            payload['device_pins'] = device_pins
         if aliases:
             payload['aliases'] = aliases
         if tags:
@@ -211,3 +240,82 @@ class Airship(object):
         return [
             (r['device_token'], parse(r['marked_inactive_on']), r['alias'])
             for r in data]
+
+    def create_rich_push(self):
+        return RichPush(self)
+
+
+class RichPush(object):
+    def __init__(self, airship):
+        self._airship = airship
+        self.user_ids = []
+        self.aliases = []
+        self.tags = []
+        self.title = None
+        self.message = None
+        self.content_type = None
+        self.push = None
+        self.extra = None
+
+    def add_recipient(self, user_ids=None, aliases=None, tags=None):
+        if user_ids is not None:
+            self.user_ids = user_ids
+        if aliases is not None:
+            self.aliases = aliases
+        if tags is not None:
+            self.tags = tags
+
+    def set_message(self, title, message, content_type='text/html'):
+        self.title = title
+        self.message = message
+        self.content_type = content_type
+        if self.push is None:
+            self.push = {"aps": {"alert": title}}
+
+    def set_push(self, push):
+        self.push = push
+
+    def set_extra(self, **kw):
+        self.extra = kw
+
+    def send(self):
+        if not self.user_ids and not self.aliases and not self.tags:
+            raise ValueError("No recipients specified")
+        payload = {
+            "title": self.title,
+            "message": self.message,
+            "content-type": self.content-type,
+        }
+        if self.push:
+            payload['push'] = self.push
+        if self.user_ids:
+            payload['user_ids'] = self.user_ids
+        if self.aliases:
+            payload['aliases'] = self.aliases
+        if self.tags:
+            payload['tags'] = self.tags
+        if self.extra:
+            payload['extra'] = self.extra
+        body = json.dumps(payload)
+        status, response = self._request('POST', body, RICH_PUSH_SEND_URL,
+            'application/json')
+        if not status == 200:
+            raise AirshipFailure(status, response)
+
+    def broadcast(self):
+        if self.user_ids or self.aliases or self.tags:
+            raise ValueError("Recipients cannot be specified for a broadcast")
+        payload = {
+            "title": self.title,
+            "message": self.message,
+            "content-type": self.content-type,
+        }
+        if self.push:
+            payload['push'] = self.push
+        if self.extra:
+            payload['extra'] = self.extra
+        body = json.dumps(payload)
+        status, response = self._request('POST', body, RICH_PUSH_BROADCAST_URL,
+            'application/json')
+        if not status == 200:
+            raise AirshipFailure(status, response)
