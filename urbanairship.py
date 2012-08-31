@@ -89,7 +89,8 @@ class Airship(object):
 
         return resp.status, resp.read()
 
-    def register(self, device_token, alias=None, tags=None, badge=None):
+    def register(self, device_token, alias=None, tags=None, badge=None,
+            quiettime_start=None, quiettime_end=None, tz=None):
         """Register the device token with UA."""
         url = DEVICE_TOKEN_URL + device_token
         payload = {}
@@ -99,6 +100,13 @@ class Airship(object):
             payload['tags'] = tags
         if badge is not None:
             payload['badge'] = badge
+        if quiettime_start is not None and quiettime_end is not None:
+            payload['quiettime'] = {
+                "start": quiettime_start,
+                "end": quiettime_end,
+            }
+        if tz is not None:
+            payload['tz'] = tz
         if payload:
             body = json.dumps(payload)
             content_type = 'application/json'
