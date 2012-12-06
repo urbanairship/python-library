@@ -15,7 +15,34 @@ PUSH_URL = BASE_URL + '/push/'
 BATCH_PUSH_URL = BASE_URL + '/push/batch/'
 BROADCAST_URL = BASE_URL + '/push/broadcast/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
+# Try to import the requests library http://pypi.python.org/pypi/requests 
+# fall back to httplib if not available.
+REQUESTS_AVAILABLE = False
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    import httplib
+# utility function to fallback to httplib
+def http_request(method, url, **kwargs):
+    if REQUESTS_AVAILABLE:
+        try:
+            # convert body argument to requests supported argument
+            if kwargs.has_key('body'):
+                kwargs['data'] = kwargs['body']
+                del kwargs['body']
 
+            resp = requests.request(method, url, **kwargs)
+            resp.status = resp.status_code
+            return resp
+        except requests.exceptions.RequestException, e:
+            raise AirshipFailure(None, str(e))
+    else:
+        h = httplib.HTTPSConnection(SERVER)
+        h.request(method, url, **kwargs)
+        resp = h.getresponse()
+        resp.content = resp.read()
+        return resp
 
 class Unauthorized(Exception):
     """Raised when we get a 401 from the server"""
@@ -69,25 +96,25 @@ class AirshipDeviceList(object):
 
 class Airship(object):
 
-    def __init__(self, key, secret):
+    def __init__(self, key, secret, timeout=None):
         self.key = key
         self.secret = secret
-
+        self.timeout = 240 # default 4 minutes
+        if timeout is not None:
+            self.timeout = timeout
         self.auth_string = ('%s:%s' % (key, secret)).encode('base64')[:-1]
 
     def _request(self, method, body, url, content_type=None):
-        h = httplib.HTTPSConnection(SERVER)
         headers = {
             'authorization': 'Basic %s' % self.auth_string,
         }
         if content_type:
             headers['content-type'] = content_type
-        h.request(method, url, body=body, headers=headers)
-        resp = h.getresponse()
+        resp = http_request(method,url,body=body,headers=headers,timeout=self.timeout)
         if resp.status == 401:
             raise Unauthorized
 
-        return resp.status, resp.read()
+        return resp.status, resp.content
 
     def register(self, device_token, alias=None, tags=None, badge=None):
         """Register the device token with UA."""
