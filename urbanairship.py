@@ -164,8 +164,18 @@ class Airship(object):
         return AirshipDeviceList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None,
-            apids=None, device_pins=None):
-        """Push this payload to the specified recipients."""
+            apids=None, device_pins=None, schedules=None):
+        """Push this payload to the specified recipients.
+
+        Payload: a dictionary the contents to send, e.g.:
+            {'aps': {'alert': 'Hello'}, 'android': {'alert': 'Hello'}}
+        device_tokens, apids, aliases, tags, device_pins:
+            lists of identifiers to send the notification to
+        schedules: list of datetime.datetime objects of when to send this
+            notification. If no schedules are present, send immediately.
+            Schedules should be in UTC time, not local.
+
+        """
         if device_tokens:
             payload['device_tokens'] = device_tokens
         if apids:
@@ -176,6 +186,9 @@ class Airship(object):
             payload['aliases'] = aliases
         if tags:
             payload['tags'] = tags
+        if schedules:
+            payload['schedule_for'] = [
+                schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
         status, response = self._request('POST', body, PUSH_URL,
             'application/json')
@@ -202,10 +215,13 @@ class Airship(object):
         if not status == 200:
             raise AirshipFailure(status, response)
 
-    def broadcast(self, payload, exclude_tokens=None):
+    def broadcast(self, payload, exclude_tokens=None, schedules=None):
         """Broadcast this payload to all users."""
         if exclude_tokens:
             payload['exclude_tokens'] = exclude_tokens
+        if schedules:
+            payload['schedule_for'] = [
+                schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
         status, response = self._request('POST', body, BROADCAST_URL,
             'application/json')
