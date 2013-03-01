@@ -13,15 +13,17 @@ you're using Python 2.5 or earlier, you'll need to install ``simplejson``.
 Functionality
 =============
 
-As of 0.3 the library handles these parts of the API:
+As of 0.5 the library handles these parts of the API:
 
- * device token registration
- * basic push
- * registering and pushing with tags
- * broadcast
- * feedback service
- * device token deactivation (deregistration)
- * device token listing
+* device token registration
+* basic push
+* registering and pushing with tags
+* broadcast
+* feedback service
+* device token deactivation (deregistration)
+* device token listing
+* rich push
+* scheduled notifications
 
 Usage
 =====
@@ -66,6 +68,8 @@ http://support.urbanairship.com/
 History
 =======
 
- * 0.1 Initial release
- * 0.2 Added tags, broadcast, feedback
- * 0.3 Added deregister, device token list, other minor improvements
+* 0.1 Initial release
+* 0.2 Added tags, broadcast, feedback
+* 0.3 Added deregister, device token list, other minor improvements
+* 0.4 Added batch push
+* 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
