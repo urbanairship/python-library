@@ -73,3 +73,4 @@ History
 * 0.3 Added deregister, device token list, other minor improvements
 * 0.4 Added batch push
 * 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
+* 0.6 Added Android APID Tagging and Aliasing
