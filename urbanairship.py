@@ -1,6 +1,7 @@
 """Python module for using the Urban Airship API"""
 
-import httplib
+import requests
+from requests.auth import HTTPBasicAuth
 import urllib
 try:
     import json
@@ -67,31 +68,30 @@ class AirshipDeviceList(object):
         status, response = self._airship._request('GET', None, url)
         if status != 200:
             raise AirshipFailure(status, response)
-        self._page = page = json.loads(response)
+        self._page = page = response
         self._token_iter = iter(page['device_tokens'])
 
 
 class Airship(object):
 
     def __init__(self, key, secret):
-        self.key = key
-        self.secret = secret
-
-        self.auth_string = ('%s:%s' % (key, secret)).encode('base64')[:-1]
+        self.auth = HTTPBasicAuth(key, secret)
 
     def _request(self, method, body, url, content_type=None):
-        h = httplib.HTTPSConnection(SERVER)
-        headers = {
-            'authorization': 'Basic %s' % self.auth_string,
-        }
+        headers = {}
         if content_type:
             headers['content-type'] = content_type
-        h.request(method, url, body=body, headers=headers)
-        resp = h.getresponse()
-        if resp.status == 401:
+        resp = requests.request(method, url, auth=self.auth, data=body,
+            headers=headers)
+        if resp.status_code == 401:
             raise Unauthorized
 
-        return resp.status, resp.read()
+        try:
+            response = resp.json()
+        except ValueError:
+            response = resp.text
+
+        return resp.status_code, response
 
     def register(self, device_token, alias=None, tags=None, badge=None,
             quiettime_start=None, quiettime_end=None, tz=None):
@@ -138,7 +138,7 @@ class Airship(object):
             return None
         elif status != 200:
             raise AirshipFailure(status, response)
-        return json.loads(response)
+        return response
 
     def get_apid_info(self, apid):
         """Retrieve information about this Android APID"""
@@ -148,7 +148,7 @@ class Airship(object):
             return None
         elif status != 200:
             raise AirshipFailure(status, response)
-        return json.loads(response)
+        return response
 
     def get_device_pin_info(self, device_pin):
         """Retrieve information about this BlackBerry PIN"""
@@ -158,7 +158,7 @@ class Airship(object):
             return None
         elif status != 200:
             raise AirshipFailure(status, response)
-        return json.loads(response)
+        return response
 
     def get_device_tokens(self):
         return AirshipDeviceList(self)
@@ -247,7 +247,7 @@ class Airship(object):
         status, response = self._request('GET', '', url)
         if not status == 200:
             raise AirshipFailure(status, response)
-        data = json.loads(response)
+        data = response
         try:
             from dateutil.parser import parse
         except ImportError:
