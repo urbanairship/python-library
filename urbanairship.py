@@ -94,9 +94,12 @@ class Airship(object):
         return resp.status, resp.read()
 
     def register(self, device_token, alias=None, tags=None, badge=None,
-            quiettime_start=None, quiettime_end=None, tz=None):
-        """Register the device token with UA."""
+            quiettime_start=None, quiettime_end=None, tz=None, is_android=False):
+        """Register the device token or apid with UA."""
         url = DEVICE_TOKEN_URL + device_token
+        if is_android:
+            url = APID_URL + device_token
+
         payload = {}
         if alias is not None:
             payload['alias'] = alias
@@ -123,9 +126,12 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return status == 201
 
-    def deregister(self, device_token):
-        """Mark this device token as inactive"""
+    def deregister(self, device_token, is_android=False):
+        """Mark this device token / apid as inactive"""
         url = DEVICE_TOKEN_URL + device_token
+        if is_android:
+            url = APID_URL + device_token
+            
         status, response = self._request('DELETE', '', url, None)
         if status != 204:
             raise AirshipFailure(status, response)

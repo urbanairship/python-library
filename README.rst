@@ -16,11 +16,13 @@ Functionality
 As of 0.5 the library handles these parts of the API:
 
 * device token registration
+* apid registration
 * basic push
 * registering and pushing with tags
 * broadcast
 * feedback service
 * device token deactivation (deregistration)
+* apid deactivation (deregistration)
 * device token listing
 * rich push
 * scheduled notifications
