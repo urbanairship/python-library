@@ -31,14 +31,14 @@ Usage
 Simple iOS Push
 ---------------
     >>> import urbanairship
-    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> airship = urbanairship.Airship('application_key','master_secret')
     >>> airship.push({'aps': {'alert': 'Hello'}}, aliases=['adam'],
     ...     device_tokens=['some_other_token'])
 
 Broadcast to iOS, Android, and BlackBerry devices
 -------------------------------------------------
     >>> import urbanairship
-    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> airship = urbanairship.Airship('application_key','master_secret')
     >>> airship.broadcast({
     ...     'aps': {'alert': 'Hello iOS'},
     ...     'android': {'alert': 'Hello Android'},
@@ -51,7 +51,7 @@ Broadcast to iOS, Android, and BlackBerry devices
 Sending a Rich Push message to a single user
 --------------------------------------------
     >>> import urbanairship
-    >>> airship = urbanairship.Airship(application_key, master_secret)
+    >>> airship = urbanairship.Airship('application_key','master_secret')
     >>> richpush = airship.create_rich_push()
     >>> richpush.add_recipents(users=["<user_id>"])
     >>> richpush.set_message(
