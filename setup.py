@@ -19,4 +19,7 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries'
     ],
+    install_requires=[
+        'requests>=1.1.0',
+    ],
 )
