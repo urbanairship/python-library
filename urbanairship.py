@@ -123,6 +123,25 @@ class Airship(object):
             raise AirshipFailure(status, response)
         return status == 201
 
+    def update_apid(self, apid=None, alias=None, tags=None):
+        url = APID_URL + apid
+        payload = {}
+        if alias is not None:
+            payload['alias'] = alias
+        if tags is not None:
+            payload['tags'] = tags
+        if payload:
+            body = json.dumps(payload)
+            content_type = 'application/json'
+        else:
+            body = ''
+            content_type = None
+
+        status, response = self._request('PUT', body, url, content_type)
+        if not status in (200, 201):
+            raise AirshipFailure(status, response)
+        return status == 201
+
     def deregister(self, device_token):
         """Mark this device token as inactive"""
         url = DEVICE_TOKEN_URL + device_token

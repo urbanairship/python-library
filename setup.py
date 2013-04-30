@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name="urbanairship",
-    version="0.5",
+    version="0.6",
     author="Adam Lowry",
     author_email="adam@urbanairship.com",
     url="http://urbanairship.com/",
