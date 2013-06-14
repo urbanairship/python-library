@@ -1,8 +1,6 @@
-"""Python package for using the Urban Airship API"""
-from .core import Airship
-from .push import (
-    Push,
-    all_,
+from .delivery import Push
+
+from .audience import (
     device_token,
     device_pin,
     apid,
@@ -17,9 +15,15 @@ from .push import (
     location,
     recent_date,
     absolute_date,
+)
+
+from .message import (
     notification,
     ios,
     android,
     device_types,
 )
 
+# Common selector for audience & device_types
+
+all_ = "all"

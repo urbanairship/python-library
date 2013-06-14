@@ -3,13 +3,13 @@ from distutils.core import setup
 
 setup(
     name="urbanairship",
-    version="0.5",
+    version="0.6",
     author="Adam Lowry",
     author_email="adam@urbanairship.com",
     url="http://urbanairship.com/",
-    description="Python module for using the Urban Airship API",
+    description="Python package for using the Urban Airship API",
     long_description=open('README.rst').read(),
-    py_modules=["urbanairship"],
+    packages=["urbanairship", "urbanairship.push"],
     license='BSD License',
     classifiers=[
         'Development Status :: 3 - Alpha',
