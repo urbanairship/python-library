@@ -1,0 +1,3 @@
+[submodule "docs/_themes/urbanairship"]
+	path = docs/_themes/urbanairship
+	url = git@github.com:urbanairship/ua-sphinx-docs-theme.git
