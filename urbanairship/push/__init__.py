@@ -29,4 +29,6 @@ from .message import (
 
 # Common selector for audience & device_types
 
+#: Select all, to do a broadcast.
+#: Used in both ``audience`` and ``device_types``.
 all_ = "all"

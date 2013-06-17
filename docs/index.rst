@@ -11,15 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   push.rst
+   examples.rst
 
-.. automodule:: urbanairship.push.delivery
-   :members:
-
-.. automodule:: urbanairship.push.audience
-   :members:
-
-.. automodule:: urbanairship.push.message
-   :members:
 
 Indices and tables
 ==================
