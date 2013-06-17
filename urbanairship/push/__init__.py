@@ -21,6 +21,9 @@ from .message import (
     notification,
     ios,
     android,
+    blackberry,
+    wns_payload,
+    mpns_payload,
     device_types,
 )
 

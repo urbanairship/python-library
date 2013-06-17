@@ -41,3 +41,61 @@ class TestMessage(unittest.TestCase):
                     'more': 'stuff',
                 }
             }})
+
+    def test_blackberry(self):
+        self.assertEqual(
+            ua.notification(blackberry=ua.blackberry(
+                alert='Hello',
+            )),
+            {'blackberry': {
+                'body': 'Hello',
+                'content_type': 'text/plain',
+            }})
+
+        self.assertEqual(
+            ua.notification(blackberry=ua.blackberry(
+                body='Hello', content_type='text/html',
+            )),
+            {'blackberry': {
+                'body': 'Hello',
+                'content_type': 'text/html',
+            }})
+        self.assertRaises(ValueError, ua.blackberry, body='Hello')
+
+    def test_wns_payload(self):
+        self.assertEqual(
+            ua.notification(wns=ua.wns_payload(
+                alert='Hello',
+            )),
+            {'wns': {
+                'alert': 'Hello',
+            }})
+
+        self.assertEqual(
+            ua.notification(wns=ua.wns_payload(
+                toast={'key': 'Hello'},
+            )),
+            {'wns': {
+                'toast': {'key': 'Hello'},
+            }})
+        self.assertRaises(ValueError, ua.wns_payload, alert='Hello',
+            tile='Foo')
+
+    def test_mpns_payload(self):
+        self.assertEqual(
+            ua.notification(mpns=ua.mpns_payload(
+                alert='Hello',
+            )),
+            {'mpns': {
+                'alert': 'Hello',
+            }})
+
+        self.assertEqual(
+            ua.notification(mpns=ua.mpns_payload(
+                toast={'key': 'Hello'},
+            )),
+            {'mpns': {
+                'toast': {'key': 'Hello'},
+            }})
+        self.assertRaises(ValueError, ua.mpns_payload, alert='Hello',
+            tile='Foo')

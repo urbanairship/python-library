@@ -4,7 +4,8 @@ import re
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
 
 
-def notification(alert=None, ios=None, android=None):
+def notification(alert=None, ios=None, android=None, blackberry=None, wns=None,
+        mpns=None):
     payload = {}
     if alert is not None:
         payload['alert'] = alert
@@ -12,6 +13,12 @@ def notification(alert=None, ios=None, android=None):
         payload['ios'] = ios
     if android is not None:
         payload['android'] = android
+    if blackberry is not None:
+        payload['blackberry'] = blackberry
+    if wns is not None:
+        payload['wns'] = wns
+    if mpns is not None:
+        payload['mpns'] = mpns
     if not payload:
         raise ValueError("Notification body may not be empty")
     return payload
@@ -54,6 +61,47 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['delay_while_idle'] = True
     if extra is not None:
         payload['extra'] = extra
+    return payload
+
+
+def blackberry(alert=None, body=None, content_type=None):
+    payload = {}
+    if alert is not None:
+        payload['body'] = alert
+        payload['content_type'] = 'text/plain'
+    elif body is not None and content_type is not None:
+        payload['body'] = body
+        payload['content_type'] = content_type
+    else:
+        raise ValueError("BlackBerry body and content_type may not be empty")
+    return payload
+
+
+def wns_payload(alert=None, toast=None, tile=None, badge=None):
+    if len(filter(None, (alert, toast, tile, badge))) != 1:
+        raise ValueError("WNS payload must have one notification type.")
+    payload = {}
+    if alert is not None:
+        payload['alert'] = alert
+    if toast is not None:
+        payload['toast'] = toast
+    if tile is not None:
+        payload['tile'] = tile
+    if badge is not None:
+        payload['badge'] = badge
+    return payload
+
+
+def mpns_payload(alert=None, toast=None, tile=None):
+    if len(filter(None, (alert, toast, tile))) != 1:
+        raise ValueError("MPNS payload must have one notification type.")
+    payload = {}
+    if alert is not None:
+        payload['alert'] = alert
+    if toast is not None:
+        payload['toast'] = toast
+    if tile is not None:
+        payload['tile'] = tile
     return payload
 
 
