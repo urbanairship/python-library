@@ -30,23 +30,24 @@ Usage
 
 Simple iOS Push
 ---------------
-    >>> import urbanairship
+    >>> import urbanairship as ua
     >>> airship = urbanairship.Airship('application_key','master_secret')
-    >>> airship.push({'aps': {'alert': 'Hello'}}, aliases=['adam'],
-    ...     device_tokens=['some_other_token'])
+    >>> push = airship.create_push()
+    >>> push.audience = ua.or(ua.alias('adam'), ua.device_token('some_token'))
+    >>> push.notification = ua.notification(alert='Hello')
+    >>> push.device_types = ua.all_
+    >>> push.deliver()
 
 Broadcast to iOS, Android, and BlackBerry devices
 -------------------------------------------------
-    >>> import urbanairship
-    >>> airship = urbanairship.Airship('application_key','master_secret')
-    >>> airship.broadcast({
-    ...     'aps': {'alert': 'Hello iOS'},
-    ...     'android': {'alert': 'Hello Android'},
-    ...     'blackberry': {
-    ...         'body': 'Hello BlackBerry',
-    ...         'content-type': 'text/plain',
-    ...     },
-    ... })
+    >>> push = airship.create_push()
+    >>> push.audience = ua.all_
+    >>> push.notification = ua.notification(
+    ...     ios=ua.ios(alert='Hello iOS'),
+    ...     android=ua.android(alert='Hello Android'),
+    ...     blackberry=ua.blackberry(alert='Hello BlackBerry'))
+    >>> push.device_types = ua.device_types('ios', 'android', 'blackberry')
+    >>> push.deliver()
 
 Sending a Rich Push message to a single user
 --------------------------------------------
@@ -73,3 +74,4 @@ History
 * 0.3 Added deregister, device token list, other minor improvements
 * 0.4 Added batch push
 * 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
+  
