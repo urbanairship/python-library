@@ -1,4 +1,4 @@
-from .delivery import Push
+from .core import Push
 
 from .audience import (
     device_token,
@@ -17,14 +17,14 @@ from .audience import (
     absolute_date,
 )
 
-from .message import (
+from .payload import (
     notification,
     ios,
     android,
     blackberry,
     wns_payload,
     mpns_payload,
-    richpush,
+    message,
     device_types,
 )
 

@@ -24,7 +24,7 @@ from .push import (
     blackberry,
     wns_payload,
     mpns_payload,
-    richpush,
+    message,
     device_types,
 )
 

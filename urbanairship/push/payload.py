@@ -169,8 +169,8 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def richpush(title, body, content_type=None, content_encoding=None):
-    """Rich push payload creation.
+def message(title, body, content_type=None, content_encoding=None):
+    """Rich push message payload creation.
 
     :param title: Required, string
     :param body: Required, string
