@@ -40,7 +40,7 @@ class AirshipDeviceList(object):
         self._load_page(next_page)
 
     def _load_page(self, url):
-        status, response = self._airship._request('GET', None, url)
+        status, response = self._airship._request('GET', None, url, version=1)
         if status != 200:
             raise common.AirshipFailure(status, response)
         self._page = page = json.loads(response)
@@ -62,8 +62,9 @@ class Airship(object):
         }
         if content_type:
             headers['content-type'] = content_type
-        if version == 3:
-            headers['Accept'] = "application/vnd.urbanairship+json; version=3;"
+        if version is not None:
+            headers['Accept'] = \
+                "application/vnd.urbanairship+json; version=%d;" % version
         h.request(method, url, body=body, headers=headers)
         resp = h.getresponse()
         if resp.status == 401:
@@ -96,7 +97,8 @@ class Airship(object):
             body = ''
             content_type = None
 
-        status, response = self._request('PUT', body, url, content_type)
+        status, response = self._request('PUT', body, url, content_type,
+            version=1)
         if not status in (200, 201):
             raise common.AirshipFailure(status, response)
         return status == 201
@@ -104,14 +106,14 @@ class Airship(object):
     def deregister(self, device_token):
         """Mark this device token as inactive"""
         url = common.DEVICE_TOKEN_URL + device_token
-        status, response = self._request('DELETE', '', url, None)
+        status, response = self._request('DELETE', '', url, None, version=1)
         if status != 204:
             raise common.AirshipFailure(status, response)
 
     def get_device_token_info(self, device_token):
         """Retrieve information about this device token"""
         url = common.DEVICE_TOKEN_URL + device_token
-        status, response = self._request('GET', None, url)
+        status, response = self._request('GET', None, url, version=1)
         if status == 404:
             return None
         elif status != 200:
@@ -121,7 +123,7 @@ class Airship(object):
     def get_apid_info(self, apid):
         """Retrieve information about this Android APID"""
         url = common.APID_URL + apid
-        status, response = self._request('GET', None, url)
+        status, response = self._request('GET', None, url, version=1)
         if status == 404:
             return None
         elif status != 200:
@@ -131,7 +133,7 @@ class Airship(object):
     def get_device_pin_info(self, device_pin):
         """Retrieve information about this BlackBerry PIN"""
         url = common.DEVICE_PIN_URL + device_pin
-        status, response = self._request('GET', None, url)
+        status, response = self._request('GET', None, url, version=1)
         if status == 404:
             return None
         elif status != 200:
@@ -169,7 +171,7 @@ class Airship(object):
                 schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
         status, response = self._request('POST', body, common.PUSH_URL,
-            'application/json')
+            'application/json', version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
 
@@ -189,7 +191,7 @@ class Airship(object):
         body = json.dumps(payloads)
 
         status, response = self._request('POST', body, common.BATCH_PUSH_URL,
-            'application/json')
+            'application/json', version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
 
@@ -202,7 +204,7 @@ class Airship(object):
                 schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
         status, response = self._request('POST', body, common.BROADCAST_URL,
-            'application/json')
+            'application/json', version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
 
@@ -222,7 +224,7 @@ class Airship(object):
         """
         url = common.FEEDBACK_URL + '?' + \
             urllib.urlencode({'since': since.isoformat()})
-        status, response = self._request('GET', '', url)
+        status, response = self._request('GET', '', url, version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
         data = json.loads(response)
@@ -312,7 +314,7 @@ class RichPush(object):
             payload['extra'] = self.extra
         body = json.dumps(payload)
         status, response = self._airship._request('POST', body,
-            common.RICH_PUSH_SEND_URL, 'application/json')
+            common.RICH_PUSH_SEND_URL, 'application/json', version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
 
@@ -332,7 +334,7 @@ class RichPush(object):
             payload['extra'] = self.extra
         body = json.dumps(payload)
         status, response = self._airship._request('POST', body,
-            common.RICH_PUSH_BROADCAST_URL, 'application/json')
+            common.RICH_PUSH_BROADCAST_URL, 'application/json', version=1)
         if not status == 200:
             raise common.AirshipFailure(status, response)
 
