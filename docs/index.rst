@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    push.rst
+   exceptions.rst
    examples.rst
 
 

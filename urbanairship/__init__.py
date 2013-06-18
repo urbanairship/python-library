@@ -1,6 +1,6 @@
 """Python package for using the Urban Airship API"""
 from .core import Airship
-from .common import AirshipFailure
+from .common import AirshipFailure, Unauthorized
 from .push import (
     Push,
     all_,

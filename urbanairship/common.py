@@ -19,6 +19,7 @@ class Unauthorized(Exception):
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
 
-    args are (status code, message)
+    :param status: Status code for the response
+    :param message: Response body containting error information.
 
     """
