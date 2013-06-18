@@ -14,16 +14,15 @@ class Push(object):
         self.options = None
         self.message = None
 
-    def validate(self):
-        """Confirm the notification is valid.
-
-        Automatically called by send, but can be called directly.
-        """
-        raise NotImplementedError
-
     def send(self):
-        """Send the notification."""
+        """Send the notification.
 
+        :returns: Dictionary with response information, including ``push_id``.
+        :raises AirshipFailure: Request failed. See args for status and
+            response body.
+        :raises Unauthorized: Authentication failed.
+
+        """
         payload = {
             "audience": self.audience,
             "notification": self.notification,
@@ -39,3 +38,5 @@ class Push(object):
             common.PUSH_URL, 'application/json', 3)
         if status < 200 or status >= 300:
             raise common.AirshipFailure(status, response)
+
+        return json.loads(response)

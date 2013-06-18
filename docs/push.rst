@@ -61,7 +61,7 @@ which sends a push notification consisting of a single piece of text:
 
 You can override the payload with platform-specific values as well.
 
-.. automodule:: urbanairship.push.message
+.. automodule:: urbanairship.push.payload
    :members: notification, ios, android, blackberry, wns_payload, mpns_payload
 
 Device Types
@@ -80,7 +80,7 @@ or with the ``all_`` shortcut.
 
    push.device_types = ua.all_
 
-.. autofunction:: urbanairship.push.message.device_types
+.. autofunction:: urbanairship.push.payload.device_types
 
 Delivery
 --------
@@ -94,3 +94,6 @@ attributes, the notification is ready for delivery.
 
 If the delivery is unsuccessful, an :py:class:`AirshipFailure` exception
 will be raised.
+
+.. autoclass:: urbanairship.push.core.Push
+   :members:
