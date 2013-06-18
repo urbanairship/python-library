@@ -169,6 +169,28 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
+def richpush(title, body, content_type=None, content_encoding=None):
+    """Rich push payload creation.
+
+    :param title: Required, string
+    :param body: Required, string
+    :keyword content_type: Optional, MIME type of the body
+    :keyword content_encoding: Optional, encoding of the data in body, e.g.
+        ``utf-8``.
+    :keyword extra: Optional, dictionary of string values.
+
+    """
+    payload = {
+        'title': title,
+        'body': body,
+    }
+    if content_type is not None:
+        payload['content_type'] = content_type
+    if content_encoding is not None:
+        payload['content_encoding'] = content_encoding
+    return payload
+
+
 def device_types(*types):
     """Create a device type specifier.
 

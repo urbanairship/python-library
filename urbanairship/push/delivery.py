@@ -12,6 +12,7 @@ class Push(object):
         self.notification = None
         self.device_types = None
         self.options = None
+        self.message = None
 
     def validate(self):
         """Confirm the notification is valid.
@@ -30,6 +31,8 @@ class Push(object):
         }
         if self.options is not None:
             payload['options'] = self.options
+        if self.message is not None:
+            payload['message'] = self.message
 
         body = json.dumps(payload)
         status, response = self._airship._request('POST', body,
