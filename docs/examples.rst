@@ -59,3 +59,16 @@ Single iOS push
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
    push.device_types = ua.device_types('ios')
    push.send()
+
+Single iOS Rich Push
+--------------------
+
+.. code-block:: python
+
+   push = ua.create_push()
+   push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+   push.notification = ua.notification(
+       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
+   push.device_types = ua.device_types('ios')
+   push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
+   push.send()
