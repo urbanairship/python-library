@@ -1,4 +1,4 @@
-from .core import Push
+from .core import Push, ScheduledPush
 
 from .audience import (
     device_token,
@@ -28,6 +28,10 @@ from .payload import (
     device_types,
 )
 
+from .schedule import (
+    scheduled_time
+)
+
 # Common selector for audience & device_types
 
 all_ = "all"
@@ -40,6 +44,7 @@ Used in both ``audience`` and ``device_types``.
 __all__ = [
     all_,
     Push,
+    ScheduledPush,
     device_token,
     device_pin,
     apid,
@@ -62,4 +67,5 @@ __all__ = [
     mpns_payload,
     message,
     device_types,
+    scheduled_time,
 ]

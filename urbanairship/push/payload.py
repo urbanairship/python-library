@@ -57,9 +57,9 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
             raise ValueError("iOS alert must be a string or dictionary")
         payload['alert'] = alert
     if badge is not None:
-        if not isinstance(badge, basestring) or isinstance(alert, int):
+        if not (isinstance(badge, basestring) or isinstance(badge, int)):
             raise ValueError("iOS badge must be an integer or string")
-        if not VALID_AUTOBADGE.match(badge):
+        if isinstance(badge, basestring) and not VALID_AUTOBADGE.match(badge):
             raise ValueError("Invalid iOS autobadge value")
         payload['badge'] = badge
     if sound is not None:

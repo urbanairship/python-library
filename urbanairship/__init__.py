@@ -3,6 +3,7 @@ from .core import Airship
 from .common import AirshipFailure, Unauthorized
 from .push import (
     Push,
+    ScheduledPush,
     all_,
     device_token,
     device_pin,
@@ -26,6 +27,7 @@ from .push import (
     mpns_payload,
     message,
     device_types,
+    scheduled_time,
 )
 
 
@@ -35,6 +37,7 @@ __all__ = [
     Unauthorized,
     all_,
     Push,
+    ScheduledPush,
     device_token,
     device_pin,
     apid,
@@ -57,4 +60,5 @@ __all__ = [
     mpns_payload,
     message,
     device_types,
+    scheduled_time,
 ]
