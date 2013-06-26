@@ -13,7 +13,7 @@ Simple broadcast to all devices
 
 .. code-block:: python
 
-   push = ua.create_push()
+   push = airship.create_push()
    push.audience = ua.all_
    push.notification = ua.notification(alert="Hello, world!")
    push.device_types = ua.all_
@@ -25,7 +25,7 @@ Complex audience with iOS & Android specifics
 
 .. code-block:: python
 
-   push = ua.create_push()
+   push = airship.create_push()
    push.audience = ua.and_(
       ua.tag("breakingnews"),
       ua.or_(
@@ -53,7 +53,7 @@ Single iOS push
 
 .. code-block:: python
 
-   push = ua.create_push()
+   push = airship.create_push()
    push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
@@ -65,7 +65,7 @@ Single iOS Rich Push
 
 .. code-block:: python
 
-   push = ua.create_push()
+   push = airship.create_push()
    push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
@@ -81,7 +81,7 @@ Sheduled iOS Push
    sched = ua.create_scheduled_push()
    sched.schedule = ua.scheduled_time("2013-10-10T02:45:00")
 
-   seched.push = ua.create_push()
+   seched.push = airship.create_push()
    sched.push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    sched.push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
