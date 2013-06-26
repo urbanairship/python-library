@@ -18,7 +18,7 @@ device types:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   push = ua.create_push()
+   push = airship.create_push()
    push.audience = ua.all_
    push.notification = ua.notification(alert="Hello, world!")
    push.device_types = ua.all_
