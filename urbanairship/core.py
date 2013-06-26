@@ -6,7 +6,7 @@ except ImportError:
     import simplejson as json
 
 from . import common
-from .push import Push
+from .push import Push, ScheduledPush
 
 
 class AirshipDeviceList(object):
@@ -240,6 +240,10 @@ class Airship(object):
     def create_push(self):
         """Create a Push notification."""
         return Push(self)
+
+    def create_scheduled_push(self):
+        """Create a Scheduled Push notification."""
+        return ScheduledPush(self)
 
     def create_rich_push(self):
         """Create a RichPush message."""
