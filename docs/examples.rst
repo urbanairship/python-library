@@ -73,15 +73,18 @@ Single iOS Rich Push
    push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
    push.send()
 
-Sheduled iOS Push
------------------
+Scheduled iOS Push
+------------------
 
 .. code-block:: python
 
-   sched = ua.create_scheduled_push()
-   sched.schedule = ua.scheduled_time("2013-10-10T02:45:00")
+   import datetime
 
-   seched.push = airship.create_push()
+   sched = ua.create_scheduled_push()
+   sched.schedule = ua.scheduled_time(
+      datetime.datetime(2013, 10, 10, 2, 45))
+
+   sched.push = airship.create_push()
    sched.push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    sched.push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
