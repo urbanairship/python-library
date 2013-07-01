@@ -27,16 +27,24 @@ class TestMessage(unittest.TestCase):
                 }
             }})
 
+        self.assertEqual(
+            ua.notification(ios=ua.ios(content_available=True)),
+            {'ios': { 'content-available': True}})
+
     def test_android(self):
         self.assertEqual(
             ua.notification(android=ua.android(
                 alert='Hello',
                 delay_while_idle=True,
+                collapse_key='123456',
+                time_to_live=100,
                 extra={'more': 'stuff'}
             )),
             {'android': {
                 'alert': 'Hello',
                 'delay_while_idle': True,
+                'collapse_key': '123456',
+                'time_to_live': 100,
                 'extra': {
                     'more': 'stuff',
                 }
@@ -73,10 +81,26 @@ class TestMessage(unittest.TestCase):
 
         self.assertEqual(
             ua.notification(wns=ua.wns_payload(
-                toast={'key': 'Hello'},
+                toast={'key': 'value'},
             )),
             {'wns': {
-                'toast': {'key': 'Hello'},
+                'toast': {'key': 'value'},
+            }})
+
+        self.assertEqual(
+            ua.notification(wns=ua.wns_payload(
+                tile={'key': 'value'},
+            )),
+            {'wns': {
+                'tile': {'key': 'value'},
+            }})
+
+        self.assertEqual(
+            ua.notification(wns=ua.wns_payload(
+                badge={'key': 'Hello'},
+            )),
+            {'wns': {
+                'badge': {'key': 'Hello'},
             }})
         self.assertRaises(ValueError, ua.wns_payload, alert='Hello',
             tile='Foo')
@@ -97,5 +121,39 @@ class TestMessage(unittest.TestCase):
             {'mpns': {
                 'toast': {'key': 'Hello'},
             }})
+
+        self.assertEqual(
+            ua.notification(mpns=ua.mpns_payload(
+                tile={'key': 'Hello'},
+            )),
+            {'mpns': {
+                'tile': {'key': 'Hello'},
+            }})
         self.assertRaises(ValueError, ua.mpns_payload, alert='Hello',
             tile='Foo')
+
+    def test_rich_push(self):
+        self.assertEqual(
+            ua.message("My Title", "My Body", content_type='text/html',
+                content_encoding='utf8'),
+            {
+                'title': 'My Title',
+                'body': 'My Body',
+                'content_type': 'text/html',
+                'content_encoding': 'utf8',
+            })
+        self.assertEqual(
+            ua.message("My Title", "My Body"),
+            {'title': 'My Title', 'body': 'My Body'})
+
+    def test_all_device_types(self):
+        self.assertEqual(ua.device_types(ua.all_), 'all')
+
+    def test_invalid_payloads(self):
+        # Base notification
+        self.assertRaises(ValueError, ua.notification)
+
+        # iOS
+        self.assertRaises(ValueError, ua.ios, alert=100)
+        self.assertRaises(ValueError, ua.ios, badge=object())
+        self.assertRaises(ValueError, ua.ios, badge="++100!")

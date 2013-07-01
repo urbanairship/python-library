@@ -37,6 +37,8 @@ class TestAudience(unittest.TestCase):
             (ua.apid, 'foobar'),
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef33'),
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
+            (ua.wns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
+            (ua.mpns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
         )
 
         for selector, value in selectors:
@@ -70,6 +72,12 @@ class TestAudience(unittest.TestCase):
             {"weeks": {'start': '2012-01-01', 'end': '2012-01-15'},
              'last_seen': True})
 
+        # Invalid time periods
+        self.assertRaises(ValueError, ua.recent_date, hours=1, minutes=1)
+        self.assertRaises(ValueError, ua.recent_date, eons=1)
+        self.assertRaises(ValueError, ua.absolute_date,
+            'eons', 'alpha', 'omega')
+
     def test_location_selector(self):
         self.assertEqual(
             ua.location(
@@ -81,3 +89,7 @@ class TestAudience(unittest.TestCase):
                     "recent": {"days": 4}
                 }
             }})
+
+        self.assertRaises(ValueError, ua.location)
+        self.assertRaises(ValueError, ua.location, alias=1, id=1)
+        self.assertRaises(ValueError, ua.location, date=None, id='foobar')
