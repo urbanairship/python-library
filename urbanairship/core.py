@@ -5,6 +5,8 @@ try:
 except ImportError:
     import simplejson as json
 
+import requests
+
 from . import common
 from .push import Push, ScheduledPush
 
@@ -53,24 +55,21 @@ class Airship(object):
         self.key = key
         self.secret = secret
 
-        self.auth_string = ('%s:%s' % (key, secret)).encode('base64')[:-1]
+        self.session = requests.Session()
+        self.session.auth = (key, secret)
 
     def _request(self, method, body, url, content_type=None, version=None):
-        h = httplib.HTTPSConnection(common.SERVER)
-        headers = {
-            'authorization': 'Basic %s' % self.auth_string,
-        }
+        headers = {}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
             headers['Accept'] = \
                 "application/vnd.urbanairship+json; version=%d;" % version
-        h.request(method, url, body=body, headers=headers)
-        resp = h.getresponse()
-        if resp.status == 401:
+        resp = self.session.request(method, url, data=body, headers=headers)
+        if resp.status_code == 401:
             raise common.Unauthorized
 
-        return resp.status, resp.read()
+        return resp.status_code, resp.content
 
     def register(self, device_token, alias=None, tags=None, badge=None,
             quiettime_start=None, quiettime_end=None, tz=None):
