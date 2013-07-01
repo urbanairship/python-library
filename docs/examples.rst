@@ -80,7 +80,7 @@ Scheduled iOS Push
 
    import datetime
 
-   sched = ua.create_scheduled_push()
+   sched = airship.create_scheduled_push()
    sched.schedule = ua.scheduled_time(
       datetime.datetime(2013, 10, 10, 2, 45))
 
