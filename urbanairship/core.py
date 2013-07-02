@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 
 import requests
 
@@ -153,6 +154,9 @@ class Airship(object):
             Schedules should be in UTC time, not local.
 
         """
+        warnings.warn(
+            "Airship.push() is deprecated. See documentation on upgrading.",
+            DeprecationWarning)
         if device_tokens:
             payload['device_tokens'] = device_tokens
         if apids:
@@ -183,6 +187,9 @@ class Airship(object):
             * 0 or more "aliases" or "tags"
             * "aps" payload, "android" payload, and/or "blackberry".
         """
+        warnings.warn(
+            "Airship.batch_push() is deprecated. See documentation on upgrading.",
+            DeprecationWarning)
         body = json.dumps(payloads)
 
         self._request('POST', body, common.BATCH_PUSH_URL,
@@ -190,6 +197,9 @@ class Airship(object):
 
     def broadcast(self, payload, exclude_tokens=None, schedules=None):
         """Broadcast this payload to all users."""
+        warnings.warn(
+            "Airship.broadcast() is deprecated. See documentation on upgrading.",
+            DeprecationWarning)
         if exclude_tokens:
             payload['exclude_tokens'] = exclude_tokens
         if schedules:
@@ -236,6 +246,9 @@ class Airship(object):
 
     def create_rich_push(self):
         """Create a RichPush message."""
+        warnings.warn(
+            "Airship.create_rich_push() is deprecated. See documentation on upgrading.",
+            DeprecationWarning)
         return RichPush(self)
 
 
