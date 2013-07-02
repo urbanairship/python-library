@@ -56,8 +56,8 @@ class Airship(object):
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
-    def _request(self, method, body, url, params=None, content_type=None,
-            version=None):
+    def _request(self, method, body, url, content_type=None,
+            version=None, params=None):
         headers = {}
         if content_type:
             headers['content-type'] = content_type
