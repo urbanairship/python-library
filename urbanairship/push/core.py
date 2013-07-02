@@ -42,13 +42,13 @@ class Push(object):
         """
         body = json.dumps(self.payload)
         response = self._airship._request('POST', body,
-            common.PUSH_URL, 'application/json', 3)
+            common.PUSH_URL, 'application/json', version=3)
 
         data = response.json()
         logger.info("Push successful. push_ids: %s",
             ', '.join(data['push_ids']))
 
-        return data
+        return PushResponse(response)
 
 
 class ScheduledPush(object):
@@ -81,10 +81,33 @@ class ScheduledPush(object):
         """
         body = json.dumps(self.payload)
         response = self._airship._request('POST', body,
-            common.SCHEDULES_URL, 'application/json', 3)
+            common.SCHEDULES_URL, 'application/json', version=3)
 
         data = response.json()
         logger.info("Push successful. push_ids: %s",
             ', '.join(data.get('push_ids', [])))
 
-        return data
+        return PushResponse(response)
+
+
+class PushResponse(object):
+    """Response to a successful push notification send or schedule.
+
+    Right now this is a fairly simple wrapper around the json payload response,
+    but making it an object gives us some flexibility to add functionality
+    later.
+
+    """
+    ok = None
+    push_ids = None
+    schedule_ids = None
+    operation_id = None
+    payload = None
+
+    def __init__(self, response):
+        data = response.json()
+        self.push_ids = data.get('push_ids')
+        self.schedule_ids = data.get('schedule_ids')
+        self.operation_id = data.get('operation_id')
+        self.ok = data.get('ok')
+        self.payload = data
