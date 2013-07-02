@@ -1,14 +1,13 @@
-import httplib
-import urllib
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import json
+import logging
 
 import requests
 
 from . import common
 from .push import Push, ScheduledPush
+
+
+logger = logging.getLogger('urbanairship')
 
 
 class AirshipDeviceList(object):
@@ -42,10 +41,8 @@ class AirshipDeviceList(object):
         self._load_page(next_page)
 
     def _load_page(self, url):
-        status, response = self._airship._request('GET', None, url, version=1)
-        if status != 200:
-            raise common.AirshipFailure(status, response)
-        self._page = page = json.loads(response)
+        response = self._airship._request('GET', None, url, version=1)
+        self._page = page = response.json()
         self._token_iter = iter(page['device_tokens'])
 
 
@@ -58,18 +55,35 @@ class Airship(object):
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
-    def _request(self, method, body, url, content_type=None, version=None):
+    def _request(self, method, body, url, params=None, content_type=None,
+            version=None):
         headers = {}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
             headers['Accept'] = \
                 "application/vnd.urbanairship+json; version=%d;" % version
-        resp = self.session.request(method, url, data=body, headers=headers)
-        if resp.status_code == 401:
-            raise common.Unauthorized
 
-        return resp.status_code, resp.content
+        logger.debug("Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
+            method, url, '\n\t'.join(
+                '%s: %s' % (key, value) for (key, value) in headers.items()),
+            body)
+
+        response = self.session.request(
+            method, url, data=body, params=params, headers=headers)
+
+        logger.debug("Received %s response. Headers:\n\t%s\nBody:\n\t%s",
+            response.status_code, '\n\t'.join(
+                '%s: %s' % (key, value) for (key, value)
+                in response.headers.items()),
+            response.content)
+
+        if response.status_code == 401:
+            raise common.Unauthorized
+        elif not (200 <= response.status_code < 300):
+            raise common.AirshipFailure.from_response(response)
+
+        return response
 
     def register(self, device_token, alias=None, tags=None, badge=None,
             quiettime_start=None, quiettime_end=None, tz=None):
@@ -96,48 +110,32 @@ class Airship(object):
             body = ''
             content_type = None
 
-        status, response = self._request('PUT', body, url, content_type,
+        response = self._request('PUT', body, url, content_type,
             version=1)
-        if not status in (200, 201):
-            raise common.AirshipFailure(status, response)
-        return status == 201
+        return response.status_code == 201
 
     def deregister(self, device_token):
         """Mark this device token as inactive"""
         url = common.DEVICE_TOKEN_URL + device_token
-        status, response = self._request('DELETE', '', url, None, version=1)
-        if status != 204:
-            raise common.AirshipFailure(status, response)
+        self._request('DELETE', '', url, None, version=1)
 
     def get_device_token_info(self, device_token):
         """Retrieve information about this device token"""
         url = common.DEVICE_TOKEN_URL + device_token
-        status, response = self._request('GET', None, url, version=1)
-        if status == 404:
-            return None
-        elif status != 200:
-            raise common.AirshipFailure(status, response)
-        return json.loads(response)
+        response = self._request('GET', None, url, version=1)
+        return response.json()
 
     def get_apid_info(self, apid):
         """Retrieve information about this Android APID"""
         url = common.APID_URL + apid
-        status, response = self._request('GET', None, url, version=1)
-        if status == 404:
-            return None
-        elif status != 200:
-            raise common.AirshipFailure(status, response)
-        return json.loads(response)
+        response = self._request('GET', None, url, version=1)
+        return response.json()
 
     def get_device_pin_info(self, device_pin):
         """Retrieve information about this BlackBerry PIN"""
         url = common.DEVICE_PIN_URL + device_pin
-        status, response = self._request('GET', None, url, version=1)
-        if status == 404:
-            return None
-        elif status != 200:
-            raise common.AirshipFailure(status, response)
-        return json.loads(response)
+        response = self._request('GET', None, url, version=1)
+        return response.json()
 
     def get_device_tokens(self):
         return AirshipDeviceList(self)
@@ -169,10 +167,8 @@ class Airship(object):
             payload['schedule_for'] = [
                 schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
-        status, response = self._request('POST', body, common.PUSH_URL,
+        self._request('POST', body, common.PUSH_URL,
             'application/json', version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
 
     def batch_push(self, payloads):
         """Push the following payloads as a batch.
@@ -189,10 +185,8 @@ class Airship(object):
         """
         body = json.dumps(payloads)
 
-        status, response = self._request('POST', body, common.BATCH_PUSH_URL,
+        self._request('POST', body, common.BATCH_PUSH_URL,
             'application/json', version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
 
     def broadcast(self, payload, exclude_tokens=None, schedules=None):
         """Broadcast this payload to all users."""
@@ -202,10 +196,8 @@ class Airship(object):
             payload['schedule_for'] = [
                 schedule.isoformat() for schedule in schedules]
         body = json.dumps(payload)
-        status, response = self._request('POST', body, common.BROADCAST_URL,
+        self._request('POST', body, common.BROADCAST_URL,
             'application/json', version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
 
     def feedback(self, since):
         """Return device tokens marked inactive since this timestamp.
@@ -221,12 +213,10 @@ class Airship(object):
             dateutil: http://labix.org/python-dateutil
 
         """
-        url = common.FEEDBACK_URL + '?' + \
-            urllib.urlencode({'since': since.isoformat()})
-        status, response = self._request('GET', '', url, version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
-        data = json.loads(response)
+        url = common.FEEDBACK_URL
+        response = self._request('GET', '', url,
+            params={'since': since.isoformat()}, version=1)
+        data = response.json()
         try:
             from dateutil.parser import parse
         except ImportError:
@@ -316,10 +306,8 @@ class RichPush(object):
         if self.extra:
             payload['extra'] = self.extra
         body = json.dumps(payload)
-        status, response = self._airship._request('POST', body,
+        self._airship._request('POST', body,
             common.RICH_PUSH_SEND_URL, 'application/json', version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
 
     def broadcast(self):
         """Broadcast the rich push message to all users."""
@@ -336,8 +324,6 @@ class RichPush(object):
         if self.extra:
             payload['extra'] = self.extra
         body = json.dumps(payload)
-        status, response = self._airship._request('POST', body,
+        self._airship._request('POST', body,
             common.RICH_PUSH_BROADCAST_URL, 'application/json', version=1)
-        if not status == 200:
-            raise common.AirshipFailure(status, response)
 

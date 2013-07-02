@@ -1,6 +1,10 @@
 import json
+import logging
 
 from urbanairship import common
+
+
+logger = logging.getLogger('urbanairship')
 
 
 class Push(object):
@@ -37,12 +41,14 @@ class Push(object):
 
         """
         body = json.dumps(self.payload)
-        status, response = self._airship._request('POST', body,
+        response = self._airship._request('POST', body,
             common.PUSH_URL, 'application/json', 3)
-        if status < 200 or status >= 300:
-            raise common.AirshipFailure(status, response)
 
-        return json.loads(response)
+        data = response.json()
+        logger.info("Push successful. push_ids: %s",
+            ', '.join(data['push_ids']))
+
+        return data
 
 
 class ScheduledPush(object):
@@ -73,13 +79,12 @@ class ScheduledPush(object):
         :raises Unauthorized: Authentication failed.
 
         """
-
         body = json.dumps(self.payload)
-        print body
-        status, response = self._airship._request('POST', body,
+        response = self._airship._request('POST', body,
             common.SCHEDULES_URL, 'application/json', 3)
-        if status < 200 or status >= 300:
-            raise common.AirshipFailure(status, response)
 
-        return json.loads(response)
+        data = response.json()
+        logger.info("Push successful. push_ids: %s",
+            ', '.join(data.get('push_ids', [])))
 
+        return data

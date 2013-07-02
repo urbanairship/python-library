@@ -62,3 +62,8 @@ __all__ = [
     device_types,
     scheduled_time,
 ]
+
+# Silence urllib3 INFO logging by default
+
+import logging
+logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
