@@ -5,4 +5,4 @@ def scheduled_time(timestamp):
 
     """
 
-    return {'scheduled_time': timestamp.isoformat()}
+    return {'scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
