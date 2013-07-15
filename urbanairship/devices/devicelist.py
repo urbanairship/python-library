@@ -68,6 +68,7 @@ class DeviceList(object):
 class DeviceTokenList(DeviceList):
     """Iterator for listing all device tokens for this application.
 
+    :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
@@ -79,6 +80,7 @@ class DeviceTokenList(DeviceList):
 class APIDList(DeviceList):
     """Iterator for listing all device tokens for this application.
 
+    :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
@@ -90,6 +92,7 @@ class APIDList(DeviceList):
 class DevicePINList(DeviceList):
     """Iterator for listing all device tokens for this application.
 
+    :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
