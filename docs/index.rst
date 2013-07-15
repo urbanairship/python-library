@@ -1,10 +1,70 @@
-.. Urban Airship Python Library documentation master file, created by
-   sphinx-quickstart on Fri Jun 14 13:52:06 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Urban Airship Python Library
 ============================
+
+``urbanairship`` is a Python library for using the `Urban Airship
+<http://urbanairship.com/>`_ web service API for push notifications and rich
+app pages.
+
+Installation
+------------
+
+Using ``pip``::
+
+   $ pip install urbanairship
+
+Using the library
+-----------------
+
+The library is intended to be used with the small footprint of a single import.
+To get started, import the package, and create an :py:class:`Airship` object
+representing a single UA application.
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship('<app key>', '<app secret>')
+
+The library uses `requests`_ for communication with the UA API,
+providing connection pooling and strict SSL checking. The ``Airship`` object is
+threadsafe, and can be instantiated once and reused in multiple threads.
+
+Logging
+-------
+
+``urbanairship`` uses the standard logging module for integration into an
+application's existing logging. If you do not have logging configured
+otherwise, your application can set it up like so:
+
+.. code-block:: python
+
+   import logging
+   logging.basicConfig()
+
+If you're having trouble with the UA API, you can turn on verbose debug
+logging.
+
+.. code-block:: python
+
+   logging.getLogger('urbanairship').setLevel(logging.DEBUG)
+
+As of Python 2.7, ``DeprecationWarning`` warnings are silenced by default. To
+enable them, use the ``warnings`` module:
+
+.. code-block:: python
+
+   import warnings
+   warnings.simplefilter('default')
+
+Development
+-----------
+
+The library source code is `available on GitHub <github>`_.
+
+Tests can be run with nose_:
+
+.. code-block:: sh
+
+   nosetests --with-doctest
 
 Contents:
 
@@ -24,3 +84,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. _requests: http://python-requests.org
+.. _github: https://github.com/urbanairship/python-library
+.. _nose: https://nose.readthedocs.org/en/latest/

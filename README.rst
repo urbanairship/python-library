@@ -1,19 +1,21 @@
 About
 =====
 
-This here is a library for using the `Urban Airship
-<http://urbanairship.com/>`_ web service API for iPhone push notifications.
+``urbanairship`` is a Python library for using the `Urban Airship
+<http://urbanairship.com/>`_ web service API for push notifications and rich
+app pages.
 
 Requirements
 ============
 
-Tested on Python 2.5 and 2.6 -- it'll probably work on earlier versions. If
-you're using Python 2.5 or earlier, you'll need to install ``simplejson``.
+As of version 0.6, Python 2.6 or 2.7 is required. Python 3.3 support will
+follow.
 
 Functionality
 =============
 
-As of 0.5 the library handles these parts of the API:
+Version 0.6 is a major upgrade, focusing on support for the new version 3 push
+API. There has also been a major reorganization of the codebase.
 
 * device token registration
 * basic push
@@ -28,15 +30,21 @@ As of 0.5 the library handles these parts of the API:
 Usage
 =====
 
+See the `full documentation
+<http://docs.urbanairship.com/reference/libraries/python>`_, as well as the
+`Urban Airship API Documentation
+<http://docs.urbnairship.com/reference/api/>`_.
+
 Simple iOS Push
 ---------------
+
     >>> import urbanairship as ua
-    >>> airship = urbanairship.Airship('application_key','master_secret')
+    >>> airship = ua.Airship('application_key','master_secret')
     >>> push = airship.create_push()
-    >>> push.audience = ua.or(ua.alias('adam'), ua.device_token('some_token'))
+    >>> push.audience = ua.or_(ua.alias('adam'), ua.device_token('some_token'))
     >>> push.notification = ua.notification(alert='Hello')
     >>> push.device_types = ua.all_
-    >>> push.deliver()
+    >>> push.send()
 
 Broadcast to iOS, Android, and BlackBerry devices
 -------------------------------------------------
@@ -47,18 +55,20 @@ Broadcast to iOS, Android, and BlackBerry devices
     ...     android=ua.android(alert='Hello Android'),
     ...     blackberry=ua.blackberry(alert='Hello BlackBerry'))
     >>> push.device_types = ua.device_types('ios', 'android', 'blackberry')
-    >>> push.deliver()
+    >>> push.send()
 
-Sending a Rich Push message to a single user
---------------------------------------------
+Sending a rich app page to a single iOS device
+----------------------------------------------
     >>> import urbanairship
     >>> airship = urbanairship.Airship('application_key','master_secret')
-    >>> richpush = airship.create_rich_push()
-    >>> richpush.add_recipents(users=["<user_id>"])
-    >>> richpush.set_message(
+    >>> push = airship.create_push()
+    >>> push.audience = ua.device_token('some_token')
+    >>> push.notification = ua.notification(alert='Hello')
+    >>> push.device_types = ua.device_types('ios')
+    >>> push.message = ua.message(
     ...     "Hello, Rich Push User",
     ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
-    >>> richpush.send()
+    >>> push.send()
 
 Questions
 =========
@@ -74,4 +84,4 @@ History
 * 0.3 Added deregister, device token list, other minor improvements
 * 0.4 Added batch push
 * 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
-  
+* 0.6 Major refactoring, support for push api v3
