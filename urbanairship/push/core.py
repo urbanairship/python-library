@@ -34,9 +34,9 @@ class Push(object):
     def send(self):
         """Send the notification.
 
-        :returns: Dictionary with response information, including ``push_id``.
-        :raises AirshipFailure: Request failed. See args for status and
-            response body.
+        :returns: :py:class:`PushResponse` object with ``push_ids`` and
+            other response data.
+        :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
 
         """
@@ -59,6 +59,27 @@ class ScheduledPush(object):
         self.schedule = None
         self.name = None
         self.push = None
+        self.url = None
+
+    @classmethod
+    def from_url(cls, airship, url):
+        """Load an existing scheduled push from its URL."""
+
+        sched = cls(airship)
+        response = sched._airship._request('GET', None, url, version=3)
+        payload = response.json()
+        sched.name = payload.get('name')
+        sched.schedule = payload['schedule']
+        sched.push = Push(airship)
+        sched.push.audience = payload['push']['audience']
+        sched.push.notification = payload['push']['notification']
+        sched.push.device_types = payload['push']['device_types']
+        if 'message' in payload['push']:
+            sched.push.message = payload['push']['message']
+        if 'options' in payload['push']:
+            sched.push.options = payload['push']['options']
+        sched.url = url
+        return sched
 
     @property
     def payload(self):
@@ -73,9 +94,9 @@ class ScheduledPush(object):
     def send(self):
         """Schedule the notification
 
-        :returns: Dictionary with response information, including ``push_id``.
-        :raises AirshipFailure: Request failed. See args for status and
-            response body.
+        :returns: :py:class:`PushResponse` object with ``schedule_url`` and
+            other response data.
+        :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
 
         """
@@ -84,8 +105,30 @@ class ScheduledPush(object):
             common.SCHEDULES_URL, 'application/json', version=3)
 
         data = response.json()
-        logger.info("Push successful. push_ids: %s",
-            ', '.join(data.get('push_ids', [])))
+        logger.info("Scheduled push successful. schedule_urls: %s",
+            ', '.join(data.get('schedule_urls', [])))
+        self.url = data.get('schedule_urls', [None])[0]
+
+        return PushResponse(response)
+
+    def cancel(self):
+        """Cancel a previously scheduled notification."""
+        if not self.url:
+            raise ValueError(
+                "Cannot cancel ScheduledPush without url.")
+        self._airship._request('DELETE', None, self.url, version=3)
+
+    def update(self):
+        if not self.url:
+            raise ValueError(
+                "Cannot update ScheduledPush without url.")
+        body = json.dumps(self.payload)
+        response = self._airship._request('PUT', body,
+            self.url, 'application/json', version=3)
+
+        data = response.json()
+        logger.info("Scheduled push update successful. schedule_urls: %s",
+            ', '.join(data.get('schedule_urls', [])))
 
         return PushResponse(response)
 
@@ -100,14 +143,14 @@ class PushResponse(object):
     """
     ok = None
     push_ids = None
-    schedule_ids = None
+    schedule_url = None
     operation_id = None
     payload = None
 
     def __init__(self, response):
         data = response.json()
         self.push_ids = data.get('push_ids')
-        self.schedule_ids = data.get('schedule_ids')
+        self.schedule_url = data.get('schedule_urls', [None])[0]
         self.operation_id = data.get('operation_id')
         self.ok = data.get('ok')
         self.payload = data

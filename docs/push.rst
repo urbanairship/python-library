@@ -90,10 +90,54 @@ attributes, the notification is ready for delivery.
 
 .. code-block:: python
 
-   push.deliver()
+   push.send()
 
 If the delivery is unsuccessful, an :py:class:`AirshipFailure` exception
 will be raised.
 
 .. autoclass:: urbanairship.push.core.Push
    :members:
+
+Scheduled Delivery
+------------------
+
+Scheduled notifications build upon the Push object, and have two other
+components.
+
+This example schedules the above notification for delivery in one minute.
+
+.. code-block:: python
+
+   import datetime
+
+   schedule = airship.create_scheduled_push()
+   schedule.push = push
+   schedule.name = "optional name for later reference"
+   schedule.schedule = ua.scheduled_time(
+       datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
+   response = schedule.send()
+
+   print "Created schedule. url:", response.schedule_url
+
+If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
+will be raised.
+
+.. autoclass:: urbanairship.push.core.ScheduledPush
+   :members:
+
+Updating or Canceling a Schedule
+--------------------------------
+
+If you have the ``schedule_url`` returned from creating a scheduled
+notification, you can update or cancel it before it's sent.
+
+.. code-block:: python
+
+   schedule = ua.ScheduledPush.from_url(airship, url)
+   # change scheduled time to tomorrow
+   schedule.schedule = ua.scheduled_time(
+       datetime.datetime.utcnow() + datetime.timedelta(days=1))
+   schedule.update()
+
+   # Cancel
+   schedule.cancel()
