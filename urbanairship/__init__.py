@@ -29,6 +29,11 @@ from .push import (
     device_types,
     scheduled_time,
 )
+from .devices import (
+    DeviceTokenList,
+    DevicePINList,
+    APIDList,
+)
 
 
 __all__ = [
@@ -61,6 +66,9 @@ __all__ = [
     message,
     device_types,
     scheduled_time,
+    DeviceTokenList,
+    DevicePINList,
+    APIDList,
 ]
 
 # Silence urllib3 INFO logging by default
