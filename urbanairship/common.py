@@ -50,9 +50,9 @@ class AirshipFailure(Exception):
 
         try:
             payload = response.json()
-            error = payload['error']
-            error_code = payload['error_code']
-            details = payload['details']
+            error = payload.get('error')
+            error_code = payload.get('error_code')
+            details = payload.get('details')
         except ValueError:
             error = response.reason
             error_code = None
