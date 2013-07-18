@@ -75,7 +75,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         delay_while_idle=False, extra=None):
     """Android specific platform override payload.
 
-    All keyword arguments are option.
+    All keyword arguments are optional.
 
     :keyword alert: String alert text.
     :keyword collapse_key: String

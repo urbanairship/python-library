@@ -33,14 +33,14 @@ def apid(uuid):
 
 
 def wns(uuid):
-    """Select a single Windows 8 apid"""
+    """Select a single Windows 8 APID"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid wns")
     return {"wns": uuid.lower().strip()}
 
 
 def mpns(uuid):
-    """Select a single Windows 8 Phone apid"""
+    """Select a single Windows Phone 8 APID"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid mpns")
     return {"mpns": uuid.lower().strip()}
