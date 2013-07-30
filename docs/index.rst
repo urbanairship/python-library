@@ -24,6 +24,12 @@ representing a single UA application.
    import urbanairship as ua
    airship = ua.Airship('<app key>', '<app secret>')
 
+   push = airship.create_push()
+   push.audience = ua.device_token('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
+   push.notification = ua.notification(ua.ios(alert='Hello from Python', badge=1))
+   push.device_types = ua.device_types('ios')
+   push.send()
+
 The library uses `requests`_ for communication with the UA API,
 providing connection pooling and strict SSL checking. The ``Airship`` object is
 threadsafe, and can be instantiated once and reused in multiple threads.
