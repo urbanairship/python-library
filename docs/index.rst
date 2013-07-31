@@ -22,11 +22,11 @@ representing a single UA application.
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.Airship('<app key>', '<app secret>')
+   airship = ua.Airship('<app key>', '<master secret>')
 
    push = airship.create_push()
    push.audience = ua.device_token('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
-   push.notification = ua.notification(ua.ios(alert='Hello from Python', badge=1))
+   push.notification = ua.notification(ios=ua.ios(alert='Hello from Python', badge=1))
    push.device_types = ua.device_types('ios')
    push.send()
 
