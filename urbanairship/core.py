@@ -55,7 +55,6 @@ class Airship(object):
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
-        self._lib_version_num = None
 
 
     def _request(self, method, body, url, content_type=None,
