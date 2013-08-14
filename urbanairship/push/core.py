@@ -154,3 +154,7 @@ class PushResponse(object):
         self.operation_id = data.get('operation_id')
         self.ok = data.get('ok')
         self.payload = data
+
+    def __str__(self):
+        return "Response Payload: {}".format(self.payload)
+

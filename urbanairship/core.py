@@ -55,10 +55,24 @@ class Airship(object):
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
+        self._lib_version_num = None
+
+
+    def _lib_version(self):
+        if self._lib_version_num is None:
+            __about__ = {}
+
+            with open('urbanairship/__about__.py') as fp:
+                exec(fp, None, __about__)
+
+            self._lib_version_num = __about__['__version__']
+        return self._lib_version_num
+
 
     def _request(self, method, body, url, content_type=None,
             version=None, params=None):
-        headers = {}
+        lib_version = self._lib_version()
+        headers = {'User-agent': "UAPythonLib/{}".format(lib_version)}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
