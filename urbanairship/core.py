@@ -4,7 +4,7 @@ import warnings
 
 import requests
 
-from . import common
+from . import common, __about__
 from .push import Push, ScheduledPush
 
 
@@ -58,21 +58,11 @@ class Airship(object):
         self._lib_version_num = None
 
 
-    def _lib_version(self):
-        if self._lib_version_num is None:
-            __about__ = {}
-
-            with open('urbanairship/__about__.py') as fp:
-                exec(fp, None, __about__)
-
-            self._lib_version_num = __about__['__version__']
-        return self._lib_version_num
-
-
     def _request(self, method, body, url, content_type=None,
             version=None, params=None):
-        lib_version = self._lib_version()
-        headers = {'User-agent': "UAPythonLib/{}".format(lib_version)}
+
+        headers = \
+                {'User-agent': "UAPythonLib/{}".format(__about__.__version__)}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
