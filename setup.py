@@ -1,9 +1,17 @@
-from distutils.core import setup
 
+try:
+    from setuptools import setup
+except (ImportError):
+    from distutils.core import setup
+
+__about__ = {}
+
+with open("urbanairship/__about__.py") as fp:
+    exec(fp, None, __about__)
 
 setup(
     name="urbanairship",
-    version=open('VERSION.txt').read().strip(),
+    version=__about__["__version__"],
     author="Adam Lowry",
     author_email="adam@urbanairship.com",
     url="http://urbanairship.com/",

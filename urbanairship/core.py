@@ -4,7 +4,7 @@ import warnings
 
 import requests
 
-from . import common
+from . import common, __about__
 from .push import Push, ScheduledPush
 
 
@@ -56,9 +56,12 @@ class Airship(object):
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
+
     def _request(self, method, body, url, content_type=None,
             version=None, params=None):
-        headers = {}
+
+        headers = \
+                {'User-agent': "UAPythonLib/{}".format(__about__.__version__)}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
