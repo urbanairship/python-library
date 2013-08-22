@@ -61,7 +61,7 @@ class Airship(object):
             version=None, params=None):
 
         headers = \
-                {'User-agent': "UAPythonLib/{}".format(__about__.__version__)}
+                {'User-agent': "UAPythonLib/{0}".format(__about__.__version__)}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:

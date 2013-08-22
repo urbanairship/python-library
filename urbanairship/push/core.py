@@ -156,5 +156,5 @@ class PushResponse(object):
         self.payload = data
 
     def __str__(self):
-        return "Response Payload: {}".format(self.payload)
+        return "Response Payload: {0}".format(self.payload)
 
