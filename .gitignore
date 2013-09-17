@@ -2,3 +2,6 @@
 /MANIFEST
 *pyc
 /docs/_build
+.idea/
+*.iml
+urbanairship.egg-info/
