@@ -1,13 +1,9 @@
-
-try:
-    from setuptools import setup
-except (ImportError):
-    from distutils.core import setup
+from setuptools import setup
 
 __about__ = {}
 
 with open("urbanairship/__about__.py") as fp:
-    exec(fp, None, __about__)
+    exec(fp.read(), None, __about__)
 
 setup(
     name="urbanairship",
@@ -30,4 +26,5 @@ setup(
     install_requires=[
         'requests>=1.2',
     ],
+    use_2to3=True,
 )
