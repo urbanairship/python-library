@@ -1,7 +1,9 @@
 /dist
 /MANIFEST
-*pyc
+/build
 /docs/_build
 .idea/
+*pyc
+*pyo
 *.iml
-urbanairship.egg-info/
+*.egg-info/

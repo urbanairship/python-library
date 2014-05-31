@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 __about__ = {}
 
@@ -13,7 +13,8 @@ setup(
     url="http://urbanairship.com/",
     description="Python package for using the Urban Airship API",
     long_description=open('README.rst').read(),
-    packages=["urbanairship", "urbanairship.push", "urbanairship.devices"],
+    # packages=["urbanairship", "urbanairship.push", "urbanairship.devices", "urbanairship.tests"],
+    packages=find_packages(),
     license='BSD License',
     classifiers=[
         "Programming Language :: Python :: 2",
