@@ -188,7 +188,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
         payload['content_type'] = content_type
     if content_encoding is not None:
         payload['content_encoding'] = content_encoding
-    if extra is not None:
+    if not extra is None:
         payload['extra'] = extra
     return payload
 
