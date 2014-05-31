@@ -226,6 +226,11 @@ class Airship(object):
             dateutil: http://labix.org/python-dateutil
 
         """
+        # Make sure that the "since" is not a datetime object.
+        try:
+            since = since.date()
+        except AttributeError:
+            pass
         url = common.FEEDBACK_URL
         response = self._request('GET', '', url,
             params={'since': since.isoformat()}, version=1)
