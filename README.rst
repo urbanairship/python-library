@@ -10,9 +10,7 @@ app pages. This is a fork of original ``urbanairship`` with Python 3 support.
 Install
 =======
 
-```
-pip install urbanairship3
-```
+    pip install urbanairship3
 
 Requirements
 ============
