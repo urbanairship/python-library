@@ -6,7 +6,7 @@ with open("urbanairship/__about__.py") as fp:
     exec(fp.read(), None, __about__)
 
 setup(
-    name="urbanairship",
+    name="urbanairship3",
     version=__about__["__version__"],
     author="Adam Lowry",
     author_email="adam@urbanairship.com",
