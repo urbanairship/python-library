@@ -49,9 +49,14 @@ class AirshipDeviceList(object):
 
 class Airship(object):
 
-    def __init__(self, key, secret):
+    def __init__(self, key, secret, timeout=None):
+        """
+        :param timeout: (optional) Float describing the timeout of 
+                        the request (in seconds).
+        """
         self.key = key
         self.secret = secret
+        self.timeout = timeout
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
@@ -74,7 +79,8 @@ class Airship(object):
             body)
 
         response = self.session.request(
-            method, url, data=body, params=params, headers=headers)
+            method, url, data=body, params=params, headers=headers,
+            timeout=self.timeout)
 
         logger.debug("Received %s response. Headers:\n\t%s\nBody:\n\t%s",
             response.status_code, '\n\t'.join(
@@ -226,6 +232,11 @@ class Airship(object):
             dateutil: http://labix.org/python-dateutil
 
         """
+        # Make sure that the "since" is not a datetime object.
+        try:
+            since = since.date()
+        except AttributeError:
+            pass
         url = common.FEEDBACK_URL
         response = self._request('GET', '', url,
             params={'since': since.isoformat()}, version=1)

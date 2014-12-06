@@ -1,15 +1,21 @@
 About
 =====
 
-``urbanairship`` is a Python library for using the `Urban Airship
+``urbanairship3`` is a Python library for using the `Urban Airship
 <http://urbanairship.com/>`_ web service API for push notifications and rich
-app pages.
+app pages. This is a fork of original ``urbanairship`` with Python 3 support.
+
+**Why fork?** Primarily for publishing Python 3 compatible version at PyPi for easier install.
+
+Install
+=======
+
+    pip install urbanairship3
 
 Requirements
 ============
 
-As of version 0.6, Python 2.6 or 2.7 is required. Python 3.3 support will
-follow.
+As of version 0.6, Python 2.6+ or 3.3+ is required.
 
 Functionality
 =============

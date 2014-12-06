@@ -53,7 +53,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     """
     payload = {}
     if alert is not None:
-        if not isinstance(alert, basestring) or isinstance(alert, dict):
+        if not (isinstance(alert, basestring) or isinstance(alert, dict)):
             raise ValueError("iOS alert must be a string or dictionary")
         payload['alert'] = alert
     if badge is not None:
@@ -188,7 +188,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
         payload['content_type'] = content_type
     if content_encoding is not None:
         payload['content_encoding'] = content_encoding
-    if extra is not None:
+    if not extra is None:
         payload['extra'] = extra
     return payload
 

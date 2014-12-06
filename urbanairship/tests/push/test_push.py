@@ -65,7 +65,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                '''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}'''.encode('utf-8'))
             response.status_code = 202
             mock_request.return_value = response
 
@@ -83,7 +83,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}'''.encode('utf-8'))
             response.status_code = 202
             mock_request.return_value = response
 
@@ -97,7 +97,7 @@ class TestPush(unittest.TestCase):
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
             sched.send()
 
-            self.assertEquals(sched.url,
+            self.assertEqual(sched.url,
                 "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
 
     def test_schedule_from_url(self):
@@ -118,7 +118,7 @@ class TestPush(unittest.TestCase):
                         "content_encoding": "utf8",
                     },
                 },
-            })
+            }).encode('utf-8')
 
             response.status_code = 200
             mock_request.return_value = response
@@ -160,7 +160,7 @@ class TestPush(unittest.TestCase):
             response = requests.Response()
             response.status_code = 202
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}'''.encode('utf-8'))
 
             mock_request.return_value = response
 
