@@ -60,17 +60,13 @@ class TestAudience(unittest.TestCase):
     def test_time_period_selector(self):
         self.assertEqual(ua.recent_date(days=4), {"recent": {"days": 4}})
         self.assertEqual(
-            ua.recent_date(days=4, last_seen=True),
-            {"recent": {"days": 4}, "last_seen": True})
-        self.assertEqual(
             ua.absolute_date(resolution='days', start='2012-01-01',
                 end='2012-01-15'),
             {"days": {"start": '2012-01-01', 'end': '2012-01-15'}})
         self.assertEqual(
             ua.absolute_date(resolution='weeks', start='2012-01-01',
-                end='2012-01-15', last_seen=True),
-            {"weeks": {'start': '2012-01-01', 'end': '2012-01-15'},
-             'last_seen': True})
+                end='2012-01-15'),
+            {"weeks": {'start': '2012-01-01', 'end': '2012-01-15'}})
 
         # Invalid time periods
         self.assertRaises(ValueError, ua.recent_date, hours=1, minutes=1)

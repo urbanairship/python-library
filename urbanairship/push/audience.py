@@ -128,19 +128,17 @@ def location(date=None, **kwargs):
     return {"location": kwargs}
 
 
-def recent_date(last_seen=False, **kwargs):
+def recent_date(**kwargs):
     """Select a recent date range for a location selector.
 
     :keyword resolution: One keyword time resolution specifier, e.g. ``hours``
         or ``days``.
     :type resolution: int
-    :keyword last_seen: Select only devices last seen in this location. Defaults
-        to False.
 
     >>> recent_date(months=6)
     {'recent': {'months': 6}}
-    >>> recent_date(weeks=3, last_seen=True)
-    {'last_seen': True, 'recent': {'weeks': 3}}
+    >>> recent_date(weeks=3)
+    {True, 'recent': {'weeks': 3}}
     """
     if not len(kwargs) == 1:
         raise ValueError("Must specificy a single date resolution")
@@ -150,35 +148,28 @@ def recent_date(last_seen=False, **kwargs):
     if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
         raise ValueError("Invalid date resolution: %s" % resolution)
     payload = {"recent": {resolution: value}}
-    if last_seen:
-        payload['last_seen'] = True
     return payload
 
 
-def absolute_date(resolution, start, end, last_seen=False):
+def absolute_date(resolution, start, end):
     """Select an absolute date range for a location selector.
 
     :keyword resolution: Time resolution specifier, e.g. ``hours`` or ``days``.
     :keyword start: UTC start time in ISO 8601 format.
     :keyword end: UTC end time in ISO 8601 format.
-    :keyword last_seen: Select only devices last seen in this location.
-        Defaults to False.
 
     >>> from pprint import pprint
     >>> d = absolute_date(resolution='months', start='2013-01', end='2013-06')
     >>> pprint(d)
     {'months': {'end': '2013-06', 'start': '2013-01'}}
     >>> d = absolute_date(resolution='minutes', start='2012-01-01 12:00',
-    ...         end='2012-01-01 12:45', last_seen=True)
+    ...         end='2012-01-01 12:45')
     >>> pprint(d, width=76)
-    {'last_seen': True,
-     'minutes': {'end': '2012-01-01 12:45', 'start': '2012-01-01 12:00'}}
+    {'minutes': {'end': '2012-01-01 12:45', 'start': '2012-01-01 12:00'}}
 
     """
     if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
         raise ValueError("Invalid date resolution: %s" % resolution)
 
     payload = {resolution: {'start': start, 'end': end}}
-    if last_seen:
-        payload['last_seen'] = True
     return payload
