@@ -59,8 +59,8 @@ Broadcast to iOS, Android, and BlackBerry devices
 
 Sending a rich app page to a single iOS device
 ----------------------------------------------
-    >>> import urbanairship
-    >>> airship = urbanairship.Airship('application_key','master_secret')
+    >>> import urbanairship as ua
+    >>> airship = ua.Airship('application_key','master_secret')
     >>> push = airship.create_push()
     >>> push.audience = ua.device_token('some_token')
     >>> push.notification = ua.notification(alert='Hello')
