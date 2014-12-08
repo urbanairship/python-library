@@ -135,12 +135,15 @@ class TestMessage(unittest.TestCase):
     def test_rich_push(self):
         self.assertEqual(
             ua.message("My Title", "My Body", content_type='text/html',
-                content_encoding='utf8'),
+                content_encoding='utf8', extra={'more' : 'stuff'}),
             {
                 'title': 'My Title',
                 'body': 'My Body',
                 'content_type': 'text/html',
                 'content_encoding': 'utf8',
+                'extra' : {
+                    'more' : 'stuff'
+                },
             })
         self.assertEqual(
             ua.message("My Title", "My Body"),
