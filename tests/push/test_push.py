@@ -38,7 +38,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = {}
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8")
+        p.message = ua.message("Title", "Body", "text/html", "utf8", "extra")
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule"
