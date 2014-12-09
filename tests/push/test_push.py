@@ -30,6 +30,28 @@ class TestPush(unittest.TestCase):
                 "content_encoding": "utf8",
             }
         })
+    def test_ios_alert_dict(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(ios=ua.ios(
+            alert={'foo': 'bar'}
+        ))
+        p.options = {}
+        p.device_types = 'ios' 
+        p.message = ua.message("Title", "Body", "text/html", "utf8")
+
+        self.assertEqual(p.payload, {
+            "audience": "all",
+            "notification": {"ios": {"alert": {'foo': 'bar'}}},
+            "device_types": "ios",
+            "options": {},
+            "message": {
+                "title": "Title",
+                "body": "Body",
+                "content_type": "text/html",
+                "content_encoding": "utf8",
+            }
+        })
 
     def test_full_scheduled_payload(self):
         p = ua.Push(None)
