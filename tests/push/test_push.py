@@ -30,6 +30,7 @@ class TestPush(unittest.TestCase):
                 "content_encoding": "utf8",
             }
         })
+
     def test_ios_alert_dict(self):
         p = ua.Push(None)
         p.audience = ua.all_
