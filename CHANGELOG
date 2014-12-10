@@ -1,8 +1,14 @@
 --------------------
+0.6.3
+--------------------
+- added extras to Rich Push message creation  
+- removed deprecated last_seen location argument
+- fixed bug that didn't allow iOS alerts to be dictionaries
+
+--------------------
 0.6.2
 --------------------
 - added CHANGELOG
 - fixed doc typo
 - aligned version tag and release
 - no code changes from 0.6.1
-
