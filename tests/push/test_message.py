@@ -13,6 +13,7 @@ class TestMessage(unittest.TestCase):
     def test_ios(self):
         self.assertEqual(
             ua.notification(ios=ua.ios(
+                # Test alert as string
                 alert='Hello',
                 badge='+1',
                 sound='cat.caf',
@@ -20,6 +21,23 @@ class TestMessage(unittest.TestCase):
             )),
             {'ios': {
                 'alert': 'Hello',
+                'badge': '+1',
+                'sound': 'cat.caf',
+                'extra': {
+                    'more': 'stuff',
+                }
+            }})
+
+        self.assertEqual(
+            ua.notification(ios=ua.ios(
+                # Test alert as dictionary
+                alert={'foo': 'bar'},
+                badge='+1',
+                sound='cat.caf',
+                extra={'more': 'stuff'}
+            )),
+            {'ios': {
+                'alert': {'foo': 'bar'},
                 'badge': '+1',
                 'sound': 'cat.caf',
                 'extra': {
