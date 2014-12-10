@@ -56,21 +56,38 @@ Single iOS push
    push = airship.create_push()
    push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    push.notification = ua.notification(
-       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
+       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
+   )
    push.device_types = ua.device_types('ios')
    push.send()
 
-Single iOS Rich Push
---------------------
+Single iOS Rich Push with notification
+--------------------------------------
 
 .. code-block:: python
 
    push = airship.create_push()
    push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
    push.notification = ua.notification(
-       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
+       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
+   )
    push.device_types = ua.device_types('ios')
    push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
+   push.send()
+
+Rich Push with extra and without notification
+---------------------------------------------
+
+.. code-block:: python
+
+   push = airship.create_push()
+   push.audience = ua.all_
+   push.device_types = ua.all_
+   push.message = ua.message(
+      title="New follower", 
+      body="<h1>OMG It's Kim Jong-Un</h1>", 
+      extra={"articleid": "http://m.example.com/123456"}
+   ) 
    push.send()
 
 Scheduled iOS Push

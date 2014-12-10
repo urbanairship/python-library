@@ -169,7 +169,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None):
+def message(title, body, content_type=None, content_encoding=None, extra=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -188,6 +188,8 @@ def message(title, body, content_type=None, content_encoding=None):
         payload['content_type'] = content_type
     if content_encoding is not None:
         payload['content_encoding'] = content_encoding
+    if extra is not None:
+        payload['extra'] = extra
     return payload
 
 

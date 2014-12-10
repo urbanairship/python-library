@@ -16,7 +16,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = {}
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8")
+        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -28,6 +28,7 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
+                "extra" : {"more": "stuff"},
             }
         })
 
@@ -60,7 +61,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = {}
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8")
+        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule"
@@ -80,6 +81,7 @@ class TestPush(unittest.TestCase):
                     "body": "Body",
                     "content_type": "text/html",
                     "content_encoding": "utf8",
+                    "extra" : {"more": "stuff"}, 
                 },
             }
         })
