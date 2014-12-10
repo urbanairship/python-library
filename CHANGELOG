@@ -6,3 +6,13 @@
 - aligned version tag and release
 - no code changes from 0.6.1
 
+
+[Delete this line and above once the following has been complete:]
+--------------------
+0.6.3
+--------------------
+- updated CHANGELOG
+- CE-703 (added Rich Push extras capability and examples to docs)
+- CE-710 (lisa)
+- CE-711 (allow iOS alerts to be dictionaries)
+- CE-753 (remove development libraries (nosetest/mock?) from requirements.txt)
