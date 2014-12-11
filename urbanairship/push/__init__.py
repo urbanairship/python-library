@@ -1,6 +1,9 @@
 from .core import Push, ScheduledPush
 
 from .audience import (
+    ios_channel,
+    android_channel,
+    amazon_channel,
     device_token,
     device_pin,
     apid,
@@ -45,6 +48,9 @@ __all__ = [
     all_,
     Push,
     ScheduledPush,
+    ios_channel,
+    android_channel,
+    amazon_channel,
     device_token,
     device_pin,
     apid,

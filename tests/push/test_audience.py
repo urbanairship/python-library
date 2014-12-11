@@ -7,6 +7,12 @@ class TestAudience(unittest.TestCase):
 
     def test_basic_selectors(self):
         selectors = (
+            (ua.ios_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
+                {'ios_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}),
+            (ua.android_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
+                {'android_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}),
+            (ua.amazon_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
+                {'amazon_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}),
             (ua.device_token, 'f' * 64,
                 {'device_token': 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'}),
             (ua.device_token, '0' * 64,
@@ -28,6 +34,9 @@ class TestAudience(unittest.TestCase):
 
     def test_invalid_device_selectors(self):
         selectors = (
+            (ua.ios_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef34'),
+            (ua.android_channel, '074e84a2-9ed9-Beee-9ca4-ccc597bfdbef3'),
+            (ua.amazon_channel, '074e84a2-Red9-5eee-0ca4-cc597bfdbef3'),
             (ua.device_token, 'f' * 63),
             (ua.device_token, 'f' * 65),
             (ua.device_token, '0123'),
