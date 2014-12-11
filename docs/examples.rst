@@ -54,7 +54,7 @@ Single iOS push
 .. code-block:: python
 
    push = airship.create_push()
-   push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+   push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
    )
@@ -67,7 +67,7 @@ Single iOS Rich Push with notification
 .. code-block:: python
 
    push = airship.create_push()
-   push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+   push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
    )
@@ -102,7 +102,7 @@ Scheduled iOS Push
       datetime.datetime(2013, 10, 10, 2, 45))
 
    sched.push = airship.create_push()
-   sched.push.audience = ua.device_token('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+   sched.push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    sched.push.notification = ua.notification(
        ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
    sched.push.device_types = ua.device_types('ios')
