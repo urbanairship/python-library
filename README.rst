@@ -41,7 +41,7 @@ Simple iOS Push
     >>> import urbanairship as ua
     >>> airship = ua.Airship('application_key','master_secret')
     >>> push = airship.create_push()
-    >>> push.audience = ua.or_(ua.alias('adam'), ua.ios_channel('some_token'))
+    >>> push.audience = ua.or_(ua.alias('adam'), ua.ios_channel('some_channel'))
     >>> push.notification = ua.notification(alert='Hello')
     >>> push.device_types = ua.device_types('ios')
     >>> push.send()

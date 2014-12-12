@@ -19,7 +19,8 @@ The library is intended to be used with the small footprint of a single import.
 To get started, import the package, and create an :py:class:`Airship` object
 representing a single UA application.
 
-Note that channels should be used instead of `device_token` and `apid`.
+Note that channels are preferred over `device_token` and `apid`.
+See <http://docs.urbanairship.com/topic-guides/channels.html>.
 
 .. code-block:: python
 
