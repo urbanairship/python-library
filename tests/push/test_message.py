@@ -68,6 +68,27 @@ class TestMessage(unittest.TestCase):
                 }
             }})
 
+    def test_amazon(self):
+        self.assertEqual(
+            ua.notification(amazon=ua.amazon(
+                alert='Amazon test',
+                title='My Title',
+                consolidation_key='123456',
+                expires_after=100,
+                summary='Summary of message',
+                extra={'more': 'stuff'}
+            )),
+            {'amazon': {
+                'alert': 'Amazon test',
+                'title':'My Title',
+                'consolidation_key':'123456',
+                'expires_after':100,
+                'summary':'Summary of message',
+                'extra': {
+                    'more': 'stuff',
+                }
+            }})
+
     def test_blackberry(self):
         self.assertEqual(
             ua.notification(blackberry=ua.blackberry(
