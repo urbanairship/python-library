@@ -8,11 +8,7 @@ DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 APID_URL = BASE_URL + '/apids/'
 DEVICE_PIN_URL = BASE_URL + '/device_pins/'
 PUSH_URL = BASE_URL + '/push/'
-BATCH_PUSH_URL = BASE_URL + '/push/batch/'
-BROADCAST_URL = BASE_URL + '/push/broadcast/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
-RICH_PUSH_SEND_URL = BASE_URL + '/airmail/send/'
-RICH_PUSH_BROADCAST_URL = BASE_URL + '/airmail/send/broadcast/'
 SCHEDULES_URL = BASE_URL + '/schedules/'
 
 
