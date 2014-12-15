@@ -1,6 +1,9 @@
 from .core import Push, ScheduledPush
 
 from .audience import (
+    ios_channel,
+    android_channel,
+    amazon_channel,
     device_token,
     device_pin,
     apid,
@@ -21,6 +24,7 @@ from .payload import (
     notification,
     ios,
     android,
+    amazon,
     blackberry,
     wns_payload,
     mpns_payload,
@@ -45,6 +49,9 @@ __all__ = [
     all_,
     Push,
     ScheduledPush,
+    ios_channel,
+    android_channel,
+    amazon_channel,
     device_token,
     device_pin,
     apid,
@@ -62,6 +69,7 @@ __all__ = [
     notification,
     ios,
     android,
+    amazon,
     blackberry,
     wns_payload,
     mpns_payload,

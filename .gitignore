@@ -5,3 +5,4 @@
 .idea/
 *.iml
 urbanairship.egg-info/
+.DS_Store

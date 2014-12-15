@@ -10,6 +10,27 @@ UUID_FORMAT = re.compile(
 # Value selectors; device IDs, aliases, tags, etc.
 
 
+def ios_channel(uuid):
+    """Select a single iOS Channel"""
+    if not UUID_FORMAT.match(uuid):
+        raise ValueError("Invalid iOS Channel")
+    return {"ios_channel": uuid.lower().strip()}
+
+
+def android_channel(uuid):
+    """Select a single Android Channel"""
+    if not UUID_FORMAT.match(uuid):
+        raise ValueError("Invalid Android Channel")
+    return {"android_channel": uuid.lower().strip()}
+
+
+def amazon_channel(uuid):
+    """Select a single Amazon Channel"""
+    if not UUID_FORMAT.match(uuid):
+        raise ValueError("Invalid Amazon Channel")
+    return {"amazon_channel": uuid.lower().strip()}
+
+
 def device_token(token):
     """Select a single iOS device token"""
     # Ensure the device token is valid

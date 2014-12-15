@@ -19,13 +19,16 @@ The library is intended to be used with the small footprint of a single import.
 To get started, import the package, and create an :py:class:`Airship` object
 representing a single UA application.
 
+Note that channels are preferred over `device_token` and `apid`.
+See <http://docs.urbanairship.com/topic-guides/channels.html>.
+
 .. code-block:: python
 
    import urbanairship as ua
    airship = ua.Airship('<app key>', '<master secret>')
 
    push = airship.create_push()
-   push.audience = ua.device_token('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
+   push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(ios=ua.ios(alert='Hello from Python', badge=1))
    push.device_types = ua.device_types('ios')
    push.send()
