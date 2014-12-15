@@ -20,7 +20,7 @@ Simple broadcast to all devices
    push.send()
 
 
-Complex audience with iOS & Android specifics
+Complex audience with platform specifics
 ---------------------------------------------
 
 .. code-block:: python
@@ -42,9 +42,15 @@ Complex audience with iOS & Android specifics
       android=ua.android(
          alert="Breaking Special Android News! Glorious Leader Kim Jong-Un wins U.S. Open!",
          extra={"articleid": "http://m.example.com/123456"}
+      ),
+      amazon=ua.amazon(
+      alert='Breaking Amazon News!',
+      expires_after=60,
+      extra={'articleid': '12345'},
+      summary='This is a short message summary',
       )
    )
-   push.device_types = ua.device_types('ios', 'android')
+   push.device_types = ua.device_types('ios', 'android', 'amazon')
    push.send()
 
 
