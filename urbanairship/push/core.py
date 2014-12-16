@@ -1,6 +1,5 @@
 import json
 import logging
-import datetime  #needed?
 
 from urbanairship import common
 
@@ -158,22 +157,3 @@ class PushResponse(object):
 
     def __str__(self):
         return "Response Payload: {0}".format(self.payload)
-
-# class Options(object):   #include pushExpiry (RichPush Expiry is an attribute of the RichPush class)
-# class Expiry(object):
-    """Expiration time for push attempt, set as time (UTC) or seconds.
-
-        Currently, the only public features of options.
-
-    """
-# class PushExpiry(object):
-#     """  Expiration time for push attempt, set as time (UTC) or seconds.
-
-#     APNS/GCM will no longer try to send this notification after the time set or the amount
-#     of seconds from original push time set in 'expiry'.
-#     Currently, Expiry is the only feature included in 'options.'
-
-#     """
-#     def __init__():
-
-

@@ -45,7 +45,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
-
+    :keyword expiry: An integar or time 
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'})
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
@@ -222,3 +222,8 @@ def device_types(*types):
         if t not in ('ios', 'android', 'blackberry', 'wns', 'mpns'):
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
+
+def options(expiry=None):
+    if expiry is not None:
+        payload['expiry'] = expiry
+    return payload
