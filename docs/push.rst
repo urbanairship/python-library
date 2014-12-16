@@ -29,7 +29,7 @@ Audience Selectors
 ------------------
 
 An audience should specify one or more devices. An audience can be a device,
-such as a ``device token`` or ``apid``; a tag, alias, or segment; a location;
+such as a ``channel``, ``device_token`` or ``apid``; a tag, alias, or segment; a location;
 or a combination. Audience selectors are combined with ``and_``, ``or_``, and
 ``not_``.
 
