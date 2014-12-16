@@ -176,15 +176,16 @@ class TestMessage(unittest.TestCase):
     def test_rich_push(self):
         self.assertEqual(
             ua.message("My Title", "My Body", content_type='text/html',
-                content_encoding='utf8', extra={'more' : 'stuff'}),
+                content_encoding='utf8', extra={'more' : 'stuff'}, expiry='time'),
             {
                 'title': 'My Title',
                 'body': 'My Body',
                 'content_type': 'text/html',
                 'content_encoding': 'utf8',
                 'extra' : {
-                    'more' : 'stuff'
+                    'more': 'stuff'
                 },
+                'expiry': 'time',
             })
         self.assertEqual(
             ua.message("My Title", "My Body"),
@@ -192,6 +193,14 @@ class TestMessage(unittest.TestCase):
 
     def test_all_device_types(self):
         self.assertEqual(ua.device_types(ua.all_), 'all')
+
+    def options(self):                           #1 of these (test_push tests) needs to go!
+        airship = ua.Airship('key', 'secret')
+        push = ua.Push(None)
+        push.audience = ua.all_
+        push.notification = ua.notification(alert="Hello Expiry")
+        push.options = ua.options(expiry=10000)  #iOS test has this written as {}
+        push.device_types = ua.all_ 
 
     def test_invalid_payloads(self):
         # Base notification
