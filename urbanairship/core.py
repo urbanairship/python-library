@@ -173,8 +173,8 @@ class Airship(object):
         if schedules:
             payload['schedule_for'] = [
                 schedule.isoformat() for schedule in schedules]
-        if expiry:
-            payload['expiry'] = expiry
+        if expiry:                            #not sure if these two lines are needed
+            payload['expiry'] = expiry        #
         body = json.dumps(payload)
         self._request('POST', body, common.PUSH_URL,
             'application/json', version=1)
