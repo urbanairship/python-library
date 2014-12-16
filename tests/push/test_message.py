@@ -18,7 +18,7 @@ class TestMessage(unittest.TestCase):
                 badge='+1',
                 sound='cat.caf',
                 extra={'more': 'stuff'},
-                expiry={'expiry': 'time'}
+                expiry='time',
             )),
             {'ios': {
                 'alert': 'Hello',
@@ -27,9 +27,7 @@ class TestMessage(unittest.TestCase):
                 'extra': {
                     'more': 'stuff',
                 },
-                'expiry': {
-                    'expiry': 'expiry_time',
-                }
+                'expiry': 'time',
             }})
 
         self.assertEqual(

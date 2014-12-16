@@ -145,7 +145,7 @@ class Airship(object):
         return AirshipDeviceList(self)
 
     def push(self, payload, device_tokens=None, aliases=None, tags=None,
-            apids=None, device_pins=None, schedules=None):
+            apids=None, device_pins=None, schedules=None, expiry=None):
         """Push this payload to the specified recipients.
 
         Payload: a dictionary the contents to send, e.g.:
@@ -173,6 +173,8 @@ class Airship(object):
         if schedules:
             payload['schedule_for'] = [
                 schedule.isoformat() for schedule in schedules]
+        if expiry:
+            payload['expiry'] = expiry
         body = json.dumps(payload)
         self._request('POST', body, common.PUSH_URL,
             'application/json', version=1)
@@ -303,11 +305,11 @@ class RichPush(object):
         self.extra = kw
 
     def set_expiry(self, expiry): 
-           """Set expiry to integar or a fixed time string.  
+        """Set expiry to integar or a fixed time string.  
 
-           Extra will be deleted from Inbox at a fixed time or x amount of seconds from the time that the 
-           extra was sent.
-           """
+        Extra will be deleted from Inbox at a fixed time or x amount of seconds from the time that the 
+        extra was sent.
+        """
         self.expiry = expiry
 
     def send(self):

@@ -35,7 +35,7 @@ def notification(alert=None, ios=None, android=None, blackberry=None, wns=None,
 
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
-        extra=None):
+        extra=None, expiry=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -45,7 +45,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
-    :keyword expiry: An integar or time 
+    :keyword expiry: An integar or time set in UTC as a string
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'})
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
@@ -70,7 +70,6 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['extra'] = extra
     if expiry is not None:         
         payload['expiry'] = expiry 
-        #  add validation function here (test for int or time input)
     return payload
 
 
@@ -104,7 +103,9 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
-    #add validation function
+    #add validation function - needs testing
+        if not (isinstance(time_to_live, basestring) or isinstance(time_to_live, int)):
+            raise ValueError("Android time_to_live value must be an integar or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
