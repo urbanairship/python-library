@@ -268,6 +268,7 @@ class RichPush(object):
         self.content_type = None
         self.push = None
         self.extra = None
+        self.expiry = None
 
     def add_recipients(self, users=None, aliases=None, tags=None):
         """Add one or more user IDs, aliases, or tags."""
@@ -301,6 +302,13 @@ class RichPush(object):
 
         self.extra = kw
 
+    def set_expiry(self, **kw):  #can I use a kwarg here? expiry can only be one of two values.
+           """Set expiry key to 0 or a fixed time.  Extra will be deleted from 
+           Inbox at a fixed time or x amount of seconds from the time that the 
+           extra was sent.  [Check docs to make sure the latter is true!]
+           """
+           self.expiry = kw
+
     def send(self):
         """Send the rich push message."""
 
@@ -321,6 +329,8 @@ class RichPush(object):
             payload['tags'] = self.tags
         if self.extra:
             payload['extra'] = self.extra
+        if self.options:
+            payload['options'] = self.options
         body = json.dumps(payload)
         self._airship._request('POST', body,
             common.RICH_PUSH_SEND_URL, 'application/json', version=1)
@@ -339,6 +349,8 @@ class RichPush(object):
             payload['push'] = self.push
         if self.extra:
             payload['extra'] = self.extra
+        if self.options:
+            payload['options'] = self.options
         body = json.dumps(payload)
         self._airship._request('POST', body,
             common.RICH_PUSH_BROADCAST_URL, 'application/json', version=1)

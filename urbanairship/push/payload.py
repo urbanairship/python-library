@@ -68,6 +68,9 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['content-available'] = 1
     if extra is not None:
         payload['extra'] = extra
+    if expiry is not None:         
+        payload['expiry'] = expiry 
+        #  add validation function here (test for int or time input)
     return payload
 
 
@@ -101,11 +104,16 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
+    #add validation function
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
         payload['extra'] = extra
     return payload
+
+    #soon-to-be merged code will include
+    #Amazon payload: expires_after
+    #add validation function
 
 
 def blackberry(alert=None, body=None, content_type=None):
@@ -169,7 +177,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None, extra=None):
+def message(title, body, content_type=None, content_encoding=None, extra=None, expiry=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -178,6 +186,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
     :keyword content_encoding: Optional, encoding of the data in body, e.g.
         ``utf-8``.
     :keyword extra: Optional, dictionary of string values.
+    :keyword expiry: time when message will delete from Inbox (UTC time or in seconds)
 
     """
     payload = {
@@ -190,6 +199,9 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
         payload['content_encoding'] = content_encoding
     if extra is not None:
         payload['extra'] = extra
+    if expiry is not None:     
+        payload['expiry'] = expiry
+    # add validation function
     return payload
 
 

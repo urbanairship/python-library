@@ -17,7 +17,8 @@ class TestMessage(unittest.TestCase):
                 alert='Hello',
                 badge='+1',
                 sound='cat.caf',
-                extra={'more': 'stuff'}
+                extra={'more': 'stuff'},
+                expiry={'expiry': 'time'}
             )),
             {'ios': {
                 'alert': 'Hello',
@@ -25,6 +26,9 @@ class TestMessage(unittest.TestCase):
                 'sound': 'cat.caf',
                 'extra': {
                     'more': 'stuff',
+                },
+                'expiry': {
+                    'expiry': 'expiry_time',
                 }
             }})
 

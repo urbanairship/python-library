@@ -28,7 +28,8 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra" : {"more": "stuff"},
+                "extra": {"more": "stuff"},
+                "expiry": {"expiry": "UTC time"},  #or "expiry": "expiry_time" #or "options": {"expiry": "expiry_time"},
             }
         })
 
