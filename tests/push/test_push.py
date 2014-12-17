@@ -204,6 +204,6 @@ class TestPush(unittest.TestCase):
         push = ua.Push(None)
         push.audience = ua.all_
         push.notification = ua.notification(alert="Hello Expiry")
-        push.options = ua.options(expiry=10000)  #iOS test has this written as {}
+        push.options = ua.options(expiry=10080)
         push.device_types = ua.all_ 
         
