@@ -14,7 +14,7 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
-        p.options = {}
+        p.options = ua.options(expiry=10080)
         p.device_types = ua.all_
         p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
 
@@ -22,7 +22,9 @@ class TestPush(unittest.TestCase):
             "audience": "all",
             "notification": {"alert": "Hello"},
             "device_types": "all",
-            "options": {},
+            "options": {
+                "expiry": 10080
+            },
             "message": {
                 "title": "Title",
                 "body": "Body",
@@ -38,7 +40,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(ios=ua.ios(
             alert={'foo': 'bar'}
         ))
-        p.options = {}
+        p.options = ua.options("expiry")
         p.device_types = 'ios' 
         p.message = ua.message("Title", "Body", "text/html", "utf8")
 
@@ -46,7 +48,9 @@ class TestPush(unittest.TestCase):
             "audience": "all",
             "notification": {"ios": {"alert": {'foo': 'bar'}}},
             "device_types": "ios",
-            "options": {},
+            "options": {
+                "expiry": "expiry"
+            },
             "message": {
                 "title": "Title",
                 "body": "Body",
@@ -59,7 +63,7 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
-        p.options = {}
+        p.options = ua.options("expiry")
         p.device_types = ua.all_
         p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
         sched = ua.ScheduledPush(None)
@@ -75,7 +79,9 @@ class TestPush(unittest.TestCase):
                 "audience": "all",
                 "notification": {"alert": "Hello"},
                 "device_types": "all",
-                "options": {},
+                "options": {
+                "expiry": "expiry"
+            },
                 "message": {
                     "title": "Title",
                     "body": "Body",
@@ -98,7 +104,7 @@ class TestPush(unittest.TestCase):
             push = airship.create_push()
             push.audience = ua.all_
             push.notification = ua.notification(alert='Hello')
-            push.options = {}
+            push.options = ua.options(expiry=10080)
             push.device_types = ua.all_
             pr = push.send()
             self.assertEqual(
@@ -135,7 +141,7 @@ class TestPush(unittest.TestCase):
                     "audience": "all",
                     "notification": {"alert": "Hello"},
                     "device_types": "all",
-                    "options": {},
+                    "options": {"expiry": 10080},
                     "message": {
                         "title": "Title",
                         "body": "Body",

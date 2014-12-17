@@ -48,7 +48,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
-    :keyword expiry: An integar or time set in UTC as a string
+    :keyword expiry: An integer or time set in UTC as a string
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'})
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
@@ -71,7 +71,9 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['content-available'] = 1
     if extra is not None:
         payload['extra'] = extra
-    if expiry is not None:         
+    if expiry is not None:   
+        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+            raise ValueError("iOS expiry must be an integer or string")    
         payload['expiry'] = expiry 
     return payload
 
@@ -106,19 +108,13 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
-    #add validation function - needs testing
         if not (isinstance(time_to_live, basestring) or isinstance(time_to_live, int)):
-            raise ValueError("Android time_to_live value must be an integar or time set in UTC as a string")
+            raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
         payload['extra'] = extra
     return payload
-
-    #soon-to-be merged code will include
-    #Amazon payload: expires_after
-    #add validation function
-
 
 def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
            title=None, summary=None):
@@ -128,7 +124,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
 
     :keyword alert: String alert text.
     :keyword consolidation_key: String
-    :keyword expires_after: Integer
+    :keyword expires_after: Integer or UTC time (string)
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device. All values must be strings.
     :keyword title: String
@@ -146,6 +142,8 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['consolidation_key'] = consolidation_key
     if expires_after is not None:
         payload['expires_after'] = expires_after
+        if not (isinstance(expires_after, basestring) or isinstance(expires_after, int)):
+            raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
     if extra is not None:
         payload['extra'] = extra
     if title is not None:
@@ -240,6 +238,8 @@ def message(title, body, content_type=None, content_encoding=None, extra=None, e
         payload['extra'] = extra
     if expiry is not None:     
         payload['expiry'] = expiry
+        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+            raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
 
@@ -270,4 +270,6 @@ def options(expiry=None):
     payload = {}
     if expiry is not None:
         payload['expiry'] = expiry
+    if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+        raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
