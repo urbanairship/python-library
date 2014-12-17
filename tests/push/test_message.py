@@ -27,7 +27,7 @@ class TestMessage(unittest.TestCase):
                 'extra': {
                     'more': 'stuff',
                 },
-                'expiry': 'time',
+                'expiry': 'time'
             }})
 
         self.assertEqual(
@@ -185,7 +185,7 @@ class TestMessage(unittest.TestCase):
                 'extra' : {
                     'more': 'stuff'
                 },
-                'expiry': 'time',
+                'expiry': 'time'
             })
         self.assertEqual(
             ua.message("My Title", "My Body"),
@@ -199,7 +199,7 @@ class TestMessage(unittest.TestCase):
         push = ua.Push(None)
         push.audience = ua.all_
         push.notification = ua.notification(alert="Hello Expiry")
-        push.options = ua.options(expiry=10080)
+        push.options = ua.options(expiry="2013-04-01T18:45:0")
         push.device_types = ua.all_ 
 
     def test_invalid_payloads(self):
@@ -210,3 +210,4 @@ class TestMessage(unittest.TestCase):
         self.assertRaises(ValueError, ua.ios, alert=100)
         self.assertRaises(ValueError, ua.ios, badge=object())
         self.assertRaises(ValueError, ua.ios, badge="++100!")
+        self.assertRaises(ValueError, ua.ios, expiry=2.5)
