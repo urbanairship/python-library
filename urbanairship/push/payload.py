@@ -109,7 +109,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
         if not (isinstance(time_to_live, basestring) or isinstance(time_to_live, int)):
-            raise ValueError("Android time_to_live value must be an integar or time set in UTC as a string")
+            raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
@@ -143,7 +143,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
     if expires_after is not None:
         payload['expires_after'] = expires_after
         if not (isinstance(expires_after, basestring) or isinstance(expires_after, int)):
-            raise ValueError("Amazon time_to_live value must be an integar or time set in UTC as a string")
+            raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
     if extra is not None:
         payload['extra'] = extra
     if title is not None:
@@ -239,7 +239,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None, e
     if expiry is not None:     
         payload['expiry'] = expiry
         if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
-            raise ValueError("Expiry value must be an integar or time set in UTC as a string")
+            raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
 
@@ -271,5 +271,5 @@ def options(expiry=None):
     if expiry is not None:
         payload['expiry'] = expiry
     if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
-        raise ValueError("Expiry value must be an integar or time set in UTC as a string")
+        raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
