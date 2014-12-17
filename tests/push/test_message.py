@@ -194,7 +194,7 @@ class TestMessage(unittest.TestCase):
     def test_all_device_types(self):
         self.assertEqual(ua.device_types(ua.all_), 'all')
 
-    def options(self):                           #1 of these (test_push tests) needs to go!
+    def options(self):
         airship = ua.Airship('key', 'secret')
         push = ua.Push(None)
         push.audience = ua.all_
