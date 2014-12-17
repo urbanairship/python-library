@@ -33,6 +33,7 @@ from .push import (
     device_types,
     options,
     scheduled_time,
+    local_scheduled_time,
 )
 from .devices import (
     DeviceTokenList,
@@ -76,6 +77,7 @@ __all__ = [
     options,
     device_types,
     scheduled_time,
+    local_scheduled_time,
     DeviceTokenList,
     DevicePINList,
     APIDList,
