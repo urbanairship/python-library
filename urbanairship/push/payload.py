@@ -48,7 +48,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
-    :keyword expiry: An integar or time set in UTC as a string
+    :keyword expiry: An integer or time set in UTC as a string
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'})
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
