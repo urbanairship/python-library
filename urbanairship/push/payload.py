@@ -38,7 +38,7 @@ def notification(alert=None, ios=None, android=None, amazon=None, blackberry=Non
 
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
-        extra=None):
+        extra=None, expiry=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -48,7 +48,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
-
+    :keyword expiry: An integer or time set in UTC as a string
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'})
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
@@ -71,6 +71,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['content-available'] = 1
     if extra is not None:
         payload['extra'] = extra
+    if expiry is not None:   
+        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+            raise ValueError("iOS expiry must be an integer or string")    
+        payload['expiry'] = expiry 
     return payload
 
 
@@ -104,12 +108,13 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
+        if not (isinstance(time_to_live, basestring) or isinstance(time_to_live, int)):
+            raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
         payload['extra'] = extra
     return payload
-
 
 def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
            title=None, summary=None):
@@ -119,7 +124,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
 
     :keyword alert: String alert text.
     :keyword consolidation_key: String
-    :keyword expires_after: Integer
+    :keyword expires_after: Integer or UTC time (string)
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device. All values must be strings.
     :keyword title: String
@@ -137,6 +142,8 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['consolidation_key'] = consolidation_key
     if expires_after is not None:
         payload['expires_after'] = expires_after
+        if not (isinstance(expires_after, basestring) or isinstance(expires_after, int)):
+            raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
     if extra is not None:
         payload['extra'] = extra
     if title is not None:
@@ -207,7 +214,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None, extra=None):
+def message(title, body, content_type=None, content_encoding=None, extra=None, expiry=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -216,6 +223,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
     :keyword content_encoding: Optional, encoding of the data in body, e.g.
         ``utf-8``.
     :keyword extra: Optional, dictionary of string values.
+    :keyword expiry: time when message will delete from Inbox (UTC time or in seconds)
 
     """
     payload = {
@@ -228,6 +236,10 @@ def message(title, body, content_type=None, content_encoding=None, extra=None):
         payload['content_encoding'] = content_encoding
     if extra is not None:
         payload['extra'] = extra
+    if expiry is not None:     
+        payload['expiry'] = expiry
+        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+            raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
 
@@ -248,3 +260,16 @@ def device_types(*types):
         if t not in ('ios', 'android', 'amazon', 'blackberry', 'wns', 'mpns'):
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
+
+def options(expiry=None):
+    """Options payload creation.
+
+    :keyword expiry: time at which push will no longer be sent.  Int or UTC time
+
+    """
+    payload = {}
+    if expiry is not None:
+        payload['expiry'] = expiry
+    if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+        raise ValueError("Expiry value must be an integer or time set in UTC as a string")
+    return payload

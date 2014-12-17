@@ -157,4 +157,3 @@ class PushResponse(object):
 
     def __str__(self):
         return "Response Payload: {0}".format(self.payload)
-

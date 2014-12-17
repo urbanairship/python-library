@@ -30,6 +30,7 @@ from .payload import (
     mpns_payload,
     message,
     device_types,
+    options,
 )
 
 from .schedule import (
@@ -75,5 +76,6 @@ __all__ = [
     mpns_payload,
     message,
     device_types,
+    options,
     scheduled_time,
 ]

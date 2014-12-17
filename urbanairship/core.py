@@ -92,4 +92,3 @@ class Airship(object):
     def create_scheduled_push(self):
         """Create a Scheduled Push notification."""
         return ScheduledPush(self)
-

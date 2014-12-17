@@ -31,6 +31,7 @@ from .push import (
     mpns_payload,
     message,
     device_types,
+    options,
     scheduled_time,
 )
 from .devices import (
@@ -72,6 +73,7 @@ __all__ = [
     wns_payload,
     mpns_payload,
     message,
+    options,
     device_types,
     scheduled_time,
     DeviceTokenList,
