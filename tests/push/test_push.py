@@ -101,12 +101,12 @@ class TestPush(unittest.TestCase):
         p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
         sched = ua.ScheduledPush(None)
         sched.push = p
-        sched.name = "a schedule in local time"
+        sched.name = "a schedule in device local time"
         sched.schedule = ua.local_scheduled_time(
             datetime.datetime(2015, 1, 1, 12, 0, 0))
 
         self.assertEqual(sched.payload, {
-            "name": "a schedule in local time",
+            "name": "a schedule in device local time",
             "schedule": {'local_scheduled_time': '2015-01-01T12:00:00'},
             "push": {
                 "audience": "all",
