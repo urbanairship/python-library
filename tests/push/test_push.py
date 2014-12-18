@@ -164,7 +164,7 @@ class TestPush(unittest.TestCase):
             self.assertEquals(sched.url,
                 "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
 
-    def test_schedule_success(self):
+    def test_local_schedule_success(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (

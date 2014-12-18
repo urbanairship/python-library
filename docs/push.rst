@@ -105,7 +105,7 @@ Scheduled Delivery
 ------------------
 
 Scheduled notifications build upon the Push object, and have two other
-components.
+components: the scheduled time(s) and an optional name.
 
 This example schedules the above notification for delivery in one minute.
 
@@ -129,13 +129,13 @@ will be raised.
    :members:
 
 
-Scheduled Delivery in local time
+Scheduled Delivery in Device Local Time
 --------------------------------
 
 Scheduled notifications build upon the Push object, and have two other
-components.
+components: the scheduled time(s) and an optional name.
 
-This example schedules the above notification for delivery in local time.
+This example schedules the above notification for delivery in device local time.
 
 .. code-block:: python
 
