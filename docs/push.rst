@@ -130,7 +130,7 @@ will be raised.
 
 
 Scheduled Delivery in Device Local Time
---------------------------------
+---------------------------------------
 
 Scheduled notifications build upon the Push object, and have two other
 components: the scheduled time(s) and an optional name.
