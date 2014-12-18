@@ -92,6 +92,39 @@ class TestPush(unittest.TestCase):
             }
         })
 
+    def test_local_scheduled_payload(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(alert='Hello')
+ #       p.options = ua.options("expiry")
+        p.device_types = ua.all_
+        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+        sched = ua.ScheduledPush(None)
+        sched.push = p
+#        sched.name = "a schedule in local time"
+        sched.schedule = ua.local_scheduled_time(
+            datetime.datetime(2014, 1, 1, 12, 0, 0))
+
+        self.assertEqual(sched.payload, {
+#            "name": "a schedule",
+            "schedule": {'local_scheduled_time': '2014-01-01T12:00:00'},
+            "push": {
+                "audience": "all",
+                "notification": {"alert": "Hello"},
+                "device_types": "all",
+                "options": {
+#                "expiry": "expiry"
+            },
+                "message": {
+                    "title": "Title",
+                    "body": "Body",
+                    "content_type": "text/html",
+                    "content_encoding": "utf8",
+#                    "extra" : {"more": "stuff"}, 
+                },
+            }
+        })
+
     def test_push_success(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
