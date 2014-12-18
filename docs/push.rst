@@ -64,6 +64,7 @@ You can override the payload with platform-specific values as well.
 .. automodule:: urbanairship.push.payload
    :members: notification, ios, android, blackberry, wns_payload, mpns_payload
 
+
 Device Types
 ------------
 
@@ -82,6 +83,7 @@ or with the ``all_`` shortcut.
 
 .. autofunction:: urbanairship.push.payload.device_types
 
+
 Delivery
 --------
 
@@ -97,6 +99,7 @@ will be raised.
 
 .. autoclass:: urbanairship.push.core.Push
    :members:
+
 
 Scheduled Delivery
 ------------------
@@ -124,6 +127,35 @@ will be raised.
 
 .. autoclass:: urbanairship.push.core.ScheduledPush
    :members:
+
+
+Scheduled Delivery in local time
+--------------------------------
+
+Scheduled notifications build upon the Push object, and have two other
+components.
+
+This example schedules the above notification for delivery in local time.
+
+.. code-block:: python
+
+   import datetime
+
+   schedule = airship.create_scheduled_push()
+   schedule.push = push
+   schedule.name = "optional name for later reference"
+   schedule.schedule = ua.local_scheduled_time(
+       datetime.datetime(2015, 4, 1, 8, 05))
+   response = schedule.send()
+
+   print "Created schedule. url:", response.schedule_url
+
+If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
+will be raised.
+
+.. autoclass:: urbanairship.push.core.ScheduledPush
+   :members:
+
 
 Updating or Canceling a Schedule
 --------------------------------

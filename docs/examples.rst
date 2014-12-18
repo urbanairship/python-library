@@ -8,6 +8,7 @@ Common setup:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
+
 Simple broadcast to all devices
 -------------------------------
 
@@ -67,6 +68,7 @@ Single iOS push
    push.device_types = ua.device_types('ios')
    push.send()
 
+
 Single iOS Rich Push with notification
 --------------------------------------
 
@@ -80,6 +82,7 @@ Single iOS Rich Push with notification
    push.device_types = ua.device_types('ios')
    push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
    push.send()
+
 
 Rich Push with extra and without notification
 ---------------------------------------------
@@ -95,6 +98,7 @@ Rich Push with extra and without notification
       extra={"articleid": "http://m.example.com/123456"}
    ) 
    push.send()
+
 
 Scheduled iOS Push
 ------------------
