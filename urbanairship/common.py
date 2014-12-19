@@ -4,6 +4,7 @@ import logging
 
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
+CHANNEL_URL = BASE_URL + '/channels/'
 DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
 APID_URL = BASE_URL + '/apids/'
 DEVICE_PIN_URL = BASE_URL + '/device_pins/'
