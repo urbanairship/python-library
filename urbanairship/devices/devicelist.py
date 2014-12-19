@@ -4,21 +4,22 @@ class ChannelInfo(object):
     """Information object for iOS, Android and Amazon device channels.
 
     :ivar channel_id: Channel ID for the device.
-    :ivar device_type: Type of the device, e.g. ``ios``
-    :ivar installed: bool; whether the app is installed on the device
+    :ivar device_type: Type of the device, e.g. ``ios``.
+    :ivar installed: bool; whether the app is installed on the device.
     :ivar opt_in: bool; whether the device is opted in to push.
     :ivar background: bool; whether the device is opted in to background push.
-    :ivar push_address: Address we use to push to the device.
+    :ivar push_address: Address we use to push to the device (device token,
+        GCM registration ID, etc,).
     :ivar created: UTC date and time the system initially saw the device.
-    :ivar last_registration: UTC date and time the system last recieved a
+    :ivar last_registration: UTC date and time the system last received a
         registration call for the device.
     :ivar tags: list of tags associated with this device, if any.
     :ivar alias: alias associated with this device, if any.
-    :ivar ios: iOS specific payload, e.g. ``badge``
+    :ivar ios: iOS specific information, e.g. ``badge``and ``quiet_time``.
 
     """
 
-    id = None
+    channel_id = None
     device_type = None
     installed = None
     opt_in = None
@@ -34,19 +35,17 @@ class ChannelInfo(object):
     def from_payload(cls, payload, device_key):
         """Create based on results from a ChannelList iterator."""
         obj = cls()
-        obj.id = payload[device_key]
+        obj.channel_id = payload[device_key]
         for key in payload:
             setattr(obj, key, payload[key])
         return obj
 
     @classmethod
-    """Fetch metadata from a channel ID"""
     def lookup(cls, airship, channel_id):
-        
+        """Fetch metadata from a channel ID"""
         start_url = common.CHANNEL_URL
         data_attribute = 'channel'
         id_key = 'channel_id'
-
         params = {}
         url = start_url + channel_id
         response = airship._request('GET', None, url, version=3, params=params)
@@ -57,7 +56,7 @@ class ChannelInfo(object):
 class DeviceInfo(object):
     """Information object for a single device token.
 
-    :ivar id: Device identifier. Also available at the attribute named by the
+    :ivar dt_id: Device identifier. Also available at the attribute named by the
         ``device_type``.
     :ivar device_type: Type of the device, e.g. ``device_token``
     :ivar active: bool; whether this device can receive notifications.
@@ -65,7 +64,7 @@ class DeviceInfo(object):
     :ivar alias: alias associated with this device, if any.
 
     """
-    id = None
+    dt_id = None
     device_type = None
     active = None
     tags = None
@@ -75,7 +74,7 @@ class DeviceInfo(object):
     def from_payload(cls, payload, device_key):
         """Create based on results from a DeviceList iterator."""
         obj = cls()
-        obj.id = payload[device_key]
+        obj.dt_id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
             setattr(obj, key, payload[key])
@@ -151,7 +150,7 @@ class ChannelList(DeviceList):
 
 
 class APIDList(DeviceList):
-    """Iterator for listing all device tokens for this application.
+    """Iterator for listing all APIDs for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
@@ -163,7 +162,7 @@ class APIDList(DeviceList):
 
 
 class DevicePINList(DeviceList):
-    """Iterator for listing all device tokens for this application.
+    """Iterator for listing all device PINs for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.

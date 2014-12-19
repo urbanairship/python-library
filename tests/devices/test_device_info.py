@@ -24,15 +24,17 @@ class TestDeviceInfo(unittest.TestCase):
             channel2 = channel_list.next()
             channel3 = channel_list.next()
 
-            self.assertEqual(channel1.id, "0492662a-1b52-4343-a1f9-c6b0c72931c0")
-            self.assertEqual(channel2.id, "d95ceae2-85cb-41b7-a87d-09c9b3ce4051")
-            self.assertEqual(channel3.id, "f10cf38c-3fbd-47e8-a4aa-43cf91d80ba1")
+            self.assertEqual(channel1.channel_id, "0492662a-1b52-4343-a1f9-c6b0c72931c0")
+            self.assertEqual(channel2.channel_id, "d95ceae2-85cb-41b7-a87d-09c9b3ce4051")
+            self.assertEqual(channel3.channel_id, "f10cf38c-3fbd-47e8-a4aa-43cf91d80ba1")
 
 
     def test_channel_lookup(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({"channel":{
+            response._content = json.dumps(
+                {
+                    "channel":{
                         "channel_id":"0492662a-1b52-4343-a1f9-c6b0c72931c0",
                         "device_type":"ios",
                         "installed":"false",
@@ -43,7 +45,16 @@ class TestDeviceInfo(unittest.TestCase):
                         "last_registration":"2014-08-11T20:47:28",
                         "alias":"null",
                         "tags":["test_tag"],
-                        "ios":{"badge":1,"quiettime":{"start":"null","end":"null"},"tz":"null"}}}
+                        "ios":{
+                            "badge":1,
+                            "quiettime":{
+                                "start":"null",
+                                "end":"null"
+                            },
+                            "tz":"null",
+                        }
+                    }
+                }
             )
 
             response.status_code = 200
@@ -53,7 +64,7 @@ class TestDeviceInfo(unittest.TestCase):
             channel_id = "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             channel_lookup = ua.ChannelInfo.lookup(airship, channel_id)
 
-            self.assertEqual(channel_lookup.id, channel_id)
+            self.assertEqual(channel_lookup.channel_id, channel_id)
             self.assertEqual(channel_lookup.device_type, "ios")
             self.assertEqual(channel_lookup.installed, "false")
             self.assertEqual(channel_lookup.opt_in, "false")

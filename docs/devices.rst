@@ -4,18 +4,19 @@ Retrieving Device Information
 Channel Listing
 ---------------
 
-Device lists are fetched by instantiating an iterator object for each type of
-device using :py:class:`ChannelList`.
+Device lists are fetched by instantiating an iterator object 
+using :py:class:`ChannelList`.
 
 .. code-block:: python
 
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   id = None
+   channel_id = None
    for channel in ua.ChannelList(airship):
-       id = channel.id
-       print channel.id, channel.device_type, channel.tags
+       channel_id = channel.channel_id
+       print channel.channel_id, channel.device_type, channel.tags,
+       channel.push_address, channel.alias, channel.opt_in
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelList, ChannelInfo
@@ -32,7 +33,8 @@ channel by using :py:class:`ChannelLookup:lookup`.
    airship = ua.Airship(app_key, app_secret)
 
    channel = ua.ChannelInfo.lookup(airship, device_channel)
-   print channel.id, channel.device_type, channel.alias
+   print channel.channel_id, channel.device_type, channel.tags,
+   channel.push_address, channel.alias, channel.opt_in
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelInfo
