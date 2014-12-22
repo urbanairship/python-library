@@ -96,9 +96,8 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     for details on ``collapse_key``, ``time_to_live``, and
     ``delay_while_idle``.
 
-    >>> ios(alert='Hello!', sound='cat.caf',
-    ...     extra={'articleid': '12345'})
-    {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
+    >>> android(alert='Hello!', extra={'articleid': '12345'})
+    {'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
     payload = {}
