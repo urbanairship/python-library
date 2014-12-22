@@ -41,6 +41,7 @@ from .devices import (
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    Feedback,
 )
 
 
@@ -85,6 +86,7 @@ __all__ = [
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    Feedback,
 ]
 
 # Silence urllib3 INFO logging by default

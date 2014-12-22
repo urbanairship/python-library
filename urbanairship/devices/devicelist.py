@@ -171,3 +171,32 @@ class DevicePINList(DeviceList):
     start_url = common.DEVICE_PIN_URL
     data_attribute = 'device_pins'
     id_key = 'device_pin'
+
+
+class Feedback(object):
+        """Return device tokens or APIDs marked inactive since this timestamp."""
+
+        @classmethod
+        def device_token(cls, airship, since):
+            url = common.DT_FEEDBACK_URL
+            return cls._get_feedback(airship, since, url)
+
+        @classmethod
+        def apid(cls, airship, since):
+            url = common.APID_FEEDBACK_URL
+            return cls._get_feedback(airship, since, url)
+
+        @classmethod
+        def _get_feedback(cls, airship, since, url):
+
+            response = airship._request('GET', '', url,
+                params={'since': since.isoformat()}, version=3)
+            data = response.json()
+            try:
+                from dateutil.parser import parse
+            except ImportError:
+                def parse(x):
+                    return x
+            for r in data:
+                r['marked_inactive_on'] = parse(r['marked_inactive_on'])
+            return data
