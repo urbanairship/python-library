@@ -35,6 +35,7 @@ from .push import (
     scheduled_time,
     local_scheduled_time,
 )
+
 from .devices import (
     ChannelList,
     ChannelInfo,
@@ -43,6 +44,10 @@ from .devices import (
     APIDList,
 )
 
+from .tag import (  #update list after completing tag.py file
+    CreateTag,
+    ListTag,
+)
 
 __all__ = [
     Airship,
@@ -85,6 +90,8 @@ __all__ = [
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    CreateTag,
+    ListTag,
 ]
 
 # Silence urllib3 INFO logging by default

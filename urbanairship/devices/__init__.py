@@ -5,3 +5,8 @@ from devicelist import (
     DevicePINList,
     APIDList,
 )
+
+from tag.py import (  #update these when finished with tag.py file
+	CreateTag,
+	ListTag,
+)

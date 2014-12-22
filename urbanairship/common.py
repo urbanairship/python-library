@@ -11,6 +11,7 @@ DEVICE_PIN_URL = BASE_URL + '/device_pins/'
 PUSH_URL = BASE_URL + '/push/'
 FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
 SCHEDULES_URL = BASE_URL + '/schedules/'
+TAGS_URL = BASE_URL + '/tags'
 
 
 logger = logging.getLogger('urbanairship')
