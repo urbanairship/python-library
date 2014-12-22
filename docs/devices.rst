@@ -59,15 +59,13 @@ device. The available iterators are :py:class:`DeviceTokenList`,
 
 Feedback
 --------
-
-Feedback returns device tokens or APIDs marked inactive since this timestamp.
-
-Returns a list of dictionaries with keys as specified in the
-documentation. http://docs.urbanairship.com/api/ua.html#feedback
+Feedback returns a list of dictionaries of device tokens/APIDs that the respective
+push provider has told us are uninstalled since the given timestamp. For more
+information, see: http://docs.urbanairship.com/api/ua.html#feedback .
 
 Note:
-    In order to parse the result, we need a date parser,
-    dateutil: http://labix.org/python-dateutil
+    If you'd like to parse the result, you'll need dateutil:
+    http://labix.org/python-dateutil
 
 .. code-block:: python
 

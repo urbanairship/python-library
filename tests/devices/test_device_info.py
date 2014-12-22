@@ -111,7 +111,7 @@ class TestDeviceInfo(unittest.TestCase):
             response = requests.Response()
             response._content = ('''[{
                                    "alias" : null,
-                                   "apid" : "4D95CB349F95ADEBE05F0A71B5F5B62D0F696667454DA60CD55282F67321710C",
+                                   "apid" : "80242a4c-d870-4fce-b0c3-724c865cfbfe",
                                    "gcm_registration_id": "null",
                                    "marked_inactive_on" : "2014-12-16 20:21:42"
                                  }]''')
@@ -128,7 +128,7 @@ class TestDeviceInfo(unittest.TestCase):
                 def parse(date):
                     return date
 
-            self.assertEqual(feedback,[{u'apid': u'4D95CB349F95ADEBE05F0A71B5F5B62D0F696667454DA60CD55282F67321710C',
+            self.assertEqual(feedback,[{u'apid': u'80242a4c-d870-4fce-b0c3-724c865cfbfe',
                                         u'alias': None,
                                         u'marked_inactive_on': date,
                                         u'gcm_registration_id': u'null'}
