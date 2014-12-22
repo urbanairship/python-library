@@ -97,7 +97,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     ``delay_while_idle``.
 
     >>> android(alert='Hello!', extra={'articleid': '12345'})
-    {'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
+    ...     {'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
     payload = {}
