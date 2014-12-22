@@ -42,6 +42,7 @@ from .devices import (
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    Feedback,
 )
 
 from .tag import (  #update list after completing tag.py file
@@ -92,6 +93,7 @@ __all__ = [
     APIDList,
     CreateTag,
     ListTag,
+    Feedback,
 ]
 
 # Silence urllib3 INFO logging by default
