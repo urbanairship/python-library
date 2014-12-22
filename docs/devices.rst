@@ -56,3 +56,26 @@ device. The available iterators are :py:class:`DeviceTokenList`,
 
 .. automodule:: urbanairship.devices.devicelist
    :members: DeviceTokenList, DevicePINList, APIDList, DeviceInfo
+
+Feedback
+--------
+
+Feedback returns device tokens or APIDs marked inactive since this timestamp.
+
+Returns a list of dictionaries with keys as specified in the
+documentation. http://docs.urbanairship.com/api/ua.html#feedback
+
+Note:
+    In order to parse the result, we need a date parser,
+    dateutil: http://labix.org/python-dateutil
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+   since  = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+   tokens = airship.Feedback.device_token(airship, since)
+   apids  = airship.Feedback.apid(airship, since)
+
+.. automodule:: urbanairship.devices.devicelist
+   :members: Feedback
