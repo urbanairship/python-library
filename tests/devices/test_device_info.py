@@ -168,7 +168,7 @@ class TestDeviceInfo(unittest.TestCase):
                 params={'since': '2014-11-22T10:10:10'}
             )
 
-    def test_bb_pin_info(self):
+    def test_device_pin_info(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
@@ -189,7 +189,7 @@ class TestDeviceInfo(unittest.TestCase):
 
             airship = ua.Airship("key", "secret")
             device_pin = "12345678"
-            device_info = ua.BBPinInfo.pin_lookup(airship, device_pin)
+            device_info = ua.DevicePINInfo.pin_lookup(airship, device_pin)
 
             self.assertEqual(device_info['device_pin'], "12345678")
             self.assertEqual(device_info['active'], "true")

@@ -1,7 +1,7 @@
 from devicelist import (
     ChannelList,
     ChannelInfo,
-    BBPinInfo,
+    DevicePINInfo,
     DeviceTokenList,
     DevicePINList,
     APIDList,

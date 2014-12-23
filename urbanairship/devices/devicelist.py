@@ -80,7 +80,8 @@ class DeviceInfo(object):
             setattr(obj, key, payload[key])
         return obj
 
-class BBPinInfo(object):
+
+class DevicePINInfo(object):
 
     @classmethod
     def pin_lookup(cls, airship, device_pin):
@@ -88,6 +89,7 @@ class BBPinInfo(object):
         url = common.DEVICE_PIN_URL + device_pin
         response = airship._request('GET', None, url, version=3)
         return response.json()
+
 
 class DeviceList(object):
     start_url = NotImplemented

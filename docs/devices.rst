@@ -43,18 +43,18 @@ Blackberry PIN Lookup
 ---------------------
 
 Device metadata is fetched by instantiating a lookup for a specific device
-PIN by using :py:class:`BBPinInfo:pin_lookup`
+PIN by using :py:class:`DevicePINInfo:pin_lookup`
 
 .. code-block:: python
 
    import urbanairship as ua
    airship = ua.Airship(app_key, app_secret)
 
-   bbpininfo = ua.BBPinInfo.pin_lookup(airship, device_pin)
-   print bbpininfo 
+   device_pin_info = ua.DevicePINInfo.pin_lookup(airship, device_pin)
+   print device_pin_info 
 
 .. automodule:: urbanairship.devices.devicelist
-   :members: BBPinInfo
+   :members: DevicePINInfo
 
 Device Listing
 --------------
