@@ -52,12 +52,6 @@ class Airship(object):
 
         return response
 
-    def get_device_pin_info(self, device_pin):
-        """Retrieve information about this BlackBerry PIN"""
-        url = common.DEVICE_PIN_URL + device_pin
-        response = self._request('GET', None, url, version=1)
-        return response.json()
-
     def create_push(self):
         """Create a Push notification."""
         return Push(self)
