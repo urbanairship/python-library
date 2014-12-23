@@ -81,6 +81,16 @@ class DeviceInfo(object):
         return obj
 
 
+class DevicePINInfo(object):
+
+    @classmethod
+    def pin_lookup(cls, airship, device_pin):
+        """Retrieve information about this BlackBerry PIN"""
+        url = common.DEVICE_PIN_URL + device_pin
+        response = airship._request('GET', None, url, version=3)
+        return response.json()
+
+
 class DeviceList(object):
     start_url = NotImplemented
     next_url = None
