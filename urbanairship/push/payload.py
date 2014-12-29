@@ -4,8 +4,8 @@ import re
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
 
 
-def notification(alert=None, ios=None, android=None, amazon=None, blackberry=None, wns=None,
-        mpns=None):
+def notification(alert=None, ios=None, android=None, amazon=None, 
+                 blackberry=None, wns=None, mpns=None):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -71,15 +71,15 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['content-available'] = 1
     if extra is not None:
         payload['extra'] = extra
-    if expiry is not None:   
+    if expiry is not None:
         if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
-            raise ValueError("iOS expiry must be an integer or string")    
-        payload['expiry'] = expiry 
+            raise ValueError("iOS expiry must be an integer or string")
+        payload['expiry'] = expiry
     return payload
 
 
 def android(alert=None, collapse_key=None, time_to_live=None,
-        delay_while_idle=False, extra=None):
+            delay_while_idle=False, extra=None):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -114,6 +114,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     if extra is not None:
         payload['extra'] = extra
     return payload
+
 
 def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
            title=None, summary=None):
@@ -213,7 +214,8 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None, extra=None, expiry=None):
+def message(title, body, content_type=None, content_encoding=None, 
+            extra=None, expiry=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -235,7 +237,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None, e
         payload['content_encoding'] = content_encoding
     if extra is not None:
         payload['extra'] = extra
-    if expiry is not None:     
+    if expiry is not None:
         payload['expiry'] = expiry
         if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
             raise ValueError("Expiry value must be an integer or time set in UTC as a string")
@@ -259,6 +261,7 @@ def device_types(*types):
         if t not in ('ios', 'android', 'amazon', 'blackberry', 'wns', 'mpns'):
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
+
 
 def options(expiry=None):
     """Options payload creation.
