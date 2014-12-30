@@ -110,10 +110,10 @@ class DeviceList(object):
 
     def next(self):
         try:
-            return DeviceInfo.from_payload(self._token_iter.next(), self.id_key)
+            return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
         except StopIteration:
             self._fetch_next_page()
-            return DeviceInfo.from_payload(self._token_iter.next(), self.id_key)
+            return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
 
     def _fetch_next_page(self):
         if not self.next_url:
@@ -153,10 +153,10 @@ class ChannelList(DeviceList):
 
     def next(self):
         try:
-            return ChannelInfo.from_payload(self._token_iter.next(), self.id_key)
+            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
         except StopIteration:
             self._fetch_next_page()
-            return ChannelInfo.from_payload(self._token_iter.next(), self.id_key)
+            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
 
 
 class APIDList(DeviceList):

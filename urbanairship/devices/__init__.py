@@ -1,4 +1,4 @@
-from devicelist import (
+from .devicelist import (
     ChannelList,
     ChannelInfo,
     DevicePINInfo,

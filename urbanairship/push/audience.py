@@ -163,8 +163,8 @@ def recent_date(**kwargs):
     """
     if not len(kwargs) == 1:
         raise ValueError("Must specificy a single date resolution")
-    resolution = kwargs.keys()[0]
-    value = kwargs.values()[0]
+    resolution = list(kwargs.keys())[0]
+    value = list(kwargs.values())[0]
 
     if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
         raise ValueError("Invalid date resolution: %s" % resolution)
