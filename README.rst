@@ -8,12 +8,12 @@ app pages.
 Requirements
 ============
 
-As of version 0.6, Python 2.6, 2.7, 3.3 or 3.4 is required.
+As of version 0.7, Python 2.6, 2.7, 3.3 or 3.4 is required.
 
 Functionality
 =============
 
-Version 0.6 is a major upgrade, focusing on support for the new version 3 push
+Version 0.7 is a major upgrade, focusing on support for the new version 3 push
 API. There has also been a major reorganization of the codebase.
 
 * device token registration
