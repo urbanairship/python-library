@@ -7,7 +7,7 @@ except (ImportError):
 __about__ = {}
 
 with open("urbanairship/__about__.py") as fp:
-    exec(fp, None, __about__)
+    exec(fp.read(), None, __about__)
 
 setup(
     name="urbanairship",
