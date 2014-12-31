@@ -7,9 +7,9 @@ PY3 = sys.version_info[0] == 3
 
 # Set version string type
 if PY3:
-    string_types = str
+    string_type = str
 elif PY2:
-    string_types = basestring
+    string_type = basestring
 
 # Valid autobadge values: auto, +N, -N
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
@@ -67,13 +67,13 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     """
     payload = {}
     if alert is not None:
-        if not (isinstance(alert, (string_types, dict))):
+        if not (isinstance(alert, (string_type, dict))):
             raise ValueError("iOS alert must be a string or dictionary")
         payload['alert'] = alert
     if badge is not None:
-        if not (isinstance(badge, (string_types, int))):
+        if not (isinstance(badge, (string_type, int))):
             raise ValueError("iOS badge must be an integer or string")
-        if isinstance(badge, string_types) and not VALID_AUTOBADGE.match(badge):
+        if isinstance(badge, string_type) and not VALID_AUTOBADGE.match(badge):
             raise ValueError("Invalid iOS autobadge value")
         payload['badge'] = badge
     if sound is not None:
@@ -83,7 +83,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     if extra is not None:
         payload['extra'] = extra
     if expiry is not None:   
-        if not (isinstance(expiry, (string_types, int))):
+        if not (isinstance(expiry, (string_type, int))):
             raise ValueError("iOS expiry must be an integer or string")    
         payload['expiry'] = expiry 
     return payload
@@ -118,7 +118,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
-        if not (isinstance(time_to_live, (string_types, int))):
+        if not (isinstance(time_to_live, (string_type, int))):
             raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
@@ -152,7 +152,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['consolidation_key'] = consolidation_key
     if expires_after is not None:
         payload['expires_after'] = expires_after
-        if not (isinstance(expires_after, (string_types, int))):
+        if not (isinstance(expires_after, (string_type, int))):
             raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
     if extra is not None:
         payload['extra'] = extra
@@ -248,7 +248,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None, e
         payload['extra'] = extra
     if expiry is not None:     
         payload['expiry'] = expiry
-        if not (isinstance(expiry, (string_types, int))):
+        if not (isinstance(expiry, (string_type, int))):
             raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
@@ -280,6 +280,6 @@ def options(expiry=None):
     payload = {}
     if expiry is not None:
         payload['expiry'] = expiry
-    if not (isinstance(expiry, (string_types, int))):
+    if not (isinstance(expiry, (string_type, int))):
         raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
