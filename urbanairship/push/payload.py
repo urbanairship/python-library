@@ -1,4 +1,15 @@
 import re
+import sys
+
+# Python coarse version differentiation
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+# Set version string type
+if PY3:
+    string_type = str
+elif PY2:
+    string_type = basestring
 
 # Valid autobadge values: auto, +N, -N
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
@@ -56,13 +67,13 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     """
     payload = {}
     if alert is not None:
-        if not (isinstance(alert, basestring) or isinstance(alert, dict)):
+        if not (isinstance(alert, (string_type, dict))):
             raise ValueError("iOS alert must be a string or dictionary")
         payload['alert'] = alert
     if badge is not None:
-        if not (isinstance(badge, basestring) or isinstance(badge, int)):
+        if not (isinstance(badge, (string_type, int))):
             raise ValueError("iOS badge must be an integer or string")
-        if isinstance(badge, basestring) and not VALID_AUTOBADGE.match(badge):
+        if isinstance(badge, string_type) and not VALID_AUTOBADGE.match(badge):
             raise ValueError("Invalid iOS autobadge value")
         payload['badge'] = badge
     if sound is not None:
@@ -72,7 +83,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     if extra is not None:
         payload['extra'] = extra
     if expiry is not None:   
-        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+        if not (isinstance(expiry, (string_type, int))):
             raise ValueError("iOS expiry must be an integer or string")    
         payload['expiry'] = expiry 
     return payload
@@ -107,7 +118,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['collapse_key'] = collapse_key
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
-        if not (isinstance(time_to_live, basestring) or isinstance(time_to_live, int)):
+        if not (isinstance(time_to_live, (string_type, int))):
             raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
     if delay_while_idle:
         payload['delay_while_idle'] = True
@@ -141,7 +152,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['consolidation_key'] = consolidation_key
     if expires_after is not None:
         payload['expires_after'] = expires_after
-        if not (isinstance(expires_after, basestring) or isinstance(expires_after, int)):
+        if not (isinstance(expires_after, (string_type, int))):
             raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
     if extra is not None:
         payload['extra'] = extra
@@ -181,7 +192,7 @@ def wns_payload(alert=None, toast=None, tile=None, badge=None):
     Must include exactly one of ``alert``, ``toast``, ``tile``, or ``badge``.
 
     """
-    if len(filter(None, (alert, toast, tile, badge))) != 1:
+    if sum(1 for x in (alert, toast, tile, badge) if x) != 1:
         raise ValueError("WNS payload must have one notification type.")
     payload = {}
     if alert is not None:
@@ -201,7 +212,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
     Must include exactly one of ``alert``, ``toast``, or ``tile``.
 
     """
-    if len(filter(None, (alert, toast, tile))) != 1:
+    if sum(1 for x in (alert, toast, tile) if x) != 1:
         raise ValueError("MPNS payload must have one notification type.")
     payload = {}
     if alert is not None:
@@ -237,7 +248,7 @@ def message(title, body, content_type=None, content_encoding=None, extra=None, e
         payload['extra'] = extra
     if expiry is not None:     
         payload['expiry'] = expiry
-        if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+        if not (isinstance(expiry, (string_type, int))):
             raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
@@ -269,6 +280,6 @@ def options(expiry=None):
     payload = {}
     if expiry is not None:
         payload['expiry'] = expiry
-    if not (isinstance(expiry, basestring) or isinstance(expiry, int)):
+    if not (isinstance(expiry, (string_type, int))):
         raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload

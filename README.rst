@@ -8,13 +8,12 @@ app pages.
 Requirements
 ============
 
-As of version 0.6, Python 2.6 or 2.7 is required. Python 3.3 support will
-follow.
+As of version 0.7, Python 2.6, 2.7, 3.3 or 3.4 is required.
 
 Functionality
 =============
 
-Version 0.6 is a major upgrade, focusing on support for the new version 3 push
+Version 0.7 is a major upgrade, focusing on support for the new version 3 push
 API. There has also been a major reorganization of the codebase.
 
 * device token registration
@@ -79,9 +78,9 @@ http://support.urbanairship.com/
 History
 =======
 
-* 0.1 Initial release
-* 0.2 Added tags, broadcast, feedback
-* 0.3 Added deregister, device token list, other minor improvements
-* 0.4 Added batch push
-* 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
 * 0.6 Major refactoring, support for push api v3
+* 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
+* 0.4 Added batch push
+* 0.3 Added deregister, device token list, other minor improvements
+* 0.2 Added tags, broadcast, feedback
+* 0.1 Initial release

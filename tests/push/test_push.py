@@ -129,7 +129,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -147,7 +147,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -168,7 +168,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -204,7 +204,7 @@ class TestPush(unittest.TestCase):
                         "content_encoding": "utf8",
                     },
                 },
-            })
+            }).encode('utf-8')
 
             response.status_code = 200
             mock_request.return_value = response
@@ -246,7 +246,7 @@ class TestPush(unittest.TestCase):
             response = requests.Response()
             response.status_code = 202
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
 
             mock_request.return_value = response
 
@@ -267,4 +267,3 @@ class TestPush(unittest.TestCase):
         push.notification = ua.notification(alert="Hello Expiry")
         push.options = ua.options(expiry=10080)
         push.device_types = ua.all_ 
-        
