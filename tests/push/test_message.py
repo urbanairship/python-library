@@ -51,6 +51,23 @@ class TestMessage(unittest.TestCase):
             ua.notification(ios=ua.ios(content_available=True)),
             {'ios': { 'content-available': True}})
 
+    def test_ios_unicode(self):
+        self.assertEqual(
+            ua.notification(ios=ua.ios(
+                alert=u'Hello',
+                badge=u'+1',
+                expiry=u'time',
+            )),
+            {'ios': {
+                'alert': 'Hello',
+                'badge': '+1',
+                'expiry': 'time'
+            }})
+
+        self.assertEqual(
+            ua.notification(ios=ua.ios(content_available=True)),
+            {'ios': { 'content-available': True}})
+
     def test_android(self):
         self.assertEqual(
             ua.notification(android=ua.android(
@@ -68,6 +85,17 @@ class TestMessage(unittest.TestCase):
                 'extra': {
                     'more': 'stuff',
                 }
+            }})
+
+    def test_android_unicode(self):
+        self.assertEqual(
+            ua.notification(android=ua.android(
+                alert=u'Hello',
+                time_to_live=u'100',
+            )),
+            {'android': {
+                'alert': 'Hello',
+                'time_to_live': '100',
             }})
 
     def test_amazon(self):
@@ -89,6 +117,17 @@ class TestMessage(unittest.TestCase):
                 'extra': {
                     'more': 'stuff',
                 }
+            }})
+
+    def test_amazon_unicode(self):
+        self.assertEqual(
+            ua.notification(amazon=ua.amazon(
+                alert=u'Amazon test',
+                expires_after=u'100',
+            )),
+            {'amazon': {
+                'alert': 'Amazon test',
+                'expires_after':'100',
             }})
 
     def test_blackberry(self):
