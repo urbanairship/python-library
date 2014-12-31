@@ -8,7 +8,8 @@ from devicelist import (
     Feedback,
 )
 
-from tag.py import (  #update these when finished with tag.py file
-	CreateTag,
-	ListTag,
+from tag import (
+	TagList,
+	Tag,
+	DeleteTag
 )

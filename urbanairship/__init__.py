@@ -44,11 +44,9 @@ from .devices import (
     DevicePINList,
     APIDList,
     Feedback,
-)
-
-from .tag import (  #update list after completing tag.py file
-    CreateTag,
-    ListTag,
+    TagList,
+    Tag,
+    DeleteTag
 )
 
 __all__ = [
@@ -93,8 +91,7 @@ __all__ = [
     DeviceTokenList,
     DevicePINList,
     APIDList,
-    CreateTag,
-    ListTag,
+    Tag,
     Feedback,
 ]
 
