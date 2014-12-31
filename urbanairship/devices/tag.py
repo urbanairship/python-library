@@ -94,7 +94,7 @@ class Tag(object):
 
         payload = {}
         if ios_channels is not None:
-            payload['ios_channels'] = {'remove': ios_channels} #need to write 'ios_channels' as a list?
+            payload['ios_channels'] = {'remove': ios_channels}
         if android_channels is not None:
             payload['android_channels'] = {'remove': android_channels}
         if amazon_channels is not None:
@@ -116,25 +116,31 @@ class Tag(object):
 
     #     """
 
-class DeleteTag(Airship, tag_name):
+class DeleteTag(object):
     """Delete Tag from the System.
 
     - deletes tag from devices which are active / not uninstalled.
     - Devices which are uninstalled retain their tags.
 
     """
-    url = common.TAGS_URL + '/' + tag_name
-    data_attribute = 'tags'
-    tag_name = 'tags'
-#    params = {}
+    def __init__(self, airship, tag_name):
+        self._airship = airship
+        self.tag_name = tag_name
+        self.url = common.TAGS_URL + '/' + tag_name
+        self.payload = None
+        # data_attribute = 'tags'
+        # tag_name = 'tags'
+        # params = {}
 
-    response = self.airship._request('DELETE', None, url, version=3)  #error here regarding 'airship'
-#    return response.json()
-#    payload = response.json()
+
+    response = self.airship._request('DELETE', None, url, version=3)
+    return response
+
 
 # class BatchTag():
 #     def __init__(self, airship):
 #         self.changelist = []
+#         self.url = common.TAGS_URL + '/batch'
 
 
 #     def addIOSChannel(channel, tags):
@@ -149,6 +155,15 @@ class DeleteTag(Airship, tag_name):
 #         self.changelist.append({"amazon_channel": channel, "tags": tags})
 
 
-#     def apply():
-#         issue api request
+#    def apply():
+#        """Issue API Request
 
+#        """
+
+#        body = json.dumps(self.payload)
+#        response = self._airship._request('POST', body, url, 'application/json', 
+    #                                       version=3)
+
+#        data = response.json()
+#        logger.info("Successful batch modification: %s",
+#             ', '.join(data))       
