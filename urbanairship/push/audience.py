@@ -159,7 +159,7 @@ def recent_date(**kwargs):
     >>> recent_date(months=6)
     {'recent': {'months': 6}}
     >>> recent_date(weeks=3)
-    {True, 'recent': {'weeks': 3}}
+    {'recent': {'weeks': 3}}
     """
     if not len(kwargs) == 1:
         raise ValueError("Must specificy a single date resolution")

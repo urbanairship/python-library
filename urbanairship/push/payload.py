@@ -61,7 +61,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         sent to the device.
     :keyword expiry: An integer or time set in UTC as a string
     >>> ios(alert='Hello!', sound='cat.caf',
-    ...     extra={'articleid': '12345'})
+    ...     extra={'articleid': '12345'}) # doctest: +SKIP
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
@@ -107,7 +107,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     for details on ``collapse_key``, ``time_to_live``, and
     ``delay_while_idle``.
 
-    >>> android(alert='Hello!', extra={'articleid': '12345'})
+    >>> android(alert='Hello!', extra={'articleid': '12345'}) # doctest: +SKIP
     {'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
@@ -141,7 +141,7 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
     :keyword summary: String
 
     >>> amazon(alert='Hello!', title='My Title',
-    ...     extra={'articleid': '12345'})
+    ...     extra={'articleid': '12345'}) # doctest: +SKIP
     {'title': 'My Title', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
