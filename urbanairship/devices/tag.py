@@ -1,29 +1,32 @@
 import json
 import logging
+#import urbanairship as ua
+
 
 from urbanairship import common
-from urbanairship import core
+
 
 
 logger = logging.getLogger('urbanairship')
+
 
 class TagList():
     """Iterator for listing tags associated with this application.
 
     Will return the first 100 listings only.
-    Returns: 
+    Returns:
 
     """
 
     def __init__(self, airship, tag_name):
         self._airship = airship
-        self._airship.secret = secret
-        self._airship.key = key
+        self._airship.secret = 'secret'
+        self._airship.key = 'key'
         self.tag_name = tag_name
         self.url = common.TAGS_URL
-        self.data_attribute = 'tags' 
+        self.data_attribute = 'tags'
 
-        response = airship._request('GET', None, url, version=3)
+        response = airship._request('GET', None, self.url, version=3)
         return response.json()
 
 
@@ -34,26 +37,27 @@ class Tag(object):
 
     def __init__(self, airship, tag_name):
         self._airship = airship
+        tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
         self.payload = None
-   
 
     def add(self, ios_channels=None, android_channels=None, amazon_channels=None):
         # do a check to see if empty or not
-        #if not empty, append
-        #if empty, add
+        # if not empty, append
+        # if empty, add
 
-        if isinstance(ios_channels):
-            ios_channels = [ios_channels]
-        if ios_channels not in self.payload:
-            self.payload['ios_channels'] = {'add': [self.ios_channels]}
-        else:
-            if 'add' in self.payload['ios_channels']:
-                self.payload[ios_channels]['add'].extend(ios_channels)
+        if ios_channels is not None:
+#            if isinstance(ios_channels):
+#                ios_channels = [ios_channels]
+            if ios_channels not in self.payload:
+                self.payload['ios_channels'] = {'add': [ios_channels]}
             else:
-                self.payload['ios_channels']['add'] = [ios_channels]
-        if isinstance(android_channels):
-            android_channels = [android_channels]
+                if 'add' in self.payload['ios_channels']:
+                    self.payload[ios_channels]['add'].extend(ios_channels)
+                else:
+                    self.payload['ios_channels']['add'] = [ios_channels]
+#        if isinstance(android_channels):
+#            android_channels = [android_channels]
         if android_channels not in self.payload:
             self.payload['android_channels'] = {'add': [self.android_channels]}
         else:
@@ -61,8 +65,8 @@ class Tag(object):
                 self.payload[android_channels]['add'].extend(android_channels)
             else:
                 self.payload['android_channels']['add'] = [android_channels]
-        if isinstance(amazon_channels):
-            amazon_channels = [amazon_channels]
+#        if isinstance(amazon_channels):
+#            amazon_channels = [amazon_channels]
         if amazon_channels not in self.payload:
             self.payload['amazon_channels'] = {'add': [self.amazon_channels]}
         else:
@@ -70,15 +74,15 @@ class Tag(object):
                 self.payload[amazon_channels]['add'].extend(amazon_channels)
             else:
                 self.payload['amazon_channels']['add'] = [amazon_channels]
-        if not data:
+        if not self.payload:
             raise ValueError('Cannot add a tag without a channel_id.')
-        return payload
-
+#        return self.payload
+        print self.payload
 
     def remove(self, ios_channels=None, android_channels=None, amazon_channels=None):
         # do a check to see if empty or not
-        #if not empty, append
-        #if empty, add
+        # if not empty, append
+        # if empty, add
 
         if isinstance(ios_channels):
             ios_channels = [ios_channels]
@@ -107,28 +111,32 @@ class Tag(object):
                 self.payload[amazon_channels]['remove'].extend(amazon_channels)
             else:
                 self.payload['amazon_channels']['remove'] = [amazon_channels]
-        if not data:
+        if not self.payload:
             raise ValueError('Cannot remove a tag without a channel_id.')
-        return payload
-
+        return self.payload
 
     def apply(self):
         """Issues POST request for adding / removing device(s) to / from a tag.
 
         """
 
-        body = json.dumps(self.data)
-        response = self._airship._request(Airship, 'POST', body,
-            self.url, 'application/json', version=3)
+        body = json.dumps(self.payload)
+        response = self._airship._request(Tag, 'POST', body,
+                                          self.url, 'application/json', version=3)
 
-        data = response.json()
-        logger.info("Successful tag added to device channel. tag_name: %s",
-             ', '.join(tag_name))
+        # data = response.json()
+        # logger.info("Successful tag added to device channel.  %s",
+        #             ', '.join(self.payload))
 
 
-# """ 
+# """
 # Test:  tag = Tag(Airship, "high roller")
-#        tag.add_remove(android_channels={"add": ['9c36e8c7-5a73-47c0-9716-99fd3d4197d5']})
+#        tag.add(android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d5'])
+        # tag.remove(
+        #            ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d6'],
+        #            amazon_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d7']
+        #            )
+        # tag.apply()
 # """
 
 class DeleteTag(object):
@@ -142,41 +150,43 @@ class DeleteTag(object):
         self._airship = airship
         self.tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
-        self._airship.secret = secret
-        self._airship.key = key
+        self._airship.secret = 'secret'
+        self._airship.key = 'key'
 
-
-        response = self.airship._request('DELETE', None, url, version=3)
+        response = self.airship._request('DELETE', None, self.url, version=3)
         return response
 
 
-# class BatchTag():
-#     def __init__(self, airship):
-#         self.changelist = []
-#         self.url = common.TAGS_URL + '/batch'
+class BatchTag(object):
+    """Modify the tags for an assortment of devices.
 
+    """
 
-#     def addIOSChannel(channel, tags):
-#         self.changelist.append({"ios_channel": channel, "tags": tags})
+    def __init__(self, airship):
+        self._airship = airship
+        self.changelist = []
+        self.url = common.TAGS_URL + '/batch'
 
+    def addIOSChannel(self, channel, tags):
+        self.changelist.append({"ios_channel": channel, "tags": tags})
 
-#     def addAndroidChannel(channel, tags):
-#         self.changelist.append({"android_channel": channel, "tags": tags})
+    def addAndroidChannel(self, channel, tags):
+        self.changelist.append({"android_channel": channel, "tags": tags})
 
+    def addAmazonChannel(self, channel, tags):
+        self.changelist.append({"amazon_channel": channel, "tags": tags})
 
-#     def addAmazonChannel(channel, tags):
-#         self.changelist.append({"amazon_channel": channel, "tags": tags})
+    def apply(self):
+        """Issue API Request
 
+        - error message in the form of an object containing array of two member arrays
+         - includes 1) the line that did not pass and 2) an error response
 
-#    def apply():
-#        """Issue API Request
+        """
 
-#        """
-
-#        body = json.dumps(self.payload)
-#        response = self._airship._request('POST', body, url, 'application/json', 
-    #                                       version=3)
-
-#        data = response.json()
-#        logger.info("Successful batch modification: %s",
-#             ', '.join(data))       
+        body = json.dumps(self.changelist)
+        response = self._airship._request(self, 'POST', body, self.url, 'application/json',
+                                          version=3)
+        data = response.json()
+        logger.info("Successful batch modification: %s",
+                    ', '.join(self.changelist))

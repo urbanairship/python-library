@@ -46,7 +46,7 @@ from .devices import (
     Feedback,
     TagList,
     Tag,
-    DeleteTag
+    BatchTag,
 )
 
 __all__ = [
@@ -91,8 +91,10 @@ __all__ = [
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    TagList,
     Tag,
-    Feedback,
+    BatchTag,
+    Feedback
 ]
 
 # Silence urllib3 INFO logging by default

@@ -9,7 +9,8 @@ from devicelist import (
 )
 
 from tag import (
-	TagList,
-	Tag,
-	DeleteTag
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag
 )

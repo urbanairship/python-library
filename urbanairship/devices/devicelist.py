@@ -1,5 +1,6 @@
 from urbanairship import common
 
+
 class ChannelInfo(object):
     """Information object for iOS, Android and Amazon device channels.
 
@@ -29,7 +30,7 @@ class ChannelInfo(object):
     last_registration = None
     tags = None
     alias = None
-    ios = None 
+    ios = None
 
     @classmethod
     def from_payload(cls, payload, device_key):
@@ -56,8 +57,8 @@ class ChannelInfo(object):
 class DeviceInfo(object):
     """Information object for a single device token.
 
-    :ivar dt_id: Device identifier. Also available at the attribute named by the
-        ``device_type``.
+    :ivar dt_id: Device identifier. Also available at the attribute named by
+        the ``device_type``.
     :ivar device_type: Type of the device, e.g. ``device_token``
     :ivar active: bool; whether this device can receive notifications.
     :ivar tags: list of tags associated with this device, if any.
@@ -184,7 +185,9 @@ class DevicePINList(DeviceList):
 
 
 class Feedback(object):
-        """Return device tokens or APIDs marked inactive since this timestamp."""
+        """Return device tokens or APIDs marked inactive since this timestamp.
+
+        """
 
         @classmethod
         def device_token(cls, airship, since):
@@ -200,7 +203,8 @@ class Feedback(object):
         def _get_feedback(cls, airship, since, url):
 
             response = airship._request('GET', '', url,
-                params={'since': since.isoformat()}, version=3)
+                                        params={'since': since.isoformat()},
+                                        version=3)
             data = response.json()
             try:
                 from dateutil.parser import parse
