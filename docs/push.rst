@@ -65,6 +65,33 @@ You can override the payload with platform-specific values as well.
    :members: notification, ios, android, blackberry, wns_payload, mpns_payload
 
 
+Actions
+-------
+
+Urban Airship Actions provides a convenient way to automatically
+perform tasks by name in response to push notifications,
+Rich App Page interactions and JavaScript:
+
+.. code-block:: python
+
+   push.notification = ua.notification(
+          alert="Hello, world!"
+          actions = ua.actions(
+              add_tag = "new_tag",
+              remove_tag = "old_tag",
+              share = "Check out Urban Airship!",
+              open_ = {
+                  "type": "url",
+                  "content": "http://www.urbanairship.com"
+              },
+              app_defined = {"some_app_defined_action": "some_values"}
+          )
+        )
+
+.. automodule:: urbanairship.push.payload
+   :members: notification, actions, ios, android, amazon
+
+
 Device Types
 ------------
 
