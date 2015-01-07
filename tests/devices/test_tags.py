@@ -39,7 +39,7 @@ class TestTags(unittest.TestCase):
         # with mock.patch.object(ua.Airship, '_request') as mock_request:
         #     response = requests.Response()
         #     response._content = (
-        #         '''{"ios_channels": "0492662a-1b52-4343-a1f9-c6b0c72931c0"}''')
+        #         '''{"ios_channels": "9c36e8c7-5a73-47c0-9716-99fd3d4197d5"}''')
         #     response.status_code = 202
         #     mock_request.return_value = response
 
