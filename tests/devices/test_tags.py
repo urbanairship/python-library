@@ -14,7 +14,7 @@ class TestTagList(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            url = "https://go.urbanairship.com/api/tags"
+#            url = "https://go.urbanairship.com/api/tags"
 
             airship = ua.Airship("key", "secret")
             test_list = ua.TagList(None)
@@ -31,18 +31,40 @@ class TestTagList(unittest.TestCase):
 class TestTags(unittest.TestCase):
 
     def test_add_device(self):
-        tag = ua.Tag(airship, "high roller")
-        tag.add(['9c36e8c7-5a73-47c0-9716-99fd3d4197d5'])
-        self.assertEqual(tag.payload, {  #?
+        tag = ua.Tag(airship, "high roller")   #need mock?
+        tag.add(ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d5', '9c36e8c7-5a73-47c0-9716-99fd3d4197d8'],
+                android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d6'])
+        self.assertEqual(tag.data, {
             "ios_channels": {
                 "add": [
-                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d5"
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d5",
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d8"
                     ]
-                            }
-                                   })
+            },
+            "android_channels": {
+                "add": [
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d6"]
+            }
+        })
 
-        # def test_remove_device(self):
-
+    def test_remove_device(self):
+        tag = ua.Tag(airship, "high roller")   # need mock?
+        tag.remove(ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d11'],
+                   android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d12',
+                                  '9c36e8c7-5a73-47c0-9716-99fd3d4197d15'])
+        self.assertEqual(tag.data, {
+            "ios_channels": {
+                "remove": [
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d11"
+                    ]
+            },
+            "android_channels": {
+                "remove": [
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d12",
+                    "9c36e8c7-5a73-47c0-9716-99fd3d4197d15"
+                    ]
+            }
+        })
 #class test_delete_tag(self):
 
 #    def test_delete(self):
@@ -80,16 +102,15 @@ class TestBatchTag(unittest.TestCase):
 
     def test_addAmazonChannel(self):
         batch = ua.BatchTag(None)
-        self.assertEqual(
-            batch.addAmazonChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d7', ['amazon_test_batch_tag', 'tag_6']),
-         self.assertEqual(batch.changelist, [
+        batch.addAmazonChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d7', ['amazon_test_batch_tag', 'tag_6']),
+
+        self.assertEqual(batch.changelist, [
             {'amazon_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
             'tags': ['amazon_test_batch_tag', 'tag_6']
             }]
-                          )
-         )
+        )
 
-    def test_apply(self):
+    def test_send_request(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
