@@ -10,25 +10,28 @@ from urbanairship import common
 logger = logging.getLogger('urbanairship')
 
 
-class TagList():
+class TagList(object):
     """Iterator for listing tags associated with this application.
 
     Will return the first 100 listings only.
-    Returns:
 
     """
 
-    def __init__(self, airship, tag_name):
+    def __init__(self, airship):
         self._airship = airship
-        self._airship.secret = 'secret'
-        self._airship.key = 'key'
-        self.tag_name = tag_name
+        # self._airship.secret = 'secret'
+        # self._airship.key = 'key'
+#        self.tag_name = tag_name
         self.url = common.TAGS_URL
-        self.data_attribute = 'tags'
+#        self.data_attribute = 'tags'
+
+    def listTags(self, airship):
 
         response = airship._request('GET', None, self.url, version=3)
-        return response.json()
-
+        
+        # data = response.json()
+        # logger.info("Listing successful.")
+        # return data
 
 class Tag(object):
     """Adding and Removing Devices from a Tag.
@@ -39,7 +42,7 @@ class Tag(object):
         self._airship = airship
         tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
-        self.payload = None
+        self.payload = {}
 
     def add(self, ios_channels=None, android_channels=None, amazon_channels=None):
         # do a check to see if empty or not
@@ -47,8 +50,6 @@ class Tag(object):
         # if empty, add
 
         if ios_channels is not None:
-#            if isinstance(ios_channels):
-#                ios_channels = [ios_channels]
             if ios_channels not in self.payload:
                 self.payload['ios_channels'] = {'add': [ios_channels]}
             else:
@@ -56,8 +57,6 @@ class Tag(object):
                     self.payload[ios_channels]['add'].extend(ios_channels)
                 else:
                     self.payload['ios_channels']['add'] = [ios_channels]
-#        if isinstance(android_channels):
-#            android_channels = [android_channels]
         if android_channels not in self.payload:
             self.payload['android_channels'] = {'add': [self.android_channels]}
         else:
@@ -65,8 +64,6 @@ class Tag(object):
                 self.payload[android_channels]['add'].extend(android_channels)
             else:
                 self.payload['android_channels']['add'] = [android_channels]
-#        if isinstance(amazon_channels):
-#            amazon_channels = [amazon_channels]
         if amazon_channels not in self.payload:
             self.payload['amazon_channels'] = {'add': [self.amazon_channels]}
         else:
@@ -76,16 +73,13 @@ class Tag(object):
                 self.payload['amazon_channels']['add'] = [amazon_channels]
         if not self.payload:
             raise ValueError('Cannot add a tag without a channel_id.')
-#        return self.payload
-        print self.payload
+        return self.payload
 
     def remove(self, ios_channels=None, android_channels=None, amazon_channels=None):
         # do a check to see if empty or not
         # if not empty, append
         # if empty, add
 
-        if isinstance(ios_channels):
-            ios_channels = [ios_channels]
         if ios_channels not in self.payload:
             self.payload['ios_channels'] = {'remove': [self.ios_channels]}
         else:
@@ -93,8 +87,6 @@ class Tag(object):
                 self.payload[ios_channels]['remove'].extend(ios_channels)
             else:
                 self.payload['ios_channels']['remove'] = [ios_channels]
-        if isinstance(android_channels):
-            android_channels = [android_channels]
         if android_channels not in self.payload:
             self.payload['android_channels'] = {'remove': [self.android_channels]}
         else:
@@ -102,8 +94,6 @@ class Tag(object):
                 self.payload[android_channels]['remove'].extend(android_channels)
             else:
                 self.payload['android_channels']['add'] = [android_channels]
-        if isinstance(amazon_channels):
-            amazon_channels = [amazon_channels]
         if amazon_channels not in self.payload:
             self.payload['amazon_channels'] = {'remove': [self.amazon_channels]}
         else:
@@ -128,16 +118,6 @@ class Tag(object):
         # logger.info("Successful tag added to device channel.  %s",
         #             ', '.join(self.payload))
 
-
-# """
-# Test:  tag = Tag(Airship, "high roller")
-#        tag.add(android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d5'])
-        # tag.remove(
-        #            ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d6'],
-        #            amazon_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d7']
-        #            )
-        # tag.apply()
-# """
 
 class DeleteTag(object):
     """Delete Tag from the System.
