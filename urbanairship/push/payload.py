@@ -291,11 +291,15 @@ def actions(add_tag=None, remove_tag=None,
             open_=None, share=None, app_defined=None):
     """Actions payload creation.
 
-    :keyword add_tag: Adds a tag to the device.
-    :keyword remove_tag: Removes a tag from the device.
-    :keyword open_: Opens type url, deep_link or landing_page.
-    :keyword share: Sends a share notification.
-    :keyword app_defined: Sends application defined actions.
+    :keyword add_tag: Adds a tag to the device. Expects a
+        string or a list of strings.
+    :keyword remove_tag: Removes a tag from the device. Expects
+        a string or a list of strings.
+    :keyword open_: Opens type url, deep_link or landing_page. Expects a
+        dictionary with "type" and "content". See API docs for more information.
+    :keyword share: Sends a share notification. Expects a string.
+    :keyword app_defined: Sends application defined actions. Expects
+        a dictionary.
     >>> actions(add_tag='new_tag', remove_tag='old_tag',
     ...     open_={'type': 'url', 'content': 'http://www.urbanairship.com'})
     {'open': {'type': 'url', 'content': 'http://www.urbanairship.com},
@@ -305,13 +309,13 @@ def actions(add_tag=None, remove_tag=None,
     payload = {}
     if add_tag is not None:
         if not (isinstance(add_tag, (string_type, list))):
-            raise ValueError("add_tag must be a string or an array of strings")
+            raise ValueError("add_tag must be a string or a list of strings")
         if isinstance(add_tag, list) and not add_tag:
             raise ValueError("add_tag list cannot be empty")
         payload['add_tag'] = add_tag
     if remove_tag is not None:
         if not (isinstance(remove_tag, (string_type, list))):
-            raise ValueError("remove_tag must be a string or an array of strings")
+            raise ValueError("remove_tag must be a string or a list of strings")
         if isinstance(remove_tag, list) and not remove_tag:
             raise ValueError("remove_tag list cannot be empty")
         payload['remove_tag'] = remove_tag
