@@ -15,8 +15,8 @@ elif PY2:
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
 
 
-def notification(alert=None, actions=None, ios=None, android=None, amazon=None, blackberry=None, wns=None,
-        mpns=None):
+def notification(alert=None, actions=None, ios=None, android=None, amazon=None,
+                 blackberry=None, wns=None, mpns=None):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -298,19 +298,22 @@ def actions(add_tag=None, remove_tag=None,
     :keyword app_defined: Sends application defined actions.
     >>> actions(add_tag='new_tag', remove_tag='old_tag',
     ...     open_={'type': 'url', 'content': 'http://www.urbanairship.com'})
-    {'add_tag': 'new_tag', 'open': {'type': 'url', 'content': 'http://www.urbanairship.com}, 'remove_tag': 'old_tag'}
+    {'open': {'type': 'url', 'content': 'http://www.urbanairship.com},
+     'add_tag': 'new_tag', 'remove_tag': 'old_tag'}
 
     """
     payload = {}
     if add_tag is not None:
         if not (isinstance(add_tag, (string_type, list))):
             raise ValueError("add_tag must be a string or an array of strings")
+        if isinstance(add_tag, list) and not add_tag:
+            raise ValueError("add_tag list cannot be empty")
         payload['add_tag'] = add_tag
     if remove_tag is not None:
         if not (isinstance(remove_tag, (string_type, list))):
             raise ValueError("remove_tag must be a string or an array of strings")
         if isinstance(remove_tag, list) and not remove_tag:
-            raise ValueError("remove_tag cannot be empty")
+            raise ValueError("remove_tag list cannot be empty")
         payload['remove_tag'] = remove_tag
     if open_ is not None:
         if not (isinstance(open_, dict)):

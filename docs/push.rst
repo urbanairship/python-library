@@ -70,7 +70,8 @@ Actions
 
 Urban Airship Actions provides a convenient way to automatically
 perform tasks by name in response to push notifications,
-Rich App Page interactions and JavaScript:
+Rich App Page interactions and JavaScript. More information at
+http://docs.urbanairship.com/api/ua.html#actions, example:
 
 .. code-block:: python
 
