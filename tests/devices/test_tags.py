@@ -1,4 +1,3 @@
-# import json
 import unittest
 import mock
 import requests
@@ -8,6 +7,9 @@ import urbanairship as ua
 class TestTagList(unittest.TestCase):
 
     def test_list_tag(self):
+        airship = ua.Airship("key", "secret")
+        test_list = ua.TagList(airship)
+        
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = ('''{"tags": ["tag1", "some_tag", "portland_or"]}''')
@@ -16,10 +18,8 @@ class TestTagList(unittest.TestCase):
 
 #            url = "https://go.urbanairship.com/api/tags/"
 
-            airship = ua.Airship("key", "secret")
-            test_list = ua.TagList(airship)
             results = test_list.listTags()
-            self.assertEqual(results, {     # AssertionError, first arg
+            self.assertEqual(results, {
                 "tags": [
                     "tag1",
                     "some_tag",
@@ -31,14 +31,14 @@ class TestTagList(unittest.TestCase):
 class TestTags(unittest.TestCase):
 
     def test_add_device(self):
+        airship = ua.Airship("key", "secret")
+        test_tag = ua.Tag(airship, "high roller")
+
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-#            response._content = ('''{"ios_channels": {"add": ["9c36e8c7-5a73-47c0-9716-99fd3d4197d5", "9c36e8c7-5a73-47c0-9716-99fd3d4197d8"]}, "android_channels": {"add": ["9c36e8c7-5a73-47c0-9716-99fd3d4197d6"]}}''')
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship("key", "secret")
-            test_tag = ua.Tag(airship, "high roller")
             test_tag.add(ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
                                        '9c36e8c7-5a73-47c0-9716-99fd3d4197d8'],
                      android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d6'])
@@ -56,14 +56,14 @@ class TestTags(unittest.TestCase):
             })
 
     def test_remove_device(self):
+        airship = ua.Airship("key", "secret")
+        tag = ua.Tag(airship, "high roller")        
+
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-#            response._content = ('''not using this line''')
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship("key", "secret")
-            tag = ua.Tag(airship, "high roller")
             tag.remove(ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d11'],
                      android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d12',
                                       '9c36e8c7-5a73-47c0-9716-99fd3d4197d15'])
@@ -85,26 +85,34 @@ class TestTags(unittest.TestCase):
 
 class TestDeleteTag(unittest.TestCase):
 
-    def test_list_tag(self):
-        with mock.patch.object(ua.Airship, "_request") as mock_request:
+    def test_delete_tag(self):
+        airship = ua.Airship("key", "secret")
+        test_delete = ua.DeleteTag(airship, "high_roller")
+
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
-            response._content = ('''That was a success.''')
-            response.status_code = 200
+            response.status_code = 204
             mock_request.return_value = response
 
-#            url = "https://go.urbanairship.com/api/tags/tag_name"
+            url = "https://go.urbanairship.com/api/tags/high_roller"
+#           if we include validation (line 101 of tag.py):
+            # # Fail w/o URL
+            # self.assertRaises(ValueError, test_delete.send_delete)
 
-            airship = ua.Airship("key", "secret")
-            test_delete = ua.DeleteTag(airship, "holiday_tag")
+            test_delete.url = url
             results = test_delete.send_delete()
-#            print test_delete
-#            print results
-            self.assertEqual(results, response.status_code)  #AssertionError - fix args
-#            self.assertRaises(ValueError,)   # look at def test_cancel in TestPush()
+            print test_delete
+            print results
+            print response
+            self.assertEqual(results, response)  # 2nd arg is correct?
+
 
 class TestBatchTag(unittest.TestCase):
 
     def test_addIOSChannel(self):
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
+
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = ([
@@ -114,8 +122,6 @@ class TestBatchTag(unittest.TestCase):
             response.status_code = 202
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
-            batch = ua.BatchTag(airship)
             batch.addIOSChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
                                 ['ios_test_batch_tag', 'tag2'])
 
@@ -125,28 +131,46 @@ class TestBatchTag(unittest.TestCase):
             ])
 
     def test_addAndroidChannel(self):
-        batch = ua.BatchTag(None)
-        batch.addAndroidChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
-                               ['android_test_batch_tag', 'tag4'])
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
 
-        self.assertEqual(batch.changelist, [
-            {
-                'android_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
-                'tags': ['android_test_batch_tag', 'tag4']
-            }
-        ])
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = ([
+            {'android_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+             'tags': ['android_test_batch_tag', 'tag4']}
+            ])
+            response.status_code = 202
+            mock_request.return_value = response
+
+            batch.addAndroidChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                                   ['android_test_batch_tag', 'tag4'])
+
+            self.assertEqual(batch.changelist, [
+                {'android_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                 'tags': ['android_test_batch_tag', 'tag4']}
+            ])
 
     def test_addAmazonChannel(self):
-        batch = ua.BatchTag(None)
-        batch.addAmazonChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
-                              ['amazon_test_batch_tag', 'tag_6']),
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
 
-        self.assertEqual(batch.changelist, [
-            {
-                'amazon_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
-                'tags': ['amazon_test_batch_tag', 'tag_6']
-            }
-        ])
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = ([
+            {'amazon_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+             'tags': ['amazon_test_batch_tag', 'tag_6']}
+            ])
+            response.status_code = 202
+            mock_request.return_value = response
+
+            batch.addAmazonChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                                  ['amazon_test_batch_tag', 'tag_6']),
+
+            self.assertEqual(batch.changelist, [
+                {'amazon_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                 'tags': ['amazon_test_batch_tag', 'tag_6']}
+            ])
 
     def test_send_request(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
