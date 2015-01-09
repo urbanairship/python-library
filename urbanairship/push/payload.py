@@ -1,6 +1,6 @@
 import re
 import sys
-
+import collections
 # Python coarse version differentiation
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -308,27 +308,27 @@ def actions(add_tag=None, remove_tag=None,
     """
     payload = {}
     if add_tag is not None:
-        if not (isinstance(add_tag, (string_type, list))):
-            raise ValueError("add_tag must be a string or a list of strings")
+        if not (isinstance(add_tag, (collections.Sequence))):
+            raise TypeError("add_tag must be a string or a list of strings")
         if isinstance(add_tag, list) and not add_tag:
             raise ValueError("add_tag list cannot be empty")
         payload['add_tag'] = add_tag
     if remove_tag is not None:
-        if not (isinstance(remove_tag, (string_type, list))):
-            raise ValueError("remove_tag must be a string or a list of strings")
+        if not (isinstance(remove_tag, (collections.Sequence))):
+            raise TypeError("remove_tag must be a string or a list of strings")
         if isinstance(remove_tag, list) and not remove_tag:
             raise ValueError("remove_tag list cannot be empty")
         payload['remove_tag'] = remove_tag
     if open_ is not None:
         if not (isinstance(open_, dict)):
-            raise ValueError("open_ must be a dictionary")
+            raise TypeError("open_ must be a dictionary")
         payload['open'] = open_
     if share is not None:
         if not (isinstance(share, string_type)):
-            raise ValueError("share must be a string")
+            raise TypeError("share must be a string")
         payload['share'] = share
     if app_defined is not None:
         if not (isinstance(app_defined, dict)):
-            raise ValueError("app_defined must be a dictionary")
+            raise TypeError("app_defined must be a dictionary")
         payload['app_defined'] = app_defined
     return payload
