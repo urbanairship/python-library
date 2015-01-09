@@ -46,6 +46,7 @@ from .devices import (
     Feedback,
     TagList,
     Tag,
+    DeleteTag,
     BatchTag,
 )
 
@@ -93,6 +94,7 @@ __all__ = [
     APIDList,
     TagList,
     Tag,
+    DeleteTag,
     BatchTag,
     Feedback
 ]

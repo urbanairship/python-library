@@ -20,16 +20,16 @@ class TagList(object):
         # self._airship.secret = 'secret'
         # self._airship.key = 'key'
 #        self.tag_name = tag_name
-        self.url = common.TAGS_URL
+        self.url = common.TAGS_URL + '/'
 #        self.data_attribute = 'tags'
 
-    def listTags(self, airship):
+    def listTags(self):
 
-        response = airship._request('GET', None, self.url, version=3)
+        response = self._airship._request('GET', None, self.url, version=3)
 
-        data = response.json()
         logger.info("Listing successful.")
-        return data
+        #print response.json()
+        return response.json()
 
 
 class Tag(object):
@@ -57,7 +57,7 @@ class Tag(object):
             self.data['amazon_channels'] = {'add': amazon_channels}
 
         body = json.dumps(self.data)
-        response = self._airship._request(Tag, 'POST', body,
+        response = self._airship._request('POST', body,
                                       self.url, 'application/json', version=3)
 
     def remove(self, ios_channels=None, android_channels=None,
@@ -78,7 +78,7 @@ class Tag(object):
         return self.data
 
         body = json.dumps(self.data)
-        response = self._airship._request(Tag, 'POST', body,
+        response = self._airship._request('POST', body,
                                           self.url, 'application/json', version=3)
 
 
@@ -93,10 +93,14 @@ class DeleteTag(object):
         self._airship = airship
         self.tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
-        self._airship.secret = 'secret'
-        self._airship.key = 'key'
+        # self._airship.secret = 'secret'
+        # self._airship.key = 'key'
 
-        response = self.airship._request('DELETE', None, self.url, version=3)
+    def send_delete(self):
+
+        response = self._airship._request('DELETE', None, self.url, version=3)
+        logger.info("Successful deletion")
+        print response
         return response
 
 
@@ -128,8 +132,7 @@ class BatchTag(object):
         """
 
         body = json.dumps(self.changelist)
-        response = self._airship._request(self, 'POST', body, self.url,
+        response = self._airship._request('POST', body, self.url,
                                           'application/json', version=3)
         data = response.json()
-        logger.info("Successful batch modification: %s",
-                    ', '.join(self.changelist))
+        logger.info("Successful batch modification: %s", self.changelist)
