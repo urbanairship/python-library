@@ -1,4 +1,15 @@
 --------------------
+0.7.0
+--------------------
+- added Python 3 compatibility
+- added support for sending to channels
+- added channels lookup and listing
+- added push to local time
+- added actions
+- added tag API support
+- added support for expiry/TTL
+
+--------------------
 0.6.3
 --------------------
 - added extras to Rich Push message creation  

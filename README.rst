@@ -13,18 +13,19 @@ As of version 0.7, Python 2.6, 2.7, 3.3 or 3.4 is required.
 Functionality
 =============
 
-Version 0.7 is a major upgrade, focusing on support for the new version 3 push
-API. There has also been a major reorganization of the codebase.
+Version 0.7 is a major upgrade, focusing on support for Python 3 and the new
+version 3 push API. There has also been a major reorganization of the codebase.
 
-* device token registration
-* basic push
-* registering and pushing with tags
-* broadcast
-* feedback service
-* device token deactivation (deregistration)
-* device token listing
-* rich push
-* scheduled notifications
+* support for Python 3
+* send to channels
+* adding and removing tags
+* batch tag modification
+* tag listing
+* actions
+* push to local time
+* channels listing
+* channels lookup
+* expiry/TTL
 
 Usage
 =====
@@ -78,6 +79,7 @@ http://support.urbanairship.com/
 History
 =======
 
+* 0.7 Support for Python 3, major refactoring
 * 0.6 Major refactoring, support for push api v3
 * 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
 * 0.4 Added batch push
