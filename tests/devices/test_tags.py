@@ -173,6 +173,9 @@ class TestBatchTag(unittest.TestCase):
             ])
 
     def test_send_request(self):
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
+
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
@@ -202,8 +205,6 @@ class TestBatchTag(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
-            batch = ua.BatchTag(airship)
             batch.addIOSChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
                                ["apply_tag", "apply_tag_2"])
             batch.addAndroidChannel('9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
