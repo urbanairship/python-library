@@ -31,6 +31,7 @@ from .payload import (
     message,
     device_types,
     options,
+    actions,
 )
 
 from .schedule import (
@@ -78,6 +79,7 @@ __all__ = [
     message,
     device_types,
     options,
+    actions,
     scheduled_time,
     local_scheduled_time
 ]
