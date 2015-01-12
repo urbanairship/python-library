@@ -57,7 +57,7 @@ class TestTags(unittest.TestCase):
 
     def test_remove_device(self):
         airship = ua.Airship("key", "secret")
-        tag = ua.Tag(airship, "high roller")        
+        tag = ua.Tag(airship, "high roller")
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()

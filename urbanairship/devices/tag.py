@@ -34,13 +34,14 @@ class Tag(object):
         self._airship = airship
         tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
-        self.data = {}
+        # self.data = {}
 
     def add(self, ios_channels=None, android_channels=None,
             amazon_channels=None):
         """Adds channels to 'data' dict and then sends POST request.
 
         """
+        self.data = {}
         if ios_channels is not None:
             self.data['ios_channels'] = {'add': ios_channels}
         if android_channels is not None:
@@ -49,8 +50,8 @@ class Tag(object):
             self.data['amazon_channels'] = {'add': amazon_channels}
 
         body = json.dumps(self.data)
-        response = self._airship._request('POST', body,
-                                      self.url, 'application/json', version=3)
+        self._airship._request('POST', body, self.url, 'application/json',
+                               version=3)
 
     def remove(self, ios_channels=None, android_channels=None,
                amazon_channels=None):
@@ -58,6 +59,7 @@ class Tag(object):
 
         """
 
+        self.data = {}
         if ios_channels is not None:
             self.data['ios_channels'] = {'remove': ios_channels}
         if android_channels is not None:
@@ -67,8 +69,8 @@ class Tag(object):
         return self.data
 
         body = json.dumps(self.data)
-        response = self._airship._request('POST', body,
-                                          self.url, 'application/json', version=3)
+        self._airship._request('POST', body, self.url, 'application/json',
+                               version=3)
 
 
 class DeleteTag(object):
@@ -103,7 +105,7 @@ class BatchTag(object):
     def __init__(self, airship):
         self._airship = airship
         self.changelist = []
-        self.url = common.TAGS_URL + '/batch'
+        self.url = common.TAGS_URL + '/batch/'
 
     def addIOSChannel(self, channel, tags):
         self.changelist.append({"ios_channel": channel, "tags": tags})
@@ -117,7 +119,8 @@ class BatchTag(object):
     def send_request(self):
         """Issue API Request
 
-        - error message in the form of an obj containing array of two member arrays
+        - error message in the form of an obj containing array of two member
+          arrays
         - includes 1) the line that did not pass and 2) an error response
 
         """
