@@ -32,6 +32,7 @@ from .push import (
     message,
     device_types,
     options,
+    actions,
     scheduled_time,
     local_scheduled_time,
 )
@@ -83,6 +84,7 @@ __all__ = [
     mpns_payload,
     message,
     options,
+    actions,
     device_types,
     scheduled_time,
     local_scheduled_time,

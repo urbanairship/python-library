@@ -159,12 +159,12 @@ def recent_date(**kwargs):
     >>> recent_date(months=6)
     {'recent': {'months': 6}}
     >>> recent_date(weeks=3)
-    {True, 'recent': {'weeks': 3}}
+    {'recent': {'weeks': 3}}
     """
     if not len(kwargs) == 1:
         raise ValueError("Must specificy a single date resolution")
-    resolution = kwargs.keys()[0]
-    value = kwargs.values()[0]
+    resolution = list(kwargs.keys())[0]
+    value = list(kwargs.values())[0]
 
     if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
         raise ValueError("Invalid date resolution: %s" % resolution)

@@ -34,6 +34,50 @@ class TestPush(unittest.TestCase):
             }
         })
 
+    def test_actions(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Hello',
+            actions = ua.actions(
+                add_tag = "new_tag",
+                remove_tag = "old_tag",
+                share = "Check out Urban Airship!",
+                open_ = {
+                    "type": "url",
+                    "content": "http://www.urbanairship.com"
+                },
+                app_defined = {"some_app_defined_action": "some_values"}
+            )
+        )
+        p.device_types = ua.all_
+        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+
+        self.assertEqual(p.payload, {
+            "audience": "all",
+            "notification": {
+                "alert": "Hello",
+                "actions": {
+                    "add_tag": "new_tag",
+                    "remove_tag": "old_tag",
+                    "share": "Check out Urban Airship!",
+                    "open": {
+                        "type": "url",
+                        "content": "http://www.urbanairship.com"
+                    },
+                    "app_defined": {"some_app_defined_action": "some_values"}
+                }
+            },
+            "device_types": "all",
+            "message": {
+                "title": "Title",
+                "body": "Body",
+                "content_type": "text/html",
+                "content_encoding": "utf8",
+                "extra": {"more": "stuff"}
+            }
+        })
+
     def test_ios_alert_dict(self):
         p = ua.Push(None)
         p.audience = ua.all_
@@ -129,7 +173,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -147,7 +191,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -168,7 +212,7 @@ class TestPush(unittest.TestCase):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
             response.status_code = 202
             mock_request.return_value = response
 
@@ -204,7 +248,7 @@ class TestPush(unittest.TestCase):
                         "content_encoding": "utf8",
                     },
                 },
-            })
+            }).encode('utf-8')
 
             response.status_code = 200
             mock_request.return_value = response
@@ -246,7 +290,7 @@ class TestPush(unittest.TestCase):
             response = requests.Response()
             response.status_code = 202
             response._content = (
-                '''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
+                b'''{"schedule_urls": ["https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0"]}''')
 
             mock_request.return_value = response
 
@@ -267,4 +311,3 @@ class TestPush(unittest.TestCase):
         push.notification = ua.notification(alert="Hello Expiry")
         push.options = ua.options(expiry=10080)
         push.device_types = ua.all_ 
-        
