@@ -33,13 +33,22 @@ from .push import (
     device_types,
     options,
     scheduled_time,
+    local_scheduled_time,
 )
+
 from .devices import (
+    ChannelList,
+    ChannelInfo,
+    DevicePINInfo,
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    Feedback,
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag,
 )
-
 
 __all__ = [
     Airship,
@@ -76,9 +85,18 @@ __all__ = [
     options,
     device_types,
     scheduled_time,
+    local_scheduled_time,
+    ChannelList,
+    ChannelInfo,
+    DevicePINInfo,
     DeviceTokenList,
     DevicePINList,
     APIDList,
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag,
+    Feedback
 ]
 
 # Silence urllib3 INFO logging by default
