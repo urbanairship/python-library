@@ -1,9 +1,14 @@
 Tags
-=============================
+====
+
+A note about using the tag API: if using UrbanAirship SDKs, it is not advisable
+to use the tag API unless you have device-side tagging disabled in the SDK. Without 
+this setting disabled, the modifications made using the tag API will be overwritten by settings in the SDK.
+
 
 Tag Listing
 -----------
-Lists tags that exist for this application.  Tag Listing will return 
+Lists tags that exist for this application. Tag Listing will return 
 up to the first 100 tags per application.
 
 .. code-block:: python
@@ -55,7 +60,7 @@ http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag 
 Deleting a Tag
 --------------
 A tag can be removed from our system by issuing a delete. This will remove the
-master record of the tag.  For more information, see: 
+master record of the tag. For more information, see: 
 http://docs.urbanairship.com/api/ua.html#deleting-a-tag .
 
 Note:

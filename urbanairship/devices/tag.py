@@ -21,7 +21,7 @@ class TagList(object):
 
         response = self._airship._request('GET', None, self.url, version=3)
 
-        logger.info("Listing successful.")   # Log the response dict?
+        logger.info("Listing successful.")
         return response.json()
 
 
@@ -89,9 +89,6 @@ class DeleteTag(object):
         self._airship.key = 'key'
 
     def send_delete(self):
-        # if not self.url:               # include?
-        #     raise ValueError(
-        #         "Cannot delete tag without url.")
         response = self._airship._request('DELETE', None, self.url, version=3)
         logger.info(("Successful tag deletion: '{}'").format(self.tag_name))
         return response

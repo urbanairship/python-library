@@ -16,8 +16,6 @@ class TestTagList(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-#            url = "https://go.urbanairship.com/api/tags/"
-
             results = test_list.listTags()
             self.assertEqual(results, {
                 "tags": [
@@ -67,7 +65,6 @@ class TestTags(unittest.TestCase):
             tag.remove(ios_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d11'],
                      android_channels=['9c36e8c7-5a73-47c0-9716-99fd3d4197d12',
                                       '9c36e8c7-5a73-47c0-9716-99fd3d4197d15'])
-#            print tag.data
             self.assertEqual(tag.data, {
                 "ios_channels": {
                     "remove": [
@@ -95,16 +92,13 @@ class TestDeleteTag(unittest.TestCase):
             mock_request.return_value = response
 
             url = "https://go.urbanairship.com/api/tags/high_roller"
-#           if we include validation (line 101 of tag.py):
-            # # Fail w/o URL
-            # self.assertRaises(ValueError, test_delete.send_delete)
 
             test_delete.url = url
             results = test_delete.send_delete()
             print test_delete
             print results
             print response
-            self.assertEqual(results, response)  # 2nd arg is correct?
+            self.assertEqual(results, response)
 
 
 class TestBatchTag(unittest.TestCase):
