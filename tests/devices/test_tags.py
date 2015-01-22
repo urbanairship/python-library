@@ -95,9 +95,6 @@ class TestDeleteTag(unittest.TestCase):
 
             test_delete.url = url
             results = test_delete.send_delete()
-            print test_delete
-            print results
-            print response
             self.assertEqual(results, response)
 
 

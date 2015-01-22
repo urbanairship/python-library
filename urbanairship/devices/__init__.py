@@ -1,4 +1,4 @@
-from devicelist import (
+from .devicelist import (
     ChannelList,
     ChannelInfo,
     DevicePINInfo,
@@ -8,9 +8,9 @@ from devicelist import (
     Feedback,
 )
 
-from tag import (
+from .tag import (
     TagList,
     Tag,
     DeleteTag,
-    BatchTag
+    BatchTag,
 )
