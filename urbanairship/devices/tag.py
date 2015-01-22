@@ -125,5 +125,5 @@ class BatchTag(object):
         body = json.dumps(self.changelist)
         response = self._airship._request('POST', body, self.url,
                                           'application/json', version=3)
-        data = response.json()
+
         logger.info("Successful batch modification: %s", self.changelist)
