@@ -1,6 +1,7 @@
 import unittest
 import mock
 import requests
+import json
 import urbanairship as ua
 
 
@@ -12,7 +13,15 @@ class TestTagList(unittest.TestCase):
         
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = ('''{"tags": ["tag1", "some_tag", "portland_or"]}''')
+            response._content = json.dumps(
+                {
+                    "tags": [
+                                "tag1", 
+                                "some_tag", 
+                                "portland_or"
+                            ]
+                }
+            ).encode('utf-8')
             response.status_code = 200
             mock_request.return_value = response
 
