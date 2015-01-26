@@ -17,7 +17,7 @@ class TagList(object):
         self._airship = airship
         self.url = common.TAGS_URL + '/'
 
-    def listTags(self):
+    def list_tags(self):
 
         response = self._airship._request('GET', None, self.url, version=3)
 
@@ -34,7 +34,6 @@ class Tag(object):
         self._airship = airship
         tag_name = tag_name
         self.url = common.TAGS_URL + '/' + tag_name
-        # self.data = {}
 
     def add(self, ios_channels=None, android_channels=None,
             amazon_channels=None):
@@ -104,13 +103,13 @@ class BatchTag(object):
         self.changelist = []
         self.url = common.TAGS_URL + '/batch/'
 
-    def addIOSChannel(self, channel, tags):
+    def add_ios_channel(self, channel, tags):
         self.changelist.append({"ios_channel": channel, "tags": tags})
 
-    def addAndroidChannel(self, channel, tags):
+    def add_android_channel(self, channel, tags):
         self.changelist.append({"android_channel": channel, "tags": tags})
 
-    def addAmazonChannel(self, channel, tags):
+    def add_amazon_channel(self, channel, tags):
         self.changelist.append({"amazon_channel": channel, "tags": tags})
 
     def send_request(self):

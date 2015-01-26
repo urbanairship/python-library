@@ -16,7 +16,7 @@ up to the first 100 tags per application.
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
    list_tags = ua.TagList(airship)
-   list_tags.listTags()
+   list_tags.list_tags()
 
 .. automodule:: urbanairship.devices.tag
    :members: TagList
@@ -92,9 +92,9 @@ Note:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
    send_batch = ua.BatchTag(airship)
-   send_batch.addIOSChannel('ios_channel_id', ['ios_tag', 'portland_OR'])
-   send_batch.addAndroidChannel('android_channel_id', ['tag11', 'tag12'])
-   send_batch.addAmazonChannel('amazon_channel_id', ['tag11', 'portland_OR'])
+   send_batch.add_ios_channel('ios_channel_id', ['ios_tag', 'portland_OR'])
+   send_batch.add_android_channel('android_channel_id', ['tag11', 'tag12'])
+   send_batch.add_amazon_channel('amazon_channel_id', ['tag11', 'portland_OR'])
    send_batch.send_request()
 
 .. automodule:: urbanairship.devices.tag
