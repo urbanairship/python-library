@@ -49,8 +49,9 @@ class Tag(object):
             self.data['amazon_channels'] = {'add': amazon_channels}
 
         body = json.dumps(self.data)
-        self._airship._request('POST', body, self.url, 'application/json',
-                               version=3)
+        response = self._airship._request('POST', body, self.url,
+                                          'application/json', version=3)
+        return response
 
     def remove(self, ios_channels=None, android_channels=None,
                amazon_channels=None):
@@ -65,11 +66,11 @@ class Tag(object):
             self.data['android_channels'] = {'remove': android_channels}
         if amazon_channels is not None:
             self.data['amazon_channels'] = {'remove': amazon_channels}
-        return self.data
 
         body = json.dumps(self.data)
-        self._airship._request('POST', body, self.url, 'application/json',
-                               version=3)
+        response = self._airship._request('POST', body, self.url,
+                                          'application/json', version=3)
+        return response
 
 
 class DeleteTag(object):
@@ -126,3 +127,4 @@ class BatchTag(object):
                                           'application/json', version=3)
 
         logger.info("Successful batch modification: %s", self.changelist)
+        return response
