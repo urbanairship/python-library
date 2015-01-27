@@ -1,15 +1,15 @@
 Tags
 ====
 
-A note about using the tag API: if using UrbanAirship SDKs, it is not advisable
-to use the tag API unless you have device-side tagging disabled in the SDK.
-Without this setting disabled, the modifications made using the tag API will
-be overwritten by settings in the SDK.
+A note about using the tag API: if using UrbanAirship SDKs, it is not
+advisable to use the tag API unless you have device-side tagging
+disabled in the SDK. Without this setting disabled, the modifications
+made using the tag API will be overwritten by settings in the SDK.
 
 
 Tag Listing
 -----------
-Lists tags that exist for this application. Tag Listing will return 
+Lists tags that exist for this application. Tag Listing will return
 up to the first 100 tags per application.
 
 .. code-block:: python
@@ -25,8 +25,7 @@ up to the first 100 tags per application.
 
 Adding Devices to a Tag
 -----------------------
-Add one or more channels to a particular tag. For more
-information, see: 
+Add one or more channels to a particular tag. For more information, see:
 http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag .
 
 .. code-block:: python
@@ -45,8 +44,7 @@ http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag 
 
 Removing Devices from a Tag
 ---------------------------
-Remove one or more channels from a particular tag. For more
-information, see: 
+Remove one or more channels from a particular tag. For more information, see:
 http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag .
 
 .. code-block:: python
@@ -64,14 +62,14 @@ http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag 
 
 Deleting a Tag
 --------------
-A tag can be removed from our system by issuing a delete. This will remove the
-master record of the tag. For more information, see: 
+A tag can be removed from our system by issuing a delete. This will
+remove the master record of the tag. For more information, see:
 http://docs.urbanairship.com/api/ua.html#deleting-a-tag .
 
 Note:
-    Delete will remove the tag from all devices with the exception of devices that
-    are inactive due to uninstall. Devices that were uninstalled will retain
-    their tags.
+    Delete will remove the tag from all devices with the exception of
+    devices that are inactive due to uninstall. Devices that were
+    uninstalled will retain their tags.
 
 .. code-block:: python
 
@@ -90,8 +88,9 @@ Modify the tags for a number of device channels. For more information, see:
 http://docs.urbanairship.com/api/ua.html#batch-modification-of-tags .
 
 Note:
-    You must include an object containing an ios_channel, android_channel, or
-    amazon_channel, and a list of tags to apply.
+    You must include an object containing an ios_channel,
+    android_channel, or amazon_channel, and a list of tags
+    to apply.
 
 .. code-block:: python
 
