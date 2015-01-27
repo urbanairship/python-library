@@ -57,7 +57,7 @@ class ChannelInfo(object):
 class DeviceInfo(object):
     """Information object for a single device token.
 
-    :ivar dt_id: Device identifier. Also available at the attribute named by
+    :ivar device_id: Device identifier. Also available at the attribute named by
         the ``device_type``.
     :ivar device_type: Type of the device, e.g. ``device_token``
     :ivar active: bool; whether this device can receive notifications.
@@ -65,7 +65,7 @@ class DeviceInfo(object):
     :ivar alias: alias associated with this device, if any.
 
     """
-    dt_id = None
+    device_id = None
     device_type = None
     active = None
     tags = None
@@ -75,7 +75,7 @@ class DeviceInfo(object):
     def from_payload(cls, payload, device_key):
         """Create based on results from a DeviceList iterator."""
         obj = cls()
-        obj.dt_id = payload[device_key]
+        obj.device_id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
             setattr(obj, key, payload[key])

@@ -148,7 +148,7 @@ This example schedules the above notification for delivery in one minute.
        datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
    response = schedule.send()
 
-   print "Created schedule. url:", response.schedule_url
+   print ("Created schedule. url:", response.schedule_url)
 
 If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
 will be raised.
@@ -176,7 +176,7 @@ This example schedules the above notification for delivery in device local time.
        datetime.datetime(2015, 4, 1, 8, 05))
    response = schedule.send()
 
-   print "Created schedule. url:", response.schedule_url
+   print ("Created schedule. url:", response.schedule_url)
 
 If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
 will be raised.
