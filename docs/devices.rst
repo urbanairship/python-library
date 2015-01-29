@@ -24,8 +24,8 @@ using :py:class:`ChannelList`.
 Channel Lookup
 --------------
      
-Device metadata is fetched by instantiating a lookup for a specific device
-channel by using :py:class:`ChannelLookup:lookup`.
+Device metadata is fetched by instantiating a lookup for a specific
+device channel by using :py:class:`ChannelLookup:lookup`.
 
 .. code-block:: python
 
@@ -42,8 +42,8 @@ channel by using :py:class:`ChannelLookup:lookup`.
 Blackberry PIN Lookup
 ---------------------
 
-Device metadata is fetched by instantiating a lookup for a specific device
-PIN by using :py:class:`DevicePINInfo:pin_lookup`
+Device metadata is fetched by instantiating a lookup for a specific
+device PIN by using :py:class:`DevicePINInfo:pin_lookup`
 
 .. code-block:: python
 
@@ -59,8 +59,8 @@ PIN by using :py:class:`DevicePINInfo:pin_lookup`
 Device Listing
 --------------
 
-Device lists are fetched by instantiating an iterator object for each type of
-device. The available iterators are :py:class:`DeviceTokenList`,
+Device lists are fetched by instantiating an iterator object for each
+type of device. The available iterators are :py:class:`DeviceTokenList`,
 :py:class:`APIDList`, and :py:class:`DevicePINList`.
 
 .. code-block:: python
@@ -76,9 +76,10 @@ device. The available iterators are :py:class:`DeviceTokenList`,
 
 Feedback
 --------
-Feedback returns a list of dictionaries of device tokens/APIDs that the respective
-push provider has told us are uninstalled since the given timestamp. For more
-information, see: http://docs.urbanairship.com/api/ua.html#feedback .
+Feedback returns a list of dictionaries of device tokens/APIDs that the
+respective push provider has told us are uninstalled since the given
+timestamp. For more information, see: `the documentation on feedback
+<feedback>`_.
 
 Note:
     If you'd like to parse the result, you'll need dateutil:
@@ -94,3 +95,5 @@ Note:
 
 .. automodule:: urbanairship.devices.devicelist
    :members: Feedback
+
+.. _feedback: http://docs.urbanairship.com/api/ua.html#feedback

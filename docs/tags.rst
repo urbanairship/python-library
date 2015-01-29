@@ -25,8 +25,8 @@ up to the first 100 tags per application.
 
 Adding Devices to a Tag
 -----------------------
-Add one or more channels to a particular tag. For more information, see:
-http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag .
+Add one or more channels to a particular tag. For more information, see
+`documentation on adding and removing devices from a tag <adding>`_.
 
 .. code-block:: python
 
@@ -44,8 +44,8 @@ http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag 
 
 Removing Devices from a Tag
 ---------------------------
-Remove one or more channels from a particular tag. For more information, see:
-http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag .
+Remove one or more channels from a particular tag. For more information,
+see: `documentation on adding and removing devices from a tag <adding>`_.
 
 .. code-block:: python
 
@@ -64,7 +64,7 @@ Deleting a Tag
 --------------
 A tag can be removed from our system by issuing a delete. This will
 remove the master record of the tag. For more information, see:
-http://docs.urbanairship.com/api/ua.html#deleting-a-tag .
+`documentation on deleting a tag <deleting>`_.
 
 Note:
     Delete will remove the tag from all devices with the exception of
@@ -84,8 +84,8 @@ Note:
 
 Batch Modification of Tags
 --------------------------
-Modify the tags for a number of device channels. For more information, see:
-http://docs.urbanairship.com/api/ua.html#batch-modification-of-tags .
+Modify the tags for a number of device channels. For more information,
+see: `documentation on batch modification of tags <batch>`_.
 
 Note:
     You must include an object containing an ios_channel,
@@ -108,3 +108,7 @@ Note:
    :members: BatchTag
 
 
+.. _adding: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
+.. _removing: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
+.. _deleting: http://docs.urbanairship.com/api/ua.html#deleting-a-tag
+.. _batch: http://docs.urbanairship.com/api/ua.html#batch-modification-of-tags
