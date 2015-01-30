@@ -41,7 +41,7 @@ Complex audience with platform specifics
          extra={"articleid": "123456"}
       ),
       android=ua.android(
-         alert="Breaking Special Android News! Glorious Leader Kim Jong-Un wins U.S. Open!",
+         alert="Breaking Android News! Glorious Leader Kim Jong-Un wins U.S. Open!",
          extra={"articleid": "http://m.example.com/123456"}
       ),
       amazon=ua.amazon(
