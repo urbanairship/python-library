@@ -1,4 +1,5 @@
 import json
+from time import strptime
 import unittest
 import mock
 import requests
@@ -96,13 +97,7 @@ class TestDeviceInfo(unittest.TestCase):
                 airship,
                 datetime.datetime(2014,11,22)
             )
-            date = '2014-12-16 20:21:42'
-            try:
-                from dateutil.parser import parse
-                date = parse(date)
-            except ImportError:
-                def parse(date):
-                    return date
+            date = strptime('2014-12-16 20:21:42', '%Y-%m-%d %H:%M:%S')
 
             self.assertEqual(
                 feedback,
@@ -141,13 +136,7 @@ class TestDeviceInfo(unittest.TestCase):
                 airship,
                 datetime.datetime(2014, 11, 22, 10, 10, 10)
             )
-            date = '2014-12-16 20:21:42'
-            try:
-                from dateutil.parser import parse
-                date = parse(date)
-            except ImportError:
-                def parse(date):
-                    return date
+            date = strptime('2014-12-16 20:21:42', '%Y-%m-%d %H:%M:%S')
 
             self.assertEqual(
                 feedback,

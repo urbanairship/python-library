@@ -1,3 +1,4 @@
+from time import strptime
 from urbanairship import common
 
 
@@ -206,11 +207,8 @@ class Feedback(object):
                                         params={'since': since.isoformat()},
                                         version=3)
             data = response.json()
-            try:
-                from dateutil.parser import parse
-            except ImportError:
-                def parse(x):
-                    return x
             for r in data:
-                r['marked_inactive_on'] = parse(r['marked_inactive_on'])
+                r['marked_inactive_on'] = strptime(
+                    r['marked_inactive_on'], '%Y-%m-%d %H:%M:%S'
+                )
             return data

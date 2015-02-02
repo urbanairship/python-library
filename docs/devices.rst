@@ -80,10 +80,6 @@ Feedback returns a list of dictionaries of device tokens/APIDs that the respecti
 push provider has told us are uninstalled since the given timestamp. For more
 information, see: http://docs.urbanairship.com/api/ua.html#feedback .
 
-Note:
-    If you'd like to parse the result, you'll need dateutil:
-    http://labix.org/python-dateutil
-
 .. code-block:: python
 
    import urbanairship as ua
