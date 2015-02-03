@@ -19,7 +19,7 @@ using :py:class:`ChannelList`.
               channel.push_address, channel.alias, channel.opt_in)
 
 .. automodule:: urbanairship.devices.devicelist
-   :members: ChannelList, ChannelInfogit sta
+   :members: ChannelList, ChannelInfo
 
 Channel Lookup
 --------------
