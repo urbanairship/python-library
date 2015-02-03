@@ -110,12 +110,18 @@ class DeviceList(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
             return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
         except StopIteration:
             self._fetch_next_page()
             return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
+
+    def next(self):
+        """Necessary for iteration to work with Python 2.*.
+
+        """
+        return self.__next__()
 
     def _fetch_next_page(self):
         if not self.next_url:
@@ -125,7 +131,9 @@ class DeviceList(object):
 
     def _load_page(self, url):
         params = {'limit': self.limit} if self.limit is not None else {}
-        response = self._airship._request('GET', None, url, version=3, params=params)
+        response = self._airship._request(
+            'GET', None, url, version=3, params=params
+        )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
 
@@ -153,12 +161,22 @@ class ChannelList(DeviceList):
     data_attribute = 'channels'
     id_key = 'channel_id'
 
-    def next(self):
+    def __next__(self):
         try:
-            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
+            return ChannelInfo.from_payload(
+                next(self._token_iter),self.id_key
+            )
         except StopIteration:
             self._fetch_next_page()
-            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
+            return ChannelInfo.from_payload(
+                next(self._token_iter), self.id_key
+            )
+
+    def next(self):
+        """Necessary for iteration to work with Python 2.*.
+
+        """
+        return self.__next__()
 
 
 class APIDList(DeviceList):
