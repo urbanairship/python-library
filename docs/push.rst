@@ -1,17 +1,17 @@
 Defining and Sending Push Notifications
 =======================================
 
-The Urban Airship Python Library strives to match the standard Urban Airship
-JSON format for specifying push notifications. When creating a push
-notification, you:
+The Urban Airship Python Library strives to match the standard Urban
+Airship JSON format for specifying push notifications. When creating a
+push notification, you:
 
 #. Select the audience
 #. Define the notification payload
 #. Specify device types.
 #. Deliver the notification.
 
-This example performs a broadcast with the same alert to all recipients and
-device types:
+This example performs a broadcast with the same alert to all recipients
+and device types:
 
 .. code-block:: python
 
@@ -28,10 +28,10 @@ device types:
 Audience Selectors
 ------------------
 
-An audience should specify one or more devices. An audience can be a device,
-such as a ``channel``, ``device_token`` or ``apid``; a tag, alias, or segment; a location;
-or a combination. Audience selectors are combined with ``and_``, ``or_``, and
-``not_``.
+An audience should specify one or more devices. An audience can be a
+device, such as a ``channel``, ``device_token`` or ``apid``; a tag,
+alias, or segment; a location; or a combination. Audience selectors are
+combined with ``and_``, ``or_``, and ``not_``.
 
 .. py:data:: urbanairship.push.all_
 
@@ -51,9 +51,10 @@ or a combination. Audience selectors are combined with ``and_``, ``or_``, and
 Notification Payload
 --------------------
 
-The notification payload determines what message and data is sent to a device.
-At its simplest, it consists of a single string-valued attribute, "alert",
-which sends a push notification consisting of a single piece of text:
+The notification payload determines what message and data is sent to a
+device. At its simplest, it consists of a single string-valued
+attribute, "alert", which sends a push notification consisting of a
+single piece of text:
 
 .. code-block:: python
 
@@ -62,7 +63,8 @@ which sends a push notification consisting of a single piece of text:
 You can override the payload with platform-specific values as well.
 
 .. automodule:: urbanairship.push.payload
-   :members: notification, ios, android, blackberry, wns_payload, mpns_payload
+   :members: notification, ios, android, blackberry, wns_payload,
+   mpns_payload
 
 
 Actions
@@ -96,8 +98,8 @@ http://docs.urbanairship.com/api/ua.html#actions, example:
 Device Types
 ------------
 
-In addition to specifying the audience, you must specify the device types you
-wish to target, either with a list of strings:
+In addition to specifying the audience, you must specify the device
+types you wish to target, either with a list of strings:
 
 .. code-block:: python
 
@@ -135,7 +137,8 @@ Scheduled Delivery
 Scheduled notifications build upon the Push object, and have two other
 components: the scheduled time(s) and an optional name.
 
-This example schedules the above notification for delivery in one minute.
+This example schedules the above notification for delivery in one
+minute.
 
 .. code-block:: python
 
@@ -150,8 +153,8 @@ This example schedules the above notification for delivery in one minute.
 
    print ("Created schedule. url:", response.schedule_url)
 
-If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
-will be raised.
+If the schedule is unsuccessful, an :py:class:`AirshipFailure`
+exception will be raised.
 
 .. autoclass:: urbanairship.push.core.ScheduledPush
    :members:
@@ -163,7 +166,8 @@ Scheduled Delivery in Device Local Time
 Scheduled notifications build upon the Push object, and have two other
 components: the scheduled time(s) and an optional name.
 
-This example schedules the above notification for delivery in device local time.
+This example schedules the above notification for delivery in device
+local time.
 
 .. code-block:: python
 
