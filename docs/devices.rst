@@ -85,9 +85,9 @@ timestamp. For more information, see: `the documentation on feedback
 
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
-   since  = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+   since = datetime.datetime.utcnow() - datetime.timedelta(days=1)
    tokens = ua.Feedback.device_token(airship, since)
-   apids  = ua.Feedback.apid(airship, since)
+   apids = ua.Feedback.apid(airship, since)
 
 .. automodule:: urbanairship.devices.devicelist
    :members: Feedback
