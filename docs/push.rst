@@ -78,18 +78,20 @@ http://docs.urbanairship.com/api/ua.html#actions, example:
 .. code-block:: python
 
    push.notification = ua.notification(
-          alert="Hello, world!"
-          actions = ua.actions(
-              add_tag = "new_tag",
-              remove_tag = "old_tag",
-              share = "Check out Urban Airship!",
-              open_ = {
+          alert="Hello, world!",
+          actions=ua.actions(
+              add_tag="new_tag",
+              remove_tag="old_tag",
+              share="Check out Urban Airship!",
+              open_={
                   "type": "url",
                   "content": "http://www.urbanairship.com"
               },
-              app_defined = {"some_app_defined_action": "some_values"}
+              app_defined={
+                  "some_app_defined_action": "some_values"
+              }
           )
-        )
+   )
 
 .. automodule:: urbanairship.push.payload
    :members: notification, actions, ios, android, amazon
@@ -177,7 +179,7 @@ local time.
    schedule.push = push
    schedule.name = "optional name for later reference"
    schedule.schedule = ua.local_scheduled_time(
-       datetime.datetime(2015, 4, 1, 8, 05))
+       datetime.datetime(2015, 4, 1, 8, 5))
    response = schedule.send()
 
    print ("Created schedule. url:", response.schedule_url)
