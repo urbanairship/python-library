@@ -13,14 +13,17 @@ As of version 0.7, Python 2.6, 2.7, 3.3 or 3.4 is required.
 Functionality
 =============
 
-Version 0.7 is a major upgrade focusing on support for Python 3 and the new
-version 3 push API. There has also been a major reorganization of the codebase.
-In favor of channels, support for the following has been removed:
-- device token registration,
+Version 0.7 is a major upgrade and backwards incompatible with earlier
+versions.  This release focuses on support for Python 3 and the new
+version 3 push API. There is also a major reorganization of the codebase.
+
+In favor of channels, support for device token registration has been removed.
+Support for v1 endpoints has also been removed and support for:
+- blackberry pin lookup,
 - lookup and listing for device tokens, and
-- sending to device tokens.
-Support for v1 endpoints has been removed and blackberry pin lookup was moved
-from v1 to v3.
+- sending to device tokens
+has been moved from v1 to v3.
+
 A more detailed list of changes can be found in the CHANGELOG.
 
 Version 0.6.3 is a bug fix release and its updates are compatible with the .6
