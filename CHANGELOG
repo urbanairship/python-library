@@ -6,8 +6,14 @@
 - added channels lookup and listing
 - added push to local time
 - added actions
-- added tag API support
+- added support for the tag api:
+  * tag listing
+  * adding and removing devices from tags
+  * deleting tags
+  * tag batch modification
 - added support for expiry/TTL
+- improved date parsing in feedback response
+- updated docs
 
 --------------------
 0.6.3

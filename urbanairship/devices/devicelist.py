@@ -1,4 +1,6 @@
+from time import strptime
 from urbanairship import common
+
 
 class ChannelInfo(object):
     """Information object for iOS, Android and Amazon device channels.
@@ -29,7 +31,7 @@ class ChannelInfo(object):
     last_registration = None
     tags = None
     alias = None
-    ios = None 
+    ios = None
 
     @classmethod
     def from_payload(cls, payload, device_key):
@@ -56,15 +58,15 @@ class ChannelInfo(object):
 class DeviceInfo(object):
     """Information object for a single device token.
 
-    :ivar dt_id: Device identifier. Also available at the attribute named by the
-        ``device_type``.
+    :ivar id: Device identifier. Also available at the attribute named by
+        the ``device_type``.
     :ivar device_type: Type of the device, e.g. ``device_token``
     :ivar active: bool; whether this device can receive notifications.
     :ivar tags: list of tags associated with this device, if any.
     :ivar alias: alias associated with this device, if any.
 
     """
-    dt_id = None
+    id = None
     device_type = None
     active = None
     tags = None
@@ -74,7 +76,7 @@ class DeviceInfo(object):
     def from_payload(cls, payload, device_key):
         """Create based on results from a DeviceList iterator."""
         obj = cls()
-        obj.dt_id = payload[device_key]
+        obj.id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
             setattr(obj, key, payload[key])
@@ -108,12 +110,18 @@ class DeviceList(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
             return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
         except StopIteration:
             self._fetch_next_page()
             return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
+
+    def next(self):
+        """Necessary for iteration to work with Python 2.*.
+
+        """
+        return self.__next__()
 
     def _fetch_next_page(self):
         if not self.next_url:
@@ -123,7 +131,9 @@ class DeviceList(object):
 
     def _load_page(self, url):
         params = {'limit': self.limit} if self.limit is not None else {}
-        response = self._airship._request('GET', None, url, version=3, params=params)
+        response = self._airship._request(
+            'GET', None, url, version=3, params=params
+        )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
 
@@ -151,12 +161,22 @@ class ChannelList(DeviceList):
     data_attribute = 'channels'
     id_key = 'channel_id'
 
-    def next(self):
+    def __next__(self):
         try:
-            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
+            return ChannelInfo.from_payload(
+                next(self._token_iter),self.id_key
+            )
         except StopIteration:
             self._fetch_next_page()
-            return ChannelInfo.from_payload(next(self._token_iter), self.id_key)
+            return ChannelInfo.from_payload(
+                next(self._token_iter), self.id_key
+            )
+
+    def next(self):
+        """Necessary for iteration to work with Python 2.*.
+
+        """
+        return self.__next__()
 
 
 class APIDList(DeviceList):
@@ -184,7 +204,9 @@ class DevicePINList(DeviceList):
 
 
 class Feedback(object):
-        """Return device tokens or APIDs marked inactive since this timestamp."""
+        """Return device tokens or APIDs marked inactive since this timestamp.
+
+        """
 
         @classmethod
         def device_token(cls, airship, since):
@@ -200,13 +222,11 @@ class Feedback(object):
         def _get_feedback(cls, airship, since, url):
 
             response = airship._request('GET', '', url,
-                params={'since': since.isoformat()}, version=3)
+                                        params={'since': since.isoformat()},
+                                        version=3)
             data = response.json()
-            try:
-                from dateutil.parser import parse
-            except ImportError:
-                def parse(x):
-                    return x
             for r in data:
-                r['marked_inactive_on'] = parse(r['marked_inactive_on'])
+                r['marked_inactive_on'] = strptime(
+                    r['marked_inactive_on'], '%Y-%m-%d %H:%M:%S'
+                )
             return data

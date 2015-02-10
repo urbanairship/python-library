@@ -12,6 +12,7 @@ PUSH_URL = BASE_URL + '/push/'
 DT_FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
 APID_FEEDBACK_URL = BASE_URL + '/apids/feedback/'
 SCHEDULES_URL = BASE_URL + '/schedules/'
+TAGS_URL = BASE_URL + '/tags'
 
 
 logger = logging.getLogger('urbanairship')

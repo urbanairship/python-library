@@ -7,3 +7,10 @@ from .devicelist import (
     APIDList,
     Feedback,
 )
+
+from .tag import (
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag,
+)

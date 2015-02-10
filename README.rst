@@ -15,17 +15,7 @@ Functionality
 
 Version 0.7 is a major upgrade, focusing on support for Python 3 and the new
 version 3 push API. There has also been a major reorganization of the codebase.
-
-* support for Python 3
-* send to channels
-* adding and removing tags
-* batch tag modification
-* tag listing
-* actions
-* push to local time
-* channels listing
-* channels lookup
-* expiry/TTL
+A more detailed list of changes can be found in the CHANGELOG.
 
 Usage
 =====

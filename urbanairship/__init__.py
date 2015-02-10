@@ -32,9 +32,11 @@ from .push import (
     message,
     device_types,
     options,
+    actions,
     scheduled_time,
     local_scheduled_time,
 )
+
 from .devices import (
     ChannelList,
     ChannelInfo,
@@ -43,8 +45,11 @@ from .devices import (
     DevicePINList,
     APIDList,
     Feedback,
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag,
 )
-
 
 __all__ = [
     Airship,
@@ -79,6 +84,7 @@ __all__ = [
     mpns_payload,
     message,
     options,
+    actions,
     device_types,
     scheduled_time,
     local_scheduled_time,
@@ -88,7 +94,11 @@ __all__ = [
     DeviceTokenList,
     DevicePINList,
     APIDList,
-    Feedback,
+    TagList,
+    Tag,
+    DeleteTag,
+    BatchTag,
+    Feedback
 ]
 
 # Silence urllib3 INFO logging by default
