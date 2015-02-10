@@ -2,8 +2,17 @@
 0.7.0
 --------------------
 - added Python 3 compatibility
+- removed support for v1 endpoints:
+  * /push/batch/
+  * /push/broadcast/
+  * /airmail/send/
+  * /airmail/send/broadcast
+- removed device token registration
+- removed support for sending to device tokens and apids
+- removed support for device token and apid lookup and listing
 - added support for sending to channels
 - added channels lookup and listing
+- added support for amazon device type
 - added push to local time
 - added actions
 - added support for the tag api:
