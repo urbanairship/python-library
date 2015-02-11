@@ -8,8 +8,10 @@
   * /airmail/send/
   * /airmail/send/broadcast
 - removed device token registration
-- removed support for sending to device tokens and apids
-- removed support for device token and apid lookup and listing
+- moved support from v1 to v3 for:
+  * sending to device tokens and apids
+  * device token and apid lookup and listing
+  * blackberry pin lookup
 - added support for sending to channels
 - added channels lookup and listing
 - added support for amazon device type
