@@ -8,9 +8,14 @@ from .devicelist import (
     Feedback,
 )
 
-from tag import (
+from .tag import (
     TagList,
     Tag,
     DeleteTag,
     BatchTag
+)
+
+from .segment import (
+    Segment,
+    SegmentList
 )
