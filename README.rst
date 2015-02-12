@@ -20,6 +20,7 @@ version 3 push API. There is also a major reorganization of the codebase.
 To encourage the use of our SDK, which takes care of proper channel
 registration, support for device token registration has been removed.
 Support for v1 endpoints has also been removed and support for:
+
 * blackberry pin lookup,
 * lookup and listing for device tokens, and
 * sending to device tokens
