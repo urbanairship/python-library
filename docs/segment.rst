@@ -48,7 +48,8 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
     seg_class = ua.Segment()
     segment = seg_class.from_id(airship, "segment_id")
     segment.display_name = "New Display Name"
-    segment.criteria = {'and': [{'tag': 'new_tag'}, {'not': {'tag': 'other_tag'}}]}
+    segment.criteria = {'and': [{'tag': 'new_tag'},
+                                {'not': {'tag': 'other_tag'}}]}
     segment.update()
 
 .. automodule:: urbanairship.devices.segment
