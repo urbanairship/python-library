@@ -69,7 +69,7 @@ class Segment(object):
         if self.criteria is not None:
             data['criteria'] = self.criteria
 
-        body = json.dumps(self.data)
+        body = json.dumps(data)
         response = self._airship._request('PUT', body, url, version=3)
         logger.info(
             "Successful segment update: '{}'".format(self.display_name))

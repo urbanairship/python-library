@@ -11,7 +11,7 @@ http://docs.urbanairship.com/api/ua.html#segments-information
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship(app_key, master_secret)
+    airship = ua.Airship("app_key", "master_secret")
     segment_list = ua.SegmentList(airship) 
 
     for segment in segment_list:
@@ -22,15 +22,15 @@ http://docs.urbanairship.com/api/ua.html#segments-information
 
 Creating a Segment 
 ------------------
-Create a tag for this application. For more information, see:
+Create a segment for this application. For more information, see:
 http://docs.urbanairship.com/api/ua.html#segment-creation
 
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship(app_key, master_secret)
+    airship = ua.Airship("app_key", "master_secret")
     seg_class = ua.Segment()
-    segment = seg_class.create(airship, "display name", {"tag":"Existing Tag"})
+    seg_class.create(airship, "display name", {"tag":"Existing Tag"})
 
 
 .. automodule:: urbanairship.devices.segment
@@ -44,11 +44,12 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship(app_key, master_secret)
+    airship = ua.Airship("app_key", "master_secret")
     seg_class = ua.Segment()
     segment = seg_class.from_id(airship, "segment_id")
     segment.display_name = "New Display Name"
     segment.criteria = {'and': [{'tag': 'new_tag'}, {'not': {'tag': 'other_tag'}}]}
+    segment.update()
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
@@ -63,7 +64,7 @@ http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship(app_key, master_secret)
+    airship = ua.Airship("app_key", "master_secret")
     seg_class = ua.Segment()
     segment = seg_class.from_id(airship, "segment_id")
     segment.delete()
@@ -80,10 +81,9 @@ http://docs.urbanairship.com/api/ua.html#get--api-segments-(segment_id)
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship(app_key, master_secret)
+    airship = ua.Airship("app_key", "master_secret")
     seg_class = ua.Segment()
-    segment = seg_class.from_id(airship, "segment_id")
-    segment.delete()
+    seg_class.from_id(airship, "segment_id")
 
 .. automodule:: urbanairship.devices.segment
     :members: segment
