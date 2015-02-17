@@ -55,7 +55,7 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
 
 
 Deleting a Segment
--------------------
+------------------
 A segment can be deleted by calling the delete function on the segment.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
@@ -87,5 +87,3 @@ http://docs.urbanairship.com/api/ua.html#get--api-segments-(segment_id)
 
 .. automodule:: urbanairship.devices.segment
     :members: segment
- 
-

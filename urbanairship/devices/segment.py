@@ -27,15 +27,15 @@ class Segment(object):
         return obj
 
     @classmethod
-    def from_id(cls, airship, id):
+    def from_id(cls, airship, seg_id):
         """Retrieve a segment based on the provided ID
         """
         cls._airship = airship
-        url = common.SEGMENTS_URL + id
+        url = common.SEGMENTS_URL + seg_id
         response = airship._request('GET', None, url, version=3)
         payload = response.json()
         seg = cls.from_payload(payload)
-        seg.id = id
+        seg.id = seg_id
         return seg
 
     def create(self, airship, name, criteria):

@@ -32,9 +32,9 @@ class TestSegment(unittest.TestCase):
         seg_class = ua.Segment()
         airship = ua.Airship('key', 'secret')
         name = "test_segment"
-        criteria = json.dumps({'and': [{'tag': 'TEST'},
-                                       {'not': {'tag': 'TEST2'}}]
-        }).encode('utf-8')
+        criteria = json.dumps(
+            {'and': [{'tag': 'TEST'}, {'not': {'tag': 'TEST2'}}]}
+        ).encode('utf-8')
 
         create_response = requests.Response()
         create_response._content = json.dumps(
@@ -69,5 +69,3 @@ class TestSegment(unittest.TestCase):
         delres = segment.delete()
 
         self.assertEqual(delres.status_code, 204)
-
-
