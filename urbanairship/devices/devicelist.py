@@ -1,4 +1,4 @@
-from time import strptime
+import datetime
 from urbanairship import common
 
 
@@ -50,8 +50,15 @@ class ChannelInfo(object):
         id_key = 'channel_id'
         params = {}
         url = start_url + channel_id
-        response = airship._request('GET', None, url, version=3, params=params)
+        response = airship._request('GET', None, url, version=3,
+                                    params=params)
         payload = response.json()
+        payload['channel']['created'] = datetime.datetime.strptime(
+                payload['channel']['created'], '%Y-%m-%dT%H:%M:%S'
+            )
+        payload['channel']['last_registration'] = datetime.datetime.strptime(
+            payload['channel']['last_registration'], '%Y-%m-%dT%H:%M:%S'
+        )
         return cls.from_payload(payload[data_attribute], id_key)
 
 
@@ -226,7 +233,7 @@ class Feedback(object):
                                         version=3)
             data = response.json()
             for r in data:
-                r['marked_inactive_on'] = strptime(
+                r['marked_inactive_on'] = datetime.datetime.strptime(
                     r['marked_inactive_on'], '%Y-%m-%d %H:%M:%S'
                 )
             return data
