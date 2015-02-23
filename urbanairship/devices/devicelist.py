@@ -97,7 +97,14 @@ class DevicePINInfo(object):
         """Retrieve information about this BlackBerry PIN"""
         url = common.DEVICE_PIN_URL + device_pin
         response = airship._request('GET', None, url, version=3)
-        return response.json()
+        payload = response.json()
+        payload['created'] = datetime.datetime.strptime(
+            payload['created'], '%Y-%m-%d %H:%M:%S'
+        )
+        payload['last_registration'] = datetime.datetime.strptime(
+            payload['last_registration'], '%Y-%m-%d %H:%M:%S'
+        )
+        return payload
 
 
 class DeviceList(object):

@@ -140,7 +140,8 @@ class TestDeviceInfo(unittest.TestCase):
                 airship,
                 datetime.datetime(2014, 11, 22, 10, 10, 10)
             )
-            date = datetime.datetime.strptime('2014-12-16 20:21:42', '%Y-%m-%d %H:%M:%S')
+            date = datetime.datetime.strptime('2014-12-16 20:21:42',
+                                              '%Y-%m-%d %H:%M:%S')
 
             self.assertEqual(
                 feedback,
@@ -184,11 +185,18 @@ class TestDeviceInfo(unittest.TestCase):
             device_pin = "12345678"
             device_info = ua.DevicePINInfo.pin_lookup(airship, device_pin)
 
+            date_created = datetime.datetime.strptime(
+                "2013-03-11 17:49:36", "%Y-%m-%d %H:%M:%S"
+            )
+            last_registration_date = datetime.datetime.strptime(
+                "2014-05-01 18:00:27", "%Y-%m-%d %H:%M:%S"
+            )
+
             self.assertEqual(device_info['device_pin'], "12345678")
             self.assertEqual(device_info['active'], "true")
             self.assertEqual(device_info['alias'], "your_user_id")
             self.assertEqual(device_info['tags'], ["tag1", "tag2"])
-            self.assertEqual(device_info['created'], "2013-03-11 17:49:36")
+            self.assertEqual(device_info['created'], date_created)
             self.assertEqual(
-                device_info['last_registration'], "2014-05-01 18:00:27"
+                device_info['last_registration'], last_registration_date
             )
