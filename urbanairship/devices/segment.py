@@ -17,50 +17,61 @@ class Segment(object):
     criteria = None
     data = None
 
-    @classmethod
-    def from_payload(cls, payload):
-        """Create segment based on results from a SegmentList iterator.
+    def create(self, airship):
+        """Create a Segment object and return it
         """
-        obj = cls()
-        for key in payload:
-            setattr(obj, key, payload[key])
-        return obj
+
+        url = common.SEGMENTS_URL
+        self.data = {
+            'display_name': self.display_name,
+            'criteria': self.criteria
+        }
+
+        body = json.dumps(self.data)
+        response = airship._request('POST', body, url, version=3)
+        logger.info(
+            "Successful segment creation: '{}'".format(self.display_name))
+
+
+        seg_url = response.headers['location']
+        seg_id = seg_url.split(url)[1]
+
+        self.id = seg_id
+        self.from_id(airship, seg_id)
+
+        return response
 
     @classmethod
     def from_id(cls, airship, seg_id):
         """Retrieve a segment based on the provided ID
         """
-        cls._airship = airship
+
         url = common.SEGMENTS_URL + seg_id
         response = airship._request('GET', None, url, version=3)
+        # #
+        # #
+        # from nose.tools import set_trace; set_trace()
+        # #
+        # #
         payload = response.json()
-        seg = cls.from_payload(payload)
-        seg.id = seg_id
-        return seg
+        cls.id = seg_id
+        cls.from_payload(payload)
 
-    def create(self, airship, name, criteria):
-        """Create a Segment object and return it
+    @classmethod
+    def from_payload(cls, payload):
+        """Create segment based on results from a SegmentList iterator.
         """
 
-        url = common.SEGMENTS_URL
-        data = {
-            'display_name': name,
-            'criteria': criteria
-        }
+        for key in payload:
+            setattr(cls, key, payload[key])
 
-        body = json.dumps(data)
-        response = airship._request('POST', body, url, version=3)
-        logger.info("Successful segment creation: '{}'".format(name))
-        seg_url = response.headers['location']
-        seg_id = seg_url.split(url)[1]
+        return cls
 
-        created_segment = self.from_id(airship, seg_id)
-        created_segment.id = seg_id
-        return created_segment
 
-    def update(self):
+    def update(self, airship):
         """Updates the segment associated with the data in the current object
         """
+
         url = common.SEGMENTS_URL + self.id
         data = {}
 
@@ -70,14 +81,15 @@ class Segment(object):
             data['criteria'] = self.criteria
 
         body = json.dumps(data)
-        response = self._airship._request('PUT', body, url, version=3)
+        response = airship._request('PUT', body, url, version=3)
         logger.info(
             "Successful segment update: '{}'".format(self.display_name))
+
         return response
 
-    def delete(self):
+    def delete(self, airship):
         url = common.SEGMENTS_URL + self.id
-        res = self._airship._request('DELETE', None, url, version=3)
+        res = airship._request('DELETE', None, url, version=3)
         logger.info(
             "Successful segment deletion: '{}'".format(self.display_name))
         return res
