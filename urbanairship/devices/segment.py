@@ -48,11 +48,7 @@ class Segment(object):
 
         url = common.SEGMENTS_URL + seg_id
         response = airship._request('GET', None, url, version=3)
-        # #
-        # #
-        # from nose.tools import set_trace; set_trace()
-        # #
-        # #
+
         payload = response.json()
         cls.id = seg_id
         cls.from_payload(payload)
@@ -72,14 +68,11 @@ class Segment(object):
         """Updates the segment associated with the data in the current object
         """
 
-        url = common.SEGMENTS_URL + self.id
         data = {}
+        data['display_name'] = self.display_name
+        data['criteria'] = self.criteria
 
-        if self.display_name is not None:
-            data['display_name'] = self.display_name
-        if self.criteria is not None:
-            data['criteria'] = self.criteria
-
+        url = common.SEGMENTS_URL + self.id
         body = json.dumps(data)
         response = airship._request('PUT', body, url, version=3)
         logger.info(
