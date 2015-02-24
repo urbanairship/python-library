@@ -39,6 +39,10 @@ class ChannelInfo(object):
         obj = cls()
         obj.channel_id = payload[device_key]
         for key in payload:
+            if key in ('created', 'last_registration'):
+                payload[key] = datetime.datetime.strptime(
+                   payload[key], '%Y-%m-%dT%H:%M:%S'
+                )
             setattr(obj, key, payload[key])
         return obj
 
@@ -53,12 +57,6 @@ class ChannelInfo(object):
         response = airship._request('GET', None, url, version=3,
                                     params=params)
         payload = response.json()
-        payload['channel']['created'] = datetime.datetime.strptime(
-                payload['channel']['created'], '%Y-%m-%dT%H:%M:%S'
-            )
-        payload['channel']['last_registration'] = datetime.datetime.strptime(
-            payload['channel']['last_registration'], '%Y-%m-%dT%H:%M:%S'
-        )
         return cls.from_payload(payload[data_attribute], id_key)
 
 
