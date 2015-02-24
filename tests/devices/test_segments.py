@@ -15,7 +15,7 @@ class TestSegmentList(unittest.TestCase):
                  {"segments":[
                       {"display_name":"test1"},
                       {"display_name":"test2"}]}
-                ''')
+                ''').encode('utf-8')
 
             name_list = ['test2', 'test1']
             mock_request.return_value = response
@@ -34,7 +34,7 @@ class TestSegment(unittest.TestCase):
             {'and': [{'tag': 'TEST'}, {'not': {'tag': 'TEST2'}}]}
         )
 
-        data = json.dumps({'name': name, 'criteria': criteria})
+        data = json.dumps({'name': name, 'criteria': criteria}).encode('utf-8')
 
         create_response = requests.Response()
         create_response.status_code = 200
