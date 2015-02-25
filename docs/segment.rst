@@ -34,9 +34,12 @@ http://docs.urbanairship.com/api/ua.html#segment-creation
     segment.criteria = {"tag":"Existing Tag"}
     segment.create(airship)
 
-
 .. automodule:: urbanairship.devices.segment
     :members: Segment
+.. note::
+    A segment's id is automatically set upon calling
+    :code:`segment.create(airship)` and can be accessed using
+    :code:`segment.id`
 
 Modifying a Segment
 -------------------
