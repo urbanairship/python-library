@@ -37,9 +37,8 @@ http://docs.urbanairship.com/api/ua.html#segment-creation
 .. automodule:: urbanairship.devices.segment
     :members: Segment
 .. note::
-    A segment's id is automatically set upon calling
-    :code:`segment.create(airship)` and can be accessed using
-    :code:`segment.id`
+    A segment's id is automatically set upon calling *segment.create(airship)*
+    and can be accessed using *segment.id*
 
 Modifying a Segment
 -------------------

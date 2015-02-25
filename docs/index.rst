@@ -82,6 +82,7 @@ Contents:
 
    push.rst
    devices.rst
+   segment.rst
    exceptions.rst
    examples.rst
 
