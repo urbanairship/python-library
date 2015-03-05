@@ -15,7 +15,7 @@ class ChannelUninstall(object):
 
     def uninstall(self, channels):
         body = json.dumps(channels)
-        chan_dict = json.loads(body)
+        chan_dict = channels
         chan_num = len(chan_dict)
 
         if chan_num > 200:
