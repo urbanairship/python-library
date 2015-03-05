@@ -33,6 +33,7 @@ from .push import (
     device_types,
     options,
     actions,
+    interactive,
     scheduled_time,
     local_scheduled_time,
 )
@@ -85,6 +86,7 @@ __all__ = [
     message,
     options,
     actions,
+    interactive,
     device_types,
     scheduled_time,
     local_scheduled_time,
