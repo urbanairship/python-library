@@ -12,7 +12,7 @@ from .tag import (
     TagList,
     Tag,
     DeleteTag,
-    BatchTag
+    BatchTag,
 )
 
 from .segment import (
