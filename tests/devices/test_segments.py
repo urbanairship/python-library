@@ -15,13 +15,12 @@ class TestSegmentList(unittest.TestCase):
                  {"segments":[
                       {"display_name":"test1"},
                       {"display_name":"test2"}]}
-                ''')
+                ''').encode('utf-8')
 
+            name_list = ['test2', 'test1']
             mock_request.return_value = response
             airship = ua.Airship('key', 'secret')
             seg_list = ua.SegmentList(airship)
-
-            name_list = ['test2', 'test1']
 
             for a in seg_list:
                 self.assertEqual(a.display_name, name_list.pop())
@@ -29,23 +28,22 @@ class TestSegmentList(unittest.TestCase):
 
 class TestSegment(unittest.TestCase):
     def test_segment_create_update_delete(self):
-        seg_class = ua.Segment()
-        airship = ua.Airship('key', 'secret')
+
         name = "test_segment"
         criteria = json.dumps(
             {'and': [{'tag': 'TEST'}, {'not': {'tag': 'TEST2'}}]}
-        ).encode('utf-8')
+        )
+
+        data = json.dumps({'name': name, 'criteria': criteria}).encode('utf-8')
 
         create_response = requests.Response()
-        create_response._content = json.dumps(
-            {'display_name': name, 'criteria': criteria}).encode('utf-8')
         create_response.status_code = 200
+        create_response.headers[
+            'location'] = "https://go.urbanairship.com/api/segments/1234"
 
         id_response = requests.Response()
-        id_response._content = name
+        id_response._content = data
         id_response.status_code = 200
-        id_response.headers[
-            'location'] = "https://go.urbanairship.com/api/segments/1234"
 
         update_response = requests.Response()
         update_response.status_code = 200
@@ -54,18 +52,22 @@ class TestSegment(unittest.TestCase):
         del_response.status_code = 204
 
         ua.Airship._request = Mock()
-        ua.Airship._request.side_effect = [id_response, create_response,
+        ua.Airship._request.side_effect = [create_response, id_response,
                                            update_response, del_response]
+        seg = ua.Segment()
+        airship = ua.Airship('key', 'secret')
 
-        segment = seg_class.create(airship, name, criteria)
-        self.assertEqual(segment.display_name, name)
-        self.assertEqual(segment.criteria, criteria)
+        seg.display_name = name
+        seg.criteria = criteria
+        create_res = seg.create(airship)
 
-        segment.display_name = 'new_test_segment'
-        upres = segment.update()
+        self.assertEqual(create_res.status_code, 200)
+        self.assertEqual(seg.display_name, name)
+        self.assertEqual(seg.criteria, criteria)
 
-        self.assertEqual(upres.status_code, 200)
+        seg.display_name = 'new_test_segment'
+        up_res = seg.update(airship)
+        del_res = seg.delete(airship)
 
-        delres = segment.delete()
-
-        self.assertEqual(delres.status_code, 204)
+        self.assertEqual(up_res.status_code, 200)
+        self.assertEqual(del_res.status_code, 204)

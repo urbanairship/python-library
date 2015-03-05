@@ -29,12 +29,16 @@ http://docs.urbanairship.com/api/ua.html#segment-creation
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    seg_class = ua.Segment()
-    seg_class.create(airship, "display name", {"tag":"Existing Tag"})
-
+    segment = ua.Segment()
+    segment.display_name = "Display Name"
+    segment.criteria = {"tag":"Existing Tag"}
+    segment.create(airship)
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
+.. note::
+    A segment's id is automatically set upon calling *segment.create(airship)*
+    and can be accessed using *segment.id*
 
 Modifying a Segment
 -------------------
@@ -45,12 +49,12 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    seg_class = ua.Segment()
-    segment = seg_class.from_id(airship, "segment_id")
+    segment = ua.Segment()
+    segment.from_id(airship, "segment_id")
     segment.display_name = "New Display Name"
     segment.criteria = {'and': [{'tag': 'new_tag'},
                                 {'not': {'tag': 'other_tag'}}]}
-    segment.update()
+    segment.update(airship)
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
@@ -66,9 +70,9 @@ http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    seg_class = ua.Segment()
-    segment = seg_class.from_id(airship, "segment_id")
-    segment.delete()
+    segment = ua.Segment()
+    segment.from_id(airship, "segment_id")
+    segment.delete(airship)
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
@@ -83,8 +87,8 @@ http://docs.urbanairship.com/api/ua.html#get--api-segments-(segment_id)
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    seg_class = ua.Segment()
-    seg_class.from_id(airship, "segment_id")
+    segment = ua.Segment()
+    segment.from_id(airship, "segment_id")
 
 .. automodule:: urbanairship.devices.segment
     :members: segment

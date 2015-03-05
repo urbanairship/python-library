@@ -2,8 +2,8 @@ Urban Airship Python Library
 ============================
 
 ``urbanairship`` is a Python library for using the `Urban Airship
-<http://urbanairship.com/>`_ web service API for push notifications and rich
-app pages.
+<http://urbanairship.com/>`_ web service API for push notifications and
+rich app pages.
 
 Installation
 ------------
@@ -11,16 +11,15 @@ Installation
 Using ``pip``::
 
    $ pip install urbanairship
-
 Using the library
 -----------------
 
-The library is intended to be used with the small footprint of a single import.
-To get started, import the package, and create an :py:class:`Airship` object
-representing a single UA application.
+The library is intended to be used with the small footprint of a single
+import. To get started, import the package, and create an
+:py:class:`Airship` object representing a single UA application.
 
-Note that channels are preferred over `device_token` and `apid`.
-See <http://docs.urbanairship.com/topic-guides/channels.html>.
+Note that channels are preferred over `device_token` and `apid`. See:
+`documentation on channels <channels>`_.
 
 .. code-block:: python
 
@@ -34,15 +33,16 @@ See <http://docs.urbanairship.com/topic-guides/channels.html>.
    push.send()
 
 The library uses `requests`_ for communication with the UA API,
-providing connection pooling and strict SSL checking. The ``Airship`` object is
-threadsafe, and can be instantiated once and reused in multiple threads.
+providing connection pooling and strict SSL checking. The ``Airship``
+object is threadsafe, and can be instantiated once and reused in
+multiple threads.
 
 Logging
 -------
 
-``urbanairship`` uses the standard logging module for integration into an
-application's existing logging. If you do not have logging configured
-otherwise, your application can set it up like so:
+``urbanairship`` uses the standard logging module for integration into
+an application's existing logging. If you do not have logging
+configured otherwise, your application can set it up like so:
 
 .. code-block:: python
 
@@ -56,8 +56,8 @@ logging.
 
    logging.getLogger('urbanairship').setLevel(logging.DEBUG)
 
-As of Python 2.7, ``DeprecationWarning`` warnings are silenced by default. To
-enable them, use the ``warnings`` module:
+As of Python 2.7, ``DeprecationWarning`` warnings are silenced by
+default. To enable them, use the ``warnings`` module:
 
 .. code-block:: python
 
@@ -82,6 +82,8 @@ Contents:
 
    push.rst
    devices.rst
+   segment.rst
+   tags.rst
    exceptions.rst
    examples.rst
 
@@ -94,6 +96,7 @@ Indices and tables
 * :ref:`search`
 
 
+.. _channels: http://docs.urbanairship.com/topic-guides/channels.html
 .. _requests: http://python-requests.org
 .. _github: https://github.com/urbanairship/python-library
 .. _nose: https://nose.readthedocs.org/en/latest/
