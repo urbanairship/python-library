@@ -14,3 +14,8 @@ from .tag import (
     DeleteTag,
     BatchTag,
 )
+
+from .segment import (
+    Segment,
+    SegmentList
+)
