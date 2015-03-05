@@ -78,6 +78,64 @@ class TestPush(unittest.TestCase):
             }
         })
 
+
+    def test_interactive(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Hey, click yes!',
+            interactive=ua.interactive(
+                type="some_type",
+                button_actions={
+                    "yes": {
+                        "add_tag": "clicked_yes",
+                        "remove_tag": "never_clicked_yes",
+                        "open": {
+                            "type": "url",
+                            "content": "http://www.urbanairship.com"
+                        }
+                    },
+                    "no": {
+                        "add_tag": "hater"
+                    }
+                }
+            )
+        )
+        p.device_types = ua.all_
+        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+
+        self.assertEqual(p.payload, {
+            "audience": "all",
+            "notification": {
+                "alert": "Hey, click yes!",
+                "interactive": {
+                    "type": "some_type",
+                    "button_actions": {
+                        "yes": {
+                            "add_tag": "clicked_yes",
+                            "remove_tag": "never_clicked_yes",
+                            "open": {
+                                "type": "url",
+                                "content": "http://www.urbanairship.com"
+                            }
+                        },
+                        "no": {
+                            "add_tag": "hater"
+                        }
+                    }
+                }
+            },
+            "device_types": "all",
+            "message": {
+                "title": "Title",
+                "body": "Body",
+                "content_type": "text/html",
+                "content_encoding": "utf8",
+                "extra": {"more": "stuff"}
+            }
+        })
+
+
     def test_ios_alert_dict(self):
         p = ua.Push(None)
         p.audience = ua.all_
