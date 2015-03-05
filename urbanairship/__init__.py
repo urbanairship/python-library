@@ -50,7 +50,8 @@ from .devices import (
     DeleteTag,
     BatchTag,
     Segment,
-    SegmentList
+    SegmentList,
+    ChannelUninstall
 )
 
 __all__ = [
@@ -102,7 +103,8 @@ __all__ = [
     BatchTag,
     Feedback,
     Segment,
-    SegmentList
+    SegmentList,
+    ChannelUninstall
 ]
 
 # Silence urllib3 INFO logging by default
