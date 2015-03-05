@@ -142,9 +142,9 @@ def location(date=None, **kwargs):
 
     """
     if not len(kwargs) == 1:
-        raise ValueError("Must specificy a single location id or alias")
+        raise ValueError("Must specify a single location id or alias")
     if date is None:
-        raise ValueError("Must specificy a time period specifier")
+        raise ValueError("Must specify a time period specifier")
     kwargs['date'] = date
     return {"location": kwargs}
 
@@ -162,7 +162,7 @@ def recent_date(**kwargs):
     {'recent': {'weeks': 3}}
     """
     if not len(kwargs) == 1:
-        raise ValueError("Must specificy a single date resolution")
+        raise ValueError("Must specify a single date resolution")
     resolution = list(kwargs.keys())[0]
     value = list(kwargs.values())[0]
 

@@ -14,3 +14,12 @@ from .tag import (
     DeleteTag,
     BatchTag,
 )
+
+from .segment import (
+    Segment,
+    SegmentList
+)
+
+from .channel_uninstall import (
+    ChannelUninstall
+)

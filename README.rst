@@ -24,6 +24,7 @@ Support for v1 endpoints has also been removed and support for:
 * blackberry pin lookup,
 * lookup and listing for device tokens, and
 * sending to device tokens
+
 has been moved from v1 to v3.
 
 A more detailed list of changes can be found in the CHANGELOG.
