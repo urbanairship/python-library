@@ -20,4 +20,4 @@ class TestChannelUninstall(unittest.TestCase):
 
             cu_res = json.loads(cu.uninstall(chans).content)
 
-            self.assertEqual(cu_res["ok"], True)
+            self.assertEqual(cu_res['ok'], True)
