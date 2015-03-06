@@ -15,8 +15,8 @@ class TestChannelUninstall(unittest.TestCase):
 
             cu = ua.ChannelUninstall(airship)
 
-            chans = [{"channel_id": "01000001-01010000-01010000-01001100",
-                      "device_type": "ios"}]
+            chans = [{'channel_id': '01000001-01010000-01010000-01001100',
+                      'device_type': 'ios'}]
 
             cu_res = json.loads(cu.uninstall(chans).content)
 
