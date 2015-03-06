@@ -292,6 +292,7 @@ def options(expiry=None):
         raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
+
 def actions(add_tag=None, remove_tag=None,
             open_=None, share=None, app_defined=None):
     """Actions payload creation.
@@ -337,6 +338,7 @@ def actions(add_tag=None, remove_tag=None,
             raise TypeError("app_defined must be a dictionary")
         payload['app_defined'] = app_defined
     return payload
+
 
 def interactive(type=None, button_actions=None):
     """Interactive payload creation.

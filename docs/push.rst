@@ -112,13 +112,29 @@ Example:
         interactive=ua.interactive(
             type = "ua_share",
             button_actions = {
-                    "share" : { "share" : "Example message"}
+                    "share" : { "share" : "Sharing is caring!"}
+            }
+        )
+    )
+
+Button actions can also be mapped to *actions* objects as shown below:
+
+.. code-block:: python
+
+    shared = ua.actions(share="Sharing is caring!")
+    push.notification = ua.notification(
+        alert="Hello, world!",
+        interactive=ua.interactive(
+            type = "ua_share",
+            button_actions = {
+                    "share" : shared
             }
         )
     )
 
 .. automodule:: urbanairship.push.payload
    :members: notification, interactive
+
 
 Device Types
 ------------
