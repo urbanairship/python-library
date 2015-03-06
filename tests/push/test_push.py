@@ -9,14 +9,14 @@ import urbanairship as ua
 
 
 class TestPush(unittest.TestCase):
-
     def test_full_payload(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options(expiry=10080)
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+        p.message = ua.message("Title", "Body", "text/html", "utf8",
+                               {"more": "stuff"})
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -39,19 +39,20 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert='Hello',
-            actions = ua.actions(
-                add_tag = "new_tag",
-                remove_tag = "old_tag",
-                share = "Check out Urban Airship!",
-                open_ = {
+            actions=ua.actions(
+                add_tag="new_tag",
+                remove_tag="old_tag",
+                share="Check out Urban Airship!",
+                open_={
                     "type": "url",
                     "content": "http://www.urbanairship.com"
                 },
-                app_defined = {"some_app_defined_action": "some_values"}
+                app_defined={"some_app_defined_action": "some_values"}
             )
         )
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+        p.message = ua.message("Title", "Body", "text/html", "utf8",
+                               {"more": "stuff"})
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -78,6 +79,65 @@ class TestPush(unittest.TestCase):
             }
         })
 
+
+    def test_interactive(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Hey, click yes!',
+            interactive=ua.interactive(
+                type="some_type",
+                button_actions={
+                    "yes": {
+                        "add_tag": "clicked_yes",
+                        "remove_tag": "never_clicked_yes",
+                        "open": {
+                            "type": "url",
+                            "content": "http://www.urbanairship.com"
+                        }
+                    },
+                    "no": {
+                        "add_tag": "hater"
+                    }
+                }
+            )
+        )
+        p.device_types = ua.all_
+        p.message = ua.message("Title", "Body", "text/html", "utf8",
+                               {"more": "stuff"})
+
+        self.assertEqual(p.payload, {
+            "audience": "all",
+            "notification": {
+                "alert": "Hey, click yes!",
+                "interactive": {
+                    "type": "some_type",
+                    "button_actions": {
+                        "yes": {
+                            "add_tag": "clicked_yes",
+                            "remove_tag": "never_clicked_yes",
+                            "open": {
+                                "type": "url",
+                                "content": "http://www.urbanairship.com"
+                            }
+                        },
+                        "no": {
+                            "add_tag": "hater"
+                        }
+                    }
+                }
+            },
+            "device_types": "all",
+            "message": {
+                "title": "Title",
+                "body": "Body",
+                "content_type": "text/html",
+                "content_encoding": "utf8",
+                "extra": {"more": "stuff"}
+            }
+        })
+
+
     def test_ios_alert_dict(self):
         p = ua.Push(None)
         p.audience = ua.all_
@@ -85,7 +145,7 @@ class TestPush(unittest.TestCase):
             alert={'foo': 'bar'}
         ))
         p.options = ua.options("expiry")
-        p.device_types = 'ios' 
+        p.device_types = 'ios'
         p.message = ua.message("Title", "Body", "text/html", "utf8")
 
         self.assertEqual(p.payload, {
@@ -109,7 +169,8 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options("expiry")
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+        p.message = ua.message("Title", "Body", "text/html", "utf8",
+                               {"more": "stuff"})
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule"
@@ -124,14 +185,14 @@ class TestPush(unittest.TestCase):
                 "notification": {"alert": "Hello"},
                 "device_types": "all",
                 "options": {
-                "expiry": "expiry"
-            },
+                    "expiry": "expiry"
+                },
                 "message": {
                     "title": "Title",
                     "body": "Body",
                     "content_type": "text/html",
                     "content_encoding": "utf8",
-                    "extra" : {"more": "stuff"}, 
+                    "extra": {"more": "stuff"},
                 },
             }
         })
@@ -142,7 +203,8 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options("expiry")
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8", {"more": "stuff"})
+        p.message = ua.message("Title", "Body", "text/html", "utf8",
+                               {"more": "stuff"})
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule in device local time"
@@ -157,14 +219,14 @@ class TestPush(unittest.TestCase):
                 "notification": {"alert": "Hello"},
                 "device_types": "all",
                 "options": {
-                "expiry": "expiry"
-            },
+                    "expiry": "expiry"
+                },
                 "message": {
                     "title": "Title",
                     "body": "Body",
                     "content_type": "text/html",
                     "content_encoding": "utf8",
-                    "extra" : {"more": "stuff"} 
+                    "extra": {"more": "stuff"}
                 },
             }
         })
@@ -206,7 +268,7 @@ class TestPush(unittest.TestCase):
             sched.send()
 
             self.assertEquals(sched.url,
-                "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
+                              "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
 
     def test_local_schedule_success(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -227,7 +289,7 @@ class TestPush(unittest.TestCase):
             sched.send()
 
             self.assertEquals(sched.url,
-                "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
+                              "https://go.urbanairship.com/api/schedules/0492662a-1b52-4343-a1f9-c6b0c72931c0")
 
 
     def test_schedule_from_url(self):

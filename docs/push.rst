@@ -96,6 +96,45 @@ http://docs.urbanairship.com/api/ua.html#actions, example:
 .. automodule:: urbanairship.push.payload
    :members: notification, actions, ios, android, amazon
 
+Interactive Notifications
+-------------------------
+
+The interactive notification payload determines the ways you can interact
+with a notification. It contains two attributes: "type" (mandatory) and
+"button_actions" (optional). More information at
+http://docs.urbanairship.com/api/ua.html#interactive-notifications
+Example:
+
+.. code-block:: python
+
+    push.notification = ua.notification(
+        alert="Hello, world!",
+        interactive=ua.interactive(
+            type = "ua_share",
+            button_actions = {
+                    "share" : { "share" : "Sharing is caring!"}
+            }
+        )
+    )
+
+Button actions can also be mapped to *actions* objects as shown below:
+
+.. code-block:: python
+
+    shared = ua.actions(share="Sharing is caring!")
+    push.notification = ua.notification(
+        alert="Hello, world!",
+        interactive=ua.interactive(
+            type = "ua_share",
+            button_actions = {
+                    "share" : shared
+            }
+        )
+    )
+
+.. automodule:: urbanairship.push.payload
+   :members: notification, interactive
+
 
 Device Types
 ------------

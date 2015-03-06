@@ -16,7 +16,7 @@ VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
 
 
 def notification(alert=None, ios=None, android=None, amazon=None,
-                 blackberry=None, wns=None, mpns=None, actions=None):
+                 blackberry=None, wns=None, mpns=None, actions=None, interactive=None):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -46,6 +46,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
         payload['wns'] = wns
     if mpns is not None:
         payload['mpns'] = mpns
+    if interactive is not None:
+        payload['interactive'] = interactive
     if not payload:
         raise ValueError("Notification body may not be empty")
     return payload
@@ -290,6 +292,7 @@ def options(expiry=None):
         raise ValueError("Expiry value must be an integer or time set in UTC as a string")
     return payload
 
+
 def actions(add_tag=None, remove_tag=None,
             open_=None, share=None, app_defined=None):
     """Actions payload creation.
@@ -334,4 +337,23 @@ def actions(add_tag=None, remove_tag=None,
         if not (isinstance(app_defined, dict)):
             raise TypeError("app_defined must be a dictionary")
         payload['app_defined'] = app_defined
+    return payload
+
+
+def interactive(type=None, button_actions=None):
+    """Interactive payload creation.
+    :keyword type: The name of one of the predefined interactive notifications
+    or a custom defined interactive notification. Expects a string.
+    :keyword button_actions: A button_actions object that maps button IDs to
+    valid action objects. Expects a dictionary.
+    """
+
+    payload = {}
+    if type is not None:
+        payload['type'] = type
+        if button_actions is not None:
+            if not isinstance(button_actions, dict):
+                raise TypeError("'button_actions' must be a dictionary")
+            payload['button_actions'] = button_actions
+
     return payload
