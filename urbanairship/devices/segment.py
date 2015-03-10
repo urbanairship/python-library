@@ -30,7 +30,7 @@ class Segment(object):
         body = json.dumps(self.data)
         response = airship._request('POST', body, url, version=3)
         logger.info(
-            "Successful segment creation: '{}'".format(self.display_name))
+            "Successful segment creation: '{0}'".format(self.display_name))
 
 
         seg_url = response.headers['location']
@@ -76,7 +76,7 @@ class Segment(object):
         body = json.dumps(data)
         response = airship._request('PUT', body, url, version=3)
         logger.info(
-            "Successful segment update: '{}'".format(self.display_name))
+            "Successful segment update: '{0}'".format(self.display_name))
 
         return response
 
@@ -84,7 +84,7 @@ class Segment(object):
         url = common.SEGMENTS_URL + self.id
         res = airship._request('DELETE', None, url, version=3)
         logger.info(
-            "Successful segment deletion: '{}'".format(self.display_name))
+            "Successful segment deletion: '{0}'".format(self.display_name))
         return res
 
 
