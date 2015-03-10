@@ -231,7 +231,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
 
 
 def message(title, body, content_type=None, content_encoding=None, 
-            extra=None, expiry=None):
+            extra=None, expiry=None, icons=None, option=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -257,6 +257,15 @@ def message(title, body, content_type=None, content_encoding=None,
         payload['expiry'] = expiry
         if not (isinstance(expiry, (string_type, int))):
             raise ValueError("Expiry value must be an integer or time set in UTC as a string")
+    if icons is not None:
+        if not isinstance(icons, dict):
+            raise TypeError("'icons' must be a dictionary")
+        payload['icons'] = icons
+    if option is not None:
+        if not isinstance(option, dict):
+                    raise TypeError("'options' must be a dictionary")
+        payload['options'] = option
+
     return payload
 
 
