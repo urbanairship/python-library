@@ -62,7 +62,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
 
     :keyword alert: iOS format alert, as either a string or dictionary.
     :keyword badge: An integer badge value or an *autobadge* string.
-    :keyword sound: An string sound file to play.
+    :keyword sound: A string sound file to play.
     :keyword content_available: If True, pass on the content_available command
         for Newsstand iOS applications.
     :keyword extra: A set of key/value pairs to include in the push payload
