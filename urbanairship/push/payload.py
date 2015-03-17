@@ -241,6 +241,10 @@ def message(title, body, content_type=None, content_encoding=None,
         ``utf-8``.
     :keyword extra: Optional, dictionary of string values.
     :keyword expiry: time when message will delete from Inbox (UTC time or in seconds)
+    :keyword icons: Optional JSON dictionary of string key and value pairs.
+        Values must be URIs or URLs to the icon resources
+    :keyword options: Optional JSON dictionary of key and value pairs
+        specifying non-payload options
 
     """
     payload = {
