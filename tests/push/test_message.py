@@ -19,6 +19,18 @@ class TestMessage(unittest.TestCase):
                 sound='cat.caf',
                 extra={'more': 'stuff'},
                 expiry='time',
+                interactive={
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes',
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                },
+                category='test'
             )),
             {'ios': {
                 'alert': 'Hello',
@@ -27,7 +39,19 @@ class TestMessage(unittest.TestCase):
                 'extra': {
                     'more': 'stuff',
                 },
-                'expiry': 'time'
+                'expiry': 'time',
+                'interactive': {
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes',
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                },
+                'category': 'test'
             }})
 
         self.assertEqual(
@@ -36,7 +60,19 @@ class TestMessage(unittest.TestCase):
                 alert={'foo': 'bar'},
                 badge='+1',
                 sound='cat.caf',
-                extra={'more': 'stuff'}
+                extra={'more': 'stuff'},
+                interactive={
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                },
+                category='test'
             )),
             {'ios': {
                 'alert': {'foo': 'bar'},
@@ -44,7 +80,19 @@ class TestMessage(unittest.TestCase):
                 'sound': 'cat.caf',
                 'extra': {
                     'more': 'stuff',
-                }
+                },
+                'interactive': {
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                },
+                'category': 'test'
             }})
 
         self.assertEqual(
@@ -75,7 +123,18 @@ class TestMessage(unittest.TestCase):
                 delay_while_idle=True,
                 collapse_key='123456',
                 time_to_live=100,
-                extra={'more': 'stuff'}
+                extra={'more': 'stuff'},
+                interactive={
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                }
             )),
             {'android': {
                 'alert': 'Hello',
@@ -84,6 +143,17 @@ class TestMessage(unittest.TestCase):
                 'time_to_live': 100,
                 'extra': {
                     'more': 'stuff',
+                },
+                'interactive': {
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
                 }
             }})
 
@@ -106,7 +176,18 @@ class TestMessage(unittest.TestCase):
                 consolidation_key='123456',
                 expires_after=100,
                 summary='Summary of message',
-                extra={'more': 'stuff'}
+                extra={'more': 'stuff'},
+                interactive={
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
+                }
             )),
             {'amazon': {
                 'alert': 'Amazon test',
@@ -116,6 +197,17 @@ class TestMessage(unittest.TestCase):
                 'summary':'Summary of message',
                 'extra': {
                     'more': 'stuff',
+                },
+                'interactive': {
+                    'type': 'a_type',
+                    'button_actions': {
+                        'yes': {
+                            'add_tag': 'clicked_yes'
+                        },
+                        'no': {
+                            'add_tag': 'clicked_no'
+                        }
+                    }
                 }
             }})
 
@@ -239,7 +331,7 @@ class TestMessage(unittest.TestCase):
         push.audience = ua.all_
         push.notification = ua.notification(alert="Hello Expiry")
         push.options = ua.options(expiry="2013-04-01T18:45:0")
-        push.device_types = ua.all_ 
+        push.device_types = ua.all_
 
     def test_invalid_payloads(self):
         # Base notification
