@@ -14,6 +14,7 @@ APID_FEEDBACK_URL = BASE_URL + '/apids/feedback/'
 SCHEDULES_URL = BASE_URL + '/schedules/'
 TAGS_URL = BASE_URL + '/tags'
 SEGMENTS_URL = BASE_URL + '/segments/'
+REPORTS_URL = BASE_URL + '/reports/'
 
 
 logger = logging.getLogger('urbanairship')
