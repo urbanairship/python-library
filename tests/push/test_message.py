@@ -347,16 +347,4 @@ class TestMessage(unittest.TestCase):
         self.assertRaises(AttributeError, ua.interactive, type=None)
 
     def test_interactive_missing_button_actions(self):
-        self.assertEqual(
-            ua.notification(
-                alert='test',
-                interactive={
-                    'type': 'a_type'
-                }
-            ),
-            {
-                'alert': 'test',
-                'interactive': {
-                    'type': 'a_type'
-                }
-            })
+        self.assertEqual(ua.interactive(type='a_type'), {'type': 'a_type'})
