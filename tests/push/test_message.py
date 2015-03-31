@@ -342,3 +342,21 @@ class TestMessage(unittest.TestCase):
         self.assertRaises(ValueError, ua.ios, badge=object())
         self.assertRaises(ValueError, ua.ios, badge="++100!")
         self.assertRaises(ValueError, ua.ios, expiry=2.5)
+
+    def test_interactive_missing_type(self):
+        self.assertRaises(AttributeError, ua.interactive, type=None)
+
+    def test_interactive_missing_button_actions(self):
+        self.assertEqual(
+            ua.notification(
+                alert='test',
+                interactive={
+                    'type': 'a_type'
+                }
+            ),
+            {
+                'alert': 'test',
+                'interactive': {
+                    'type': 'a_type'
+                }
+            })
