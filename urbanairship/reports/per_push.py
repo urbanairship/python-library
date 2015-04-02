@@ -6,6 +6,9 @@ from urbanairship import common
 
 class Detail(object):
     def get_single(self, airship, push_id):
+        if not isinstance(push_id, str):
+            raise ValueError("'push_id' must be a string")
+
         response = airship._request('GET', None, common.REPORTS_URL +
                                     'perpush/detail/' + push_id, version=3)
         return response.json()
@@ -16,7 +19,7 @@ class Detail(object):
         body = json.dumps(data)
 
         response = airship._request('POST', body, common.REPORTS_URL +
-                            'perpush/detail/', version=3)
+                                    'perpush/detail/', version=3)
         return response.json()
 
 
@@ -35,7 +38,7 @@ class Series(object):
         url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}'.format(push_id, precision)
 
         response = airship._request('GET', None, url, version=3)
-        return response.json()
+        return response #.json()
 
     def get_with_precision_and_range(self, airship, push_id, precision, start, end):
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
