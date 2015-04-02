@@ -1,6 +1,6 @@
 import json
 import logging
-
+from datetime import datetime
 from urbanairship import common
 
 
@@ -41,7 +41,23 @@ class Series(object):
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
             raise ValueError("Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
 
-        #TODO: Verify that start and end are both valid dates
+        newstart = None
+        newend = None
+
+        for format in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']:
+            try:
+                newstart = datetime.strptime(start, format)
+            except ValueError:
+                pass
+
+        for format in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']:
+            try:
+                newend = datetime.strptime(end, format)
+            except ValueError:
+                pass
+
+        if newstart is None or newend is None:
+            raise ValueError("'start' and 'end' date must be in the form: YYYY-MM-DD H:M:S or YY-MM-DD")
 
         url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}&start={2}&end{3}'.format(push_id, precision, start, end)
         response = airship._request('GET', None, url, version=3)

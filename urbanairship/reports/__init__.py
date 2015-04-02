@@ -1,4 +1,4 @@
-from per_push import (
+from .per_push import (
     Detail,
     Series
 )
