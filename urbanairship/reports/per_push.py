@@ -6,14 +6,21 @@ from urbanairship import common
 
 class Detail(object):
     def get_single(self, airship, push_id):
-        if not isinstance(push_id, str):
-            raise ValueError("'push_id' must be a string")
+        if not push_id:
+            raise ValueError("'push_id' cannot be empty")
 
+        if not isinstance(push_id, str):
+            raise TypeError("'push_id' must be a string")
         response = airship._request('GET', None, common.REPORTS_URL +
                                     'perpush/detail/' + push_id, version=3)
         return response.json()
 
     def get_batch(self, airship, push_ids):
+        if not push_ids or push_ids is []:
+            raise ValueError("'push_ids' cannot be empty")
+        if not isinstance(push_ids, list):
+            raise TypeError("'push_ids' must be a list")
+
         data = {}
         data['push_ids'] = push_ids
         body = json.dumps(data)
@@ -23,26 +30,35 @@ class Detail(object):
         return response.json()
 
 
-
 class Series(object):
     def get(self, airship, push_id):
+        if not isinstance(push_id, str):
+            raise TypeError("'push_id' must be a string")
 
         url = common.REPORTS_URL + 'perpush/series/{0}'.format(push_id)
         response = airship._request('GET', None, url, version=3)
         return response.json()
 
     def get_with_precision(self, airship, push_id, precision):
+        if not isinstance(push_id, str):
+            raise TypeError("'push_id' must be a string")
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
-            raise ValueError("Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
+            raise ValueError(
+                "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
 
-        url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}'.format(push_id, precision)
+        url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}'.format(
+            push_id, precision)
 
         response = airship._request('GET', None, url, version=3)
-        return response #.json()
+        return response.json()
 
-    def get_with_precision_and_range(self, airship, push_id, precision, start, end):
+    def get_with_precision_and_range(self, airship, push_id, precision, start,
+                                     end):
+        if not isinstance(push_id, str):
+            raise TypeError("'push_id' must be a string")
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
-            raise ValueError("Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
+            raise ValueError(
+                "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
 
         newstart = None
         newend = None
@@ -52,7 +68,6 @@ class Series(object):
                 newstart = datetime.strptime(start, format)
             except ValueError:
                 pass
-
         for format in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']:
             try:
                 newend = datetime.strptime(end, format)
