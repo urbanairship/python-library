@@ -23,6 +23,7 @@ class TestSeries(unittest.TestCase):
                           start='3/2/2015',
                           end='3/5/2015')
 
+
 class TestDetail(unittest.TestCase):
     def test_get_single_invalid_id_type(self):
         d = ua.Detail()
@@ -43,5 +44,4 @@ class TestDetail(unittest.TestCase):
         self.assertRaises(ValueError,
                           callableObj=d.get_batch,
                           airship=None,
-                          push_ids=[]
-)
+                          push_ids=[])
