@@ -20,6 +20,8 @@ class Detail(object):
             raise ValueError("'push_ids' cannot be empty")
         if not isinstance(push_ids, list):
             raise TypeError("'push_ids' must be a list")
+        if len(push_ids) > 100:
+            raise ValueError("'push_ids' can not contain more than 100 IDs")
 
         data = {}
         data['push_ids'] = push_ids
