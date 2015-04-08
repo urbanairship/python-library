@@ -257,7 +257,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
 
 
 def message(title, body, content_type=None, content_encoding=None, 
-            extra=None, expiry=None):
+            extra=None, expiry=None, icons=None, options=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -267,6 +267,10 @@ def message(title, body, content_type=None, content_encoding=None,
         ``utf-8``.
     :keyword extra: Optional, dictionary of string values.
     :keyword expiry: time when message will delete from Inbox (UTC time or in seconds)
+    :keyword icons: Optional JSON dictionary of string key and value pairs.
+        Values must be URIs or URLs to the icon resources
+    :keyword options: Optional JSON dictionary of key and value pairs
+        specifying non-payload options
 
     """
     payload = {
@@ -283,6 +287,15 @@ def message(title, body, content_type=None, content_encoding=None,
         payload['expiry'] = expiry
         if not (isinstance(expiry, (string_type, int))):
             raise ValueError("Expiry value must be an integer or time set in UTC as a string")
+    if icons is not None:
+        if not isinstance(icons, dict):
+            raise TypeError("'icons' must be a dictionary")
+        payload['icons'] = icons
+    if options is not None:
+        if not isinstance(options, dict):
+                    raise TypeError("'options' must be a dictionary")
+        payload['options'] = options
+
     return payload
 
 

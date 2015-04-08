@@ -15,8 +15,13 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options(expiry=10080)
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8",
-                               {"more": "stuff"})
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8",
+                               extra={"more": "stuff"},
+                               expiry=10080,
+                               icons={"list_icon": "http://cdn.example.com/message.png"},
+                               options={"some_delivery_option": "true"}, )
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -30,7 +35,10 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra": {"more": "stuff"}
+                "extra": {"more": "stuff"},
+                "expiry": 10080,
+                "icons": {"list_icon": "http://cdn.example.com/message.png"},
+                "options": {"some_delivery_option": "true"},
             }
         })
 
@@ -51,8 +59,9 @@ class TestPush(unittest.TestCase):
             )
         )
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8",
-                               {"more": "stuff"})
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8", )
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -75,10 +84,8 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra": {"more": "stuff"}
             }
         })
-
 
     def test_interactive(self):
         p = ua.Push(None)
@@ -103,8 +110,9 @@ class TestPush(unittest.TestCase):
             )
         )
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8",
-                               {"more": "stuff"})
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8", )
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -133,10 +141,8 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra": {"more": "stuff"}
             }
         })
-
 
     def test_ios_alert_dict(self):
         p = ua.Push(None)
@@ -144,16 +150,18 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(ios=ua.ios(
             alert={'foo': 'bar'}
         ))
-        p.options = ua.options("expiry")
+        p.options = ua.options(10080)
         p.device_types = 'ios'
-        p.message = ua.message("Title", "Body", "text/html", "utf8")
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8", )
 
         self.assertEqual(p.payload, {
             "audience": "all",
             "notification": {"ios": {"alert": {'foo': 'bar'}}},
             "device_types": "ios",
             "options": {
-                "expiry": "expiry"
+                "expiry": 10080
             },
             "message": {
                 "title": "Title",
@@ -167,10 +175,15 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
-        p.options = ua.options("expiry")
+        p.options = ua.options(10080)
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8",
-                               {"more": "stuff"})
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8",
+                               extra={"more": "stuff"},
+                               expiry=10080,
+                               icons={"list_icon": "http://cdn.example.com/message.png"},
+                               options={"some_delivery_option": "true"}, )
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule"
@@ -185,7 +198,7 @@ class TestPush(unittest.TestCase):
                 "notification": {"alert": "Hello"},
                 "device_types": "all",
                 "options": {
-                    "expiry": "expiry"
+                    "expiry": 10080
                 },
                 "message": {
                     "title": "Title",
@@ -193,6 +206,10 @@ class TestPush(unittest.TestCase):
                     "content_type": "text/html",
                     "content_encoding": "utf8",
                     "extra": {"more": "stuff"},
+                    "expiry": 10080,
+                    "icons": {
+                    "list_icon": "http://cdn.example.com/message.png"},
+                    "options": {"some_delivery_option": "true"},
                 },
             }
         })
@@ -201,10 +218,12 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
-        p.options = ua.options("expiry")
+        p.options = ua.options(10080)
         p.device_types = ua.all_
-        p.message = ua.message("Title", "Body", "text/html", "utf8",
-                               {"more": "stuff"})
+        p.message = ua.message(title="Title", body="Body",
+                               content_type="text/html",
+                               content_encoding="utf8", )
+
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule in device local time"
@@ -219,14 +238,13 @@ class TestPush(unittest.TestCase):
                 "notification": {"alert": "Hello"},
                 "device_types": "all",
                 "options": {
-                    "expiry": "expiry"
+                    "expiry": 10080
                 },
                 "message": {
                     "title": "Title",
                     "body": "Body",
                     "content_type": "text/html",
-                    "content_encoding": "utf8",
-                    "extra": {"more": "stuff"}
+                    "content_encoding": "utf8"
                 },
             }
         })
