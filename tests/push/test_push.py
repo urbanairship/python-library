@@ -61,11 +61,7 @@ class TestPush(unittest.TestCase):
         p.device_types = ua.all_
         p.message = ua.message(title="Title", body="Body",
                                content_type="text/html",
-                               content_encoding="utf8",
-                               extra={"more": "stuff"},
-                               expiry=10080,
-                               icons={"list_icon": "http://cdn.example.com/message.png"},
-                               options={"some_delivery_option": "true"}, )
+                               content_encoding="utf8", )
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -88,10 +84,6 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra": {"more": "stuff"},
-                "expiry": 10080,
-                "icons": {"list_icon": "http://cdn.example.com/message.png"},
-                "options": {"some_delivery_option": "true"},
             }
         })
 
@@ -162,11 +154,7 @@ class TestPush(unittest.TestCase):
         p.device_types = 'ios'
         p.message = ua.message(title="Title", body="Body",
                                content_type="text/html",
-                               content_encoding="utf8",
-                               extra={"more": "stuff"},
-                               expiry=10080,
-                               icons={"list_icon": "http://cdn.example.com/message.png"},
-                               options={"some_delivery_option": "true"}, )
+                               content_encoding="utf8", )
 
         self.assertEqual(p.payload, {
             "audience": "all",
@@ -180,10 +168,6 @@ class TestPush(unittest.TestCase):
                 "body": "Body",
                 "content_type": "text/html",
                 "content_encoding": "utf8",
-                "extra": {"more": "stuff"},
-                "expiry": 10080,
-                "icons": {"list_icon": "http://cdn.example.com/message.png"},
-                "options": {"some_delivery_option": "true"},
             }
         })
 
@@ -238,11 +222,7 @@ class TestPush(unittest.TestCase):
         p.device_types = ua.all_
         p.message = ua.message(title="Title", body="Body",
                                content_type="text/html",
-                               content_encoding="utf8",
-                               extra={"more": "stuff"},
-                               expiry=10080,
-                               icons={"list_icon": "http://cdn.example.com/message.png"},
-                               options={"some_delivery_option": "true"}, )
+                               content_encoding="utf8", )
 
         sched = ua.ScheduledPush(None)
         sched.push = p
@@ -264,12 +244,7 @@ class TestPush(unittest.TestCase):
                     "title": "Title",
                     "body": "Body",
                     "content_type": "text/html",
-                    "content_encoding": "utf8",
-                    "extra": {"more": "stuff"},
-                    "expiry": 10080,
-                    "icons": {
-                    "list_icon": "http://cdn.example.com/message.png"},
-                    "options": {"some_delivery_option": "true"},
+                    "content_encoding": "utf8"
                 },
             }
         })
