@@ -95,7 +95,6 @@ class TestPush(unittest.TestCase):
             }
         })
 
-
     def test_interactive(self):
         p = ua.Push(None)
         p.audience = ua.all_
@@ -152,7 +151,6 @@ class TestPush(unittest.TestCase):
                 "content_encoding": "utf8",
             }
         })
-
 
     def test_ios_alert_dict(self):
         p = ua.Push(None)
