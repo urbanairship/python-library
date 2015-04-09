@@ -1,4 +1,9 @@
 --------------------
+0.7.1
+--------------------
+- version bump for packaging fix
+
+--------------------
 0.7.0
 --------------------
 - added Python 3 compatibility
