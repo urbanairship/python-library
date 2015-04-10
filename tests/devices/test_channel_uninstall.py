@@ -9,7 +9,9 @@ class TestChannelUninstall(unittest.TestCase):
     def test_channel_uninstall(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
-            response._content = '{"ok": true}'
+            response._content = json.dumps(
+                {'ok': True}
+            )
             mock_request.return_value = response
             airship = ua.Airship('key', 'secret')
 
