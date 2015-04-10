@@ -15,7 +15,8 @@ class TestDeviceInfo(unittest.TestCase):
                     'channels': [
                         {'channel_id': '0492662a-1b52-4343-a1f9-c6b0c72931c0'},
                         {'channel_id': 'd95ceae2-85cb-41b7-a87d-09c9b3ce4051'},
-                        {'channel_id': 'f10cf38c-3fbd-47e8-a4aa-43cf91d80ba1'}]
+                        {'channel_id': 'f10cf38c-3fbd-47e8-a4aa-43cf91d80ba1'}
+                    ]
                 }
             ).encode('utf-8')
             response.status_code = 200
