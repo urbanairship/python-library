@@ -24,26 +24,35 @@ class Airship(object):
             version=None, params=None):
 
         headers = \
-                {'User-agent': "UAPythonLib/{0}".format(__about__.__version__)}
+                {'User-agent': 'UAPythonLib/{0}'.format(__about__.__version__)}
         if content_type:
             headers['content-type'] = content_type
         if version is not None:
-            headers['Accept'] = \
-                "application/vnd.urbanairship+json; version=%d;" % version
+            headers['Accept'] = ('application/vnd.urbanairship+json; '
+                                 'version=%d;' % version)
 
-        logger.debug("Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
-            method, url, '\n\t'.join(
-                '%s: %s' % (key, value) for (key, value) in headers.items()),
-            body)
+        logger.debug(
+            'Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s',
+            method,
+            url,
+            '\n\t'.join(
+                '%s: %s' % (key, value) for (key, value) in headers.items()
+            ),
+            body
+        )
 
         response = self.session.request(
             method, url, data=body, params=params, headers=headers)
 
-        logger.debug("Received %s response. Headers:\n\t%s\nBody:\n\t%s",
-            response.status_code, '\n\t'.join(
+        logger.debug(
+            'Received %s response. Headers:\n\t%s\nBody:\n\t%s',
+            response.status_code,
+            '\n\t'.join(
                 '%s: %s' % (key, value) for (key, value)
-                in response.headers.items()),
-            response.content)
+                in response.headers.items()
+            ),
+            response.content
+        )
 
         if response.status_code == 401:
             raise common.Unauthorized
