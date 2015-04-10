@@ -9,85 +9,62 @@ class TestAudience(unittest.TestCase):
             (
                 ua.ios_channel,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'ios_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'ios_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.android_channel,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'android_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'android_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.amazon_channel,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'amazon_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'amazon_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.device_token,
                 'f' * 64,
-                {
-                    'device_token': 'F' * 64
-                },
+                {'device_token': 'F' * 64},
             ),
-            (ua.device_token,
-             '0' * 64,
-             {
-                 'device_token': '0' * 64
-             }
-             ),
+            (
+                ua.device_token,
+                '0' * 64,
+                {'device_token': '0' * 64}
+            ),
             (
                 ua.device_pin,
                 '12345678',
-                {
-                    'device_pin': '12345678'
-                }
+                {'device_pin': '12345678'}
             ),
             (
                 ua.apid,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'apid': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'apid': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.wns,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'wns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'wns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.mpns,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {
-                    'mpns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'
-                }
+                {'mpns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
                 ua.tag,
                 'test',
-                {
-                    'tag': 'test'
-                }
+                {'tag': 'test'}
             ),
             (
                 ua.alias,
                 'test',
-                {
-                    'alias': 'test'
-                }
+                {'alias': 'test'}
             ),
             (
                 ua.segment,
                 'test',
-                {
-                    'segment': 'test'
-                }
+                {'segment': 'test'}
             ),
         )
 
@@ -96,62 +73,20 @@ class TestAudience(unittest.TestCase):
 
     def test_invalid_device_selectors(self):
         selectors = (
-            (
-                ua.ios_channel,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef34'
-            ),
-            (
-                ua.android_channel,
-                '074e84a2-9ed9-Beee-9ca4-ccc597bfdbef3'
-            ),
-            (
-                ua.amazon_channel,
-                '074e84a2-Red9-5eee-0ca4-cc597bfdbef3'
-            ),
-            (
-                ua.device_token,
-                'f' * 63
-            ),
-            (
-                ua.device_token,
-                'f' * 65
-            ),
-            (
-                ua.device_token,
-                '0123'
-            ),
-            (
-                ua.device_token,
-                'X' * 64
-            ),
-            (
-                ua.device_pin,
-                '1234567'
-            ),
-            (
-                ua.device_pin,
-                'x' * 8
-            ),
-            (
-                ua.apid,
-                'foobar'
-            ),
-            (
-                ua.apid,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef33'
-            ),
-            (
-                ua.apid,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'
-            ),
-            (
-                ua.wns,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'
-            ),
-            (
-                ua.mpns,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'
-            ),
+            (ua.ios_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef34'),
+            (ua.android_channel, '074e84a2-9ed9-Beee-9ca4-ccc597bfdbef3'),
+            (ua.amazon_channel, '074e84a2-Red9-5eee-0ca4-cc597bfdbef3'),
+            (ua.device_token, 'f' * 63),
+            (ua.device_token, 'f' * 65),
+            (ua.device_token, '0123'),
+            (ua.device_token, 'X' * 64),
+            (ua.device_pin, '1234567'),
+            (ua.device_pin, 'x' * 8),
+            (ua.apid, 'foobar'),
+            (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef33'),
+            (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
+            (ua.wns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
+            (ua.mpns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
         )
 
         for selector, value in selectors:
@@ -174,10 +109,12 @@ class TestAudience(unittest.TestCase):
                 ua.tag('foo'),
                 ua.tag('bar')
             ),
-            {'and': [
-                {'tag': 'foo'},
-                {'tag': 'bar'}
-            ]}
+            {
+                'and': [
+                    {'tag': 'foo'},
+                    {'tag': 'bar'}
+                ]
+            }
         )
 
         self.assertEqual(
@@ -247,11 +184,7 @@ class TestAudience(unittest.TestCase):
             {
                 'location': {
                     'id': 'a_location_id',
-                    'date': {
-                        'recent': {
-                            'days': 4
-                        }
-                    }
+                    'date': {'recent': {'days': 4}}
                 }
             }
         )
