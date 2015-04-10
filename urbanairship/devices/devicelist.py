@@ -41,7 +41,7 @@ class ChannelInfo(object):
         for key in payload:
             if key in ('created', 'last_registration'):
                 payload[key] = datetime.datetime.strptime(
-                   payload[key], '%Y-%m-%dT%H:%M:%S'
+                    payload[key], '%Y-%m-%dT%H:%M:%S'
                 )
             setattr(obj, key, payload[key])
         return obj
@@ -54,8 +54,13 @@ class ChannelInfo(object):
         id_key = 'channel_id'
         params = {}
         url = start_url + channel_id
-        response = airship._request('GET', None, url, version=3,
-                                    params=params)
+        response = airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3,
+            params=params
+        )
         payload = response.json()
         return cls.from_payload(payload[data_attribute], id_key)
 
@@ -89,12 +94,16 @@ class DeviceInfo(object):
 
 
 class DevicePINInfo(object):
-
     @classmethod
     def pin_lookup(cls, airship, device_pin):
         """Retrieve information about this BlackBerry PIN"""
         url = common.DEVICE_PIN_URL + device_pin
-        response = airship._request('GET', None, url, version=3)
+        response = airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3
+        )
         payload = response.json()
         payload['created'] = datetime.datetime.strptime(
             payload['created'], '%Y-%m-%d %H:%M:%S'
@@ -130,9 +139,7 @@ class DeviceList(object):
             return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
 
     def next(self):
-        """Necessary for iteration to work with Python 2.*.
-
-        """
+        """Necessary for iteration to work with Python 2.*."""
         return self.__next__()
 
     def _fetch_next_page(self):
@@ -144,7 +151,11 @@ class DeviceList(object):
     def _load_page(self, url):
         params = {'limit': self.limit} if self.limit is not None else {}
         response = self._airship._request(
-            'GET', None, url, version=3, params=params
+            method='GET',
+            body=None,
+            url=url,
+            version=3,
+            params=params
         )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
@@ -176,18 +187,18 @@ class ChannelList(DeviceList):
     def __next__(self):
         try:
             return ChannelInfo.from_payload(
-                next(self._token_iter),self.id_key
+                next(self._token_iter),
+                self.id_key
             )
         except StopIteration:
             self._fetch_next_page()
             return ChannelInfo.from_payload(
-                next(self._token_iter), self.id_key
+                next(self._token_iter),
+                self.id_key
             )
 
     def next(self):
-        """Necessary for iteration to work with Python 2.*.
-
-        """
+        """Necessary for iteration to work with Python 2.*."""
         return self.__next__()
 
 
@@ -216,29 +227,31 @@ class DevicePINList(DeviceList):
 
 
 class Feedback(object):
-        """Return device tokens or APIDs marked inactive since this timestamp.
+    """Return device tokens or APIDs marked inactive since this timestamp."""
 
-        """
+    @classmethod
+    def device_token(cls, airship, since):
+        url = common.DT_FEEDBACK_URL
+        return cls._get_feedback(airship, since, url)
 
-        @classmethod
-        def device_token(cls, airship, since):
-            url = common.DT_FEEDBACK_URL
-            return cls._get_feedback(airship, since, url)
+    @classmethod
+    def apid(cls, airship, since):
+        url = common.APID_FEEDBACK_URL
+        return cls._get_feedback(airship, since, url)
 
-        @classmethod
-        def apid(cls, airship, since):
-            url = common.APID_FEEDBACK_URL
-            return cls._get_feedback(airship, since, url)
-
-        @classmethod
-        def _get_feedback(cls, airship, since, url):
-
-            response = airship._request('GET', '', url,
-                                        params={'since': since.isoformat()},
-                                        version=3)
-            data = response.json()
-            for r in data:
-                r['marked_inactive_on'] = datetime.datetime.strptime(
-                    r['marked_inactive_on'], '%Y-%m-%d %H:%M:%S'
-                )
-            return data
+    @classmethod
+    def _get_feedback(cls, airship, since, url):
+        response = airship._request(
+            method='GET',
+            body='',
+            url=url,
+            params={'since': since.isoformat()},
+            version=3
+        )
+        data = response.json()
+        for r in data:
+            r['marked_inactive_on'] = datetime.datetime.strptime(
+                r['marked_inactive_on'],
+                '%Y-%m-%d %H:%M:%S'
+            )
+        return data

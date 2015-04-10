@@ -151,9 +151,9 @@ class TestDeviceInfo(unittest.TestCase):
                 ]
             )
             mock_request.assert_called_with(
-                'GET',
-                '',
-                'https://go.urbanairship.com/api/device_tokens/feedback/',
+                method='GET',
+                body='',
+                url='https://go.urbanairship.com/api/device_tokens/feedback/',
                 version=3,
                 params={'since': '2014-11-22T00:00:00'}
             )
@@ -193,9 +193,9 @@ class TestDeviceInfo(unittest.TestCase):
                 ]
             )
             mock_request.assert_called_with(
-                'GET',
-                '',
-                'https://go.urbanairship.com/api/apids/feedback/',
+                method='GET',
+                body='',
+                url='https://go.urbanairship.com/api/apids/feedback/',
                 version=3,
                 params={'since': '2014-11-22T10:10:10'}
             )

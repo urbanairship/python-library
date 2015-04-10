@@ -15,7 +15,7 @@ class TagList(object):
 
     def __init__(self, airship):
         self._airship = airship
-        self.url = common.TAGS_URL + '/'
+        self.url = common.TAGS_URL
 
     def list_tags(self):
 
@@ -26,20 +26,17 @@ class TagList(object):
 
 
 class Tag(object):
-    """Add and remove devices from a tag.
-
-    """
+    """Add and remove devices from a tag."""
 
     def __init__(self, airship, tag_name):
         self._airship = airship
         tag_name = tag_name
-        self.url = common.TAGS_URL + '/' + tag_name
+        self.url = common.TAGS_URL + tag_name
 
     def add(self, ios_channels=None, android_channels=None,
             amazon_channels=None):
-        """Adds channels to 'data' dict and then sends POST request.
-
-        """
+        """Adds channels to 'data' dict and then sends POST request."""
+        
         self.data = {}
         if ios_channels is not None:
             self.data['ios_channels'] = {'add': ios_channels}
@@ -55,9 +52,7 @@ class Tag(object):
 
     def remove(self, ios_channels=None, android_channels=None,
                amazon_channels=None):
-        """Add channels to remove to 'data' dict and sends POST request.
-
-        """
+        """Add channels to remove to 'data' dict and sends POST request."""
 
         self.data = {}
         if ios_channels is not None:
@@ -84,13 +79,13 @@ class DeleteTag(object):
     def __init__(self, airship, tag_name):
         self._airship = airship
         self.tag_name = tag_name
-        self.url = common.TAGS_URL + '/' + tag_name
+        self.url = common.TAGS_URL + tag_name
         self._airship.secret = 'secret'
         self._airship.key = 'key'
 
     def send_delete(self):
         response = self._airship._request('DELETE', None, self.url, version=3)
-        logger.info("Successful tag deletion: %s", self.tag_name)
+        logger.info('Successful tag deletion: %s', self.tag_name)
         return response
 
 
@@ -105,13 +100,13 @@ class BatchTag(object):
         self.url = common.TAGS_URL + '/batch/'
 
     def add_ios_channel(self, channel, tags):
-        self.changelist.append({"ios_channel": channel, "tags": tags})
+        self.changelist.append({'ios_channel': channel, 'tags': tags})
 
     def add_android_channel(self, channel, tags):
-        self.changelist.append({"android_channel": channel, "tags": tags})
+        self.changelist.append({'android_channel': channel, 'tags': tags})
 
     def add_amazon_channel(self, channel, tags):
-        self.changelist.append({"amazon_channel": channel, "tags": tags})
+        self.changelist.append({'amazon_channel': channel, 'tags': tags})
 
     def send_request(self):
         """Issue API Request
@@ -126,5 +121,5 @@ class BatchTag(object):
         response = self._airship._request('POST', body, self.url,
                                           'application/json', version=3)
 
-        logger.info("Successful batch modification: %s", self.changelist)
+        logger.info('Successful batch modification: %s', self.changelist)
         return response
