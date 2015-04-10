@@ -21,9 +21,9 @@ class Push(object):
     @property
     def payload(self):
         data = {
-            "audience": self.audience,
-            "notification": self.notification,
-            "device_types": self.device_types,
+            'audience': self.audience,
+            'notification': self.notification,
+            'device_types': self.device_types,
         }
         if self.options is not None:
             data['options'] = self.options
@@ -41,12 +41,17 @@ class Push(object):
 
         """
         body = json.dumps(self.payload)
-        response = self._airship._request('POST', body,
-            common.PUSH_URL, 'application/json', version=3)
+        response = self._airship._request(
+            method='POST',
+            body=body,
+            url=common.PUSH_URL,
+            content_type='application/json',
+            version=3
+        )
 
         data = response.json()
-        logger.info("Push successful. push_ids: %s",
-            ', '.join(data['push_ids']))
+        logger.info('Push successful. push_ids: %s',
+                    ', '.join(data['push_ids']))
 
         return PushResponse(response)
 
@@ -66,7 +71,12 @@ class ScheduledPush(object):
         """Load an existing scheduled push from its URL."""
 
         sched = cls(airship)
-        response = sched._airship._request('GET', None, url, version=3)
+        response = sched._airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3
+        )
         payload = response.json()
         sched.name = payload.get('name')
         sched.schedule = payload['schedule']
@@ -84,8 +94,8 @@ class ScheduledPush(object):
     @property
     def payload(self):
         data = {
-            "schedule": self.schedule,
-            "push": self.push.payload,
+            'schedule': self.schedule,
+            'push': self.push.payload,
         }
         if self.name is not None:
             data['name'] = self.name
@@ -101,12 +111,17 @@ class ScheduledPush(object):
 
         """
         body = json.dumps(self.payload)
-        response = self._airship._request('POST', body,
-            common.SCHEDULES_URL, 'application/json', version=3)
+        response = self._airship._request(
+            method='POST',
+            body=body,
+            url=common.SCHEDULES_URL,
+            content_type='application/json',
+            version=3
+        )
 
         data = response.json()
-        logger.info("Scheduled push successful. schedule_urls: %s",
-            ', '.join(data.get('schedule_urls', [])))
+        logger.info('Scheduled push successful. schedule_urls: %s',
+                    ', '.join(data.get('schedule_urls', [])))
         self.url = data.get('schedule_urls', [None])[0]
 
         return PushResponse(response)
@@ -114,21 +129,31 @@ class ScheduledPush(object):
     def cancel(self):
         """Cancel a previously scheduled notification."""
         if not self.url:
-            raise ValueError(
-                "Cannot cancel ScheduledPush without url.")
-        self._airship._request('DELETE', None, self.url, version=3)
+            raise ValueError('Cannot cancel ScheduledPush without url.')
+        
+        self._airship._request(
+            method='DELETE',
+            body=None,
+            url=self.url,
+            version=3
+        )
 
     def update(self):
         if not self.url:
             raise ValueError(
-                "Cannot update ScheduledPush without url.")
+                'Cannot update ScheduledPush without url.')
         body = json.dumps(self.payload)
-        response = self._airship._request('PUT', body,
-            self.url, 'application/json', version=3)
+        response = self._airship._request(
+            method='PUT',
+            body=body,
+            url=self.url,
+            content_type='application/json',
+            version=3
+        )
 
         data = response.json()
-        logger.info("Scheduled push update successful. schedule_urls: %s",
-            ', '.join(data.get('schedule_urls', [])))
+        logger.info('Scheduled push update successful. schedule_urls: %s',
+                    ', '.join(data.get('schedule_urls', [])))
 
         return PushResponse(response)
 
@@ -156,4 +181,4 @@ class PushResponse(object):
         self.payload = data
 
     def __str__(self):
-        return "Response Payload: {0}".format(self.payload)
+        return 'Response Payload: {0}'.format(self.payload)
