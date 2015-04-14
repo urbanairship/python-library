@@ -293,11 +293,11 @@ def message(title, body, content_type=None, content_encoding=None,
                              'integer or time set in UTC as a string')
     if icons is not None:
         if not isinstance(icons, dict):
-            raise TypeError("'icons' must be a dictionary")
+            raise TypeError('icons must be a dictionary')
         payload['icons'] = icons
     if options is not None:
         if not isinstance(options, dict):
-            raise TypeError("'options' must be a dictionary")
+            raise TypeError('options must be a dictionary')
         payload['options'] = options
 
     return payload
