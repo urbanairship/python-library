@@ -52,7 +52,7 @@ def notification(alert=None, ios=None, android=None, amazon=None,
     if interactive is not None:
         payload['interactive'] = interactive
     if not payload:
-        raise ValueError("Notification body may not be empty")
+        raise ValueError('Notification body may not be empty')
     return payload
 
 
@@ -81,13 +81,13 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     payload = {}
     if alert is not None:
         if not (isinstance(alert, (string_type, dict))):
-            raise ValueError("iOS alert must be a string or dictionary")
+            raise ValueError('iOS alert must be a string or dictionary')
         payload['alert'] = alert
     if badge is not None:
         if not (isinstance(badge, (string_type, int))):
-            raise ValueError("iOS badge must be an integer or string")
+            raise ValueError('iOS badge must be an integer or string')
         if isinstance(badge, string_type) and not VALID_AUTOBADGE.match(badge):
-            raise ValueError("Invalid iOS autobadge value")
+            raise ValueError('Invalid iOS autobadge value')
         payload['badge'] = badge
     if sound is not None:
         payload['sound'] = sound
@@ -95,15 +95,15 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['content-available'] = 1
     if extra is not None:
         payload['extra'] = extra
-    if expiry is not None:   
+    if expiry is not None:
         if not (isinstance(expiry, (string_type, int))):
-            raise ValueError("iOS expiry must be an integer or string")    
+            raise ValueError('iOS expiry must be an integer or string')
         payload['expiry'] = expiry
     if interactive is not None:
         payload['interactive'] = interactive
     if category is not None:
         if not (isinstance(category, string_type)):
-            raise ValueError("iOS category must be a string")
+            raise ValueError('iOS category must be a string')
         payload['category'] = category
 
     return payload
@@ -142,7 +142,8 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     if time_to_live is not None:
         payload['time_to_live'] = time_to_live
         if not (isinstance(time_to_live, (string_type, int))):
-            raise ValueError("Android time_to_live value must be an integer or time set in UTC as a string")
+            raise ValueError('Android time_to_live value must be an '
+                             'integer or time set in UTC as a string')
     if delay_while_idle:
         payload['delay_while_idle'] = True
     if extra is not None:
@@ -183,7 +184,8 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
     if expires_after is not None:
         payload['expires_after'] = expires_after
         if not (isinstance(expires_after, (string_type, int))):
-            raise ValueError("Amazon time_to_live value must be an integer or time set in UTC as a string")
+            raise ValueError('Amazon time_to_live value must be an '
+                             'integer or time set in UTC as a string')
     if extra is not None:
         payload['extra'] = extra
     if title is not None:
@@ -214,7 +216,7 @@ def blackberry(alert=None, body=None, content_type=None):
         payload['body'] = body
         payload['content_type'] = content_type
     else:
-        raise ValueError("BlackBerry body and content_type may not be empty")
+        raise ValueError('BlackBerry body and content_type may not be empty')
     return payload
 
 
@@ -225,7 +227,7 @@ def wns_payload(alert=None, toast=None, tile=None, badge=None):
 
     """
     if sum(1 for x in (alert, toast, tile, badge) if x) != 1:
-        raise ValueError("WNS payload must have one notification type.")
+        raise ValueError('WNS payload must have one notification type.')
     payload = {}
     if alert is not None:
         payload['alert'] = alert
@@ -245,7 +247,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
 
     """
     if sum(1 for x in (alert, toast, tile) if x) != 1:
-        raise ValueError("MPNS payload must have one notification type.")
+        raise ValueError('MPNS payload must have one notification type.')
     payload = {}
     if alert is not None:
         payload['alert'] = alert
@@ -256,7 +258,7 @@ def mpns_payload(alert=None, toast=None, tile=None):
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None, 
+def message(title, body, content_type=None, content_encoding=None,
             extra=None, expiry=None, icons=None, options=None):
     """Rich push message payload creation.
 
@@ -266,7 +268,8 @@ def message(title, body, content_type=None, content_encoding=None,
     :keyword content_encoding: Optional, encoding of the data in body, e.g.
         ``utf-8``.
     :keyword extra: Optional, dictionary of string values.
-    :keyword expiry: time when message will delete from Inbox (UTC time or in seconds)
+    :keyword expiry: time when message will delete from Inbox
+        (UTC time or in seconds)
     :keyword icons: Optional JSON dictionary of string key and value pairs.
         Values must be URIs or URLs to the icon resources
     :keyword options: Optional JSON dictionary of key and value pairs
@@ -286,14 +289,15 @@ def message(title, body, content_type=None, content_encoding=None,
     if expiry is not None:
         payload['expiry'] = expiry
         if not (isinstance(expiry, (string_type, int))):
-            raise ValueError("Expiry value must be an integer or time set in UTC as a string")
+            raise ValueError('Expiry value must be an '
+                             'integer or time set in UTC as a string')
     if icons is not None:
         if not isinstance(icons, dict):
-            raise TypeError("'icons' must be a dictionary")
+            raise TypeError('icons must be a dictionary')
         payload['icons'] = icons
     if options is not None:
         if not isinstance(options, dict):
-                    raise TypeError("'options' must be a dictionary")
+            raise TypeError('options must be a dictionary')
         payload['options'] = options
 
     return payload
@@ -328,7 +332,8 @@ def options(expiry=None):
     if expiry is not None:
         payload['expiry'] = expiry
     if not (isinstance(expiry, (string_type, int))):
-        raise ValueError("Expiry value must be an integer or time set in UTC as a string")
+        raise ValueError('Expiry value must be an '
+                         'integer or time set in UTC as a string')
     return payload
 
 
@@ -354,27 +359,27 @@ def actions(add_tag=None, remove_tag=None,
     payload = {}
     if add_tag is not None:
         if not (isinstance(add_tag, (collections.Sequence))):
-            raise TypeError("add_tag must be a string or a list of strings")
+            raise TypeError('add_tag must be a string or a list of strings')
         if isinstance(add_tag, list) and not add_tag:
-            raise ValueError("add_tag list cannot be empty")
+            raise ValueError('add_tag list cannot be empty')
         payload['add_tag'] = add_tag
     if remove_tag is not None:
         if not (isinstance(remove_tag, (collections.Sequence))):
-            raise TypeError("remove_tag must be a string or a list of strings")
+            raise TypeError('remove_tag must be a string or a list of strings')
         if isinstance(remove_tag, list) and not remove_tag:
-            raise ValueError("remove_tag list cannot be empty")
+            raise ValueError('remove_tag list cannot be empty')
         payload['remove_tag'] = remove_tag
     if open_ is not None:
         if not (isinstance(open_, dict)):
-            raise TypeError("open_ must be a dictionary")
+            raise TypeError('open_ must be a dictionary')
         payload['open'] = open_
     if share is not None:
         if not (isinstance(share, string_type)):
-            raise TypeError("share must be a string")
+            raise TypeError('share must be a string')
         payload['share'] = share
     if app_defined is not None:
         if not (isinstance(app_defined, dict)):
-            raise TypeError("app_defined must be a dictionary")
+            raise TypeError('app_defined must be a dictionary')
         payload['app_defined'] = app_defined
     return payload
 

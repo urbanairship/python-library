@@ -18,20 +18,25 @@ class Segment(object):
     data = None
 
     def create(self, airship):
-        """Create a Segment object and return it
-        """
+        """Create a Segment object and return it."""
 
         url = common.SEGMENTS_URL
-        self.data = {
-            'display_name': self.display_name,
-            'criteria': self.criteria
-        }
 
-        body = json.dumps(self.data)
-        response = airship._request('POST', body, url, version=3)
+        body = json.dumps(
+            {
+                'display_name': self.display_name,
+                'criteria': self.criteria
+            }
+        )
+        response = airship._request(
+            method='POST',
+            body=body,
+            url=url,
+            version=3
+        )
         logger.info(
-            "Successful segment creation: '{0}'".format(self.display_name))
-
+            'Successful segment creation: {0}'.format(self.display_name)
+        )
 
         seg_url = response.headers['location']
         seg_id = seg_url.split(url)[1]
@@ -43,11 +48,15 @@ class Segment(object):
 
     @classmethod
     def from_id(cls, airship, seg_id):
-        """Retrieve a segment based on the provided ID
-        """
+        """Retrieve a segment based on the provided ID."""
 
         url = common.SEGMENTS_URL + seg_id
-        response = airship._request('GET', None, url, version=3)
+        response = airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3
+        )
 
         payload = response.json()
         cls.id = seg_id
@@ -55,18 +64,15 @@ class Segment(object):
 
     @classmethod
     def from_payload(cls, payload):
-        """Create segment based on results from a SegmentList iterator.
-        """
+        """Create segment based on results from a SegmentList iterator."""
 
         for key in payload:
             setattr(cls, key, payload[key])
 
         return cls
 
-
     def update(self, airship):
-        """Updates the segment associated with the data in the current object
-        """
+        """Updates the segment associated with data in the current object."""
 
         data = {}
         data['display_name'] = self.display_name
@@ -74,7 +80,12 @@ class Segment(object):
 
         url = common.SEGMENTS_URL + self.id
         body = json.dumps(data)
-        response = airship._request('PUT', body, url, version=3)
+        response = airship._request(
+            method='PUT',
+            body=body,
+            url=url,
+            version=3
+        )
         logger.info(
             "Successful segment update: '{0}'".format(self.display_name))
 
@@ -82,7 +93,12 @@ class Segment(object):
 
     def delete(self, airship):
         url = common.SEGMENTS_URL + self.id
-        res = airship._request('DELETE', None, url, version=3)
+        res = airship._request(
+            method='DELETE',
+            body=None,
+            url=url,
+            version=3
+        )
         logger.info(
             "Successful segment deletion: '{0}'".format(self.display_name))
         return res
@@ -92,6 +108,7 @@ class SegmentList(object):
     """Retrieves a list of segments
 
         :ivar limit: Number of segments to fetch
+
     """
 
     start_url = None
@@ -119,8 +136,7 @@ class SegmentList(object):
             return Segment.from_payload(next(self._token_iter))
 
     def next(self):
-        """ Necessary for iteration to work with Python 2.*
-        """
+        """ Necessary for iteration to work with Python 2.*."""
         return self.__next__()
 
     def _fetch_next_page(self):
@@ -134,7 +150,12 @@ class SegmentList(object):
         else:
             params = None
 
-        response = self._airship._request('GET', None, url, version=3,
-                                          params=params)
+        response = self._airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3,
+            params=params
+        )
         self._page = page = response.json()
         self._token_iter = iter(page['segments'])

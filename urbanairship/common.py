@@ -12,7 +12,7 @@ PUSH_URL = BASE_URL + '/push/'
 DT_FEEDBACK_URL = BASE_URL + '/device_tokens/feedback/'
 APID_FEEDBACK_URL = BASE_URL + '/apids/feedback/'
 SCHEDULES_URL = BASE_URL + '/schedules/'
-TAGS_URL = BASE_URL + '/tags'
+TAGS_URL = BASE_URL + '/tags/'
 SEGMENTS_URL = BASE_URL + '/segments/'
 
 
@@ -62,5 +62,11 @@ class AirshipFailure(Exception):
             "Request failed with status %d: '%s %s': %s",
             response.status_code, error_code, error, json.dumps(details))
 
-        return cls(error, error_code, details, response, response.status_code,
-            response.content)
+        return cls(
+            error,
+            error_code,
+            details,
+            response,
+            response.status_code,
+            response.content
+        )
