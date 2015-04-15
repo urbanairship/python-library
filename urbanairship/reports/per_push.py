@@ -62,24 +62,15 @@ class Series(object):
             raise ValueError(
                 "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
 
-        newstart = None
-        newend = None
+        if not isinstance(start, datetime) or not isinstance(end, datetime):
+            raise ValueError(
+                'start and end date must both be datetime objects'
+            )
 
-        for format in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']:
-            try:
-                newstart = datetime.strptime(start, format)
-            except ValueError:
-                pass
-        for format in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']:
-            try:
-                newend = datetime.strptime(end, format)
-            except ValueError:
-                pass
+        url = common.REPORTS_URL + (
+            'perpush/series/{0}?precision={1}&start={2}&end{3}'
+        ).format(push_id, precision, str(start), str(end))
 
-        if newstart is None or newend is None:
-            raise ValueError("'start' and 'end' date must be in the form: YYYY-MM-DD H:M:S or YY-MM-DD")
-
-        url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}&start={2}&end{3}'.format(push_id, precision, start, end)
         response = airship._request('GET', None, url, version=3)
 
         return response.json()
