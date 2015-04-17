@@ -54,6 +54,7 @@ class TestSegment(unittest.TestCase):
         id_response._content = data
         id_response.status_code = 200
 
+
         update_response = requests.Response()
         update_response.status_code = 200
 
@@ -62,7 +63,8 @@ class TestSegment(unittest.TestCase):
 
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [create_response, id_response,
-                                           update_response, del_response]
+                                           id_response, update_response,
+                                           del_response]
 
         airship = ua.Airship('key', 'secret')
 
@@ -74,6 +76,10 @@ class TestSegment(unittest.TestCase):
         self.assertEqual(create_res.status_code, 200)
         self.assertEqual(seg.display_name, name)
         self.assertEqual(seg.criteria, criteria)
+
+        from_id = seg.from_id(airship, 'test_id')
+        self.assertEqual(from_id.name, name)
+        self.assertEqual(from_id.criteria, criteria)
 
         seg.display_name = 'new_test_segment'
         up_res = seg.update(airship)
