@@ -60,7 +60,9 @@ class Segment(object):
 
         payload = response.json()
         cls.id = seg_id
-        return cls.from_payload(payload)
+        cls.from_payload(payload)
+
+        return response
 
     @classmethod
     def from_payload(cls, payload):

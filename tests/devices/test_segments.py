@@ -78,8 +78,9 @@ class TestSegment(unittest.TestCase):
         self.assertEqual(seg.criteria, criteria)
 
         from_id = seg.from_id(airship, 'test_id')
-        self.assertEqual(from_id.name, name)
-        self.assertEqual(from_id.criteria, criteria)
+        self.assertEqual(from_id.status_code, 200)
+        self.assertEqual(from_id.content, data)
+
 
         seg.display_name = 'new_test_segment'
         up_res = seg.update(airship)
