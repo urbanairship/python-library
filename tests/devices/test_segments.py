@@ -54,7 +54,6 @@ class TestSegment(unittest.TestCase):
         id_response._content = data
         id_response.status_code = 200
 
-
         update_response = requests.Response()
         update_response.status_code = 200
 
@@ -80,7 +79,6 @@ class TestSegment(unittest.TestCase):
         from_id = seg.from_id(airship, 'test_id')
         self.assertEqual(from_id.status_code, 200)
         self.assertEqual(from_id.content, data)
-
 
         seg.display_name = 'new_test_segment'
         up_res = seg.update(airship)
