@@ -10,7 +10,7 @@
     * delete an existing segment
 - added support for Channel Uninstall API
 - added support for interactive notifications
-- added support for the APS category field
+- added support for the category field
 - added support for icons and options parameters for the rich push object
 
 --------------------
