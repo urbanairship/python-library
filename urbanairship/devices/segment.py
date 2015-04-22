@@ -62,6 +62,8 @@ class Segment(object):
         cls.id = seg_id
         cls.from_payload(payload)
 
+        return response
+
     @classmethod
     def from_payload(cls, payload):
         """Create segment based on results from a SegmentList iterator."""
