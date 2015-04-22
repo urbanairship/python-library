@@ -1,4 +1,20 @@
+
 --------------------
+0.7.2
+--------------------
+- Added support for Segments API
+    * List all segments
+    * Lookup single segment information
+    * Create new segment
+    * Modify existing segment
+    * Delete an existing segment
+- Added support for Channel Uninstall API
+- Added support for interactive notifications
+- Added support for the APS category field
+- Added support for icons and options parameters for the rich push object
+
+--------------------
+
 0.7.1
 --------------------
 - version bump for packaging fix
