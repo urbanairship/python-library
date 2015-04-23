@@ -82,6 +82,7 @@ Contents:
 
    push.rst
    devices.rst
+   channel_uninstall.rst
    segment.rst
    tags.rst
    exceptions.rst
