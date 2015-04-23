@@ -3,9 +3,8 @@ Channel Uninstall
 
 Uninstalling Channels
 ---------------------
-Channels can be uninstalled by instantiating a ChannelUninstall class using
-:py:class:`ChannelUninstall`. There is a limit of 200 channels that can be
-uninstalled at once.
+Channels can be uninstalled using :py:class:`ChannelUninstall`.
+There is a limit of 200 channels that can be uninstalled at one time.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#uninstall-channels
 
