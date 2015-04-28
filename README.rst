@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/urbanairship/python-library.svg?branch=master)](https://travis-ci.org/urbanairship/python-library)
+.. image:: https://travis-ci.org/urbanairship/python-library.svg?branch=master
+    :target: https://travis-ci.org/urbanairship/python-library
 
 About
 =====
