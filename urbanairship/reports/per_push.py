@@ -5,17 +5,23 @@ from urbanairship import common
 
 
 class Detail(object):
-    def get_single(self, airship, push_id):
+    self.airship = None
+
+    def __init__(self, airship):
+        self.airship = airship
+
+    def get_single(self, push_id):
         if not push_id:
             raise ValueError("'push_id' cannot be empty")
 
         if not isinstance(push_id, str):
             raise TypeError("'push_id' must be a string")
-        response = airship._request('GET', None, common.REPORTS_URL +
-                                    'perpush/detail/' + push_id, version=3)
+        response = self.airship._request('GET', None, common.REPORTS_URL +
+                                         'perpush/detail/' + push_id,
+                                         version=3)
         return response.json()
 
-    def get_batch(self, airship, push_ids):
+    def get_batch(self, push_ids):
         if not push_ids or push_ids is []:
             raise ValueError("'push_ids' cannot be empty")
         if not isinstance(push_ids, list):
@@ -27,21 +33,26 @@ class Detail(object):
         data['push_ids'] = push_ids
         body = json.dumps(data)
 
-        response = airship._request('POST', body, common.REPORTS_URL +
-                                    'perpush/detail/', version=3)
+        response = self.airship._request('POST', body, common.REPORTS_URL +
+                                         'perpush/detail/', version=3)
         return response.json()
 
 
 class Series(object):
-    def get(self, airship, push_id):
+    self.airship = None
+
+    def init(self, airship):
+        self.airship = airship
+
+    def get(self, push_id):
         if not isinstance(push_id, str):
             raise TypeError("'push_id' must be a string")
 
         url = common.REPORTS_URL + 'perpush/series/{0}'.format(push_id)
-        response = airship._request('GET', None, url, version=3)
+        response = self.airship._request('GET', None, url, version=3)
         return response.json()
 
-    def get_with_precision(self, airship, push_id, precision):
+    def get_with_precision(self, push_id, precision):
         if not isinstance(push_id, str):
             raise TypeError("'push_id' must be a string")
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
@@ -51,10 +62,10 @@ class Series(object):
         url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}'.format(
             push_id, precision)
 
-        response = airship._request('GET', None, url, version=3)
+        response = self.airship._request('GET', None, url, version=3)
         return response.json()
 
-    def get_with_precision_and_range(self, airship, push_id, precision, start,
+    def get_with_precision_and_range(self, push_id, precision, start,
                                      end):
         if not isinstance(push_id, str):
             raise TypeError("'push_id' must be a string")
@@ -71,6 +82,6 @@ class Series(object):
             'perpush/series/{0}?precision={1}&start={2}&end{3}'
         ).format(push_id, precision, str(start), str(end))
 
-        response = airship._request('GET', None, url, version=3)
+        response = self.airship._request('GET', None, url, version=3)
 
         return response.json()
