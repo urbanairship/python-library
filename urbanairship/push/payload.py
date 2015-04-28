@@ -57,7 +57,7 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
-        extra=None, expiry=None, interactive=None, category=None):
+        extra=None, expiry=None, interactive=None, category=None, title=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -105,6 +105,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         if not (isinstance(category, string_type)):
             raise ValueError('iOS category must be a string')
         payload['category'] = category
+    if title is not None:
+        if not (isinstance(title, string_type)):
+            raise ValueError('iOS title must be a string')
+        payload['title'] = title
 
     return payload
 
