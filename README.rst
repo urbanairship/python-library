@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/urbanairship/python-library.svg?branch=master
+    :target: https://travis-ci.org/urbanairship/python-library
+
 About
 =====
 
