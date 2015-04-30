@@ -24,6 +24,7 @@ class TestMessage(unittest.TestCase):
                     extra={'more': 'stuff'},
                     expiry='time',
                     category='test',
+                    title=None,
                     interactive={
                         'type': 'a_type',
                         'button_actions': {
@@ -47,6 +48,7 @@ class TestMessage(unittest.TestCase):
                     },
                     'expiry': 'time',
                     'category': 'test',
+                    'title': 'none',
                     'interactive': {
                         'type': 'a_type',
                         'button_actions': {
@@ -175,6 +177,31 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
+                    },
+                    local_only=True,
+                    wearable={
+                        'background_image': "http://example.com/background.png",
+                        'extra_pages': [
+                            {
+                                'title': 'Page 1 title - optional title',
+                                'alert': 'Page 1 title - optional alert'
+                            },
+                            {
+                                'title': 'Page 2 title - optional title',
+                                'alert': 'Page 2 title - optional alert'
+                            }
+                        ],
+                        'interactive': {
+                            'type': 'a_type',
+                            'button_actions': {
+                                'yes': {
+                                    'add_tag': 'clicked_yes'
+                                },
+                                'no': {
+                                    'add_tag': 'clicked_no'
+                                }
+                            }
+                        }
                     }
                 )
             ),
@@ -195,6 +222,31 @@ class TestMessage(unittest.TestCase):
                             },
                             'no': {
                                 'add_tag': 'clicked_no'
+                            }
+                        }
+                    },
+                    'local_only': True,
+                    'wearable': {
+                        'background_image': "http://example.com/background.png",
+                        'extra_pages': [
+                            {
+                                'title': 'Page 1 title - optional title',
+                                'alert': 'Page 1 title - optional alert'
+                            },
+                            {
+                                'title': 'Page 2 title - optional title',
+                                'alert': 'Page 2 title - optional alert'
+                            }
+                        ],
+                        'interactive': {
+                            'type': 'a_type',
+                            'button_actions': {
+                                'yes': {
+                                    'add_tag': 'clicked_yes'
+                                },
+                                'no': {
+                                    'add_tag': 'clicked_no'
+                                }
                             }
                         }
                     }
