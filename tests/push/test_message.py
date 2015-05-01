@@ -24,7 +24,7 @@ class TestMessage(unittest.TestCase):
                     extra={'more': 'stuff'},
                     expiry='time',
                     category='test',
-                    title=None,
+                    title='title',
                     interactive={
                         'type': 'a_type',
                         'button_actions': {
@@ -48,7 +48,7 @@ class TestMessage(unittest.TestCase):
                     },
                     'expiry': 'time',
                     'category': 'test',
-                    'title': 'none',
+                    'title': 'title',
                     'interactive': {
                         'type': 'a_type',
                         'button_actions': {
@@ -568,4 +568,3 @@ class TestMessage(unittest.TestCase):
                 'type': 'a_type'
             }
         )
-
