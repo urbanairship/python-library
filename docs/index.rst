@@ -84,6 +84,7 @@ Contents:
    devices.rst
    segment.rst
    tags.rst
+   reports.rst
    exceptions.rst
    examples.rst
 

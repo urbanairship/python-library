@@ -20,11 +20,11 @@ http://docs.urbanairship.com/api/ua.html#single-request
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey"), "master_secret")
+    airship = ua.Airship("appkey", "master_secret")
     d = ua.Detail()
     details = d.get_single(airship, 'push_id')
 
-.. automodule:: urbanairship.reports.perpush
+.. automodule:: urbanairship.reports.per_push
     :members: Detail
 
 Batch Request
@@ -39,7 +39,7 @@ see: http://docs.urbanairship.com/api/ua.html#batch-request
     d = ua.Detail()
     details = d.get_batch(airship, ['push_id', 'push_id2', 'push_id3'])
 
-.. automodule:: urbanairship.reports.perpush
+.. automodule:: urbanairship.reports.per_push
     :members: Detail
 
 .. note::
@@ -58,7 +58,7 @@ see: http://docs.urbanairship.com/api/ua.html#per-push-series
     s = ua.Series()
     series = s.get(airship, 'push_id')
 
-.. automodule:: urbanairship.reports.perpush
+.. automodule:: urbanairship.reports.per_push
     :members: Series
 
 Series With Precision
@@ -74,7 +74,7 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision
     s = ua.Series()
     series = s.get_with_precision(airship, 'push_id', 'HOURLY')
 
-.. automodule:: urbanairship.reports.perpush
+.. automodule:: urbanairship.reports.per_push
     :members: Series
 
 Series With Precision and Range
@@ -92,5 +92,5 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
     series = s.get_with_precision_and_range(airship, 'push_id', 'DAILY',
                                             '2015-01-15', '2015-02-15')
 
-.. automodule:: urbanairship.reports.perpush
+.. automodule:: urbanairship.reports.per_push
     :members: Series
