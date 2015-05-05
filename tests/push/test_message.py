@@ -180,7 +180,7 @@ class TestMessage(unittest.TestCase):
                     },
                     local_only=True,
                     wearable={
-                        'background_image': "http://example.com/background.png",
+                        'background_image': 'http://example.com/background.png',
                         'extra_pages': [
                             {
                                 'title': 'Page 1 title - optional title',
@@ -227,7 +227,7 @@ class TestMessage(unittest.TestCase):
                     },
                     'local_only': True,
                     'wearable': {
-                        'background_image': "http://example.com/background.png",
+                        'background_image': 'http://example.com/background.png',
                         'extra_pages': [
                             {
                                 'title': 'Page 1 title - optional title',
@@ -567,4 +567,25 @@ class TestMessage(unittest.TestCase):
             {
                 'type': 'a_type'
             }
+        )
+
+    def test_wearable(self):
+        self.assertEqual(
+            ua.android(
+                alert='android alert',
+                local_only=False,
+                wearable={
+                    'background_image': 'http://example.com/background.png',
+                    'extra_pages': [
+                        {'title': 'title', 'alert': 'wearable alert'}
+                    ],
+                    'interactive': {
+                        'type': 'a_type',
+                        'button_actions': {
+                            'yes': {'add_tag': 'clicked_yes'}
+                        }
+                    }
+
+                }
+            )
         )
