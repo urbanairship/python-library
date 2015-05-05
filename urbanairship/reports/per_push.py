@@ -5,7 +5,7 @@ from urbanairship import common
 
 
 class Detail(object):
-    self.airship = None
+    airship = None
 
     def __init__(self, airship):
         self.airship = airship
@@ -39,9 +39,9 @@ class Detail(object):
 
 
 class Series(object):
-    self.airship = None
+    airship = None
 
-    def init(self, airship):
+    def __init__(self, airship):
         self.airship = airship
 
     def get(self, push_id):
