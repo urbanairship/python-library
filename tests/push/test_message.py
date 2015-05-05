@@ -587,5 +587,21 @@ class TestMessage(unittest.TestCase):
                     }
 
                 }
-            )
+            ),
+            {
+                'alert': 'android alert',
+                'local_only': False,
+                'wearable': {
+                    'background_image': 'http://example.com/background.png',
+                    'extra_pages': [
+                        {'title': 'title', 'alert': 'wearable alert'}
+                    ],
+                    'interactive': {
+                        'type': 'a_type',
+                        'button_actions': {
+                            'yes': {'add_tag': 'clicked_yes'}
+                        }
+                    }
+                }
+            }
         )
