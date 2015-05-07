@@ -20,9 +20,9 @@ http://docs.urbanairship.com/api/ua.html#single-request
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey", "master_secret")
-    d = ua.Detail()
-    details = d.get_single(airship, 'push_id')
+    airship = ua.Airship('appkey', 'master_secret')
+    d = ua.Detail(airship)
+    details = d.get_single('push_id')
 
 .. automodule:: urbanairship.reports.per_push
     :members: Detail
@@ -35,9 +35,9 @@ see: http://docs.urbanairship.com/api/ua.html#batch-request
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey", "master_secret")
-    d = ua.Detail()
-    details = d.get_batch(airship, ['push_id', 'push_id2', 'push_id3'])
+    airship = ua.Airship('appkey', 'master_secret')
+    d = ua.Detail(airship)
+    details = d.get_batch(['push_id', 'push_id2', 'push_id3'])
 
 .. automodule:: urbanairship.reports.per_push
     :members: Detail
@@ -54,9 +54,9 @@ see: http://docs.urbanairship.com/api/ua.html#per-push-series
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey", "master_secret")
-    s = ua.Series()
-    series = s.get(airship, 'push_id')
+    airship = ua.Airship('appkey', 'master_secret')
+    s = ua.Series(airship)
+    series = s.get('push_id')
 
 .. automodule:: urbanairship.reports.per_push
     :members: Series
@@ -70,9 +70,9 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey", "master_secret")
-    s = ua.Series()
-    series = s.get_with_precision(airship, 'push_id', 'HOURLY')
+    airship = ua.Airship('appkey', 'master_secret')
+    s = ua.Series(airship)
+    series = s.get_with_precision('push_id', 'HOURLY')
 
 .. automodule:: urbanairship.reports.per_push
     :members: Series
@@ -87,9 +87,9 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 .. code-block:: python
 
     import urbanairship as ua
-    airship = ua.Airship("appkey", "master_secret")
-    s = ua.Series()
-    series = s.get_with_precision_and_range(airship, 'push_id', 'DAILY',
+    airship = ua.Airship('appkey', 'master_secret')
+    s = ua.Series(airship)
+    series = s.get_with_precision_and_range('push_id', 'DAILY',
                                             '2015-01-15', '2015-02-15')
 
 .. automodule:: urbanairship.reports.per_push
