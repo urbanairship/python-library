@@ -4,7 +4,7 @@ from datetime import datetime
 from urbanairship import common
 
 
-class Detail(object):
+class PerPushDetail(object):
     airship = None
 
     def __init__(self, airship):
@@ -14,11 +14,9 @@ class Detail(object):
         if not push_id:
             raise ValueError('push_id cannot be empty')
 
-        if not isinstance(push_id, str):
-            raise TypeError('push_id must be a string')
-        response = self.airship._request('GET', None, common.REPORTS_URL +
-                                         'perpush/detail/' + push_id,
-                                         version=3)
+        url = '{0}perpush/detail/{1}'.format(common.REPORTS_URL, push_id)
+        response = self.airship._request('GET', None, url, version=3)
+
         return response.json()
 
     def get_batch(self, push_ids):
@@ -32,55 +30,71 @@ class Detail(object):
         data = {}
         data['push_ids'] = push_ids
         body = json.dumps(data)
+        url = '{0}perpush/detail/'.format(common.REPORTS_URL)
+        response = self.airship._request('POST', body, url, version=3)
 
-        response = self.airship._request('POST', body, common.REPORTS_URL +
-                                         'perpush/detail/', version=3)
         return response.json()
 
 
-class Series(object):
+class PerPushSeries(object):
     airship = None
 
     def __init__(self, airship):
         self.airship = airship
 
     def get(self, push_id):
-        if not isinstance(push_id, str):
-            raise TypeError('push_id must be a string')
+        if not push_id:
+            raise TypeError('push_id cannot be empty')
 
-        url = common.REPORTS_URL + 'perpush/series/{0}'.format(push_id)
+        url = '{0}perpush/series/{1}'.format(common.REPORTS_URL, push_id)
         response = self.airship._request('GET', None, url, version=3)
         return response.json()
 
     def get_with_precision(self, push_id, precision):
-        if not isinstance(push_id, str):
-            raise TypeError('push_id must be a string')
+        if not push_id:
+            raise TypeError('push_id cannot be empty')
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
-            raise ValueError("Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
+            raise ValueError(
+                "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'"
+            )
 
-        url = common.REPORTS_URL + 'perpush/series/{0}?precision={1}'.format(
-            push_id, precision)
+        url = '{0}perpush/series/{1}'.format(common.REPORTS_URL, push_id)
 
-        response = self.airship._request('GET', None, url, version=3)
+        params = {'precision': precision}
+        response = self.airship._request(
+            'GET',
+            None,
+            url,
+            version=3,
+            params=params
+        )
+
         return response.json()
 
-    def get_with_precision_and_range(self, push_id, precision, start,
-                                     end):
-        if not isinstance(push_id, str):
-            raise TypeError('push_id must be a string')
+    def get_with_precision_and_range(self, push_id, precision, start, end):
+        if not push_id:
+            raise TypeError('push_id cannot be empty')
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
             raise ValueError(
                 "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
-
         if not isinstance(start, datetime) or not isinstance(end, datetime):
             raise ValueError(
                 'start and end date must both be datetime objects'
             )
 
-        url = common.REPORTS_URL + (
-            'perpush/series/{0}?precision={1}&start={2}&end{3}'
-        ).format(push_id, precision, str(start), str(end))
+        url = '{0}perpush/series/{1}'.format(common.REPORTS_URL, push_id)
+        params = {
+            'precision': precision,
+            'start': start.strftime('%Y-%m-%dT%H:%M:%S'),
+            'end': end.strftime('%Y-%m-%dT%H:%M:%S')
+        }
 
-        response = self.airship._request('GET', None, url, version=3)
+        response = self.airship._request(
+            'GET',
+            None,
+            url,
+            version=3,
+            params=params
+        )
 
         return response.json()
