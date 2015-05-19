@@ -85,6 +85,7 @@ Contents:
    channel_uninstall.rst
    segment.rst
    tags.rst
+   reports.rst
    exceptions.rst
    examples.rst
 
