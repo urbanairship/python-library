@@ -7,7 +7,8 @@ import urbanairship as ua
 
 class TestSeries(unittest.TestCase):
     def test_invalid_precision(self):
-        s = ua.Series(None)
+        airship = ua.Airship('key', 'secret')
+        s = ua.reports.PerPushSeries(airship)
         self.assertRaises(
             ValueError,
             callableObj=s.get_with_precision,
@@ -16,7 +17,8 @@ class TestSeries(unittest.TestCase):
         )
 
     def test_invalid_range(self):
-        s = ua.Series(None)
+        airship = ua.Airship('key', 'secret')
+        s = ua.reports.PerPushSeries(airship)
         self.assertRaises(
             ValueError,
             callableObj=s.get_with_precision_and_range,
@@ -28,16 +30,9 @@ class TestSeries(unittest.TestCase):
 
 
 class TestDetail(unittest.TestCase):
-    def test_get_single_invalid_id_type(self):
-        d = ua.Detail(None)
-        self.assertRaises(
-            TypeError,
-            callableObj=d.get_single,
-            push_id=12345
-        )
-
     def test_get_single_with_empty_id(self):
-        d = ua.Detail(None)
+        airship = ua.Airship('key', 'secret')
+        d = ua.reports.PerPushDetail(airship)
         self.assertRaises(
             ValueError,
             callableObj=d.get_single,
@@ -45,7 +40,8 @@ class TestDetail(unittest.TestCase):
         )
 
     def test_get_batch_empty_list(self):
-        d = ua.Detail(None)
+        airship = ua.Airship('key', 'secret')
+        d = ua.reports.PerPushDetail(airship)
         self.assertRaises(
             ValueError,
             callableObj=d.get_batch,
