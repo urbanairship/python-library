@@ -67,9 +67,16 @@ def mpns(uuid):
     return {'mpns': uuid.lower().strip()}
 
 
-def tag(tag):
-    """Select a single tag."""
-    return {'tag': tag}
+def tag(tag, group=None):
+    """Select a tag with an optional tag group"""
+    payload = {}
+    payload['tag'] = tag
+    if group is not None:
+        payload['group'] = group
+    else:
+        payload['group'] = 'device'
+
+    return payload
 
 
 def alias(alias):
