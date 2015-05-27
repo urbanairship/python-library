@@ -32,7 +32,6 @@ class Tag(object):
         self._airship = airship
         self.tag_name = tag_name
         self.url = common.CHANNEL_URL + 'tags/'
-        self.data = {}
 
         if group is None:
             self.group = 'device'
@@ -41,16 +40,17 @@ class Tag(object):
 
     def add(self, ios_channels=None, android_channels=None,
             amazon_channels=None):
-        """Adds channels to 'data' dict and then sends POST request."""
+        """Add channels to the add operation in the device payloads"""
 
+        self.data = {}
         audience = {}
 
         if ios_channels is not None:
-            audience['ios_channels'] = ios_channels
+            audience['ios_channel'] = ios_channels
         if android_channels is not None:
-            audience['android_channels'] = android_channels
+            audience['android_channel'] = android_channels
         if amazon_channels is not None:
-            audience['amazon_channels'] = amazon_channels
+            audience['amazon_channel'] = amazon_channels
 
         self.data['audience'] = audience
         self.data['add'] = {self.group: self.tag_name}
@@ -63,19 +63,43 @@ class Tag(object):
 
     def remove(self, ios_channels=None, android_channels=None,
                amazon_channels=None):
-        """Add channels to remove to 'data' dict and sends POST request."""
+        """Add channels to the remove operation in the device payloads"""
 
+        self.data = {}
         audience = {}
 
         if ios_channels is not None:
-            audience['ios_channels'] = ios_channels
+            audience['ios_channel'] = ios_channels
         if android_channels is not None:
-            audience['android_channels'] = android_channels
+            audience['android_channel'] = android_channels
         if amazon_channels is not None:
-            audience['amazon_channels'] = amazon_channels
+            audience['amazon_channel'] = amazon_channels
 
         self.data['audience'] = audience
         self.data['remove'] = {self.group: self.tag_name}
+
+        body = json.dumps(self.data)
+        response = self._airship._request(
+            'POST', body, self.url, 'application/json', version=3
+        )
+        return response
+
+    def set(self, ios_channels=None, android_channels=None,
+               amazon_channels=None):
+        """Add channels to the set operation in the device payloads"""
+
+        self.data = {}
+        audience = {}
+
+        if ios_channels is not None:
+            audience['ios_channel'] = ios_channels
+        if android_channels is not None:
+            audience['android_channel'] = android_channels
+        if amazon_channels is not None:
+            audience['amazon_channel'] = amazon_channels
+
+        self.data['audience'] = audience
+        self.data['set'] = {self.group: self.tag_name}
 
         body = json.dumps(self.data)
         response = self._airship._request(
