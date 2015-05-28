@@ -18,7 +18,6 @@ class TagList(object):
         self.url = common.TAGS_URL
 
     def list_tags(self):
-
         response = self._airship._request('GET', None, self.url, version=3)
 
         logger.info("Tag listing successful.")
@@ -85,7 +84,7 @@ class Tag(object):
         return response
 
     def set(self, ios_channels=None, android_channels=None,
-               amazon_channels=None):
+            amazon_channels=None):
         """Add channels to the set operation in the device payloads"""
 
         self.data = {}
@@ -177,20 +176,26 @@ class BatchTag(object):
         if self.ios_payload:
             body = json.dumps(self.ios_payload)
             response_list.append(
-                self._airship._request('POST', body, self.url,
-                                       'application/json', version=3)
+                self._airship._request(
+                    'POST', body, self.url,
+                    'application/json', version=3
+                )
             )
         if self.android_payload:
             body = json.dumps(self.android_payload)
             response_list.append(
-                self._airship._request('POST', body, self.url,
-                                       'application/json', version=3)
+                self._airship._request(
+                    'POST', body, self.url,
+                    'application/json', version=3
+                )
             )
         if self.amazon_payload:
             body = json.dumps(self.amazon_payload)
             response_list.append(
-                self._airship._request('POST', body, self.url,
-                                       'application/json', version=3)
+                self._airship._request(
+                    'POST', body, self.url,
+                    'application/json', version=3
+                )
             )
 
         if not response_list:
@@ -199,3 +204,46 @@ class BatchTag(object):
             logger.info('Successful batch modification: %s', response_list)
 
         return response_list
+
+
+class ChannelTags(object):
+    """Modify the tags for a channel"""
+
+    def __init__(self, airship):
+        self.url = common.CHANNEL_URL + 'tags/'
+        self._airship = airship
+
+    def add(self, channels, tags):
+        payload = {}
+        payload['audience'] = channels
+        payload['add'] = tags
+
+        body = json.dumps(payload)
+        response = self._airship._request(
+            'POST', body, self.url, 'application/json', version=3
+        )
+
+        return response
+
+    def remove(self, channels, tags):
+        payload = {}
+        payload['audience'] = channels
+        payload['remove'] = tags
+
+        body = json.dumps(payload)
+        response = self._airship._request(
+            'POST', body, self.url, 'application/json', version=3
+        )
+        return response
+
+    def set(self, channels, tags):
+        payload = {}
+        payload['audience'] = channels
+        payload['set'] = tags
+
+        body = json.dumps(payload)
+        response = self._airship._request(
+            'POST', body, self.url,
+            'application/json', version=3
+        )
+        return response

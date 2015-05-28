@@ -50,6 +50,7 @@ from .devices import (
     Tag,
     DeleteTag,
     BatchTag,
+    ChannelTags,
     Segment,
     SegmentList,
     ChannelUninstall

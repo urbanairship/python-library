@@ -13,6 +13,7 @@ from .tag import (
     Tag,
     DeleteTag,
     BatchTag,
+    ChannelTags
 )
 
 from .segment import (
