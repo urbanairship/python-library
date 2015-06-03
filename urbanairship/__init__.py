@@ -52,7 +52,9 @@ from .devices import (
     BatchTag,
     Segment,
     SegmentList,
-    ChannelUninstall
+    ChannelUninstall,
+    NamedUser,
+    NamedUserList
 )
 
 from .reports import (
@@ -114,6 +116,8 @@ __all__ = [
     ChannelUninstall,
     PerPushDetail,
     PerPushSeries,
+    NamedUser,
+    NamedUserList
 ]
 
 # Silence urllib3 INFO logging by default

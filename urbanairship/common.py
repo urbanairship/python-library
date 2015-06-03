@@ -15,6 +15,7 @@ SCHEDULES_URL = BASE_URL + '/schedules/'
 TAGS_URL = BASE_URL + '/tags/'
 SEGMENTS_URL = BASE_URL + '/segments/'
 REPORTS_URL = BASE_URL + '/reports/'
+NAMED_USER_URL = BASE_URL + '/named_users/'
 
 
 logger = logging.getLogger('urbanairship')
