@@ -81,6 +81,38 @@ class NamedUser(object):
         )
         return response.json()
 
+    def tag(self, add=None, remove=None, set=None):
+        """Add, remove, or set tags on a named user
+        :param add: A dict mapping a tag group to a list of tags to add
+        :param remove: A dict mapping a tag group to a list of tags to remove
+        :param set: A dict mapping a tag group to a list of tags to set
+        """
+        url = common.NAMED_USER_URL + 'tags/'
+        payload = {}
+        audience = {'named_user_id': self.named_user_id}
+        payload['audience'] = audience
+
+        if add is not None:
+            if set is not None:
+                raise ValueError('A tag request can only contain an add or '
+                                 'remove field, both, or a single set field.')
+            payload['add'] = add
+        if remove is not None:
+            if set is not None:
+                raise ValueError('A tag request can only contain an add or '
+                                 'remove field, both, or a single set field.')
+            payload['remove'] = remove
+
+        if set is not None:
+            payload['set'] = set
+
+        body = json.dumps(payload).encode('utf-8')
+        response = self._airship._request(
+            'POST', body, url, 'application/json', version=3
+        )
+
+        return response.json()
+
     @classmethod
     def from_payload(cls, payload):
         """
