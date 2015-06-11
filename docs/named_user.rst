@@ -35,6 +35,7 @@ http://docs.urbanairship.com/api/ua.html#association
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
+
 .. note::
     You may only associate up to 20 channels to a Named User.
 
