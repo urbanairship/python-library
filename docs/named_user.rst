@@ -84,11 +84,12 @@ see: http://docs.urbanairship.com/api/ua.html#tags-named-users
     named_user = ua.NamedUser(airship, 'named_user_id')
 
     named_user.tag(
-        add={'tag_group': ['tag2', 'tag3', 'tag4']},
-        remove={'tag_group': 'tag1'}
+        'tag_group_name',
+        add=['tag2', 'tag3', 'tag4'],
+        remove='tag1'
     )
 
-    named_user.tag(set={'tag_group': 'single_tag'})
+    named_user.tag(set=['tag5', 'tag6'])
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser

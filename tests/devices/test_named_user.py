@@ -64,6 +64,7 @@ class TestNamedUser(unittest.TestCase):
         self.assertRaises(
             ValueError,
             nu.tag,
+            'tag_group_name',
             add={'group': 'tag'},
             set={'group': 'other_tag'}
         )

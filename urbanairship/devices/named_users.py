@@ -9,7 +9,7 @@ logger = logging.getLogger('urbanairship')
 class NamedUser(object):
     """Perform various operations on a named user object"""
 
-    def __init__(self, airship, named_user_id):
+    def __init__(self, airship, named_user_id=None):
 
         self._airship = airship
         self.named_user_id = named_user_id
@@ -22,6 +22,8 @@ class NamedUser(object):
         :param device_type: The device type of the channel
         :return:
         """
+        if self.named_user_id is None:
+            raise ValueError('named_user_id is required for association')
 
         payload = {}
         url = common.NAMED_USER_URL + 'associate/'
@@ -53,15 +55,11 @@ class NamedUser(object):
         url = common.NAMED_USER_URL + 'disassociate/'
         payload['channel_id'] = channel_id
         payload['device_type'] = device_type
-        payload['named_user_id'] = self.named_user_id
 
-        body = json.dumps(
-            {
-                'channel_id': channel_id,
-                'device_type': device_type,
-                'named_user_id': self.named_user_id
-            }
-        ).encode('utf-8')
+        if self.named_user_id is not None:
+            payload['named_user_id'] = self.named_user_id
+
+        body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
             'POST', body, url, 'application/json', version=3
         )
@@ -81,30 +79,38 @@ class NamedUser(object):
         )
         return response.json()
 
-    def tag(self, add=None, remove=None, set=None):
+    def tag(self, group, add=None, remove=None, set=None):
         """Add, remove, or set tags on a named user
-        :param add: A dict mapping a tag group to a list of tags to add
-        :param remove: A dict mapping a tag group to a list of tags to remove
-        :param set: A dict mapping a tag group to a list of tags to set
+        :param add: A list of tags to add
+        :param remove: A list of tags to remove
+        :param set: A list of tags to set
+        :param group: The Tag group for the add, remove, and set operations
         """
         url = common.NAMED_USER_URL + 'tags/'
         payload = {}
-        audience = {'named_user_id': self.named_user_id}
+        if self.named_user_id is not None:
+            audience = {'named_user_id': self.named_user_id}
+        else:
+            raise ValueError('A named user ID is required for modifying tags')
+
         payload['audience'] = audience
 
         if add is not None:
             if set is not None:
                 raise ValueError('A tag request can only contain an add or '
-                                 'remove field, both, or a single set field.')
-            payload['add'] = add
+                                 'remove field, both, or a single set field')
+            payload['add'] = {group: add}
+
         if remove is not None:
             if set is not None:
                 raise ValueError('A tag request can only contain an add or '
-                                 'remove field, both, or a single set field.')
-            payload['remove'] = remove
+                                 'remove field, both, or a single set field')
+            payload['remove'] = {group: remove}
 
         if set is not None:
-            payload['set'] = set
+            payload['set'] = {group: set}
+        if not add and not remove and not set:
+            raise ValueError('An add, remove, or set field was not set')
 
         body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
