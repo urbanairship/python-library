@@ -57,6 +57,17 @@ class TestNamedUser(unittest.TestCase):
             'tags': {'group_name': ['tag1', 'tag2']}
         })
 
+    def test_named_user_tag(self):
+        airship = ua.Airship('key', 'secret')
+        nu = ua.NamedUser(airship, 'named_user_id')
+
+        self.assertRaises(
+            ValueError,
+            nu.tag,
+            add={'group': 'tag'},
+            set={'group': 'other_tag'}
+        )
+
 
 class TestNamedUserList(unittest.TestCase):
     def test_NamedUserlist_iteration(self):

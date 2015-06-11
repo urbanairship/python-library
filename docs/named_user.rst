@@ -72,4 +72,27 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#lookup
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
 
+Tags
+----
+Add, remove, or set tags on a named user. For more information,
+see: http://docs.urbanairship.com/api/ua.html#tags-named-users
 
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship('app_key', 'master_secret')
+    named_user = ua.NamedUser(airship, 'named_user_id')
+
+    named_user.tag(
+        add={'tag_group': ['tag2', 'tag3', 'tag4']},
+        remove={'tag_group': 'tag1'}
+    )
+
+    named_user.tag(set={'tag_group': 'single_tag'})
+
+.. automodule:: urbanairship.devices.named_users
+    :members: NamedUser
+
+.. note::
+    A single request may contain an add or remove field, both, or a single set
+    field.
