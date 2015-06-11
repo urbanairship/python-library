@@ -15,7 +15,7 @@ class NamedUser(object):
         self.named_user_id = named_user_id
 
     def associate(self, channel_id, device_type):
-        """Associate a channel with a named user id
+        """Associate a channel with a named user ID
 
         :param channel_id: The ID of the channel you would like to associate
             with the named user
@@ -42,7 +42,7 @@ class NamedUser(object):
         return response
 
     def disassociate(self, channel_id, device_type):
-        """Disassociate a channel with a named user id
+        """Disassociate a channel with a named user ID
 
         :param channel_id: The ID of the channel you would like to disassociate
         :param device_type: The device type of the channel
@@ -71,7 +71,7 @@ class NamedUser(object):
     def lookup(self):
         """Lookup a single named user
 
-        :return: The named user payload for the named user id
+        :return: The named user payload for the named user ID
         """
         url = common.NAMED_USER_URL
 

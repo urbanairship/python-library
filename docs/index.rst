@@ -11,6 +11,7 @@ Installation
 Using ``pip``::
 
    $ pip install urbanairship
+
 Using the library
 -----------------
 
@@ -86,6 +87,7 @@ Contents:
    segment.rst
    tags.rst
    reports.rst
+   named_user.rst
    exceptions.rst
    examples.rst
 
