@@ -31,7 +31,7 @@ http://docs.urbanairship.com/api/ua.html#association
     airship = ua.Airship('app_key', 'master_secret')
 
     named_user = ua.NamedUser(airship, 'named_user_id')
-    named_user.associate('channel_id', 'device_type')
+    named_user.associate('channel_id', 'ios')
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
@@ -51,7 +51,7 @@ http://docs.urbanairship.com/api/ua.html#disassociation
     airship = ua.Airship('app_key', 'master_secret')
 
     named_user = ua.NamedUser(airship, 'named_user_id')
-    named_user.disassociate('channel_id', 'device_type')
+    named_user.disassociate('channel_id', 'ios')
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
@@ -89,7 +89,7 @@ see: http://docs.urbanairship.com/api/ua.html#tags-named-users
         remove='tag1'
     )
 
-    named_user.tag(set=['tag5', 'tag6'])
+    named_user.tag('tag_group_name', set=['tag5', 'tag6'])
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
