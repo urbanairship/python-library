@@ -26,7 +26,6 @@ class NamedUser(object):
             raise ValueError('named_user_id is required for association')
 
         payload = {}
-        url = common.NAMED_USER_URL + 'associate/'
         payload['channel_id'] = channel_id
         payload['device_type'] = device_type
         payload['named_user_id'] = self.named_user_id
@@ -39,7 +38,8 @@ class NamedUser(object):
             }
         ).encode('utf-8')
         response = self._airship._request(
-            'POST', body, url, 'application/json', version=3
+            'POST', body, common.NAMED_USER_ASSOCIATE_URL, 'application/json',
+            version=3
         )
         return response
 
@@ -52,7 +52,6 @@ class NamedUser(object):
         """
 
         payload = {}
-        url = common.NAMED_USER_URL + 'disassociate/'
         payload['channel_id'] = channel_id
         payload['device_type'] = device_type
 
@@ -61,7 +60,8 @@ class NamedUser(object):
 
         body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
-            'POST', body, url, 'application/json', version=3
+            'POST', body, common.NAMED_USER_DISASSOCIATE_URL,
+            'application/json', version=3
         )
 
         return response
@@ -71,10 +71,8 @@ class NamedUser(object):
 
         :return: The named user payload for the named user ID
         """
-        url = common.NAMED_USER_URL
-
         response = self._airship._request(
-            'GET', None, url, 'application/json', version=3,
+            'GET', None, common.NAMED_USER_URL, 'application/json', version=3,
             params={'id': self.named_user_id}
         )
         return response.json()
@@ -86,7 +84,6 @@ class NamedUser(object):
         :param set: A list of tags to set
         :param group: The Tag group for the add, remove, and set operations
         """
-        url = common.NAMED_USER_URL + 'tags/'
         payload = {}
         if self.named_user_id is not None:
             audience = {'named_user_id': self.named_user_id}
@@ -114,7 +111,7 @@ class NamedUser(object):
 
         body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
-            'POST', body, url, 'application/json', version=3
+            'POST', body, common.NAMED_USER_TAG_URL, 'application/json', version=3
         )
 
         return response.json()
