@@ -54,12 +54,12 @@ from .devices import (
     SegmentList,
     ChannelUninstall,
     NamedUser,
-    NamedUserList
+    NamedUserList,
 )
 
 from .reports import (
     PerPushDetail,
-    PerPushSeries
+    PerPushSeries,
 )
 
 __all__ = [
@@ -117,7 +117,7 @@ __all__ = [
     PerPushDetail,
     PerPushSeries,
     NamedUser,
-    NamedUserList
+    NamedUserList,
 ]
 
 # Silence urllib3 INFO logging by default
