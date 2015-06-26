@@ -55,6 +55,11 @@ from .devices import (
     ChannelUninstall
 )
 
+from .reports import (
+    PerPushDetail,
+    PerPushSeries
+)
+
 __all__ = [
     Airship,
     AirshipFailure,
@@ -106,7 +111,9 @@ __all__ = [
     Feedback,
     Segment,
     SegmentList,
-    ChannelUninstall
+    ChannelUninstall,
+    PerPushDetail,
+    PerPushSeries,
 ]
 
 # Silence urllib3 INFO logging by default
