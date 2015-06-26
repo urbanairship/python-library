@@ -23,3 +23,8 @@ from .segment import (
 from .channel_uninstall import (
     ChannelUninstall
 )
+
+from .named_users import (
+    NamedUser,
+    NamedUserList
+)

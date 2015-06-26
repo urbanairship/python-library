@@ -16,6 +16,10 @@ TAGS_URL = BASE_URL + '/tags/'
 SEGMENTS_URL = BASE_URL + '/segments/'
 REPORTS_URL = BASE_URL + '/reports/'
 
+NAMED_USER_URL = BASE_URL + '/named_users/'
+NAMED_USER_TAG_URL = NAMED_USER_URL + 'tags/'
+NAMED_USER_DISASSOCIATE_URL = NAMED_USER_URL + 'disassociate/'
+NAMED_USER_ASSOCIATE_URL = NAMED_USER_URL + 'associate/'
 
 logger = logging.getLogger('urbanairship')
 
