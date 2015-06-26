@@ -21,6 +21,7 @@ up to the first 100 tags per application.
 
 .. automodule:: urbanairship.devices.tag
    :members: TagList
+   :noindex:
 
 
 Adding Devices to a Tag
@@ -40,6 +41,7 @@ Add one or more channels to a particular tag. For more information, see
 
 .. automodule:: urbanairship.devices.tag
    :members: Tag
+   :noindex:
 
 
 Removing Devices from a Tag
@@ -59,6 +61,7 @@ see: `documentation on adding and removing devices from a tag <adding>`_.
 
 .. automodule:: urbanairship.devices.tag
    :members: Tag
+   :noindex:
 
 Deleting a Tag
 --------------
@@ -80,6 +83,7 @@ Note:
 
 .. automodule:: urbanairship.devices.tag
    :members: DeleteTag
+   :noindex:
 
 
 Batch Modification of Tags
@@ -106,6 +110,7 @@ Note:
 
 .. automodule:: urbanairship.devices.tag
    :members: BatchTag
+   :noindex:
 
 
 .. _adding: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
