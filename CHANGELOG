@@ -1,8 +1,21 @@
+--------------------
+0.7.3
+--------------------
+- added support for named user API
+    * associate a channel id with a named user
+    * disassociate a channel id with a named user
+    * look up information for a named user
+    * add, remove, and set tags to a named user
+- added support for per-push reporting
+    * lookup analytics details for push IDs
+    * lookup time series data for a push ID with precision and range
+- added support for Android wearable key
+- added support for Apple Watch title and category keys
 
 --------------------
 0.7.2
 --------------------
-- added support for Segments API
+- added support for segments API
     * list all segments
     * lookup single segment information
     * create new segment
