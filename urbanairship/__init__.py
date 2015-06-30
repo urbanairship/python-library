@@ -60,7 +60,7 @@ from .devices import (
 from .reports import (
     PerPushDetail,
     PerPushSeries,
-    IndividualResponseStatistics,
+    IndividualResponseStats,
     ResponseListing,
 )
 
@@ -120,7 +120,7 @@ __all__ = [
     PerPushSeries,
     NamedUser,
     NamedUserList,
-    IndividualResponseStatistics,
+    IndividualResponseStats,
     ResponseListing,
 ]
 

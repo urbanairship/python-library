@@ -1,7 +1,7 @@
 from urbanairship import common
 from datetime import datetime
 
-class IndividualResponseStatistics(object):
+class IndividualResponseStats(object):
     def __init__(self, airship):
         self.airship = airship
 
