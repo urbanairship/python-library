@@ -97,3 +97,33 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
+
+Response Listing
+==================
+Get a listing of all pushes, plus basic response information, in a given
+timeframe. Start and end date times are required parameters.
+
+For more information, see:
+http://docs.urbanairship.com/api/ua.html#response-listing
+
+-----------------------
+Response Listing Detail
+-----------------------
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship('appkey', 'master_secret')
+    d = ua.reports.ResponseListing(airship)
+    start_date = datetime(2015, 12, 25)
+    end_date = datetime(2015, 12, 30)
+    listing = d.get(start_date, end_date, limit, 'start_id')
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: ResponseListingDetail 
+
+.. note::
+    limit (optional) is the number of results desired per page. push_id_start 
+    (optional) specifies the id of the first response to return.  
+
+ 
