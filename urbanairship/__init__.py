@@ -61,6 +61,7 @@ from .reports import (
     PerPushDetail,
     PerPushSeries,
     IndividualResponseStatistics,
+    ResponseListing,
 )
 
 __all__ = [
@@ -120,6 +121,7 @@ __all__ = [
     NamedUser,
     NamedUserList,
     IndividualResponseStatistics,
+    ResponseListing,
 ]
 
 # Silence urllib3 INFO logging by default

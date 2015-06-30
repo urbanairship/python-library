@@ -22,6 +22,8 @@ NAMED_USER_DISASSOCIATE_URL = NAMED_USER_URL + 'disassociate/'
 NAMED_USER_ASSOCIATE_URL = NAMED_USER_URL + 'associate/'
 
 INDIVIDUAL_RESPONSE_STATS_URL = BASE_URL + '/reports/responses/'
+RESPONSE_LISTING_URL = BASE_URL + '/reports/responses/list'
+
 logger = logging.getLogger('urbanairship')
 
 
