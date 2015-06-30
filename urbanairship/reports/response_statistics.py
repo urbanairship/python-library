@@ -1,6 +1,6 @@
 from urbanairship import common
 
-class IndividualResponseStatistics(object):
+class IndividualResponseStats(object):
     def __init__(self, airship):
         self.airship = airship
 

@@ -3,5 +3,5 @@ from .per_push import (
     PerPushSeries,
 )
 from .response_statistics import (
-    IndividualResponseStatistics,
+    IndividualResponseStats,
 )
