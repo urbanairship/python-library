@@ -1,19 +1,21 @@
 from urbanairship import common
 from datetime import datetime
 
+
 class IndividualResponseStats(object):
     def __init__(self, airship):
         self.airship = airship
 
     def get(self, push_id):
-        url = common.REPORTS_URL + 'responses/'+ push_id
+        url = common.REPORTS_URL + 'responses/' + push_id
         response = self.airship._request('GET', None, url, version=3)
         return response.json()
+
 
 class ResponseListing(object):
     def __init__(self, airship):
         self.airship = airship
-        self.url = common.RESPONSE_LISTING_URL
+        self.url = common.REPORTS_URL + 'responses/list'
 
     def get(self, start_date, end_date, limit=None, start_id=None):
         if not start_date or not end_date:
