@@ -1,4 +1,7 @@
 from .per_push import (
     PerPushDetail,
-    PerPushSeries
+    PerPushSeries,
+)
+from .response_statistics import (
+    IndividualResponseStats,
 )
