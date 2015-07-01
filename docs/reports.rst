@@ -2,6 +2,28 @@
 Reports
 *******
 
+Individual Push Response Stats
+==============================
+Returns detailed report information about a specific push notification.
+Use the push_id, which is the identifier returned by the API that represents a
+specific push message delivery.
+For more information,
+see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics
+
+-------------------------------------
+Individual Push Response Stats Detail
+-------------------------------------
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship('appkey', 'master_secret')
+    d = ua.reports.IndividualResponseStats(airship)
+    statistics = d.get('push_id')
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: IndividualPushResponseStatsDetail
+
+
 Per Push Reporting
 ==================
 Retrieve data specific to the performance of an individual push.

@@ -6,7 +6,7 @@ class IndividualResponseStats(object):
         self.airship = airship
 
     def get(self, push_id):
-        url = common.INDIVIDUAL_RESPONSE_STATS_URL + push_id
+        url = common.REPORTS_URL + 'responses/'+ push_id
         response = self.airship._request('GET', None, url, version=3)
         return response.json()
 
