@@ -145,7 +145,6 @@ Response Listing Detail
     :members: ResponseListingDetail 
 
 .. note::
-    limit (optional) is the number of results desired per page. push_id_start 
-    (optional) specifies the id of the first response to return.  
+    limit (optional) is the number of results desired per page.
+    push_id_start (optional) specifies the id of the first response to return.
 
- 
