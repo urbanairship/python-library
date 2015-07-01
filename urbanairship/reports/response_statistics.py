@@ -34,3 +34,21 @@ class ResponseListing(object):
 
         response = self.airship._request('GET', None, self.url, version=3, params=params)
         return response.json()
+
+
+class DevicesReportAPI(object):
+    def __init__(self, airship):
+        self.airship = airship
+
+    def get(self, date):
+        if not date:
+            raise TypeError("date cannot be empty")
+        if not isinstance(date, datetime):
+            raise ValueError(
+                'date must be a datetime object')
+        url = common.REPORTS_URL + 'devices/'
+        params = {
+            'date': date.strftime('%Y-%m-%dT%H:%M:%S')
+        }
+        response = self.airship._request('GET', None, url, version=3, params=params)
+        return response.json()
