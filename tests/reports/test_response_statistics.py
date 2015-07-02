@@ -127,3 +127,21 @@ class TestDevicesReportAPI(unittest.TestCase):
         self.assertEqual(devices['counts']['ios']['opted_in'], 0)
         self.assertEqual(devices['counts']['ios']['opted_out'], 0)
         self.assertEqual(devices['counts']['ios']['uninstalled'], 10)
+
+    def test_invalid_datetime(self):
+        airship = ua.Airship('key', 'secret')
+        s = ua.reports.DevicesReportAPI(airship)
+        self.assertRaises(
+            ValueError,
+            callableObj=s.get,
+            date='2015-07-01'
+        )
+
+    def test_empty_date(self):
+        airship = ua.Airship('key', 'secret')
+        s = ua.reports.ResponseListing(airship)
+        self.assertRaises(
+            TypeError,
+            callableObj=s.get,
+            date=None,
+        )
