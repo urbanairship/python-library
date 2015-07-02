@@ -83,3 +83,47 @@ class TestResponseListing(unittest.TestCase):
             start_date=None,
             end_date=end_date
         )
+
+
+class TestDevicesReportAPI(unittest.TestCase):
+    def test_devices_report(self):
+        mock_response = requests.Response()
+        mock_response._content = json.dumps({
+            "total_unique_devices": 150,
+            "date_computed": "2014-10-01T08:31:54.000Z",
+            "date_closed": "2014-10-01T00:00:00.000Z",
+            "counts": {
+                "android": {
+                    "unique_devices": 50,
+                    "opted_in": 0,
+                    "opted_out": 0,
+                    "uninstalled": 10
+                },
+                "ios": {
+                    "unique_devices": 50,
+                    "opted_in": 0,
+                    "opted_out": 0,
+                    "uninstalled": 10
+                },
+            }
+        }).encode('utf-8')
+
+        ua.Airship._request = Mock()
+        ua.Airship._request.side_effect = [mock_response]
+
+        airship = ua.Airship('key', 'secret')
+        push_date = datetime(2014, 10, 1)
+        d = ua.reports.DevicesReportAPI(airship)
+        devices = d.get(push_date)
+
+        self.assertEqual(devices['total_unique_devices'], 150)
+        self.assertEqual(devices['date_computed'], "2014-10-01T08:31:54.000Z")
+        self.assertEqual(devices['date_closed'], "2014-10-01T00:00:00.000Z")
+        self.assertEqual(devices['counts']['android']['unique_devices'], 50)
+        self.assertEqual(devices['counts']['android']['opted_in'], 0)
+        self.assertEqual(devices['counts']['android']['opted_out'], 0)
+        self.assertEqual(devices['counts']['android']['uninstalled'], 10)
+        self.assertEqual(devices['counts']['ios']['unique_devices'], 50)
+        self.assertEqual(devices['counts']['ios']['opted_in'], 0)
+        self.assertEqual(devices['counts']['ios']['opted_out'], 0)
+        self.assertEqual(devices['counts']['ios']['uninstalled'], 10)
