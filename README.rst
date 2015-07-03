@@ -41,7 +41,7 @@ Usage
 See the `full documentation
 <http://docs.urbanairship.com/reference/libraries/python>`_, as well as the
 `Urban Airship API Documentation
-<http://docs.urbanairship.com/reference/api/>`_.
+<http://docs.urbanairship.com/api/ua.html>`_.
 
 Simple iOS Push
 ---------------
