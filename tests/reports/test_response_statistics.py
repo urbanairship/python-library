@@ -179,3 +179,54 @@ class TestDevicesReportAPI(unittest.TestCase):
             callableObj=s.get,
             date=None,
         )
+
+
+class TestOptInList(unittest.TestCase):
+    def test_opt_in_list(self):
+        mock_response = requests.Response()
+        mock_response._content = json.dumps({
+            "optins": [
+                {
+                    "android": 50,
+                    "date": "2012-12-01 00:00:00",
+                    "ios": 23
+                },
+                {
+                    "android": 13,
+                    "date": "2012-2-01 00:00:00",
+                    "ios": 8
+                },
+                {
+                    "android": 5,
+                    "date": "2012-3-01 00:00:00",
+                    "ios": 88
+                }
+            ]
+        }).encode('utf-8')
+
+        ua.Airship._request = Mock()
+        ua.Airship._request.side_effect = [mock_response]
+
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2012, 12, 1)
+        end_date = datetime(2012, 4, 1)
+        precision = 'MONTHLY'
+
+        response_list = ua.reports.OptInList(airship, start_date, end_date, precision)
+
+        opt_in_list = []
+
+        for response in response_list:
+            opt_in_list.append(response)
+
+        self.assertEqual(opt_in_list[0].android, 50)
+        self.assertEqual(opt_in_list[0].date, datetime(2012, 12, 1))
+        self.assertEqual(opt_in_list[0].ios, 23)
+
+        self.assertEqual(opt_in_list[1].android, 13)
+        self.assertEqual(opt_in_list[1].date, datetime(2012, 2, 1))
+        self.assertEqual(opt_in_list[1].ios, 8)
+
+        self.assertEqual(opt_in_list[2].android, 5)
+        self.assertEqual(opt_in_list[2].date, datetime(2012, 3, 1))
+        self.assertEqual(opt_in_list[2].ios, 88)
