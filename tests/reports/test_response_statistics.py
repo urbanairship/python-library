@@ -173,7 +173,7 @@ class TestDevicesReportAPI(unittest.TestCase):
 
     def test_empty_date(self):
         airship = ua.Airship('key', 'secret')
-        s = ua.reports.ResponseListing(airship)
+        s = ua.reports.DevicesReportAPI(airship)
         self.assertRaises(
             TypeError,
             callableObj=s.get,
