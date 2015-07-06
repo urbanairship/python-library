@@ -4,6 +4,6 @@ from .per_push import (
 )
 from .response_statistics import (
     IndividualResponseStats,
-    ResponseListing,
+    ResponseList,
     DevicesReportAPI,
 )
