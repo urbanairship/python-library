@@ -46,14 +46,13 @@ copyright = u'2015, Urban Airship'
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-#
-# The short X.Y version.
 
 __about__ = {}
 
 with open("../urbanairship/__about__.py") as fp:
     exec(fp.read(), None, __about__)
 
+# The short X.Y version.
 version = __about__["__version__"].read().strip().rstrip('b').rstrip('a')
 # The full version, including alpha/beta/rc tags.
 release = __about__["__version__"].read().strip()
