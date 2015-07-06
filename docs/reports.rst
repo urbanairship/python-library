@@ -2,6 +2,25 @@
 Reports
 *******
 
+Individual Push Response Stats
+==============================
+Returns detailed report information about a specific push notification.
+Use the push_id, which is the identifier returned by the API that represents a
+specific push message delivery.
+For more information,
+see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship('appkey', 'master_secret')
+    d = ua.reports.IndividualResponseStats(airship)
+    statistics = d.get('push_id')
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: IndividualPushResponseStats
+
+
 Per Push Reporting
 ==================
 Retrieve data specific to the performance of an individual push.
@@ -97,3 +116,32 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
+
+Response Listing
+==================
+Get a listing of all pushes and basic response information in a given
+timeframe by instantiating an iterator object using ResponseList. 
+Start and end date times are required parameters.
+For more information, see:
+http://docs.urbanairship.com/api/ua.html#response-listing
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 12, 25)
+    end_date = datetime(2015, 12, 30)
+    limit = 20
+    response_list = ua.reports.ResponseList(airship, start_date, end_date, 
+        limit, 'start_id')
+    for response in response_list:
+        print(response.push_uuid, response.push_time, response.push_type,
+            response.direct_responses, response.sends, response.group_id)
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: ResponseListing
+
+.. note::
+    limit (optional) is the number of results desired per page.
+    push_id_start (optional) specifies the id of the first response to return.
+
