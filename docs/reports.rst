@@ -167,3 +167,55 @@ http://docs.urbanairship.com/api/ua.html#response-listing
     limit (optional) is the number of results desired per page.
     push_id_start (optional) specifies the id of the first response to return.
 
+Opt-In Report
+=============
+Get the number of opted-in Push users who access the app within the specified 
+time period.
+For more information, see:
+http://docs.urbanairship.com/api/ua.html#opt-in-report
+
+.. code-block:: python
+
+  import urbanairship as ua
+  from datetime import datetime
+  
+  airship = ua.Airship('appkey', 'master_secret')
+  start_date = datetime(2015, 6, 1)
+  end_date = datetime(2015, 7, 1)
+  precision = 'HOURLY'
+  list = ua.reports.OptInList(airship, start_date, end_date, precision)
+  for resp in list:
+     print(resp.date, resp.android, resp.ios) 
+
+.. automodule: urbanairship.reports.response_statistics
+    :members: OptInReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
+Opt-Out Report
+=============
+Get the number of opted-out Push users who access the app within the specified 
+time period.
+For more information, see:
+http://docs.urbanairship.com/api/ua.html#opt-out-report
+
+.. code-block:: python
+
+  import urbanairship as ua
+  from datetime import datetime
+  
+  airship = ua.Airship('appkey', 'master_secret')
+  start_date = datetime(2015, 6, 1)
+  end_date = datetime(2015, 7, 1)
+  precision = 'HOURLY'
+  list = ua.reports.OptOutList(airship, start_date, end_date, precision)
+  for resp in list:
+     print(resp.date, resp.android, resp.ios) 
+
+.. automodule: urbanairship.reports.response_statistics
+    :members: OptInReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
