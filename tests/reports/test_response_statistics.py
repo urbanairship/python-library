@@ -280,3 +280,6 @@ class TestOptInList(unittest.TestCase):
             end_date=end_date,
             precision=None
         )
+
+class TestOptOutList(TestOptInList):
+    ua.reports.OptInList = ua.reports.OptOutList

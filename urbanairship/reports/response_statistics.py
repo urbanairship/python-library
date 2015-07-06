@@ -145,7 +145,7 @@ class DevicesReportAPI(object):
         return response.json()
 
 
-class OptInAndOutInfo(object):
+class OptInOrOutInfo(object):
     android = None
     date = None
     ios = None
@@ -179,10 +179,10 @@ class OptInList(ReportListParent):
 
     def __next__(self):
         try:
-            return OptInAndOutInfo.from_payload(next(self._token_iter))
+            return OptInOrOutInfo.from_payload(next(self._token_iter))
         except StopIteration:
             self._fetch_next_page()
-            return OptInAndOutInfo.from_payload(next(self._token_iter))
+            return OptInOrOutInfo.from_payload(next(self._token_iter))
 
     def _load_page(self, url):
         params = {
@@ -199,23 +199,6 @@ class OptInList(ReportListParent):
         )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
-
-    def getall(self):
-        params = {
-            'start': self.start_date.strftime('%Y-%m-%d %H:%M:%S'),
-            'end': self.end_date.strftime('%Y-%m-%d %H:%M:%S')
-        }
-        if self.precision is not None:
-            params['precision'] = self.precision
-
-        response = self._airship._request(
-            method='GET',
-            body=None,
-            url=self.start_url,
-            version=3,
-            params=params
-        )
-        return response.json()
 
 
 class OptOutList(OptInList):

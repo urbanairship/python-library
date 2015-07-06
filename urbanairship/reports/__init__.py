@@ -6,6 +6,7 @@ from .response_statistics import (
     IndividualResponseStats,
     ResponseList,
     DevicesReportAPI,
-    OptInAndOutInfo,
+    OptInOrOutInfo,
     OptInList,
+    OptOutList,
 )
