@@ -45,6 +45,7 @@ http://docs.urbanairship.com/api/ua.html#single-request
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushDetail
+    :noindex:
 
 Batch Request
 -------------
@@ -60,6 +61,7 @@ see: http://docs.urbanairship.com/api/ua.html#batch-request
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushDetail
+    :noindex:
 
 .. note::
     There is a maximum of 100 Push IDs per request
@@ -79,6 +81,7 @@ see: http://docs.urbanairship.com/api/ua.html#per-push-series
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
+    :noindex:
 
 Series With Precision
 ---------------------
@@ -95,6 +98,7 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
+    :noindex:
 
 Series With Precision and Range
 -------------------------------
@@ -116,7 +120,8 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
-
+    :noindex:
+    
 Response Listing
 ==================
 Get a listing of all pushes and basic response information in a given
@@ -144,4 +149,3 @@ http://docs.urbanairship.com/api/ua.html#response-listing
 .. note::
     limit (optional) is the number of results desired per page.
     push_id_start (optional) specifies the id of the first response to return.
-
