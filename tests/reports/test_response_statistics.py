@@ -230,3 +230,53 @@ class TestOptInList(unittest.TestCase):
         self.assertEqual(opt_in_list[2].android, 5)
         self.assertEqual(opt_in_list[2].date, datetime(2012, 3, 1))
         self.assertEqual(opt_in_list[2].ios, 88)
+
+    def test_invalid_datetime(self):
+        airship = ua.Airship('key', 'secret')
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            ValueError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date='2015-7-1',
+            end_date=end_date,
+            precision='HOURLY',
+        )
+
+    def test_empty_date(self):
+        airship = ua.Airship('key', 'secret')
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            TypeError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=None,
+            end_date=end_date,
+            precision='HOURLY',
+        )
+
+    def test_invalid_precision(self):
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2015, 7, 1)
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            ValueError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=start_date,
+            end_date=end_date,
+            precision='foo'
+        )
+
+    def test_empty_precision(self):
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2015, 7, 1)
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            TypeError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=start_date,
+            end_date=end_date,
+            precision=None
+        )
