@@ -10,9 +10,6 @@ specific push message delivery.
 For more information,
 see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics
 
--------------------------------------
-Individual Push Response Stats Detail
--------------------------------------
 .. code-block:: python
 
     import urbanairship as ua
@@ -21,7 +18,7 @@ Individual Push Response Stats Detail
     statistics = d.get('push_id')
 
 .. automodule:: urbanairship.reports.response_statistics
-    :members: IndividualPushResponseStatsDetail
+    :members: IndividualPushResponseStats
 
 
 Per Push Reporting
@@ -122,27 +119,27 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 
 Response Listing
 ==================
-Get a listing of all pushes, plus basic response information, in a given
-timeframe. Start and end date times are required parameters.
-
+Get a listing of all pushes and basic response information in a given
+timeframe by instantiating an iterator object using ResponseList. 
+Start and end date times are required parameters.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#response-listing
-
------------------------
-Response Listing Detail
------------------------
 
 .. code-block:: python
 
     import urbanairship as ua
     airship = ua.Airship('appkey', 'master_secret')
-    d = ua.reports.ResponseListing(airship)
     start_date = datetime(2015, 12, 25)
     end_date = datetime(2015, 12, 30)
-    listing = d.get(start_date, end_date, limit, 'start_id')
+    limit = 20
+    response_list = ua.reports.ResponseList(airship, start_date, end_date, 
+        limit, 'start_id')
+    for response in response_list:
+        print(response.push_uuid, response.push_time, response.push_type,
+            response.direct_responses, response.sends, response.group_id)
 
 .. automodule:: urbanairship.reports.response_statistics
-    :members: ResponseListingDetail 
+    :members: ResponseListing
 
 .. note::
     limit (optional) is the number of results desired per page.
