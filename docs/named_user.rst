@@ -18,6 +18,7 @@ http://docs.urbanairship.com/api/ua.html#listing
         print(n.named_user_id)
 
 .. automodule:: urbanairship.devices.named_users
+   :noindex:
 
 
 Association
@@ -35,6 +36,7 @@ http://docs.urbanairship.com/api/ua.html#association
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
+    :noindex:
 
 .. note::
     You may only associate up to 20 channels to a Named User.
@@ -55,6 +57,7 @@ http://docs.urbanairship.com/api/ua.html#disassociation
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
+    :noindex:
 
 Lookup
 ------
@@ -71,6 +74,7 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#lookup
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
+    :noindex:
 
 Tags
 ----
@@ -93,6 +97,7 @@ see: http://docs.urbanairship.com/api/ua.html#tags-named-users
 
 .. automodule:: urbanairship.devices.named_users
     :members: NamedUser
+    :noindex:
 
 .. note::
     A single request may contain an add or remove field, both, or a single set

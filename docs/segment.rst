@@ -18,6 +18,7 @@ http://docs.urbanairship.com/api/ua.html#segments-information
         print(segment.display_name)
 
 .. automodule:: urbanairship.devices.segment
+    :noindex:
 
 
 Creating a Segment 
@@ -36,6 +37,8 @@ http://docs.urbanairship.com/api/ua.html#segment-creation
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
+    :noindex:
+
 .. note::
     A segment's id is automatically set upon calling *segment.create(airship)*
     and can be accessed using *segment.id*
@@ -58,6 +61,7 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
+    :noindex:
 
 
 Deleting a Segment
@@ -76,6 +80,7 @@ http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
 
 .. automodule:: urbanairship.devices.segment
     :members: Segment
+    :noindex:
 
 
 Segment Lookup 
@@ -91,4 +96,5 @@ http://docs.urbanairship.com/api/ua.html#get--api-segments-(segment_id)
     segment.from_id(airship, "segment_id")
 
 .. automodule:: urbanairship.devices.segment
-    :members: segment
+    :members: Segment
+    :noindex:

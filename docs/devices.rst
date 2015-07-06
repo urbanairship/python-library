@@ -20,6 +20,7 @@ using :py:class:`ChannelList`.
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelList, ChannelInfo
+   :noindex:
 
 Channel Lookup
 --------------
@@ -38,6 +39,7 @@ Device metadata is fetched for a specific channel by using
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelInfo
+   :noindex:
 
 Blackberry PIN Lookup
 ---------------------
@@ -55,6 +57,7 @@ device PIN by using :py:class:`DevicePINInfo:pin_lookup`
 
 .. automodule:: urbanairship.devices.devicelist
    :members: DevicePINInfo
+   :noindex:
 
 Device Listing
 --------------
@@ -73,6 +76,7 @@ type of device. The available iterators are :py:class:`DeviceTokenList`,
 
 .. automodule:: urbanairship.devices.devicelist
    :members: DeviceTokenList, DevicePINList, APIDList, DeviceInfo
+   :noindex:
 
 Feedback
 --------
@@ -91,5 +95,6 @@ timestamp. For more information, see: `the documentation on feedback
 
 .. automodule:: urbanairship.devices.devicelist
    :members: Feedback
+   :noindex:
 
 .. _feedback: http://docs.urbanairship.com/api/ua.html#feedback
