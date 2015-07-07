@@ -138,7 +138,7 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
     :noindex:
-
+    
 Response Listing
 ==================
 Get a listing of all pushes and basic response information in a given

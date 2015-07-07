@@ -66,7 +66,7 @@ class IndividualResponseStats(object):
 
     @classmethod
     def from_payload(cls, payload):
-        """Create based on results from a ChannelList iterator."""
+        """Create based on results from a ResponseList iterator."""
         obj = cls()
         for key in payload:
             if key in 'push_time':
