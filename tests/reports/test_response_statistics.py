@@ -157,7 +157,6 @@ class TestResponseList(unittest.TestCase):
         self.assertEqual(push_responses[1].direct_responses, 23)
         self.assertEqual(push_responses[1].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
 
-
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
         end_date = datetime(2015, 7, 2)
