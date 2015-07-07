@@ -188,7 +188,7 @@ information, see: http://docs.urbanairship.com/api/ua.html#response-report
         resp.ios['influenced'], resp.ios['direct']) 
 
 .. automodule: urbanairship.reports.response_statistics
-    :members: PushReport
+    :members: ResponseReport
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
@@ -243,7 +243,7 @@ http://docs.urbanairship.com/api/ua.html#app-opens-report
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
-    :members: OptInReport
+    :members: AppOpensReport
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
@@ -269,7 +269,7 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
-    :members: OptInReport
+    :members: TimeInAppReport
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
@@ -323,7 +323,7 @@ http://docs.urbanairship.com/api/ua.html#opt-out-report
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
-    :members: OptInReport
+    :members: OptOutReport
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
