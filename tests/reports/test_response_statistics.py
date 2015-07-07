@@ -1,9 +1,9 @@
 import unittest
 import requests
-from mock import Mock
 import json
-from datetime import datetime
 import urbanairship as ua
+from mock import Mock
+from datetime import datetime
 
 
 class TestResponseStats(unittest.TestCase):
@@ -156,7 +156,6 @@ class TestResponseList(unittest.TestCase):
         self.assertEqual(push_responses[1].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[1].direct_responses, 23)
         self.assertEqual(push_responses[1].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
-
 
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
