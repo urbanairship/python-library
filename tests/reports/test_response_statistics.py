@@ -1,9 +1,9 @@
 import unittest
 import requests
-from mock import Mock
 import json
-from datetime import datetime
 import urbanairship as ua
+from mock import Mock
+from datetime import datetime
 
 
 class TestResponseStats(unittest.TestCase):
