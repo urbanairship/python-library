@@ -11,7 +11,6 @@ class ReportListParent(object):
     data_attribute = None
     _page = None
 
-    @abstractmethod
     def __init__(self, airship, start_date, end_date):
         self._airship = airship
         self.next_url = self.start_url
@@ -146,10 +145,6 @@ class DevicesReportAPI(object):
 
 
 class CountStatsInfo(object):
-    android = None
-    date = None
-    ios = None
-
     @classmethod
     def from_payload(cls, payload):
         obj = cls()
@@ -205,18 +200,23 @@ class OptOutList(OptInList):
     start_url = common.REPORTS_URL + 'optouts/'
     data_attribute = 'optouts'
 
+
 class PushList(OptInList):
     start_url = common.REPORTS_URL + 'sends/'
     data_attribute = 'sends'
+
 
 class ResponseReportList(OptInList):
     start_url = common.REPORTS_URL + 'responses/'
     data_attribute = 'responses'
 
+
 class AppOpensList(OptInList):
     start_url = common.REPORTS_URL + 'opens/'
     data_attribute = 'opens'
 
+
 class TimeInAppList(OptInList):
     start_url = common.REPORTS_URL + 'timeinapp/'
     data_attribute = 'timeinapp'
+    

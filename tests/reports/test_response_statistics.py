@@ -185,7 +185,7 @@ class TestOptInList(unittest.TestCase):
     test_class = ua.reports.OptInList
     response_key = 'optins'
 
-    def test_opt_in_list(self):
+    def test_list(self):
         mock_response = requests.Response()
         mock_response._content = json.dumps({
             self.response_key: [
