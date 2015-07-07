@@ -96,6 +96,68 @@ class TestResponseList(unittest.TestCase):
         self.assertEqual(push_responses[2].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[2].direct_responses, 7)
 
+    def test_next_page(self):
+        mock_response = requests.Response()
+        mock_response._content = json.dumps(
+            {
+                'pushes': [
+                    {
+                        'push_uuid': 'ae46a0b4-8130-4fcd-8464-0c601d0390be',
+                        'sends': 0,
+                        'push_time': '2015-06-13 23:27:46',
+                        'push_type': 'UNICAST_PUSH',
+                        'direct_responses': 10,
+                        'group_id': 'de4e1149-9dfb-4c29-a639-090b29bada45'
+                    }
+                ],
+                'next_page': 'next_page_url'
+            }
+        ).encode('utf-8')
+
+        mock_next_response = requests.Response()
+        mock_next_response._content = json.dumps(
+            {
+                'pushes': [
+                    {
+                        'push_uuid': 'de4e1149-9dfb-4c29-a639-090b29bada45',
+                        'sends': 1,
+                        'push_time': '2015-06-29 23:42:39',
+                        'push_type': 'UNICAST_PUSH',
+                        'direct_responses': 23,
+                        'group_id': 'de4e1149-9dfb-4c29-a639-090b29bada45'
+                    }
+                ]
+            }
+        ).encode('utf-8')
+
+        ua.Airship._request = Mock()
+        ua.Airship._request.side_effect = [mock_response, mock_next_response]
+
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2015, 6, 29)
+        end_date = datetime(2015, 6, 30)
+        return_list = ua.reports.ResponseList(airship, start_date, end_date)
+
+        push_responses = []
+
+        for response in return_list:
+            push_responses.append(response)
+
+        self.assertEqual(push_responses[0].push_uuid, 'ae46a0b4-8130-4fcd-8464-0c601d0390be')
+        self.assertEqual(push_responses[0].sends, 0)
+        self.assertEqual(push_responses[0].push_time, datetime(2015, 6, 13, 23, 27, 46))
+        self.assertEqual(push_responses[0].push_type, 'UNICAST_PUSH')
+        self.assertEqual(push_responses[0].direct_responses, 10)
+        self.assertEqual(push_responses[0].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+
+        self.assertEqual(push_responses[1].push_uuid, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[1].sends, 1)
+        self.assertEqual(push_responses[1].push_time, datetime(2015, 6, 29, 23, 42, 39))
+        self.assertEqual(push_responses[1].push_type, 'UNICAST_PUSH')
+        self.assertEqual(push_responses[1].direct_responses, 23)
+        self.assertEqual(push_responses[1].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+
+
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
         end_date = datetime(2015, 7, 2)

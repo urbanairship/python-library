@@ -23,7 +23,7 @@ class IndividualResponseStats(object):
 
     @classmethod
     def from_payload(cls, payload):
-        """Create based on results from a ChannelList iterator."""
+        """Create based on results from a ResponseList iterator."""
         obj = cls()
         for key in payload:
             if key in 'push_time':
@@ -49,7 +49,6 @@ class ResponseList(object):
     end_date = None
     limit = None
     start_id = None
-    id_key = NotImplemented
     data_attribute = 'pushes'
 
     def __init__(self, airship, start_date, end_date, limit=None, start_id=None):
