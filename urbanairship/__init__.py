@@ -64,9 +64,13 @@ from .reports import (
     ResponseList,
     DevicesReportAPI,
     ResponseList,
-    OptInOrOutInfo,
+    CountStatsInfo,
     OptInList,
     OptOutList,
+    PushReportList,
+    ResponseReportList,
+    AppOpensReportList,
+    TimeInAppReport,
 )
 
 __all__ = [
@@ -129,9 +133,13 @@ __all__ = [
     ResponseList,
     DevicesReportAPI,
     ResponseList,
-    OptInOrOutInfo,
+    CountStatsInfo,
     OptInList,
     OptOutList,
+    PushReportList,
+    ResponseReportList,
+    AppOpensReportList,
+    TimeInAppReport,
 ]
 
 # Silence urllib3 INFO logging by default

@@ -6,7 +6,11 @@ from .response_statistics import (
     IndividualResponseStats,
     ResponseList,
     DevicesReportAPI,
-    OptInOrOutInfo,
+    CountStatsInfo,
     OptInList,
     OptOutList,
+    PushReportList,
+    ResponseReportList,
+    AppOpensReportList,
+    TimeInAppReport,
 )

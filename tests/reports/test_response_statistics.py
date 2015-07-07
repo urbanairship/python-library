@@ -283,3 +283,15 @@ class TestOptInList(unittest.TestCase):
 
 class TestOptOutList(TestOptInList):
     ua.reports.OptInList = ua.reports.OptOutList
+
+class TestPushReportList(TestOptInList):
+    ua.reports.OptInList = ua.reports.PushReportList
+
+class TestResponseReportList(TestOptInList):
+    ua.reports.OptInList = ua.reports.ResponseReportList
+
+class TestAppOpensReportList(TestOptInList):
+    ua.reports.OptInList = ua.reports.AppOpensReportList
+
+class TestTimeInAppReport(TestOptInList):
+    ua.reports.OptInList = ua.reports.TimeInAppReport

@@ -145,7 +145,7 @@ class DevicesReportAPI(object):
         return response.json()
 
 
-class OptInOrOutInfo(object):
+class CountStatsInfo(object):
     android = None
     date = None
     ios = None
@@ -179,10 +179,10 @@ class OptInList(ReportListParent):
 
     def __next__(self):
         try:
-            return OptInOrOutInfo.from_payload(next(self._token_iter))
+            return CountStatsInfo.from_payload(next(self._token_iter))
         except StopIteration:
             self._fetch_next_page()
-            return OptInOrOutInfo.from_payload(next(self._token_iter))
+            return CountStatsInfo.from_payload(next(self._token_iter))
 
     def _load_page(self, url):
         params = {
@@ -203,3 +203,15 @@ class OptInList(ReportListParent):
 
 class OptOutList(OptInList):
     start_url = common.REPORTS_URL + 'optouts/'
+
+class PushReportList(OptInList):
+    start_url = common.REPORTS_URL + 'sends/'
+
+class ResponseReportList(OptInList):
+    start_url = common.REPORTS_URL + 'responses/'
+
+class AppOpensReportList(OptInList):
+    start_url = common.REPORTS_URL + 'opens/'
+
+class TimeInAppReport(OptInList):
+    start_url = common.REPORTS_URL + 'timeinapp/'
