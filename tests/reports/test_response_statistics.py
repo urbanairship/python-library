@@ -182,10 +182,13 @@ class TestDevicesReportAPI(unittest.TestCase):
 
 
 class TestOptInList(unittest.TestCase):
+    test_class = ua.reports.OptInList
+    response_key = 'optins'
+
     def test_opt_in_list(self):
         mock_response = requests.Response()
         mock_response._content = json.dumps({
-            "optins": [
+            self.response_key: [
                 {
                     "android": 50,
                     "date": "2012-12-01 00:00:00",
@@ -212,24 +215,24 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2012, 4, 1)
         precision = 'MONTHLY'
 
-        response_list = ua.reports.OptInList(airship, start_date, end_date, precision)
+        response_list = self.test_class(airship, start_date, end_date, precision)
 
-        opt_in_list = []
+        instantiated_list = []
 
         for response in response_list:
-            opt_in_list.append(response)
+            instantiated_list.append(response)
 
-        self.assertEqual(opt_in_list[0].android, 50)
-        self.assertEqual(opt_in_list[0].date, datetime(2012, 12, 1))
-        self.assertEqual(opt_in_list[0].ios, 23)
+        self.assertEqual(instantiated_list[0].android, 50)
+        self.assertEqual(instantiated_list[0].date, datetime(2012, 12, 1))
+        self.assertEqual(instantiated_list[0].ios, 23)
 
-        self.assertEqual(opt_in_list[1].android, 13)
-        self.assertEqual(opt_in_list[1].date, datetime(2012, 2, 1))
-        self.assertEqual(opt_in_list[1].ios, 8)
+        self.assertEqual(instantiated_list[1].android, 13)
+        self.assertEqual(instantiated_list[1].date, datetime(2012, 2, 1))
+        self.assertEqual(instantiated_list[1].ios, 8)
 
-        self.assertEqual(opt_in_list[2].android, 5)
-        self.assertEqual(opt_in_list[2].date, datetime(2012, 3, 1))
-        self.assertEqual(opt_in_list[2].ios, 88)
+        self.assertEqual(instantiated_list[2].android, 5)
+        self.assertEqual(instantiated_list[2].date, datetime(2012, 3, 1))
+        self.assertEqual(instantiated_list[2].ios, 88)
 
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
@@ -282,16 +285,21 @@ class TestOptInList(unittest.TestCase):
         )
 
 class TestOptOutList(TestOptInList):
-    ua.reports.OptInList = ua.reports.OptOutList
+    test_class = ua.reports.OptOutList
+    response_key = 'optouts'
 
 class TestPushReportList(TestOptInList):
-    ua.reports.OptInList = ua.reports.PushReportList
+    test_class = ua.reports.PushList
+    response_key = 'sends'
 
 class TestResponseReportList(TestOptInList):
-    ua.reports.OptInList = ua.reports.ResponseReportList
+    test_class = ua.reports.ResponseReportList
+    response_key = 'responses'
 
 class TestAppOpensReportList(TestOptInList):
-    ua.reports.OptInList = ua.reports.AppOpensReportList
+    test_class = ua.reports.AppOpensList
+    response_key = 'opens'
 
 class TestTimeInAppReport(TestOptInList):
-    ua.reports.OptInList = ua.reports.TimeInAppReport
+    test_class = ua.reports.TimeInAppList
+    response_key = 'timeinapp'

@@ -9,8 +9,8 @@ from .response_statistics import (
     CountStatsInfo,
     OptInList,
     OptOutList,
-    PushReportList,
+    PushList,
     ResponseReportList,
-    AppOpensReportList,
-    TimeInAppReport,
+    AppOpensList,
+    TimeInAppList,
 )

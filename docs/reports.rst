@@ -54,7 +54,7 @@ http://docs.urbanairship.com/api/ua.html#push-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.PushReportList(airship, start_date, end_date, precision)
+  list = ua.reports.PushList(airship, start_date, end_date, precision)
   for resp in list:
      print(resp.date, resp.android, resp.ios) 
 
@@ -184,7 +184,8 @@ information, see: http://docs.urbanairship.com/api/ua.html#response-report
   precision = 'HOURLY'
   list = ua.reports.ResponseReportList(airship, start_date, end_date, precision)
   for resp in list:
-     print(resp.date, resp.android, resp.ios) 
+     print(resp.date, resp.android['influenced'], resp.android['direct'], 
+        resp.ios['influenced'], resp.ios['direct']) 
 
 .. automodule: urbanairship.reports.response_statistics
     :members: PushReport
@@ -237,7 +238,7 @@ http://docs.urbanairship.com/api/ua.html#app-opens-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.AppOpensReportList(airship, start_date, end_date, precision)
+  list = ua.reports.AppOpensList(airship, start_date, end_date, precision)
   for resp in list:
      print(resp.date, resp.android, resp.ios) 
 
@@ -263,7 +264,7 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.TimeInAppReportist(airship, start_date, end_date, precision)
+  list = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
   for resp in list:
      print(resp.date, resp.android, resp.ios) 
 

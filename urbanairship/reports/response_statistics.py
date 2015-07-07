@@ -203,15 +203,20 @@ class OptInList(ReportListParent):
 
 class OptOutList(OptInList):
     start_url = common.REPORTS_URL + 'optouts/'
+    data_attribute = 'optouts'
 
-class PushReportList(OptInList):
+class PushList(OptInList):
     start_url = common.REPORTS_URL + 'sends/'
+    data_attribute = 'sends'
 
 class ResponseReportList(OptInList):
     start_url = common.REPORTS_URL + 'responses/'
+    data_attribute = 'responses'
 
-class AppOpensReportList(OptInList):
+class AppOpensList(OptInList):
     start_url = common.REPORTS_URL + 'opens/'
+    data_attribute = 'opens'
 
-class TimeInAppReport(OptInList):
+class TimeInAppList(OptInList):
     start_url = common.REPORTS_URL + 'timeinapp/'
+    data_attribute = 'timeinapp'
