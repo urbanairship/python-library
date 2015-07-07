@@ -66,7 +66,6 @@ class IndividualResponseStats(object):
 
     @classmethod
     def from_payload(cls, payload):
-        """Create based on results from a ChannelList iterator."""
         obj = cls()
         for key in payload:
             if key in 'push_time':
@@ -78,7 +77,6 @@ class IndividualResponseStats(object):
 
     @classmethod
     def get(cls, airship, push_id):
-        """Fetch metadata from a push ID"""
         url = common.REPORTS_URL + 'responses/' + push_id
         response = airship._request('GET', None, url, version=3)
         payload = response.json()
@@ -219,4 +217,3 @@ class AppOpensList(OptInList):
 class TimeInAppList(OptInList):
     start_url = common.REPORTS_URL + 'timeinapp/'
     data_attribute = 'timeinapp'
-    
