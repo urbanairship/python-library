@@ -272,7 +272,7 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
     :members: OptInReport
 
 .. note::
-    precision needs to be a member of ['hourly', 'daily', 'monthly']
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
 
 
 Opt-In Report
@@ -299,7 +299,7 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
     :members: OptInReport
 
 .. note::
-    precision needs to be a member of ['hourly', 'daily', 'monthly']
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
 
 
 Opt-Out Report
