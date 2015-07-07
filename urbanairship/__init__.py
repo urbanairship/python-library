@@ -64,7 +64,6 @@ from .reports import (
     ResponseList,
     DevicesReportAPI,
     ResponseList,
-    OptInOrOutInfo,
     OptInList,
     OptOutList,
 )
@@ -129,7 +128,6 @@ __all__ = [
     ResponseList,
     DevicesReportAPI,
     ResponseList,
-    OptInOrOutInfo,
     OptInList,
     OptOutList,
 ]

@@ -145,11 +145,7 @@ class DevicesReportAPI(object):
         return response.json()
 
 
-class OptInOrOutInfo(object):
-    android = None
-    date = None
-    ios = None
-
+class CountStatsInfo(object):
     @classmethod
     def from_payload(cls, payload):
         obj = cls()
@@ -179,10 +175,10 @@ class OptInList(ReportListParent):
 
     def __next__(self):
         try:
-            return OptInOrOutInfo.from_payload(next(self._token_iter))
+            return CountStatsInfo.from_payload(next(self._token_iter))
         except StopIteration:
             self._fetch_next_page()
-            return OptInOrOutInfo.from_payload(next(self._token_iter))
+            return CountStatsInfo.from_payload(next(self._token_iter))
 
     def _load_page(self, url):
         params = {
@@ -203,3 +199,4 @@ class OptInList(ReportListParent):
 
 class OptOutList(OptInList):
     start_url = common.REPORTS_URL + 'optouts/'
+    data_attribute = 'optouts'
