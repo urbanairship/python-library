@@ -49,7 +49,6 @@ class ResponseList(object):
     end_date = None
     limit = None
     start_id = None
-    id_key = NotImplemented
     data_attribute = 'pushes'
 
     def __init__(self, airship, start_date, end_date, limit=None, start_id=None):
