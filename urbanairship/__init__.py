@@ -53,7 +53,24 @@ from .devices import (
     ChannelTags,
     Segment,
     SegmentList,
-    ChannelUninstall
+    ChannelUninstall,
+    NamedUser,
+    NamedUserList,
+)
+
+from .reports import (
+    PerPushDetail,
+    PerPushSeries,
+    IndividualResponseStats,
+    ResponseList,
+    DevicesReportAPI,
+    ResponseList,
+    OptInList,
+    OptOutList,
+    PushList,
+    ResponseReportList,
+    AppOpensList,
+    TimeInAppList,
 )
 
 __all__ = [
@@ -107,7 +124,21 @@ __all__ = [
     Feedback,
     Segment,
     SegmentList,
-    ChannelUninstall
+    ChannelUninstall,
+    PerPushDetail,
+    PerPushSeries,
+    NamedUser,
+    NamedUserList,
+    IndividualResponseStats,
+    ResponseList,
+    DevicesReportAPI,
+    ResponseList,
+    OptInList,
+    OptOutList,
+    PushList,
+    ResponseReportList,
+    AppOpensList,
+    TimeInAppList,
 ]
 
 # Silence urllib3 INFO logging by default

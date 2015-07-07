@@ -11,6 +11,7 @@ Installation
 Using ``pip``::
 
    $ pip install urbanairship
+
 Using the library
 -----------------
 
@@ -85,6 +86,8 @@ Contents:
    channel_uninstall.rst
    segment.rst
    tags.rst
+   reports.rst
+   named_user.rst
    exceptions.rst
    examples.rst
 

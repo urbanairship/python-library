@@ -201,3 +201,7 @@ def absolute_date(resolution, start, end):
 
     payload = {resolution: {'start': start, 'end': end}}
     return payload
+
+
+def named_user(name):
+    return {'named_user': name}

@@ -46,6 +46,7 @@ combined with ``and_``, ``or_``, and ``not_``.
 
 .. automodule:: urbanairship.push.audience
    :members:
+   :noindex:
 
 
 Notification Payload
@@ -63,8 +64,7 @@ single piece of text:
 You can override the payload with platform-specific values as well.
 
 .. automodule:: urbanairship.push.payload
-   :members: notification, ios, android, blackberry, wns_payload,
-   mpns_payload
+   :members: notification, ios, android, blackberry, wns_payload, mpns_payload
 
 
 Actions
@@ -95,6 +95,7 @@ http://docs.urbanairship.com/api/ua.html#actions, example:
 
 .. automodule:: urbanairship.push.payload
    :members: notification, actions, ios, android, amazon
+   :noindex:
 
 Interactive Notifications
 -------------------------
@@ -134,6 +135,7 @@ Button actions can also be mapped to *actions* objects as shown below:
 
 .. automodule:: urbanairship.push.payload
    :members: notification, interactive
+   :noindex:
 
 
 Device Types

@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/urbanairship/python-library.svg?branch=master
+    :target: https://travis-ci.org/urbanairship/python-library
+
 About
 =====
 
@@ -38,7 +41,7 @@ Usage
 See the `full documentation
 <http://docs.urbanairship.com/reference/libraries/python>`_, as well as the
 `Urban Airship API Documentation
-<http://docs.urbanairship.com/reference/api/>`_.
+<http://docs.urbanairship.com/api/>`_.
 
 Simple iOS Push
 ---------------
