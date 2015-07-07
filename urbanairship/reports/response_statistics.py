@@ -11,7 +11,6 @@ class ReportListParent(object):
     data_attribute = None
     _page = None
 
-    @abstractmethod
     def __init__(self, airship, start_date, end_date):
         self._airship = airship
         self.next_url = self.start_url
