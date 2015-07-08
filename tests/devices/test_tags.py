@@ -61,11 +61,11 @@ class TestTags(unittest.TestCase):
                 test_tag.data,
                 {
                     'audience': {
-                        'ios_channels': [
+                        'ios_channel': [
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d8'
                         ],
-                        'android_channels': [
+                        'android_channel': [
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d6'
                         ]
                     },
@@ -99,10 +99,10 @@ class TestTags(unittest.TestCase):
                 tag.data,
                 {
                     'audience': {
-                        'ios_channels': [
+                        'ios_channel': [
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d11'
                         ],
-                        'android_channels': [
+                        'android_channel': [
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d12',
                             '9c36e8c7-5a73-47c0-9716-99fd3d4197d15'
                         ]
