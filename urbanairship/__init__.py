@@ -56,6 +56,7 @@ from .devices import (
     ChannelUninstall,
     NamedUser,
     NamedUserList,
+    StaticList,
 )
 
 from .reports import (
@@ -139,6 +140,7 @@ __all__ = [
     ResponseReportList,
     AppOpensList,
     TimeInAppList,
+    StaticList,
 ]
 
 # Silence urllib3 INFO logging by default
