@@ -54,8 +54,8 @@ http://docs.urbanairship.com/api/ua.html#push-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.PushList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.PushList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
@@ -182,8 +182,9 @@ information, see: http://docs.urbanairship.com/api/ua.html#response-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.ResponseReportList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.ResponseReportList(airship, start_date, end_date, 
+    precision)
+  for resp in listing:
      print(resp.date, resp.android['influenced'], resp.android['direct'], 
         resp.ios['influenced'], resp.ios['direct']) 
 
@@ -238,8 +239,8 @@ http://docs.urbanairship.com/api/ua.html#app-opens-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.AppOpensList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.AppOpensList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
@@ -264,8 +265,8 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
@@ -291,8 +292,8 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.OptInList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.OptInList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
@@ -318,8 +319,8 @@ http://docs.urbanairship.com/api/ua.html#opt-out-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.OptOutList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
