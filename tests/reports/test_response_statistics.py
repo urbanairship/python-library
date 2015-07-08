@@ -180,7 +180,7 @@ class TestResponseList(unittest.TestCase):
         )
 
 
-class TestDevicesReportAPI(unittest.TestCase):
+class TestDevicesReport(unittest.TestCase):
     def test_devices_report(self):
         mock_response = requests.Response()
         mock_response._content = json.dumps({
@@ -208,7 +208,7 @@ class TestDevicesReportAPI(unittest.TestCase):
 
         airship = ua.Airship('key', 'secret')
         push_date = datetime(2014, 10, 1)
-        d = ua.reports.DevicesReportAPI(airship)
+        d = ua.reports.DevicesReport(airship)
         devices = d.get(push_date)
 
         self.assertEqual(devices['total_unique_devices'], 150)
@@ -225,7 +225,7 @@ class TestDevicesReportAPI(unittest.TestCase):
 
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
-        s = ua.reports.DevicesReportAPI(airship)
+        s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             ValueError,
             callableObj=s.get,
@@ -234,7 +234,7 @@ class TestDevicesReportAPI(unittest.TestCase):
 
     def test_empty_date(self):
         airship = ua.Airship('key', 'secret')
-        s = ua.reports.DevicesReportAPI(airship)
+        s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             TypeError,
             callableObj=s.get,
