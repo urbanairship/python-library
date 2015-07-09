@@ -126,8 +126,10 @@ __all__ = [
     NamedUserList,
     IndividualResponseStats,
     ResponseList,
-    DevicesReportAPI,
+    DevicesReport,
     ResponseList,
+    OptInList,
+    OptOutList,
 ]
 
 # Silence urllib3 INFO logging by default
