@@ -126,7 +126,7 @@ class ResponseList(ReportListParent):
         self._token_iter = iter(page[self.data_attribute])
 
 
-class DevicesReportAPI(object):
+class DevicesReport(object):
     def __init__(self, airship):
         self.airship = airship
 

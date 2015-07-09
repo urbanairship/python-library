@@ -5,7 +5,7 @@ from .per_push import (
 from .response_statistics import (
     IndividualResponseStats,
     ResponseList,
-    DevicesReportAPI,
+    DevicesReport,
     OptInList,
     OptOutList,
 )
