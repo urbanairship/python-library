@@ -106,3 +106,21 @@ class ResponseList(object):
         )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
+
+
+class DevicesReport(object):
+    def __init__(self, airship):
+        self.airship = airship
+
+    def get(self, date):
+        if not date:
+            raise TypeError("date cannot be empty")
+        if not isinstance(date, datetime):
+            raise ValueError(
+                'date must be a datetime object')
+        url = common.REPORTS_URL + 'devices/'
+        params = {
+            'date': date.strftime('%Y-%m-%dT%H:%M:%S')
+        }
+        response = self.airship._request('GET', None, url, version=3, params=params)
+        return response.json()
