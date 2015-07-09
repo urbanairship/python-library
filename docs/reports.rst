@@ -20,7 +20,7 @@ see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistic
 .. automodule:: urbanairship.reports.response_statistics
     :members: IndividualPushResponseStats
 
-Devices Report API
+Devices Report 
 =================
 Returns an app’s opted-in and installed device counts broken out by device
 type. This endpoint returns the same data that populates the Devices Report.
@@ -32,11 +32,11 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#devices-repo
     airship = ua.Airship('appkey', 'master_secret')
     from datetime import datetime
     date = datetime(2014, 5, 5)
-    d = ua.reports.DevicesReportAPI(airship)
+    d = ua.reports.DevicesReport(airship)
     devices = d.get(date)
 
 .. automodule::urbanairship.reports.response_statistics
-    :members: DevicesReportAPI
+    :members: DevicesReport
 
 
 Push Report
