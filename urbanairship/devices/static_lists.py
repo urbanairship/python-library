@@ -38,7 +38,7 @@ class StaticList(object):
         """
 
         url = common.LISTS_URL + self.name + 'csv/'
-        response = self.airship._request(method='PUT', url=url, version=3, file=csv_file)
+        response = self.airship._request(method='PUT', body=csv_file, url=url, version=3)
         return response.json
 
     def lookup(self):
