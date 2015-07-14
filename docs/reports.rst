@@ -278,7 +278,7 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
 
 Opt-In Report
 =============
-Get the number of opted-in Push users who access the app within the specified 
+Get the number of opted-in push users who access the app within the specified 
 time period.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#opt-in-report
@@ -305,7 +305,7 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
 
 Opt-Out Report
 =============
-Get the number of opted-out Push users who access the app within the specified 
+Get the number of opted-out push users who access the app within the specified 
 time period.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#opt-out-report
