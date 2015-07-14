@@ -240,3 +240,111 @@ class TestDevicesReport(unittest.TestCase):
             callableObj=s.get,
             date=None,
         )
+
+
+class TestOptInList(unittest.TestCase):
+    test_class = ua.reports.OptInList
+    response_key = 'optins'
+
+    def test_list(self):
+        mock_response = requests.Response()
+        mock_response._content = json.dumps({
+            self.response_key: [
+                {
+                    "android": 50,
+                    "date": "2012-12-01 00:00:00",
+                    "ios": 23
+                },
+                {
+                    "android": 13,
+                    "date": "2012-2-01 00:00:00",
+                    "ios": 8
+                },
+                {
+                    "android": 5,
+                    "date": "2012-3-01 00:00:00",
+                    "ios": 88
+                }
+            ]
+        }).encode('utf-8')
+
+        ua.Airship._request = Mock()
+        ua.Airship._request.side_effect = [mock_response]
+
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2012, 12, 1)
+        end_date = datetime(2012, 4, 1)
+        precision = 'MONTHLY'
+
+        response_list = self.test_class(airship, start_date, end_date, precision)
+
+        instantiated_list = []
+
+        for response in response_list:
+            instantiated_list.append(response)
+
+        self.assertEqual(instantiated_list[0].android, 50)
+        self.assertEqual(instantiated_list[0].date, datetime(2012, 12, 1))
+        self.assertEqual(instantiated_list[0].ios, 23)
+
+        self.assertEqual(instantiated_list[1].android, 13)
+        self.assertEqual(instantiated_list[1].date, datetime(2012, 2, 1))
+        self.assertEqual(instantiated_list[1].ios, 8)
+
+        self.assertEqual(instantiated_list[2].android, 5)
+        self.assertEqual(instantiated_list[2].date, datetime(2012, 3, 1))
+        self.assertEqual(instantiated_list[2].ios, 88)
+
+    def test_invalid_datetime(self):
+        airship = ua.Airship('key', 'secret')
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            ValueError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date='2015-7-1',
+            end_date=end_date,
+            precision='HOURLY',
+        )
+
+    def test_empty_date(self):
+        airship = ua.Airship('key', 'secret')
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            TypeError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=None,
+            end_date=end_date,
+            precision='HOURLY',
+        )
+
+    def test_invalid_precision(self):
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2015, 7, 1)
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            ValueError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=start_date,
+            end_date=end_date,
+            precision='foo'
+        )
+
+    def test_empty_precision(self):
+        airship = ua.Airship('key', 'secret')
+        start_date = datetime(2015, 7, 1)
+        end_date = datetime(2015, 7, 2)
+        self.assertRaises(
+            TypeError,
+            callableObj=ua.reports.OptInList,
+            airship=airship,
+            start_date=start_date,
+            end_date=end_date,
+            precision=None
+        )
+
+class TestOptOutList(TestOptInList):
+    test_class = ua.reports.OptOutList
+    response_key = 'optouts'

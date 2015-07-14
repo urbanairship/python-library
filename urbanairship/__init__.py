@@ -63,6 +63,8 @@ from .reports import (
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
+    OptInList,
+    OptOutList,
 )
 
 __all__ = [
@@ -124,6 +126,8 @@ __all__ = [
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
+    OptInList,
+    OptOutList,
 ]
 
 # Silence urllib3 INFO logging by default
