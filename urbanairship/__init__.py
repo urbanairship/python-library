@@ -63,7 +63,6 @@ from .reports import (
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
-    ResponseList,
     OptInList,
     OptOutList,
 )
@@ -127,7 +126,6 @@ __all__ = [
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
-    ResponseList,
     OptInList,
     OptOutList,
 ]
