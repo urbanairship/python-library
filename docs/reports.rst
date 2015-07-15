@@ -20,7 +20,7 @@ see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistic
 .. automodule:: urbanairship.reports.response_statistics
     :members: IndividualPushResponseStats
 
-Devices Report API
+Devices Report 
 =================
 Returns an app’s opted-in and installed device counts broken out by device
 type. This endpoint returns the same data that populates the Devices Report.
@@ -32,11 +32,11 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#devices-repo
     airship = ua.Airship('appkey', 'master_secret')
     from datetime import datetime
     date = datetime(2014, 5, 5)
-    d = ua.reports.DevicesReportAPI(airship)
+    d = ua.reports.DevicesReport(airship)
     devices = d.get(date)
 
 .. automodule::urbanairship.reports.response_statistics
-    :members: DevicesReportAPI
+    :members: DevicesReport
 
 
 Push Report
@@ -277,7 +277,7 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
 
 Opt-In Report
 =============
-Get the number of opted-in Push users who access the app within the specified 
+Get the number of opted-in push users who access the app within the specified 
 time period.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#opt-in-report
@@ -291,8 +291,8 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.OptInList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.OptInList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
@@ -304,7 +304,7 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
 
 Opt-Out Report
 =============
-Get the number of opted-out Push users who access the app within the specified 
+Get the number of opted-out push users who access the app within the specified 
 time period.
 For more information, see:
 http://docs.urbanairship.com/api/ua.html#opt-out-report
@@ -318,8 +318,8 @@ http://docs.urbanairship.com/api/ua.html#opt-out-report
   start_date = datetime(2015, 6, 1)
   end_date = datetime(2015, 7, 1)
   precision = 'HOURLY'
-  list = ua.reports.OptOutList(airship, start_date, end_date, precision)
-  for resp in list:
+  listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
+  for resp in listing:
      print(resp.date, resp.android, resp.ios) 
 
 .. automodule: urbanairship.reports.response_statistics
