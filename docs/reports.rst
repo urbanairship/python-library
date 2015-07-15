@@ -47,18 +47,18 @@ http://docs.urbanairship.com/api/ua.html#push-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.PushList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.PushList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: PushReport
 
 .. note::
@@ -175,20 +175,24 @@ information, see: http://docs.urbanairship.com/api/ua.html#response-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.ResponseReportList(airship, start_date, end_date, 
-    precision)
-  for resp in listing:
-     print(resp.date, resp.android['influenced'], resp.android['direct'], 
-        resp.ios['influenced'], resp.ios['direct']) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.ResponseReportList(
+        airship,
+        start_date,
+        end_date,
+        precision
+    )
+    for resp in listing:
+        print(resp.date, resp.android['influenced'], resp.android['direct'],
+            resp.ios['influenced'], resp.ios['direct'])
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: ResponseReport
 
 .. note::
@@ -232,18 +236,18 @@ http://docs.urbanairship.com/api/ua.html#app-opens-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.AppOpensList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.AppOpensList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: AppOpensReport
 
 .. note::
@@ -258,18 +262,18 @@ http://docs.urbanairship.com/api/ua.html#time-in-app-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: TimeInAppReport
 
 .. note::
@@ -285,18 +289,18 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.OptInList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.OptInList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: OptInReport
 
 .. note::
@@ -312,18 +316,18 @@ http://docs.urbanairship.com/api/ua.html#opt-out-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: OptOutReport
 
 .. note::
