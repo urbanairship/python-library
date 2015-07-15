@@ -38,6 +38,34 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#devices-repo
 .. automodule::urbanairship.reports.response_statistics
     :members: DevicesReport
 
+
+Push Report
+===========
+Get the number of pushes you have sent within a specified time period.
+For more information, see: 
+http://docs.urbanairship.com/api/ua.html#push-report
+
+.. code-block:: python
+
+    import urbanairship as ua
+    from datetime import datetime
+
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.PushList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: PushReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
+
 Per Push Reporting
 ==================
 Retrieve data specific to the performance of an individual push.
@@ -138,7 +166,39 @@ http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision-range
 .. automodule:: urbanairship.reports.per_push
     :members: PerPushSeries
     :noindex:
-    
+
+
+Response Report
+===============
+Get the number of direct and influenced opens of your app. For more 
+information, see: http://docs.urbanairship.com/api/ua.html#response-report
+
+.. code-block:: python
+
+    import urbanairship as ua
+    from datetime import datetime
+
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.ResponseReportList(
+        airship,
+        start_date,
+        end_date,
+        precision
+    )
+    for resp in listing:
+        print(resp.date, resp.android['influenced'], resp.android['direct'],
+            resp.ios['influenced'], resp.ios['direct'])
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: ResponseReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
 Response Listing
 ==================
 Get a listing of all pushes and basic response information in a given
@@ -167,6 +227,59 @@ http://docs.urbanairship.com/api/ua.html#response-listing
     limit (optional) is the number of results desired per page.
     push_id_start (optional) specifies the id of the first response to return.
 
+
+App Opens Report
+================
+Get the number of users who have opened your app within the specified time 
+period. For more information, see: 
+http://docs.urbanairship.com/api/ua.html#app-opens-report
+
+.. code-block:: python
+
+    import urbanairship as ua
+    from datetime import datetime
+
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.AppOpensList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: AppOpensReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
+Time In App Report
+==================
+Get the average amount of time users have spent in your app within the 
+specified time period. For more information, see:
+http://docs.urbanairship.com/api/ua.html#time-in-app-report
+
+.. code-block:: python
+
+    import urbanairship as ua
+    from datetime import datetime
+
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.TimeInAppList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: TimeInAppReport
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
 Opt-In Report
 =============
 Get the number of opted-in push users who access the app within the specified 
@@ -176,18 +289,18 @@ http://docs.urbanairship.com/api/ua.html#opt-in-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.OptInList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.OptInList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
     :members: OptInReport
 
 .. note::
@@ -203,19 +316,19 @@ http://docs.urbanairship.com/api/ua.html#opt-out-report
 
 .. code-block:: python
 
-  import urbanairship as ua
-  from datetime import datetime
-  
-  airship = ua.Airship('appkey', 'master_secret')
-  start_date = datetime(2015, 6, 1)
-  end_date = datetime(2015, 7, 1)
-  precision = 'HOURLY'
-  listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
-  for resp in listing:
-     print(resp.date, resp.android, resp.ios) 
+    import urbanairship as ua
+    from datetime import datetime
 
-.. automodule: urbanairship.reports.response_statistics
-    :members: OptInReport
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.OptOutList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp.date, resp.android, resp.ios)
+
+.. automodule:: urbanairship.reports.response_statistics
+    :members: OptOutReport
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
