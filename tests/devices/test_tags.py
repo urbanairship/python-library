@@ -25,7 +25,7 @@ class TestTagList(unittest.TestCase):
             mock_request.return_value = response
 
             results = test_list.list_tags()
-            
+
             self.assertEqual(
                 results,
                 {
@@ -351,6 +351,226 @@ class TestChannelTags(unittest.TestCase):
                     'ok': True,
                 }
             ]
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                [
+                    {
+                        'ios_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
+                        'tags': [
+                            'ios_test_batch_tag',
+                            'tag2'
+                        ]
+                    }
+                ]
+            ).encode('utf-8')
+            response.status_code = 202
+            mock_request.return_value = response
+
+            batch.add_ios_channel(
+                '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
+                [
+                    'ios_test_batch_tag',
+                    'tag2'
+                ]
+            )
+
+            self.assertEqual(
+                batch.changelist,
+                [
+                    {
+                        'ios_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
+                        'tags': [
+                            'ios_test_batch_tag',
+                            'tag2'
+                        ]
+                    }
+                ]
+            )
+
+    def test_add_android_channel(self):
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
+
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                [
+                    {
+                        'android_channel':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                        'tags': [
+                            'android_test_batch_tag',
+                            'tag4'
+                        ]
+                    }
+                ]
+            ).encode('utf-8')
+            response.status_code = 202
+            mock_request.return_value = response
+
+            batch.add_android_channel(
+                '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                [
+                    'android_test_batch_tag',
+                    'tag4'
+                ]
+            )
+
+            self.assertEqual(
+                batch.changelist,
+                [
+                    {
+                        'android_channel':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                        'tags': [
+                            'android_test_batch_tag',
+                            'tag4'
+                        ]
+                    }
+                ]
+            )
+
+    def test_add_amazon_channel(self):
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
+
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                [
+                    {
+                        'amazon_channel':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                        'tags': [
+                            'amazon_test_batch_tag',
+                            'tag_6'
+                        ]
+                    }
+                ])
+            response.status_code = 202
+            mock_request.return_value = response
+
+            batch.add_amazon_channel(
+                '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                [
+                    'amazon_test_batch_tag',
+                    'tag_6'
+                ]
+            )
+
+            self.assertEqual(batch.changelist, [
+                {
+                    'amazon_channel': '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                    'tags': [
+                        'amazon_test_batch_tag',
+                        'tag_6'
+                    ]
+                }
+            ])
+
+    def test_send_request(self):
+        airship = ua.Airship('key', 'secret')
+        batch = ua.BatchTag(airship)
+
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                [
+                    {
+                        'ios_channels':
+                            '0492662a-1b52-4343-a1f9-c6b0c72931c0',
+                        'tags': [
+                            'some_tag',
+                            'some_other_tag'
+                        ]
+                    },
+                    {
+                        'android_channels':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                        'tags': [
+                            'tag_to_apply_1',
+                            'tag_to_apply_2'
+                        ]
+                    },
+                    {
+                        'amazon_channels':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d7',
+                        'tags': [
+                            'tag_to_apply_1',
+                            'tag_to_apply_7'
+                        ]
+                    }
+                ]).encode('utf-8')
+            response.status_code = 200
+            mock_request.return_value = response
+
+            batch.add_ios_channel(
+                '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
+                [
+                    'apply_tag',
+                    'apply_tag_2'
+                ]
+            )
+            batch.add_android_channel(
+                '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                [
+                    'apply_tag_3',
+                    'apply_tag_4'
+                ]
+            )
+            batch.send_request()
+
+            self.assertEqual(
+                batch.changelist,
+                [
+                    {
+                        'ios_channel':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d5',
+                        'tags': [
+                            'apply_tag',
+                            'apply_tag_2'
+                        ]
+                    },
+                    {
+                        'android_channel':
+                            '9c36e8c7-5a73-47c0-9716-99fd3d4197d6',
+                        'tags': [
+                            'apply_tag_3',
+                            'apply_tag_4'
+                        ]
+                    },
+                ]
+            )
+
+
+class TestChannelTags(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship('key', 'secret')
+        self.channel_tags = ua.ChannelTags(self.airship)
+        self.mock_response = requests.Response()
+        self.mock_response._content = json.dumps(
+            [
+                {
+                    'ok': True,
+                }
+            ]).encode('utf-8')
+
+        ua.Airship._request = mock.Mock()
+        ua.Airship._request.side_effect = [self.mock_response]
+
+    def test_ios_audience(self):
+        self.channel_tags.set_audience('ios_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        result = self.channel_tags.send_request()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
         )
 
     def test_android_audience(self):
@@ -382,7 +602,7 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_all_audiences(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'android_audience')
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
         self.channel_tags.add('group_name', 'tag1')
         result = self.channel_tags.send_request()
 
