@@ -1,7 +1,9 @@
 import json
 import logging
+import warnings
 
 from urbanairship import common
+
 
 logger = logging.getLogger('urbanairship')
 
@@ -14,6 +16,10 @@ class TagList(object):
     """
 
     def __init__(self, airship):
+        warnings.warn(
+            "The TagList object has been deprecated.",
+            DeprecationWarning
+        )
         self._airship = airship
         self.url = common.TAGS_URL
 
@@ -27,84 +33,49 @@ class TagList(object):
 class Tag(object):
     """Add and remove devices from a tag."""
 
-    def __init__(self, airship, tag_name, group=None):
+    def __init__(self, airship, tag_name):
+        warnings.warn(
+            "The Tag object has been deprecated. Please use ChannelTags instead.",
+            DeprecationWarning
+        )
         self._airship = airship
-        self.tag_name = tag_name
-        self.url = common.CHANNEL_URL + 'tags/'
-
-        if group is None:
-            self.group = 'device'
-        else:
-            self.group = group
+        tag_name = tag_name
+        self.url = common.TAGS_URL + tag_name
 
     def add(self, ios_channels=None, android_channels=None,
             amazon_channels=None):
-        """Add channels to the add operation in the device payloads"""
+        """Adds channels to 'data' dict and then sends POST request."""
 
         self.data = {}
-        audience = {}
-
         if ios_channels is not None:
-            audience['ios_channel'] = ios_channels
+            self.data['ios_channels'] = {'add': ios_channels}
         if android_channels is not None:
-            audience['android_channel'] = android_channels
+            self.data['android_channels'] = {'add': android_channels}
         if amazon_channels is not None:
-            audience['amazon_channel'] = amazon_channels
-
-        self.data['audience'] = audience
-        self.data['add'] = {self.group: self.tag_name}
+            self.data['amazon_channels'] = {'add': amazon_channels}
 
         body = json.dumps(self.data)
-        response = self._airship._request(
-            'POST', body, self.url, 'application/json', version=3
-        )
+        response = self._airship._request('POST', body, self.url,
+                                          'application/json', version=3)
         return response
 
     def remove(self, ios_channels=None, android_channels=None,
                amazon_channels=None):
-        """Add channels to the remove operation in the device payloads"""
+        """Add channels to remove to 'data' dict and sends POST request."""
 
         self.data = {}
-        audience = {}
-
         if ios_channels is not None:
-            audience['ios_channel'] = ios_channels
+            self.data['ios_channels'] = {'remove': ios_channels}
         if android_channels is not None:
-            audience['android_channel'] = android_channels
+            self.data['android_channels'] = {'remove': android_channels}
         if amazon_channels is not None:
-            audience['amazon_channel'] = amazon_channels
-
-        self.data['audience'] = audience
-        self.data['remove'] = {self.group: self.tag_name}
+            self.data['amazon_channels'] = {'remove': amazon_channels}
 
         body = json.dumps(self.data)
-        response = self._airship._request(
-            'POST', body, self.url, 'application/json', version=3
-        )
+        response = self._airship._request('POST', body, self.url,
+                                          'application/json', version=3)
         return response
 
-    def set(self, ios_channels=None, android_channels=None,
-            amazon_channels=None):
-        """Add channels to the set operation in the device payloads"""
-
-        self.data = {}
-        audience = {}
-
-        if ios_channels is not None:
-            audience['ios_channel'] = ios_channels
-        if android_channels is not None:
-            audience['android_channel'] = android_channels
-        if amazon_channels is not None:
-            audience['amazon_channel'] = amazon_channels
-
-        self.data['audience'] = audience
-        self.data['set'] = {self.group: self.tag_name}
-
-        body = json.dumps(self.data)
-        response = self._airship._request(
-            'POST', body, self.url, 'application/json', version=3
-        )
-        return response
 
 
 class DeleteTag(object):
@@ -116,6 +87,10 @@ class DeleteTag(object):
     """
 
     def __init__(self, airship, tag_name):
+        warnings.warn(
+            "The DeleteTag object has been deprecated.",
+            DeprecationWarning
+        )
         self._airship = airship
         self.tag_name = tag_name
         self.url = common.TAGS_URL + tag_name
@@ -134,76 +109,38 @@ class BatchTag(object):
     """
 
     def __init__(self, airship):
+        warnings.warn(
+            "The BatchTag object has been deprecated. Please use ChannelTags instead.",
+            DeprecationWarning
+        )
         self._airship = airship
-        self.url = common.CHANNEL_URL + 'tags/'
-        self.ios_payload = {}
-        self.android_payload = {}
-        self.amazon_payload = {}
+        self.changelist = []
+        self.url = common.TAGS_URL + '/batch/'
 
-    def add_ios_channel(self, channel, tags, group=None):
-        self.ios_payload['audience'] = {}
-        self.ios_payload['audience']['ios_channel'] = channel
+    def add_ios_channel(self, channel, tags):
+        self.changelist.append({'ios_channel': channel, 'tags': tags})
 
-        if group is not None:
-            self.ios_payload['add'] = {group: tags}
-        else:
-            self.ios_payload['add'] = {'device': tags}
+    def add_android_channel(self, channel, tags):
+        self.changelist.append({'android_channel': channel, 'tags': tags})
 
-    def add_android_channel(self, channel, tags, group=None):
-        self.android_payload['audience'] = {}
-        self.android_payload['audience']['android_channel'] = channel
-
-        if group is not None:
-            self.android_payload['add'] = {group: tags}
-        else:
-            self.android_payload['add'] = {'device': tags}
-
-    def add_amazon_channel(self, channel, tags, group=None):
-        self.amazon_payload['audience'] = {}
-        self.amazon_payload['audience']['amazon_channel'] = channel
-
-        if group is not None:
-            self.amazon_payload['add'] = {group: tags}
-        else:
-            self.amazon_payload['add'] = {'device': tags}
+    def add_amazon_channel(self, channel, tags):
+        self.changelist.append({'amazon_channel': channel, 'tags': tags})
 
     def send_request(self):
-        """Issue API Requests for all device types
+        """Issue API Request
+
+        - error message in the form of an obj containing array of two member
+          arrays
+        - includes 1) the line that did not pass and 2) an error response
 
         """
-        response_list = []
 
-        if self.ios_payload:
-            body = json.dumps(self.ios_payload)
-            response_list.append(
-                self._airship._request(
-                    'POST', body, self.url,
-                    'application/json', version=3
-                )
-            )
-        if self.android_payload:
-            body = json.dumps(self.android_payload)
-            response_list.append(
-                self._airship._request(
-                    'POST', body, self.url,
-                    'application/json', version=3
-                )
-            )
-        if self.amazon_payload:
-            body = json.dumps(self.amazon_payload)
-            response_list.append(
-                self._airship._request(
-                    'POST', body, self.url,
-                    'application/json', version=3
-                )
-            )
+        body = json.dumps(self.changelist)
+        response = self._airship._request('POST', body, self.url,
+                                          'application/json', version=3)
 
-        if not response_list:
-            logger.error('Unsuccessful batch modification: No channels added.')
-        else:
-            logger.info('Successful batch modification: %s', response_list)
-
-        return response_list
+        logger.info('Successful batch modification: %s', self.changelist)
+        return response
 
 
 class ChannelTags(object):
@@ -212,38 +149,56 @@ class ChannelTags(object):
     def __init__(self, airship):
         self.url = common.CHANNEL_URL + 'tags/'
         self._airship = airship
+        self.audience = {}
+        self.add_group = {}
+        self.remove_group = {}
+        self.set_group = {}
 
-    def add(self, channels, tags):
+    def set_audience(self, ios=None, android=None, amazon=None):
+        if ios is not None:
+            self.audience['ios_channel'] = ios
+        if android is not None:
+            self.audience['android_channel'] = android
+        if amazon is not None:
+            self.audience['amazon_channel'] = amazon
+
+    def add(self, group_name, tags):
+        self.add_group[group_name] = tags
+
+    def remove(self, group_name, tags):
+        self.remove_group[group_name] = tags
+
+    def set(self, group_name, tags):
+        self.set_group[group_name] = tags
+
+    def send_request(self):
         payload = {}
-        payload['audience'] = channels
-        payload['add'] = tags
 
-        body = json.dumps(payload)
-        response = self._airship._request(
-            'POST', body, self.url, 'application/json', version=3
-        )
+        if not self.audience:
+            raise ValueError('A audience is required for modifying tags')
+        payload['audience'] = self.audience
 
-        return response
+        if self.add_group:
+            if self.set_group:
+                raise ValueError('A tag request can only contain an add or '
+                                 'remove field, both, or a single set field')
+            payload['add'] = self.add_group
 
-    def remove(self, channels, tags):
-        payload = {}
-        payload['audience'] = channels
-        payload['remove'] = tags
+        if self.remove_group:
+            if self.set_group:
+                raise ValueError('A tag request can only contain an add or '
+                                 'remove field, both, or a single set field')
+            payload['remove'] = self.remove_group
 
-        body = json.dumps(payload)
-        response = self._airship._request(
-            'POST', body, self.url, 'application/json', version=3
-        )
-        return response
+        if self.set_group:
+            payload['set'] = self.set_group
 
-    def set(self, channels, tags):
-        payload = {}
-        payload['audience'] = channels
-        payload['set'] = tags
+        if not self.add_group and not self.remove_group and not self.set_group:
+            raise ValueError('An add, remove, or set field was not set')
 
         body = json.dumps(payload)
         response = self._airship._request(
             'POST', body, self.url,
             'application/json', version=3
         )
-        return response
+        return response.json()
