@@ -180,14 +180,14 @@ class ChannelTags(object):
 
         if self.add_group:
             if self.set_group:
-                raise ValueError('A tag request can only contain an add or '
-                                 'remove field, both, or a single set field')
+                raise ValueError('A tag request cannot contain both an "add"'
+                                 ' and a "set" field.')
             payload['add'] = self.add_group
 
         if self.remove_group:
             if self.set_group:
-                raise ValueError('A tag request can only contain an add or '
-                                 'remove field, both, or a single set field')
+                raise ValueError('A tag request cannot contain both a "remove"'
+                                 ' and a "set" field.')
             payload['remove'] = self.remove_group
 
         if self.set_group:
