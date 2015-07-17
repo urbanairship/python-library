@@ -1,5 +1,8 @@
 import json
-import cStringIO
+try:
+    from cStringIO import StringIO      # Python 2.x
+except ImportError:
+    from io import BytesIO as StringIO  # Python 3.x
 
 from urbanairship import common
 from gzip import GzipFile
@@ -39,7 +42,8 @@ class StaticList(object):
         :return: http response
         """
 
-        fgz = cStringIO.StringIO()
+        # Gzip the csv file into a buffer
+        fgz = StringIO()
         zipped = GzipFile(mode='wb', fileobj=fgz)
         zipped.writelines(csv_file)
         zipped.close()
@@ -53,6 +57,20 @@ class StaticList(object):
             version=3,
             encoding='gzip'
         )
+        fgz.close()
+        return response.json()
+
+    def update(self, description=None, extras=None):
+        if description is None and extras is None:
+            raise ValueError('Either description or extras must be non-empty.')
+        payload = {}
+        if description is not None:
+            payload['description'] = description
+        if extras is not None:
+            payload['extras'] = extras
+        body = json.dumps(payload).encode('utf-8')
+        url = common.LISTS_URL + self.name
+        response = self.airship._request('PUT', body, url, 'application/json', version=3)
         return response.json()
 
     def lookup(self):
