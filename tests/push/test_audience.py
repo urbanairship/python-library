@@ -54,7 +54,7 @@ class TestAudience(unittest.TestCase):
             (
                 ua.tag,
                 'test',
-                {'tag': 'test', 'group': 'device'}
+                {'tag': 'test'}
             ),
             (
                 ua.alias,
@@ -99,8 +99,8 @@ class TestAudience(unittest.TestCase):
                 ua.tag('bar')
             ),
             {'or': [
-                {'tag': 'foo', 'group': 'device'},
-                {'tag': 'bar', 'group': 'device'}
+                {'tag': 'foo'},
+                {'tag': 'bar'}
             ]}
         )
 
@@ -111,8 +111,8 @@ class TestAudience(unittest.TestCase):
             ),
             {
                 'and': [
-                    {'tag': 'foo', 'group': 'device'},
-                    {'tag': 'bar', 'group': 'device'}
+                    {'tag': 'foo'},
+                    {'tag': 'bar'}
                 ]
             }
         )
@@ -123,7 +123,7 @@ class TestAudience(unittest.TestCase):
             ),
             {
                 'not': {
-                    'tag': 'foo', 'group': 'device'
+                    'tag': 'foo'
                 }
             }
         )
