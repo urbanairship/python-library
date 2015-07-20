@@ -11,7 +11,7 @@
     * opt-in
     * opt-out
 - added support for channel tags
-- deprecated existing tags including:
+- deprecated previous tags functionality including:
     * Tag
     * TagList
     * DeleteTag

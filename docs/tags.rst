@@ -33,7 +33,7 @@ missing Tag Groups are specified, a warning will be included in the response.
 
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
-    channel_tags = ua.devices.ChannelTags(self.airship)
+    channel_tags = ua.devices.ChannelTags(airship)
     ios_audience = ['channel1', 'channel2', 'channel3']
     android_audience = 'channel4'
     amazon_audience = None
