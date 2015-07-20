@@ -1,12 +1,11 @@
 import unittest
 import json
-from datetime import datetime
-
 import mock
 import requests
 import csv
-
 import urbanairship as ua
+
+from datetime import datetime
 
 
 class TestStaticList(unittest.TestCase):
