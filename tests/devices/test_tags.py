@@ -25,7 +25,7 @@ class TestTagList(unittest.TestCase):
             mock_request.return_value = response
 
             results = test_list.list_tags()
-            
+
             self.assertEqual(
                 results,
                 {
@@ -323,3 +323,139 @@ class TestBatchTag(unittest.TestCase):
                     },
                 ]
             )
+
+
+class TestChannelTags(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship('key', 'secret')
+        self.channel_tags = ua.ChannelTags(self.airship)
+        self.mock_response = requests.Response()
+        self.mock_response._content = json.dumps(
+            [
+                {
+                    'ok': True,
+                }
+            ]).encode('utf-8')
+
+        ua.Airship._request = mock.Mock()
+        ua.Airship._request.side_effect = [self.mock_response]
+
+    def test_ios_audience(self):
+        self.channel_tags.set_audience('ios_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_android_audience(self):
+        self.channel_tags.set_audience(android='android_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_amazon_audience(self):
+        self.channel_tags.set_audience(amazon='android_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_all_audiences(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_add_and_remove(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        self.channel_tags.remove('group2_name', 'tag2')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_add_and_remove_and_set(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.add('group_name', 'tag1')
+        self.channel_tags.remove('group2_name', 'tag2')
+        self.channel_tags.set('group3_name', 'tag3')
+
+        self.assertRaises(
+            ValueError,
+            callableObj=self.channel_tags.send,
+        )
+
+    def test_remove_and_set(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.remove('group2_name', 'tag2')
+        self.channel_tags.set('group3_name', 'tag3')
+
+        self.assertRaises(
+            ValueError,
+            callableObj=self.channel_tags.send,
+        )
+
+    def test_set(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set('group3_name', 'tag3')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
+    def test_tag_lists(self):
+        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set('group3_name', ['tag1', 'tag2', 'tag3'])
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )

@@ -1,3 +1,23 @@
+0.7.5
+--------------------
+- added support for reports including:
+    * individual push response
+    * devices
+    * push
+    * response report
+    * response listing
+    * app opens
+    * time in app
+    * opt-in
+    * opt-out
+- added support for channel tags
+- deprecated previous tags functionality including:
+    * Tag
+    * TagList
+    * DeleteTag
+    * BatchTag
+- added support for static lists
+
 --------------------
 0.7.4
 --------------------
