@@ -77,7 +77,6 @@ class Tag(object):
         return response
 
 
-
 class DeleteTag(object):
     """Delete Tag from the System.
 
