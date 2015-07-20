@@ -32,4 +32,5 @@ from .named_users import (
 
 from .static_lists import (
     StaticList,
+    StaticLists,
 )

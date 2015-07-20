@@ -57,6 +57,7 @@ from .devices import (
     NamedUser,
     NamedUserList,
     StaticList,
+    StaticLists
 )
 
 from .reports import (
@@ -139,6 +140,7 @@ __all__ = [
     AppOpensList,
     TimeInAppList,
     StaticList,
+    StaticLists,
 ]
 
 # Silence urllib3 INFO logging by default

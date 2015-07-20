@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 try:
     from cStringIO import StringIO      # Python 2.x
 except ImportError:
@@ -73,11 +75,68 @@ class StaticList(object):
         response = self.airship._request('PUT', body, url, 'application/json', version=3)
         return response.json()
 
-    def lookup(self):
-        """Retrieve information about the static list
-        :return:
-        """
+    @classmethod
+    def from_payload(cls, payload, airship):
+        obj = cls(airship, payload['name'])
+        for key in payload:
+            if key in 'created' or key in 'last_updated':
+                payload[key] = datetime.strptime(
+                    payload[key], '%Y-%m-%d %H:%M:%S'
+                )
+            setattr(obj, key, payload[key])
+        return obj
 
+    def lookup(self):
         url = common.LISTS_URL + self.name
-        response = self.airship._request('GET', None, url, version=3, params=None)
-        return response.json()
+        response = self.airship._request('GET', None, url, version=3)
+        payload = response.json()
+        return self.from_payload(payload, self.airship)
+
+    def delete(self):
+        url = common.LISTS_URL + self.name
+        return self.airship._request('DELETE', None, url, version=3)
+
+
+class StaticLists(object):
+    start_url = common.LISTS_URL
+    next_url = None
+    start_date = None
+    end_date = None
+    data_attribute = 'lists'
+    _page = None
+
+    def __init__(self, airship):
+        self._airship = airship
+        self.next_url = self.start_url
+        self._token_iter = iter(())
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            return StaticList.from_payload(next(self._token_iter), self._airship)
+        except StopIteration:
+            self._fetch_next_page()
+            return StaticList.from_payload(next(self._token_iter), self._airship)
+
+    def next(self):
+        """Necessary for iteration to work with Python 2.*."""
+        return self.__next__()
+
+    def _fetch_next_page(self):
+        if not self.next_url:
+            return
+        self._load_page(self.next_url)
+        self.next_url = self._page.get('next_page')
+
+    def _load_page(self, url):
+        response = self._airship._request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3,
+        )
+        self._page = page = response.json()
+        self._token_iter = iter(page[self.data_attribute])
+
