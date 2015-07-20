@@ -1,13 +1,12 @@
 import json
 from datetime import datetime
+from urbanairship import common
+from gzip import GzipFile
 
 try:
     from cStringIO import StringIO      # Python 2.x
 except ImportError:
     from io import BytesIO as StringIO  # Python 3.x
-
-from urbanairship import common
-from gzip import GzipFile
 
 
 class StaticList(object):
