@@ -171,7 +171,7 @@ class ChannelTags(object):
     def set(self, group_name, tags):
         self.set_group[group_name] = tags
 
-    def send_request(self):
+    def send(self):
         payload = {}
 
         if not self.audience:

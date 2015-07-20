@@ -16,14 +16,9 @@ field, or both, or a single set field. If both add and remove are fields are
 present and the intersection of the tags in these fields is not empty, then
 a 400 will be returned.
 
-Tag operations done by application secret can only be made to a single channel.
-
 Tag set operations only update tag groups that are present in the request.
 Tags for a given Tag Group can be cleared by sending a set field with an empty
 list.
-
-Secure Tag Groups require the master secret to modify tags, otherwise a 403
-Forbidden response is returned.
 
 If a tag update request contains tags in multiple Tag Groups, the request
 will be accepted if at least one of the Tag Groups is active. If inactive or
