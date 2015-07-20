@@ -1,14 +1,7 @@
 Tags
 ====
 
-Prior to the Urban Airship product release in Spring 2015, tag
-manipulation (addition, removal, setting of tags) was handled either on
-the client- or server-side, but not both. Tags set by the device would
-be overwritten by tags set from your server and vice versa.
-
-With the release of Named Users, Tag Groups, and Channel IDs, tag
-manipulation is now fundamentally simpler and supports significantly more
-complex use-cases and integrations.
+This reference covers tag operations on channels.
 
 For more information, see: http://docs.urbanairship.com/api/ua.html#tags.
 
@@ -23,14 +16,9 @@ field, or both, or a single set field. If both add and remove are fields are
 present and the intersection of the tags in these fields is not empty, then
 a 400 will be returned.
 
-Tag operations done by application secret can only be made to a single channel.
-
 Tag set operations only update tag groups that are present in the request.
 Tags for a given Tag Group can be cleared by sending a set field with an empty
 list.
-
-Secure Tag Groups require the master secret to modify tags, otherwise a 403
-Forbidden response is returned.
 
 If a tag update request contains tags in multiple Tag Groups, the request
 will be accepted if at least one of the Tag Groups is active. If inactive or
@@ -40,7 +28,7 @@ missing Tag Groups are specified, a warning will be included in the response.
 
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
-    channel_tags = ua.devices.ChannelTags(self.airship)
+    channel_tags = ua.devices.ChannelTags(airship)
     ios_audience = ['channel1', 'channel2', 'channel3']
     android_audience = 'channel4'
     amazon_audience = None
