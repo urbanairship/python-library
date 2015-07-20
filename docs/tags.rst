@@ -1,14 +1,7 @@
 Tags
 ====
 
-Prior to the Urban Airship product release in Spring 2015, tag
-manipulation (addition, removal, setting of tags) was handled either on
-the client- or server-side, but not both. Tags set by the device would
-be overwritten by tags set from your server and vice versa.
-
-With the release of Named Users, Tag Groups, and Channel IDs, tag
-manipulation is now fundamentally simpler and supports significantly more
-complex use-cases and integrations.
+This reference covers tag operations on channels.
 
 For more information, see: http://docs.urbanairship.com/api/ua.html#tags.
 
