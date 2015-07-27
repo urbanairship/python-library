@@ -1,7 +1,8 @@
 import json
-from datetime import datetime
+import gzip
+import datetime
 from urbanairship import common
-from gzip import GzipFile
+
 
 try:
     from cStringIO import StringIO      # Python 2.x
@@ -32,8 +33,13 @@ class StaticList(object):
             payload['extras'] = extras
 
         body = json.dumps(payload).encode('utf-8')
-        url = common.LISTS_URL
-        response = self.airship._request('POST', body, url, 'application/json', version=3)
+        response = self.airship._request(
+            'POST',
+            body,
+            common.LISTS_URL,
+            'application/json',
+            version=3
+        )
         return response.json()
 
     def upload(self, csv_file):
@@ -45,7 +51,7 @@ class StaticList(object):
 
         # Gzip the csv file into a buffer
         fgz = StringIO()
-        zipped = GzipFile(mode='wb', fileobj=fgz)
+        zipped = gzip.GzipFile(mode='wb', fileobj=fgz)
         zipped.writelines(csv_file)
         zipped.close()
 
@@ -79,8 +85,8 @@ class StaticList(object):
         obj = cls(airship, payload['name'])
         for key in payload:
             if key in 'created' or key in 'last_updated':
-                payload[key] = datetime.strptime(
-                    payload[key], '%Y-%m-%d %H:%M:%S'
+                payload[key] = datetime.datetime.strptime(
+                    payload[key], '%Y-%m-%dT%H:%M:%S'
                 )
             setattr(obj, key, payload[key])
         return obj

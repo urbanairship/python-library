@@ -87,8 +87,8 @@ class TestStaticLists(unittest.TestCase):
                         'name': 'ca-testlist',
                         'description': 'this little list',
                         'extra': {'key': 'value'},
-                        'created': '2015-06-29 23:42:39',
-                        'last_updated': '2015-06-30 23:42:39',
+                        'created': '2015-06-29T23:42:39',
+                        'last_updated': '2015-06-30T23:42:39',
                         'channel_count': 123,
                         'status': 'ready'
                     },
@@ -96,8 +96,8 @@ class TestStaticLists(unittest.TestCase):
                         'name': 'ca-testlist2',
                         'description': 'this little list2',
                         'extra': {'key': 'value'},
-                        'created': '2015-05-29 23:42:39',
-                        'last_updated': '2015-05-30 23:42:39',
+                        'created': '2015-05-29T23:42:39',
+                        'last_updated': '2015-05-30T23:42:39',
                         'channel_count': 23,
                         'status': 'processing'
                     },
@@ -105,8 +105,8 @@ class TestStaticLists(unittest.TestCase):
                         'name': 'ca-testlist3',
                         'description': 'this little list3',
                         'extra': {'key': 'value'},
-                        'created': '2015-04-29 23:42:39',
-                        'last_updated': '2015-04-30 23:42:39',
+                        'created': '2015-04-29T23:42:39',
+                        'last_updated': '2015-04-30T23:42:39',
                         'channel_count': 1500,
                         'status': 'ready'
                     },
@@ -158,8 +158,8 @@ class TestStaticLists(unittest.TestCase):
                         'name': 'ca-testlist',
                         'description': 'this little list',
                         'extra': {'key': 'value'},
-                        'created': '2015-06-29 23:42:39',
-                        'last_updated': '2015-06-30 23:42:39',
+                        'created': '2015-06-29T23:42:39',
+                        'last_updated': '2015-06-30T23:42:39',
                         'channel_count': 123,
                         'status': 'ready'
                     }
@@ -176,8 +176,8 @@ class TestStaticLists(unittest.TestCase):
                         'name': 'ca-testlist2',
                         'description': 'this little list2',
                         'extra': {'key': 'value'},
-                        'created': '2015-05-29 23:42:39',
-                        'last_updated': '2015-05-30 23:42:39',
+                        'created': '2015-05-29T23:42:39',
+                        'last_updated': '2015-05-30T23:42:39',
                         'channel_count': 23,
                         'status': 'processing'
                     },
