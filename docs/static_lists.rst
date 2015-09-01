@@ -41,8 +41,7 @@ The CSV format consists of two columns: 'identifier_type' and 'identifier'.
 or 'amazon_channel'. 'identifier' is the associated identifier you wish to send to.
 
 The maximum number of 'identifier_type,identifier' pairs that may be uploaded to a list
-is 10 million. The csv file is automatically gzipped before it is uploaded to the
-endpoint.
+is 10 million.
 
 .. code-block:: python
 
