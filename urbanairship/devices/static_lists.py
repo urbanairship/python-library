@@ -1,13 +1,6 @@
 import json
-import gzip
 import datetime
 from urbanairship import common
-
-
-try:
-    from cStringIO import StringIO      # Python 2.x
-except ImportError:
-    from io import BytesIO as StringIO  # Python 3.x
 
 
 class StaticList(object):
@@ -49,22 +42,14 @@ class StaticList(object):
         :return: http response
         """
 
-        # Gzip the csv file into a buffer
-        fgz = StringIO()
-        zipped = gzip.GzipFile(mode='wb', fileobj=fgz)
-        zipped.writelines(csv_file)
-        zipped.close()
-
         url = common.LISTS_URL + self.name + '/csv/'
         response = self.airship._request(
             method='PUT',
-            body=fgz,
+            body=csv_file,
             url=url,
             content_type='text/csv',
-            version=3,
-            encoding='gzip'
+            version=3
         )
-        fgz.close()
         return response.json()
 
     def update(self, description=None, extras=None):
@@ -144,4 +129,3 @@ class StaticLists(object):
         )
         self._page = page = response.json()
         self._token_iter = iter(page[self.data_attribute])
-
