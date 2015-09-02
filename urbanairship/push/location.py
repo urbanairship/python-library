@@ -27,7 +27,7 @@ class Location(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by name %s', name)
+        logger.info('Retrieved location info by name: %s' % name)
         return resp.json()
 
     def coordinates_lookup(self, latitude, longitude, location_type=None):
@@ -53,6 +53,7 @@ class Location(object):
             version=3,
             params=params
         )
+        logger.info('Retrieved location info by coordinates: %s,%s' % (str(latitude), str(longitude)))
         return resp.json()
 
     def bounding_box_lookup(self, lat1, long1, lat2, long2, location_type=None):
@@ -80,6 +81,7 @@ class Location(object):
             version=3,
             params=params
         )
+        logger.info('Retrieved location info by bounding box: %s,%s,%s,%s'% (str(lat1), str(long1), str(lat2), str(long2)))
         return resp.json()
 
     def alias_lookup(self, from_alias):
@@ -104,6 +106,7 @@ class Location(object):
             version=3,
             params=params
         )
+        logger.info('Retrieved location info by alias: %s' % from_alias)
         return resp.json()
 
     def polygon_lookup(self, polygon_id, zoom):
@@ -123,4 +126,5 @@ class Location(object):
             version=3,
             params=params
         )
+        logger.info('Retrieved location info by polygon id: %s and zoom: %s' % (polygon_id, str(zoom)))
         return resp.json()
