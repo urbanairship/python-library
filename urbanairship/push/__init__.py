@@ -40,6 +40,10 @@ from .schedule import (
     local_scheduled_time
 )
 
+from .location import (
+    Location
+)
+
 # Common selector for audience & device_types
 
 all_ = "all"
