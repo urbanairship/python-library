@@ -36,7 +36,7 @@ from .push import (
     interactive,
     scheduled_time,
     local_scheduled_time,
-    Location,
+    LocationFinder,
 )
 
 from .devices import (
@@ -142,7 +142,7 @@ __all__ = [
     TimeInAppList,
     StaticList,
     StaticLists,
-    Location,
+    LocationFinder,
 ]
 
 # Silence urllib3 INFO logging by default

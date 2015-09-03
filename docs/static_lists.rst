@@ -6,11 +6,13 @@ lists of devices that are defined in your systems outside of Urban Airship.
 Any list or grouping of devices for which the canonical source of data about
 the members is elsewhere is a good candidate for Static Lists, e.g., members
 of a customer loyalty program.
-For more information, see: http://docs.urbanairship.com/api/ua.html#static-lists
+For more information, see `the documentation on Static Lists
+<http://docs.urbanairship.com/api/ua.html#static-lists>`__
 
 
 Create List
 -----------
+
 Creates a static list. The body of the request will contain several of the list
 object parameters, but the actual list content will be provided by a second call
 to the upload endpoint.
@@ -25,13 +27,10 @@ string keys to arbitrary JSON values.
     static_list = ua.devices.StaticList(airship, 'list_name')
     static_list.create('description', 'extras')
 
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticList
-    :noindex:
-
 
 Upload List
 -----------
+
 Lists target identifiers are specified or replaced with an upload to this endpoint.
 Uploads must be newline delimited identifiers (text/CSV) as described in RFC 4180,
 with commas as the delimiter.
@@ -51,13 +50,10 @@ is 10 million.
     resp = static_list.upload(csv_file)
     csv_file.close()
 
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticList
-    :noindex:
-
 
 Update List
 -----------
+
 Updates the metadata of a static list.
 
 .. code-block:: python
@@ -66,13 +62,10 @@ Updates the metadata of a static list.
     static_list = ua.devices.StaticList(airship, 'list_name')
     static_list.update('description', 'extras')
 
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticList
-    :noindex:
-
 
 Delete List
 -----------
+
 Delete a static list.
 
 .. code-block:: python
@@ -80,10 +73,6 @@ Delete a static list.
     airship = ua.Airship('app_key', 'master_secret')
     static_list = ua.devices.StaticList(airship, 'list_name')
     static_list.delete()
-
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticList
-    :noindex:
 
 .. note::
     If you are attempting to update a current list by deleting it
@@ -95,6 +84,7 @@ Delete a static list.
 
 Lookup List
 -----------
+
 Retrieve information about one static list.
 
 .. code-block:: python
@@ -103,10 +93,8 @@ Retrieve information about one static list.
     static_list = ua.devices.StaticList(airship, 'list_name')
     static_list.lookup()
 
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticList
-
 .. note::
+
     When looking up lists, the returned information may actually be a combination
     of values from both the last uploaded list and the last successfully processed
     list. If you create a list successfully, and then you update it and the
@@ -117,6 +105,7 @@ Retrieve information about one static list.
 
 Lookup All Lists
 ----------------
+
 Retrieve information about all static lists. This call returns a paginated list of
 metadata that will not contain the actual lists of users.
 
@@ -135,6 +124,3 @@ metadata that will not contain the actual lists of users.
             resp.channel_count,
             resp.status
         )
-
-.. automodule:: urbanairship.devices.static_lists
-    :members: StaticLists

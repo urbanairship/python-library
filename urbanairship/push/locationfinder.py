@@ -2,7 +2,7 @@ from urbanairship import common
 import logging
 logger = logging.getLogger('urbanairship')
 
-class Location(object):
+class LocationFinder(object):
     def __init__(self, airship):
         self.airship = airship
 
