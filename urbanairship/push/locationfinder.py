@@ -1,6 +1,8 @@
 from urbanairship import common
 import logging
+
 logger = logging.getLogger('urbanairship')
+
 
 class LocationFinder(object):
     def __init__(self, airship):
@@ -81,7 +83,8 @@ class LocationFinder(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by bounding box: %s,%s,%s,%s'% (str(lat1), str(long1), str(lat2), str(long2)))
+        logger.info(
+            'Retrieved location info by bounding box: %s,%s,%s,%s' % (str(lat1), str(long1), str(lat2), str(long2)))
         return resp.json()
 
     def alias_lookup(self, from_alias):
