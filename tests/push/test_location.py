@@ -83,7 +83,7 @@ class TestLocationFinder(unittest.TestCase):
         )
 
     def test_alias_lookup(self):
-        info = self.l.alias_lookup('alias')
+        info = self.l.alias_lookup('alias=alias')
         self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_alias_list_lookup(self):
