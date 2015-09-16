@@ -4,24 +4,6 @@ from abc import abstractmethod
 
 
 class IndividualResponseStats(object):
-    """Information object for an individual push response
-
-    :ivar push_uuid: Push ID
-    :ivar push_time: UTC date and time of the push
-    :ivar push_type: Describes the push operation, which is often comparable to
-        the audience selection, e.g. BROADCAST_PUSH.
-    :ivar direct_responses: Number of direct responses
-    :ivar sends: Number of sends
-    :ivar group_id: Group ID
-
-    """
-    push_uuid = None
-    push_time = None
-    push_type = None
-    direct_responses = None
-    sends = None
-    group_id = None
-
     def __init__(self, airship):
         self.airship = airship
 
