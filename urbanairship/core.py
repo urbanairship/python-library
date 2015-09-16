@@ -20,6 +20,9 @@ class Airship(object):
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
+    def request(self, method, body, url, content_type=None, version=None, params=None):
+        return self._request(method, body, url, content_type, version, params)
+
     def _request(self, method, body, url, content_type=None,
             version=None, params=None):
 
