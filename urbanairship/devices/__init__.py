@@ -29,3 +29,8 @@ from .named_users import (
     NamedUser,
     NamedUserList
 )
+
+from .static_lists import (
+    StaticList,
+    StaticLists,
+)
