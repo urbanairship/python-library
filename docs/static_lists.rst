@@ -131,7 +131,7 @@ metadata that will not contain the actual lists of users.
             resp.description,
             resp.extra,
             resp.created,
-            resp.last_modified,
+            resp.last_updated,
             resp.channel_count,
             resp.status
         )
