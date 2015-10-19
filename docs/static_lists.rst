@@ -3,7 +3,7 @@ Static Lists
 
 With the Static List endpoint, you can easily target and manage
 lists of devices that are defined in your systems outside of Urban Airship.
-Any list or grouping of devices that is maintained in an exterior database
+Any list or grouping of devices that is maintained in an external database
 (such as members of a customer loyalty program) is a good candidate for
 Static Lists. For more information, see: http://docs.urbanairship.com/api/ua.html#static-lists
 
@@ -14,8 +14,8 @@ Creates a static list. The body of the request will contain several of the list
 object parameters, but the actual list content will be provided by a second call
 to the upload endpoint.
 
-The StaticList class has two optional parameters including 'description,' which is a
-user-provided description of the list, and 'extra,' which is a dictionary of
+The StaticList class has two optional parameters including "description," which is a
+user-provided description of the list, and "extra," which is a dictionary of
 string keys to arbitrary JSON values.
 
 .. code-block:: python
