@@ -11,23 +11,25 @@ class StaticList(object):
     def __init__(self, airship, name):
         self.airship = airship
         self.name = name
+        self.description = None
+        self.extra = None
 
-    def create(self, description=None, extras=None):
+    def create(self):
         """Create a static list
 
         :param description: An optional user-provided description of the list.
             Maximum length of 1000 characters
-        :param extras: An optional user-provided JSON map of string values associated
+        :param extra: An optional user-provided JSON map of string values associated
             with a list. A key has a maximum length of 64 characters, while a value can
             be up to 1024 characters. You may add up to 100 key-value pairs.
         :return:
         """
 
         payload = {'name': self.name}
-        if description is not None:
-            payload['description'] = description
-        if extras is not None:
-            payload['extras'] = extras
+        if self.description is not None:
+            payload['description'] = self.description
+        if self.extra is not None:
+            payload['extra'] = self.extra
 
         body = json.dumps(payload).encode('utf-8')
         response = self.airship._request(
@@ -58,21 +60,21 @@ class StaticList(object):
         )
         return response.json()
 
-    def update(self, description=None, extras=None):
+    def update(self):
         """Update the metadata in a static list
 
         :param description: Description of the list (optional)
-        :param extras: JSON map of string values to associate with the list
+        :param extra: JSON map of string values to associate with the list
         :return: http response
         """
 
-        if description is None and extras is None:
-            raise ValueError('Either description or extras must be non-empty.')
+        if self.description is None and self.extra is None:
+            raise ValueError('Either description or extra must be non-empty.')
         payload = {}
-        if description is not None:
-            payload['description'] = description
-        if extras is not None:
-            payload['extras'] = extras
+        if self.description is not None:
+            payload['description'] = self.description
+        if self.extra is not None:
+            payload['extra'] = self.extra
         body = json.dumps(payload).encode('utf-8')
         url = common.LISTS_URL + self.name
         response = self.airship._request('PUT', body, url, 'application/json', version=3)

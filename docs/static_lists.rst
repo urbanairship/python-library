@@ -3,10 +3,9 @@ Static Lists
 
 With the Static List endpoint, you can easily target and manage
 lists of devices that are defined in your systems outside of Urban Airship.
-Any list or grouping of devices for which the canonical source of data about
-the members is elsewhere is a good candidate for Static Lists, e.g., members
-of a customer loyalty program.
-For more information, see: http://docs.urbanairship.com/api/ua.html#static-lists
+Any list or grouping of devices that is maintained in an exterior database
+(such as members of a customer loyalty program) is a good candidate for
+Static Lists. For more information, see: http://docs.urbanairship.com/api/ua.html#static-lists
 
 
 Create List
@@ -15,15 +14,17 @@ Creates a static list. The body of the request will contain several of the list
 object parameters, but the actual list content will be provided by a second call
 to the upload endpoint.
 
-The create method has two optional parameters including 'description,' which is a
-user-provided description of the list, and 'extras,' which is a dictionary of
+The StaticList class has two optional parameters including 'description,' which is a
+user-provided description of the list, and 'extra,' which is a dictionary of
 string keys to arbitrary JSON values.
 
 .. code-block:: python
 
     airship = ua.Airship('app_key', 'master_secret')
     static_list = ua.devices.StaticList(airship, 'list_name')
-    static_list.create('description', 'extras')
+    static_list.description = 'description'
+    static_list.extra = { 'key': 'value' }
+    static_list.create()
 
 .. automodule:: urbanairship.devices.static_lists
     :members: StaticList
@@ -64,7 +65,9 @@ Updates the metadata of a static list.
 
     airship = ua.Airship('app_key', 'master_secret')
     static_list = ua.devices.StaticList(airship, 'list_name')
-    static_list.update('description', 'extras')
+    static_list.description = 'description'
+    static_list.extra = { 'key': 'value' }
+    static_list.update()
 
 .. automodule:: urbanairship.devices.static_lists
     :members: StaticList
