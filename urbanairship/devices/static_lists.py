@@ -15,16 +15,6 @@ class StaticList(object):
         self.extra = None
 
     def create(self):
-        """Create a static list
-
-        :param description: An optional user-provided description of the list.
-            Maximum length of 1000 characters
-        :param extra: An optional user-provided JSON map of string values associated
-            with a list. A key has a maximum length of 64 characters, while a value can
-            be up to 1024 characters. You may add up to 100 key-value pairs.
-        :return:
-        """
-
         payload = {'name': self.name}
         if self.description is not None:
             payload['description'] = self.description
@@ -62,9 +52,6 @@ class StaticList(object):
 
     def update(self):
         """Update the metadata in a static list
-
-        :param description: Description of the list (optional)
-        :param extra: JSON map of string values to associate with the list
         :return: http response
         """
 
