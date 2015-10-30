@@ -31,8 +31,6 @@ class ResponseList(common.IteratorParent):
             params['limit'] = limit
         if start_id:
             params['start_id'] = start_id
-        if len(params) == 0:
-            params = None
         super(ResponseList, self).__init__(airship, params)
 
 
