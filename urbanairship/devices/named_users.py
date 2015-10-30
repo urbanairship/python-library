@@ -119,7 +119,7 @@ class NamedUser(object):
     @classmethod
     def from_payload(cls, payload):
         """
-        Create NamedUser object based on results from a NamedUserList iterator.
+        Create NamedUser object
 
         """
         for key in payload:
@@ -128,44 +128,10 @@ class NamedUser(object):
         return cls
 
 
-class NamedUserList(object):
+class NamedUserList(common.IteratorParent):
     """Retrieves a list of NamedUsers"""
-    start_url = None
-    next_url = None
-    airship = None
-    data = None
+    next_url = common.NAMED_USER_URL
+    data_attribute = 'named_users'
 
     def __init__(self, airship):
-        self._airship = airship
-        self.start_url = common.NAMED_USER_URL
-        self.next_url = self.start_url
-        self._token_iter = iter(())
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        try:
-            return NamedUser.from_payload(next(self._token_iter))
-        except StopIteration:
-            self._fetch_next_page()
-            return NamedUser.from_payload(next(self._token_iter))
-
-    def next(self):
-        """ Necessary for iteration to work with Python 2.*."""
-        return self.__next__()
-
-    def _fetch_next_page(self):
-        if self.next_url:
-            self._load_page(self.next_url)
-            self.next_url = self._page.get('next_page')
-
-    def _load_page(self, url):
-        response = self._airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
-        self._page = page = response.json()
-        self._token_iter = iter(page['named_users'])
+        super(NamedUserList, self).__init__(airship, None)
