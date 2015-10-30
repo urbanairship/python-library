@@ -21,15 +21,17 @@ class Airship(object):
         self.session.auth = (key, secret)
 
     def _request(self, method, body, url, content_type=None,
-            version=None, params=None):
+            version=None, params=None, encoding=None):
 
         headers = \
                 {'User-agent': 'UAPythonLib/{0}'.format(__about__.__version__)}
         if content_type:
-            headers['content-type'] = content_type
-        if version is not None:
+            headers['Content-type'] = content_type
+        if version:
             headers['Accept'] = ('application/vnd.urbanairship+json; '
                                  'version=%d;' % version)
+        if encoding:
+            headers['Content-Encoding'] = encoding
 
         logger.debug(
             'Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s',
