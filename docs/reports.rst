@@ -10,7 +10,8 @@ Returns detailed report information about a specific push notification.
 Use the push_id, which is the identifier returned by the API that represents a
 specific push message delivery.
 For more information,
-see: http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics
+see `the documentation on Individual Push Response Stats
+<http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics>`_
 
 .. code-block:: python
 
@@ -25,7 +26,8 @@ Devices Report
 
 Returns an app’s opted-in and installed device counts broken out by device
 type. This endpoint returns the same data that populates the Devices Report.
-For more information, see: http://docs.urbanairship.com/api/ua.html#devices-report-api
+For more information, see `the documentation on the Devices Report
+<http://docs.urbanairship.com/api/ua.html#devices-report-api>`_
 
 .. code-block:: python
 
@@ -41,8 +43,8 @@ Push Report
 ===========
 
 Get the number of pushes you have sent within a specified time period.
-For more information, see: 
-http://docs.urbanairship.com/api/ua.html#push-report
+For more information, see `the API documentation on Push Reports
+<http://docs.urbanairship.com/api/ua.html#push-report>`_.
 
 .. code-block:: python
 
@@ -65,7 +67,8 @@ Per Push Reporting
 ==================
 
 Retrieve data specific to the performance of an individual push.
-For more information, see: http://docs.urbanairship.com/api/ua.html#per-push-reporting
+For more information, see `the API documentation on per push reporting
+<http://docs.urbanairship.com/api/ua.html#per-push-reporting>`_
 
 ---------------
 Per Push Detail
