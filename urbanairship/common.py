@@ -146,5 +146,8 @@ class IteratorDataObj(object):
         print_str = ""
         for attr in dir(self):
             if not attr.startswith('__') and attr != 'from_payload':
-                print_str += attr + ': ' + str(getattr(self, attr)) + ', '
+                try:
+                    print_str += attr + ': ' + str(getattr(self, attr)) + ', '
+                except UnicodeEncodeError:
+                    print_str += attr + ': ' + getattr(self, attr).encode('utf-8') + ', '
         return print_str[:-2]

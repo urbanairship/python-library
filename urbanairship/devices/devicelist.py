@@ -98,7 +98,6 @@ class DeviceTokenList(common.IteratorParent):
     id_key = 'device_token'
 
     def __init__(self, airship, limit=None):
-        self.airship = airship
         params = {'limit': limit} if limit else {}
         super(DeviceTokenList, self).__init__(airship, params)
 
