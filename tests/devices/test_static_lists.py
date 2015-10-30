@@ -65,7 +65,9 @@ class TestStaticList(unittest.TestCase):
             response = requests.Response()
             response._content = json.dumps({'ok': True}).encode('utf-8')
             mock_request.return_value = response
-            results = self.device.update('this is a description', {'key': 'value'})
+            self.device.description = 'this is a description'
+            self.device.extra = {'key': 'value'}
+            results = self.device.update()
             self.assertEqual(results, {'ok': True})
 
     def test_delete(self):

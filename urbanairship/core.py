@@ -27,10 +27,10 @@ class Airship(object):
                 {'User-agent': 'UAPythonLib/{0}'.format(__about__.__version__)}
         if content_type:
             headers['Content-type'] = content_type
-        if version is not None:
+        if version:
             headers['Accept'] = ('application/vnd.urbanairship+json; '
                                  'version=%d;' % version)
-        if encoding is not None:
+        if encoding:
             headers['Content-Encoding'] = encoding
 
         logger.debug(
