@@ -65,34 +65,6 @@ class ChannelInfo(object):
         return cls.from_payload(payload[data_attribute], id_key)
 
 
-class DeviceInfo(object):
-    """Information object for a single device token.
-
-    :ivar id: Device identifier. Also available at the attribute named by
-        the ``device_type``.
-    :ivar device_type: Type of the device, e.g. ``device_token``
-    :ivar active: bool; whether this device can receive notifications.
-    :ivar tags: list of tags associated with this device, if any.
-    :ivar alias: alias associated with this device, if any.
-
-    """
-    id = None
-    device_type = None
-    active = None
-    tags = None
-    alias = None
-
-    @classmethod
-    def from_payload(cls, payload, device_key):
-        """Create based on results from a DeviceList iterator."""
-        obj = cls()
-        obj.id = payload[device_key]
-        obj.device_type = device_key
-        for key in payload:
-            setattr(obj, key, payload[key])
-        return obj
-
-
 class DevicePINInfo(object):
     @classmethod
     def pin_lookup(cls, airship, device_pin):
@@ -114,114 +86,55 @@ class DevicePINInfo(object):
         return payload
 
 
-class DeviceList(object):
-    start_url = NotImplemented
-    next_url = None
-    limit = None
-    data_attribute = NotImplemented
-    id_key = NotImplemented
-
-    def __init__(self, airship, limit=None):
-        self._airship = airship
-        self.next_url = self.start_url
-        self._token_iter = iter(())
-        if limit is not None:
-            self.limit = limit
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        try:
-            return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
-        except StopIteration:
-            self._fetch_next_page()
-            return DeviceInfo.from_payload(next(self._token_iter), self.id_key)
-
-    def next(self):
-        """Necessary for iteration to work with Python 2.*."""
-        return self.__next__()
-
-    def _fetch_next_page(self):
-        if not self.next_url:
-            return
-        self._load_page(self.next_url)
-        self.next_url = self._page.get('next_page')
-
-    def _load_page(self, url):
-        params = {'limit': self.limit} if self.limit is not None else {}
-        response = self._airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3,
-            params=params
-        )
-        self._page = page = response.json()
-        self._token_iter = iter(page[self.data_attribute])
-
-
-class DeviceTokenList(DeviceList):
+class DeviceTokenList(common.IteratorParent):
     """Iterator for listing all device tokens for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
-    start_url = common.DEVICE_TOKEN_URL
+    next_url = common.DEVICE_TOKEN_URL
     data_attribute = 'device_tokens'
     id_key = 'device_token'
 
+    def __init__(self, airship, limit=None):
+        self.airship = airship
+        params = {'limit': limit} if limit else {}
+        super(DeviceTokenList, self).__init__(airship, params)
 
-class ChannelList(DeviceList):
+
+class ChannelList(DeviceTokenList):
     """Iterator for listing all channels for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`ChannelInfo` object.
 
     """
-    start_url = common.CHANNEL_URL
+    next_url = common.CHANNEL_URL
     data_attribute = 'channels'
     id_key = 'channel_id'
 
-    def __next__(self):
-        try:
-            return ChannelInfo.from_payload(
-                next(self._token_iter),
-                self.id_key
-            )
-        except StopIteration:
-            self._fetch_next_page()
-            return ChannelInfo.from_payload(
-                next(self._token_iter),
-                self.id_key
-            )
 
-    def next(self):
-        """Necessary for iteration to work with Python 2.*."""
-        return self.__next__()
-
-
-class APIDList(DeviceList):
+class APIDList(DeviceTokenList):
     """Iterator for listing all APIDs for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
-    start_url = common.APID_URL
+    next_url = common.APID_URL
     data_attribute = 'apids'
     id_key = 'apid'
 
 
-class DevicePINList(DeviceList):
+class DevicePINList(DeviceTokenList):
     """Iterator for listing all device PINs for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
-    start_url = common.DEVICE_PIN_URL
+    next_url = common.DEVICE_PIN_URL
     data_attribute = 'device_pins'
     id_key = 'device_pin'
 

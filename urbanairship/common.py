@@ -83,6 +83,7 @@ class IteratorParent(object):
     data_attribute = None
     data_list = None
     params = None
+    id_key = None
 
     def __init__(self, airship, params):
         self.airship = airship
@@ -94,10 +95,10 @@ class IteratorParent(object):
 
     def __next__(self):
         try:
-            return IteratorDataObj.from_payload(next(self._token_iter))
+            return IteratorDataObj.from_payload(next(self._token_iter), self.id_key)
         except StopIteration:
             if self._load_page():
-                return IteratorDataObj.from_payload(next(self._token_iter))
+                return IteratorDataObj.from_payload(next(self._token_iter), self.id_key)
             else:
                 raise StopIteration
 
@@ -127,8 +128,12 @@ class IteratorParent(object):
 
 class IteratorDataObj(object):
     @classmethod
-    def from_payload(cls, payload):
+    def from_payload(cls, payload, device_key=None):
         obj = cls()
+        if device_key:
+            obj.device_type = device_key
+        if device_key and payload[device_key]:
+            obj.id = payload[device_key]
         for key in payload:
             try:
                 val = datetime.datetime.strptime(payload[key], '%Y-%m-%d %H:%M:%S')
