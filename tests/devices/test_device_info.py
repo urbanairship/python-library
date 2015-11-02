@@ -241,3 +241,27 @@ class TestDeviceInfo(unittest.TestCase):
             self.assertEqual(
                 device_info['last_registration'], last_registration_date
             )
+
+    def device_pin_registration(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            expected_resp = {'ok': 'true'}
+            response._content = json.dumps(expected_resp).encode('utf-8')
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+            actual_resp = ua.DevicePINInfo(airship).register('12345678')
+
+            self.assertEqual(expected_resp, actual_resp)
+
+    def device_pin_deactivation(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response.status_code = 204
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+            actual_resp = ua.DevicePINInfo(airship).deactivate('12345678')
+
+            self.assertEqual(actual_resp.status_code, 204)
