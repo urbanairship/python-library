@@ -101,3 +101,29 @@ class TestLocationFinder(unittest.TestCase):
             polygon_id='id',
             zoom='1'
         )
+
+    def test_date_ranges(self):
+        expected_resp = \
+            [{'unit': 'hours',
+              'cutoff': '2015-10-01 15'
+              },
+             {'unit': 'days',
+              'cutoff': '2015-10-01'
+              },
+             {'unit': 'weeks',
+              'cutoff': '2015-W10'
+              },
+             {'unit': 'months',
+              'cutoff': '2015-10'
+              },
+             {'unit': 'years',
+              'cutoff': '2015-10'
+              }]
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            mock_response = requests.Response()
+            mock_response._content = json.dumps(expected_resp).encode('utf-8')
+            mock_request.return_value = mock_response
+            airship = ua.Airship('key', 'secret')
+            location = ua.LocationFinder(airship)
+            actual_resp = location.date_ranges()
+            self.assertEqual(actual_resp, expected_resp)

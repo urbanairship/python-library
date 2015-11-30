@@ -106,3 +106,18 @@ Search for location by polygon id. See the `documentation on polygon lookup
 .. note::
 
     polygon_id needs to be a string. Zoom is a number ranging 1-20.
+
+
+Location Date Ranges
+--------------------
+
+Get the possible date ranges that can be used with location endpoints. See `the documentation
+on location date ranges <http://docs.urbanairship.com/api/ua.html#location-date-ranges>`__
+for more information.
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship(app_key, master_secret)
+    l = ua.LocationFinder(airship)
+    l.date_ranges()

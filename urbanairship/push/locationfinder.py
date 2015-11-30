@@ -131,3 +131,12 @@ class LocationFinder(object):
         )
         logger.info('Retrieved location info by polygon id: %s and zoom: %s' % (polygon_id, str(zoom)))
         return resp.json()
+
+    def date_ranges(self):
+        resp = self.airship._request(
+            'GET',
+            None,
+            common.SEGMENTS_URL + 'dates/',
+            version=3,
+        )
+        return resp.json()
