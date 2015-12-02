@@ -23,11 +23,13 @@ class TestResponseStats(unittest.TestCase):
         airship = ua.Airship('key', 'secret')
         statistics = ua.reports.IndividualResponseStats.get(airship, 'push_id')
 
-        self.assertEqual(statistics.push_uuid, "f133a7c8-d750-11e1-a6cf-e06995b6c872")
+        self.assertEqual(statistics.push_uuid,
+                         "f133a7c8-d750-11e1-a6cf-e06995b6c872")
         self.assertEqual(statistics.direct_responses, 45)
         self.assertEqual(statistics.sends, 123)
         self.assertEqual(statistics.push_type, "UNICAST_PUSH")
-        self.assertEqual(statistics.push_time, datetime(2012, 7, 31, 12, 34, 56))
+        self.assertEqual(statistics.push_time,
+                         datetime(2012, 7, 31, 12, 34, 56))
 
 
 class TestResponseList(unittest.TestCase):
@@ -76,23 +78,31 @@ class TestResponseList(unittest.TestCase):
         for response in return_list:
             push_responses.append(response)
 
-        self.assertEqual(push_responses[0].push_uuid, 'ae46a0b4-8130-4fcd-8464-0c601d0390be')
+        self.assertEqual(push_responses[0].push_uuid,
+                         'ae46a0b4-8130-4fcd-8464-0c601d0390be')
         self.assertEqual(push_responses[0].sends, 0)
-        self.assertEqual(push_responses[0].push_time, datetime(2015, 6, 13, 23, 27, 46))
+        self.assertEqual(push_responses[0].push_time,
+                         datetime(2015, 6, 13, 23, 27, 46))
         self.assertEqual(push_responses[0].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[0].direct_responses, 10)
-        self.assertEqual(push_responses[0].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[0].group_id,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
 
-        self.assertEqual(push_responses[1].push_uuid, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[1].push_uuid,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
         self.assertEqual(push_responses[1].sends, 1)
-        self.assertEqual(push_responses[1].push_time, datetime(2015, 6, 29, 23, 42, 39))
+        self.assertEqual(push_responses[1].push_time,
+                         datetime(2015, 6, 29, 23, 42, 39))
         self.assertEqual(push_responses[1].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[1].direct_responses, 23)
-        self.assertEqual(push_responses[1].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[1].group_id,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
 
-        self.assertEqual(push_responses[2].push_uuid, 'e91fd480-0aa1-4f70-981d-7be765d465d1')
+        self.assertEqual(push_responses[2].push_uuid,
+                         'e91fd480-0aa1-4f70-981d-7be765d465d1')
         self.assertEqual(push_responses[2].sends, 2)
-        self.assertEqual(push_responses[2].push_time, datetime(2015, 6, 23, 18, 12, 44))
+        self.assertEqual(push_responses[2].push_time,
+                         datetime(2015, 6, 23, 18, 12, 44))
         self.assertEqual(push_responses[2].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[2].direct_responses, 7)
 
@@ -143,19 +153,25 @@ class TestResponseList(unittest.TestCase):
         for response in return_list:
             push_responses.append(response)
 
-        self.assertEqual(push_responses[0].push_uuid, 'ae46a0b4-8130-4fcd-8464-0c601d0390be')
+        self.assertEqual(push_responses[0].push_uuid,
+                         'ae46a0b4-8130-4fcd-8464-0c601d0390be')
         self.assertEqual(push_responses[0].sends, 0)
-        self.assertEqual(push_responses[0].push_time, datetime(2015, 6, 13, 23, 27, 46))
+        self.assertEqual(push_responses[0].push_time,
+                         datetime(2015, 6, 13, 23, 27, 46))
         self.assertEqual(push_responses[0].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[0].direct_responses, 10)
-        self.assertEqual(push_responses[0].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[0].group_id,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
 
-        self.assertEqual(push_responses[1].push_uuid, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[1].push_uuid,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
         self.assertEqual(push_responses[1].sends, 1)
-        self.assertEqual(push_responses[1].push_time, datetime(2015, 6, 29, 23, 42, 39))
+        self.assertEqual(push_responses[1].push_time,
+                         datetime(2015, 6, 29, 23, 42, 39))
         self.assertEqual(push_responses[1].push_type, 'UNICAST_PUSH')
         self.assertEqual(push_responses[1].direct_responses, 23)
-        self.assertEqual(push_responses[1].group_id, 'de4e1149-9dfb-4c29-a639-090b29bada45')
+        self.assertEqual(push_responses[1].group_id,
+                         'de4e1149-9dfb-4c29-a639-090b29bada45')
 
     def test_invalid_datetime(self):
         airship = ua.Airship('key', 'secret')
@@ -276,7 +292,8 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2012, 4, 1)
         precision = 'MONTHLY'
 
-        response_list = self.test_class(airship, start_date, end_date, precision)
+        response_list = self.test_class(airship, start_date, end_date,
+                                        precision)
 
         instantiated_list = []
 

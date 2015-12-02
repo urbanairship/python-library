@@ -1,6 +1,5 @@
 import json
 import logging
-
 from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
@@ -22,13 +21,8 @@ class NamedUser(object):
         :param device_type: The device type of the channel
         :return:
         """
-        if self.named_user_id is None:
+        if not self.named_user_id:
             raise ValueError('named_user_id is required for association')
-
-        payload = {}
-        payload['channel_id'] = channel_id
-        payload['device_type'] = device_type
-        payload['named_user_id'] = self.named_user_id
 
         body = json.dumps(
             {
@@ -38,7 +32,10 @@ class NamedUser(object):
             }
         ).encode('utf-8')
         response = self._airship._request(
-            'POST', body, common.NAMED_USER_ASSOCIATE_URL, 'application/json',
+            'POST',
+            body,
+            common.NAMED_USER_ASSOCIATE_URL,
+            'application/json',
             version=3
         )
         return response
@@ -60,8 +57,11 @@ class NamedUser(object):
 
         body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
-            'POST', body, common.NAMED_USER_DISASSOCIATE_URL,
-            'application/json', version=3
+            'POST',
+            body,
+            common.NAMED_USER_DISASSOCIATE_URL,
+            'application/json',
+            version=3
         )
 
         return response
@@ -72,7 +72,11 @@ class NamedUser(object):
         :return: The named user payload for the named user ID
         """
         response = self._airship._request(
-            'GET', None, common.NAMED_USER_URL, 'application/json', version=3,
+            'GET',
+            None,
+            common.NAMED_USER_URL,
+            'application/json',
+            version=3,
             params={'id': self.named_user_id}
         )
         return response.json()
@@ -85,33 +89,37 @@ class NamedUser(object):
         :param group: The Tag group for the add, remove, and set operations
         """
         payload = {}
-        if self.named_user_id is not None:
+        if not self.named_user_id:
             audience = {'named_user_id': self.named_user_id}
         else:
             raise ValueError('A named user ID is required for modifying tags')
 
         payload['audience'] = audience
 
-        if add is not None:
-            if set is not None:
+        if add:
+            if set:
                 raise ValueError('A tag request can only contain an add or '
                                  'remove field, both, or a single set field')
             payload['add'] = {group: add}
 
-        if remove is not None:
-            if set is not None:
+        if remove:
+            if set:
                 raise ValueError('A tag request can only contain an add or '
                                  'remove field, both, or a single set field')
             payload['remove'] = {group: remove}
 
-        if set is not None:
+        if set:
             payload['set'] = {group: set}
         if not add and not remove and not set:
             raise ValueError('An add, remove, or set field was not set')
 
         body = json.dumps(payload).encode('utf-8')
         response = self._airship._request(
-            'POST', body, common.NAMED_USER_TAG_URL, 'application/json', version=3
+            'POST',
+            body,
+            common.NAMED_USER_TAG_URL,
+            'application/json',
+            version=3
         )
 
         return response.json()
@@ -120,6 +128,7 @@ class NamedUser(object):
     def from_payload(cls, payload):
         """
         Create NamedUser object based on results from a NamedUserList iterator.
+        :param payload: Payload used to create the NamedUser object
 
         """
         for key in payload:

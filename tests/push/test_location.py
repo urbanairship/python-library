@@ -2,7 +2,6 @@ import json
 import unittest
 import mock
 import requests
-
 import urbanairship as ua
 
 
@@ -42,19 +41,23 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_name_lookup(self):
         info = self.l.name_lookup('name')
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_name_lookup_with_type(self):
         info = self.l.name_lookup('name', 'type')
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_coordinates_lookup(self):
         info = self.l.coordinates_lookup(123, 123)
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_coordinates_lookup_with_type(self):
         info = self.l.coordinates_lookup(123, 123, 'type')
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_invalid_coordinates(self):
         self.assertRaises(
@@ -66,11 +69,13 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_bounding_box_lookup(self):
         info = self.l.bounding_box_lookup(123, 123, 123, 123)
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_bounding_box_lookup_with_type(self):
         info = self.l.bounding_box_lookup(123, 123, 123, 123, 'type')
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_invalid_bounding_box(self):
         self.assertRaises(
@@ -84,15 +89,18 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_alias_lookup(self):
         info = self.l.alias_lookup('alias=alias')
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_alias_list_lookup(self):
         info = self.l.alias_lookup(['alias=alias1', 'alias=alias2'])
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_polygon_lookup(self):
         info = self.l.polygon_lookup('id', 1)
-        self.assertEqual(info['features'][0]['bounds'], [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(info['features'][0]['bounds'],
+                         [37.63983, -123.173825, 37.929824, -122.28178])
 
     def test_invalid_zoom(self):
         self.assertRaises(

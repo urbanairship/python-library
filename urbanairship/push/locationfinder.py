@@ -41,7 +41,8 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        if not isinstance(latitude, (int, float)) or not isinstance(longitude, (int, float)):
+        if not isinstance(latitude, (int, float)) or \
+                not isinstance(longitude, (int, float)):
             raise TypeError('latitude and longitude need to be numbers')
 
         url = common.LOCATION_URL + str(latitude) + ',' + str(longitude)
@@ -55,7 +56,8 @@ class LocationFinder(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by coordinates: %s,%s' % (str(latitude), str(longitude)))
+        logger.info('Retrieved location info by coordinates: %s,%s' % (
+            str(latitude), str(longitude)))
         return resp.json()
 
     def bounding_box_lookup(self, lat1, long1, lat2, long2, location_type=None):
@@ -69,10 +71,13 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        if not isinstance(lat1, (float, int)) or not isinstance(lat2, (float, int)) or \
-                not isinstance(long1, (float, int)) or not isinstance(long2, (float, int)):
+        if not isinstance(lat1, (float, int)) or \
+                not isinstance(lat2, (float, int)) or \
+                not isinstance(long1, (float, int)) or \
+                not isinstance(long2, (float, int)):
             raise TypeError('lat1, long1, lat2, and long2 need to be numbers')
-        url = common.LOCATION_URL + str(lat1) + ',' + str(long1) + ',' + str(lat2) + ',' + str(long2)
+        url = common.LOCATION_URL + str(lat1) + ',' + str(long1) + ',' + str(
+            lat2) + ',' + str(long2)
         params = {}
         if location_type:
             params['type'] = location_type
@@ -84,7 +89,8 @@ class LocationFinder(object):
             params=params
         )
         logger.info(
-            'Retrieved location info by bounding box: %s,%s,%s,%s' % (str(lat1), str(long1), str(lat2), str(long2)))
+            'Retrieved location info by bounding box: %s,%s,%s,%s' % (
+                str(lat1), str(long1), str(lat2), str(long2)))
         return resp.json()
 
     def alias_lookup(self, from_alias):
@@ -129,7 +135,8 @@ class LocationFinder(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by polygon id: %s and zoom: %s' % (polygon_id, str(zoom)))
+        logger.info('Retrieved location info by polygon id: %s and zoom: %s' % (
+            polygon_id, str(zoom)))
         return resp.json()
 
     def date_ranges(self):
