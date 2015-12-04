@@ -284,7 +284,7 @@ For more information, see `the documentation on Opt In Report
 
 
 Opt-Out Report
-=============
+==============
 Get the number of opted-out push users who access the app within the specified 
 time period.
 For more information, see `the documentation on Opt Out Report
