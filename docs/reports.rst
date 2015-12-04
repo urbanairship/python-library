@@ -83,10 +83,10 @@ For more information, see `the API documentation on Push Reports
 
     .. code-block:: python
 
-    import urbanairship as ua
-    airship = ua.Airship('appkey', 'master_secret')
-    d = ua.reports.PerPushDetail(airship)
-    details = d.get_single('push_id')
+        import urbanairship as ua
+        airship = ua.Airship('appkey', 'master_secret')
+        d = ua.reports.PerPushDetail(airship)
+        details = d.get_single('push_id')
 
    Batch Request
    -------------
@@ -110,11 +110,13 @@ For more information, see `the API documentation on Push Reports
    Get the default time series data. For more information,
    see: `the documentation on Per Push Series:
    <http://docs.urbanairship.com/api/ua.html#per-push-series>`__
+
+   .. code-block:: python
  
-   import urbanairship as ua
-   airship = ua.Airship('appkey', 'master_secret')
-   s = ua.reports.PerPushSeries(airship)
-   series = s.get('push_id')
+       import urbanairship as ua
+       airship = ua.Airship('appkey', 'master_secret')
+       s = ua.reports.PerPushSeries(airship)
+       series = s.get('push_id')
 
    Series With Precision
    ---------------------
