@@ -63,9 +63,6 @@ For more information, see `the API documentation on Push Reports
 
 .. Hiding the perpush endpoints for now per GAG-705 (until rate limiting is in place)
 
-Per Push Reporting
-==================
-
    Per Push Reporting
    ==================
    Retrieve data specific to the performance of an individual push.
