@@ -48,9 +48,7 @@ class NamedUser(object):
         :return:
         """
 
-        payload = {}
-        payload['channel_id'] = channel_id
-        payload['device_type'] = device_type
+        payload = {'channel_id': channel_id, 'device_type': device_type}
 
         if self.named_user_id is not None:
             payload['named_user_id'] = self.named_user_id
@@ -88,13 +86,10 @@ class NamedUser(object):
         :param set: A list of tags to set
         :param group: The Tag group for the add, remove, and set operations
         """
-        payload = {}
-        if not self.named_user_id:
-            audience = {'named_user_id': self.named_user_id}
+        if self.named_user_id:
+            payload = {'audience': {'named_user_id': self.named_user_id}}
         else:
             raise ValueError('A named user ID is required for modifying tags')
-
-        payload['audience'] = audience
 
         if add:
             if set:

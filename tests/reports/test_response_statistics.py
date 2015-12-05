@@ -292,8 +292,12 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2012, 4, 1)
         precision = 'MONTHLY'
 
-        response_list = self.test_class(airship, start_date, end_date,
-                                        precision)
+        response_list = self.test_class(
+            airship,
+            start_date,
+            end_date,
+            precision
+        )
 
         instantiated_list = []
 

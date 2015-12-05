@@ -39,7 +39,7 @@ for more information.
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
     l = ua.LocationFinder(airship)
-    l.coordinates_lookup(123.45, 123.45, 'type')
+    l.coordinates_lookup('lat', 'long', 'type')
 
 .. note::
 
@@ -63,7 +63,7 @@ for more information.
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
     l = ua.LocationFinder(airship)
-    l.bounding_box_lookup(123.45, 123.45, 321.45, 321.45, 'type')
+    l.bounding_box_lookup('lat1', 'long1', 'lat2', 'long2', 'type')
 
 .. note::
 
@@ -83,7 +83,7 @@ information.
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
     l = ua.LocationFinder(airship)
-    l.alias_lookup('ua_state=CA')
+    l.alias_lookup('us_state=CA')
 
 .. note::
 
@@ -101,7 +101,7 @@ Search for location by polygon id. See the `documentation on polygon lookup
     import urbanairship as ua
     airship = ua.Airship(app_key, master_secret)
     l = ua.LocationFinder(airship)
-    l.polygon_lookup('id', 1)
+    l.polygon_lookup('id', 'zoom')
 
 .. note::
 

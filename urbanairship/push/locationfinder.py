@@ -11,7 +11,7 @@ class LocationFinder(object):
     def name_lookup(self, name, location_type=None):
         """Lookup a location by name
 
-        :param name: Name of the location to lookup
+        :param name: Name of the location to look up
         :param location_type: Location type
         :return: Information about the location
         """
