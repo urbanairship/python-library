@@ -52,15 +52,17 @@ the system. You can also set up an alias and tags for the pin.
 
     import urbanairship as ua
     airship = ua.Airship(app_key, app_secret)
-    device_pin = ua.DevicePinInfo.new(client: airship)
+    device_pin = ua.DevicePinInfo(airship)
     resp = device_pin.register(
-        '12345678',
-        pin_alias='blackberry',
-        tags: ['tag1', 'tag2']
+        'device_pin',
+        'pin_alias',
+        ['tag1', 'tag2']
     )
     print(resp)
 
 .. note::
+
+    ``device_pin`` must be an 8 digit hex string.
     ``pin_alias`` and ``tags`` are optional parameters for this command.
     If no ``pin_alias`` is provided, any existing alias will be removed from the device
     record. To empty the tag set, send an empty array of tags. If the tags
