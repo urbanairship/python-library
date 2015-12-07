@@ -33,7 +33,7 @@ class Tag(object):
 
     def __init__(self, airship, tag_name):
         warnings.warn(
-            'The Tag object has been deprecated. Please use ChannelTags ' +
+            'The Tag object has been deprecated. Please use ChannelTags '
             'instead.',
             DeprecationWarning
         )

@@ -156,7 +156,9 @@ class IteratorDataObj(object):
     def __str__(self):
         print_str = ""
         for attr in dir(self):
-            if not attr.startswith('__') and \
-                    not hasattr(getattr(self, attr), '__call__'):
+            if(
+                not attr.startswith('__') and
+                not hasattr(getattr(self, attr), '__call__')
+            ):
                 print_str += attr + ': ' + str(getattr(self, attr)) + ', '
         return print_str[:-2]
