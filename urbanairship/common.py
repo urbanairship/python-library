@@ -1,6 +1,8 @@
 import json
 import logging
 import datetime
+import six
+
 
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
@@ -52,7 +54,10 @@ class AirshipFailure(Exception):
 
     @classmethod
     def from_response(cls, response):
-        """Instantiate a ValidationFailure from a Response object"""
+        """
+        Instantiate a ValidationFailure from a Response object
+        :param response: response object used to create failure obj
+        """
 
         try:
             payload = response.json()
@@ -78,7 +83,7 @@ class AirshipFailure(Exception):
         )
 
 
-class IteratorParent(object):
+class IteratorParent(six.Iterator):
     next_url = None
     data_attribute = None
     data_list = None
@@ -95,16 +100,18 @@ class IteratorParent(object):
 
     def __next__(self):
         try:
-            return IteratorDataObj.from_payload(next(self._token_iter), self.id_key)
+            return IteratorDataObj.from_payload(
+                next(self._token_iter),
+                self.id_key
+            )
         except StopIteration:
             if self._load_page():
-                return IteratorDataObj.from_payload(next(self._token_iter), self.id_key)
+                return IteratorDataObj.from_payload(
+                    next(self._token_iter),
+                    self.id_key
+                )
             else:
                 raise StopIteration
-
-    def next(self):
-        """Necessary for iteration to work with Python 2.*."""
-        return self.__next__()
 
     def _load_page(self):
         if not self.next_url:
@@ -126,6 +133,7 @@ class IteratorParent(object):
         return True
 
 
+@six.python_2_unicode_compatible
 class IteratorDataObj(object):
     @classmethod
     def from_payload(cls, payload, device_key=None):
@@ -136,7 +144,10 @@ class IteratorDataObj(object):
             obj.id = payload[device_key]
         for key in payload:
             try:
-                val = datetime.datetime.strptime(payload[key], '%Y-%m-%d %H:%M:%S')
+                val = datetime.datetime.strptime(
+                    payload[key],
+                    '%Y-%m-%d %H:%M:%S'
+                )
             except (TypeError, ValueError):
                 val = payload[key]
             setattr(obj, key, val)
@@ -145,9 +156,7 @@ class IteratorDataObj(object):
     def __str__(self):
         print_str = ""
         for attr in dir(self):
-            if not attr.startswith('__') and attr != 'from_payload':
-                try:
-                    print_str += attr + ': ' + str(getattr(self, attr)) + ', '
-                except UnicodeEncodeError:
-                    print_str += attr + ': ' + getattr(self, attr).encode('utf-8') + ', '
+            if not attr.startswith('__') and \
+                    not hasattr(getattr(self, attr), '__call__'):
+                print_str += attr + ': ' + str(getattr(self, attr)) + ', '
         return print_str[:-2]
