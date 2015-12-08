@@ -51,7 +51,7 @@ class NamedUser(object):
 
         payload = {'channel_id': channel_id, 'device_type': device_type}
 
-        if self.named_user_id is not None:
+        if self.named_user_id:
             payload['named_user_id'] = self.named_user_id
 
         body = json.dumps(payload).encode('utf-8')
