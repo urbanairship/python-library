@@ -52,7 +52,7 @@ the system. You can also set up an alias and tags for the pin.
 
     import urbanairship as ua
     airship = ua.Airship(app_key, app_secret)
-    device_pin = ua.DevicePinInfo(airship)
+    device_pin = ua.DevicePINInfo(airship)
     resp = device_pin.register(
         'device_pin',
         'pin_alias',

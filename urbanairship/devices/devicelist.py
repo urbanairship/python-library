@@ -94,11 +94,12 @@ class DevicePINInfo(object):
 
     def register(self, pin, pin_alias=None, tags=None):
         try:
-            pin_hex = int(pin, 16)
+            int(pin, 16)
             if len(pin) != 8:
                 raise ValueError
         except ValueError:
-            'Device pin must be an 8 digit hex string'
+            print('Device pin must be an 8 digit hex string')
+            raise
         payload = {}
         if pin_alias:
             payload['alias'] = pin_alias
@@ -121,7 +122,8 @@ class DevicePINInfo(object):
             if len(pin) != 8:
                 raise ValueError
         except ValueError:
-            'Device pin must be an 8 digit hex string'
+            print('Device pin must be an 8 digit hex string')
+            raise
         resp = self.airship.request(
             method='DELETE',
             url=common.DEVICE_PIN_URL + pin,
