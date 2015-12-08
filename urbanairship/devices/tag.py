@@ -1,9 +1,7 @@
 import json
 import logging
 import warnings
-
 from urbanairship import common
-
 
 logger = logging.getLogger('urbanairship')
 
@@ -35,7 +33,8 @@ class Tag(object):
 
     def __init__(self, airship, tag_name):
         warnings.warn(
-            "The Tag object has been deprecated. Please use ChannelTags instead.",
+            'The Tag object has been deprecated. Please use ChannelTags '
+            'instead.',
             DeprecationWarning
         )
         self._airship = airship
@@ -109,7 +108,8 @@ class BatchTag(object):
 
     def __init__(self, airship):
         warnings.warn(
-            "The BatchTag object has been deprecated. Please use ChannelTags instead.",
+            'The BatchTag object has been deprecated. Please use ChannelTags '+
+            'instead.',
             DeprecationWarning
         )
         self._airship = airship

@@ -21,7 +21,7 @@ class TestResponseStats(unittest.TestCase):
         ua.Airship._request.side_effect = [mock_response]
 
         airship = ua.Airship('key', 'secret')
-        statistics = ua.reports.IndividualResponseStats.get(airship, 'push_id')
+        statistics = ua.reports.IndividualResponseStats(airship).get('push_id')
 
         self.assertEqual(statistics.push_uuid,
                          "f133a7c8-d750-11e1-a6cf-e06995b6c872")
@@ -177,7 +177,7 @@ class TestResponseList(unittest.TestCase):
         airship = ua.Airship('key', 'secret')
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
-            ValueError,
+            TypeError,
             callableObj=ua.reports.ResponseList,
             airship=airship,
             start_date='2015-07-01',
@@ -320,7 +320,7 @@ class TestOptInList(unittest.TestCase):
         airship = ua.Airship('key', 'secret')
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
-            ValueError,
+            TypeError,
             callableObj=ua.reports.OptInList,
             airship=airship,
             start_date='2015-7-1',

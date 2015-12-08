@@ -96,49 +96,12 @@ class StaticList(object):
         return self.airship._request('DELETE', None, url, version=3)
 
 
-class StaticLists(object):
-    start_url = common.LISTS_URL
-    next_url = None
-    start_date = None
-    end_date = None
+class StaticLists(common.IteratorParent):
+    next_url = common.LISTS_URL
     data_attribute = 'lists'
-    _page = None
 
     def __init__(self, airship):
-        self._airship = airship
-        self.next_url = self.start_url
-        self._token_iter = iter(())
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        try:
-            return StaticList.from_payload(next(self._token_iter), self._airship)
-        except StopIteration:
-            self._fetch_next_page()
-            return StaticList.from_payload(next(self._token_iter), self._airship)
-
-    def next(self):
-        """Necessary for iteration to work with Python 2.*."""
-        return self.__next__()
-
-    def _fetch_next_page(self):
-        if not self.next_url:
-            return
-        self._load_page(self.next_url)
-        self.next_url = self._page.get('next_page')
-
-    def _load_page(self, url):
-        response = self._airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3,
-        )
-        self._page = page = response.json()
-        self._token_iter = iter(page[self.data_attribute])
-
+        super(StaticLists,self).__init__(airship, None)
 
 class Buffer(object):
     def __init__(self):
