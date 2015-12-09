@@ -127,7 +127,7 @@ For more information, see `the API documentation on Push Reports
    <http://docs.urbanairship.com/api/ua.html#per-push-series-with-precision>`__
    
    .. code-block:: python
-   
+
        import urbanairship as ua
        airship = ua.Airship('appkey', 'master_secret')
        s = ua.reports.PerPushSeries(airship)
