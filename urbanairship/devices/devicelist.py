@@ -1,5 +1,9 @@
 import datetime
+import json
+import logging
 from urbanairship import common
+
+logger = logging.getLogger('urbanairship')
 
 
 class ChannelInfo(object):
@@ -84,6 +88,50 @@ class DevicePINInfo(object):
             payload['last_registration'], '%Y-%m-%d %H:%M:%S'
         )
         return payload
+
+    def __init__(self, airship):
+        self.airship = airship
+
+    def register(self, pin, pin_alias=None, tags=None):
+        try:
+            int(pin, 16)
+            if len(pin) != 8:
+                raise ValueError
+        except ValueError:
+            print('Device pin must be an 8 digit hex string')
+            raise
+        payload = {}
+        if pin_alias:
+            payload['alias'] = pin_alias
+        if tags:
+            payload['tags'] = tags
+
+        resp = self.airship.request(
+            method='PUT',
+            url=common.DEVICE_PIN_URL + pin,
+            body=json.dumps(payload),
+            content_type='application/json',
+            version=3
+        )
+        logger.info("Registered device pin %s", pin)
+        return resp.json()
+
+    def deactivate(self, pin):
+        try:
+            int(pin, 16)
+            if len(pin) != 8:
+                raise ValueError
+        except ValueError:
+            print('Device pin must be an 8 digit hex string')
+            raise
+        resp = self.airship.request(
+            method='DELETE',
+            url=common.DEVICE_PIN_URL + pin,
+            body=None,
+            version=3
+        )
+        logger.info("Deactived device pin %s", pin)
+        return resp
 
 
 class DeviceTokenList(common.IteratorParent):

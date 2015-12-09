@@ -41,6 +41,34 @@ Device metadata is fetched for a specific channel by using
    :members: ChannelInfo
    :noindex:
 
+
+Blackberry PIN Register
+-----------------------
+
+Register a PIN with the application. This will mark the PIN as active in
+the system. You can also set up an alias and tags for the pin.
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship(app_key, app_secret)
+    device_pin = ua.DevicePINInfo(airship)
+    resp = device_pin.register(
+        'device_pin',
+        'pin_alias',
+        ['tag1', 'tag2']
+    )
+    print(resp)
+
+.. note::
+
+    ``device_pin`` must be an 8 digit hex string.
+    ``pin_alias`` and ``tags`` are optional parameters for this command.
+    If no ``pin_alias`` is provided, any existing alias will be removed from the device
+    record. To empty the tag set, send an empty array of tags. If the tags
+    array is missing from the request, the tags will not be modified.
+
+
 Blackberry PIN Lookup
 ---------------------
 
@@ -58,6 +86,21 @@ device PIN by using :py:class:`DevicePINInfo:pin_lookup`
 .. automodule:: urbanairship.devices.devicelist
    :members: DevicePINInfo
    :noindex:
+
+
+Blackberry PIN Deactivate
+-------------------------
+
+Deactive a Blackberry pin for the application.
+
+.. code-block:: python
+
+    import urbanairship as ua
+    airship = ua.Airship(app_key, app_secret)
+    device_pin_info = ua.DevicePINInfo(airship)
+    resp = device_pin_info.deactivate('12345678')
+    print(resp)
+
 
 Device Listing
 --------------
