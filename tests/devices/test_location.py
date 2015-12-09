@@ -7,14 +7,18 @@ import urbanairship as ua
 
 class TestLocationFinder(unittest.TestCase):
     def setUp(self):
+        self.lat1 = 37.63983
+        self.long1 = -123.173825
+        self.lat2 = 37.929824
+        self.long2 = -122.28178
         mock_response = requests.Response()
         mock_response._content = json.dumps({
             "features": [{
                 "bounds": [
-                    37.63983,
-                    -123.173825,
-                    37.929824,
-                    -122.28178
+                    self.lat1,
+                    self.long1,
+                    self.lat2,
+                    self.long2
                 ],
                 "centroid": [
                     37.759715,
@@ -41,23 +45,31 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_name_lookup(self):
         info = self.l.name_lookup('name')
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_name_lookup_with_type(self):
         info = self.l.name_lookup('name', 'type')
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_coordinates_lookup(self):
         info = self.l.coordinates_lookup(123, 123)
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_coordinates_lookup_with_type(self):
         info = self.l.coordinates_lookup(123, 123, 'type')
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_invalid_coordinates(self):
         self.assertRaises(
@@ -69,13 +81,17 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_bounding_box_lookup(self):
         info = self.l.bounding_box_lookup(123, 123, 123, 123)
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_bounding_box_lookup_with_type(self):
         info = self.l.bounding_box_lookup(123, 123, 123, 123, 'type')
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_invalid_bounding_box(self):
         self.assertRaises(
@@ -89,18 +105,24 @@ class TestLocationFinder(unittest.TestCase):
 
     def test_alias_lookup(self):
         info = self.l.alias_lookup('alias=alias')
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_alias_list_lookup(self):
         info = self.l.alias_lookup(['alias=alias1', 'alias=alias2'])
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_polygon_lookup(self):
         info = self.l.polygon_lookup('id', 1)
-        self.assertEqual(info['features'][0]['bounds'],
-                         [37.63983, -123.173825, 37.929824, -122.28178])
+        self.assertEqual(
+            info['features'][0]['bounds'],
+            [self.lat1, self.long1, self.lat2, self.long2]
+        )
 
     def test_invalid_zoom(self):
         self.assertRaises(
@@ -111,22 +133,13 @@ class TestLocationFinder(unittest.TestCase):
         )
 
     def test_date_ranges(self):
-        expected_resp = \
-            [{'unit': 'hours',
-              'cutoff': '2015-10-01 15'
-              },
-             {'unit': 'days',
-              'cutoff': '2015-10-01'
-              },
-             {'unit': 'weeks',
-              'cutoff': '2015-W10'
-              },
-             {'unit': 'months',
-              'cutoff': '2015-10'
-              },
-             {'unit': 'years',
-              'cutoff': '2015-10'
-              }]
+        expected_resp = [
+            {'unit': 'hours', 'cutoff': '2015-10-01 15'},
+            {'unit': 'days', 'cutoff': '2015-10-01'},
+            {'unit': 'weeks', 'cutoff': '2015-W10'},
+            {'unit': 'months', 'cutoff': '2015-10'},
+            {'unit': 'years', 'cutoff': '2015-10'}
+        ]
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             mock_response = requests.Response()
             mock_response._content = json.dumps(expected_resp).encode('utf-8')

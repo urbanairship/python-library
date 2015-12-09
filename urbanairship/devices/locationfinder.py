@@ -16,9 +16,8 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        params = {
-            'q': name
-        }
+        params = {'q': name}
+
         if location_type:
             params['type'] = location_type
 
@@ -29,7 +28,7 @@ class LocationFinder(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by name: %s' % name)
+        logger.info(u'Retrieved location info by name: %s' % name)
         return resp.json()
 
     def coordinates_lookup(self, latitude, longitude, location_type=None):
@@ -41,14 +40,21 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        if not isinstance(latitude, (int, float)) or \
-                not isinstance(longitude, (int, float)):
+        coor_are_valid = isinstance(latitude, (int, float)) and isinstance(longitude, (int, float))
+
+        if not coor_are_valid:
             raise TypeError('latitude and longitude need to be numbers')
 
-        url = common.LOCATION_URL + str(latitude) + ',' + str(longitude)
+        url = '{base_url}{latitude},{longitude}'.format(
+            base_url=common.LOCATION_URL,
+            latitude=str(latitude),
+            longitude=str(longitude))
+
         params = {}
+
         if location_type:
             params['type'] = location_type
+
         resp = self.airship._request(
             'GET',
             None,
@@ -71,16 +77,24 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        if not isinstance(lat1, (float, int)) or \
-                not isinstance(lat2, (float, int)) or \
-                not isinstance(long1, (float, int)) or \
-                not isinstance(long2, (float, int)):
+        loc1_valid = isinstance(lat1, (float, int)) and isinstance(long1, (float, int))
+        loc2_valid = isinstance(lat2, (float, int)) and isinstance(long2, (float, int))
+
+        if not loc1_valid or not loc2_valid:
             raise TypeError('lat1, long1, lat2, and long2 need to be numbers')
-        url = common.LOCATION_URL + str(lat1) + ',' + str(long1) + ',' + str(
-            lat2) + ',' + str(long2)
+
+        url = '{base_url}{lat1},{long1},{lat2},{long2}'.format(
+            base_url=common.LOCATION_URL,
+            lat1=str(lat1),
+            long1=str(long1),
+            lat2=str(lat2),
+            long2=str(long2)
+        )
         params = {}
+
         if location_type:
             params['type'] = location_type
+
         resp = self.airship._request(
             'GET',
             None,
@@ -100,6 +114,7 @@ class LocationFinder(object):
         """
 
         params = {}
+
         if isinstance(from_alias, list):
             for alias in from_alias:
                 alias_parts = alias.split('=')
