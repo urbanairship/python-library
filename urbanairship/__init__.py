@@ -36,7 +36,6 @@ from .push import (
     interactive,
     scheduled_time,
     local_scheduled_time,
-    LocationFinder,
 )
 
 from .devices import (
@@ -58,7 +57,8 @@ from .devices import (
     NamedUser,
     NamedUserList,
     StaticList,
-    StaticLists
+    StaticLists,
+    LocationFinder,
 )
 
 from .reports import (

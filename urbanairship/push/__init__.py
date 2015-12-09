@@ -40,10 +40,6 @@ from .schedule import (
     local_scheduled_time
 )
 
-from .locationfinder import (
-    LocationFinder
-)
-
 # Common selector for audience & device_types
 
 all_ = "all"
@@ -71,7 +67,6 @@ __all__ = [
     and_,
     or_,
     not_,
-    locationfinder,
     recent_date,
     absolute_date,
     notification,
