@@ -67,7 +67,6 @@ __all__ = [
     and_,
     or_,
     not_,
-    location,
     recent_date,
     absolute_date,
     notification,

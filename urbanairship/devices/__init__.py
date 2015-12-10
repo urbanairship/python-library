@@ -34,3 +34,7 @@ from .static_lists import (
     StaticList,
     StaticLists,
 )
+
+from .locationfinder import (
+    LocationFinder
+)

@@ -496,5 +496,3 @@ class TestPush(unittest.TestCase):
             opt,
             {'expiry': '2015-04-01T12:00:00'}
         )
-
-

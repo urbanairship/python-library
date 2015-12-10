@@ -370,6 +370,7 @@ def actions(add_tag=None, remove_tag=None,
     :keyword share: Sends a share notification. Expects a string.
     :keyword app_defined: Sends application defined actions. Expects
         a dictionary.
+
     >>> actions(add_tag='new_tag', remove_tag='old_tag',
     ...     open_={'type': 'url', 'content': 'http://www.urbanairship.com'}) # doctest: +SKIP
     {'open': {'type': 'url', 'content': 'http://www.urbanairship.com},
