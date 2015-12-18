@@ -36,6 +36,7 @@ from .push import (
     interactive,
     scheduled_time,
     local_scheduled_time,
+    named_user,
 )
 
 from .devices import (
@@ -118,6 +119,7 @@ __all__ = [
     PerPushSeries,
     NamedUser,
     NamedUserList,
+    named_user,
 ]
 
 # Silence urllib3 INFO logging by default
