@@ -18,6 +18,7 @@ from .audience import (
     location,
     recent_date,
     absolute_date,
+    named_user,
 )
 
 from .payload import (
@@ -83,5 +84,6 @@ __all__ = [
     actions,
     interactive,
     scheduled_time,
-    local_scheduled_time
+    local_scheduled_time,
+    named_user
 ]
