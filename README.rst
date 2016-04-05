@@ -78,6 +78,42 @@ Sending a rich app page to a single iOS device
     ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
     >>> push.send()
 
+Development
+===========
+
+
+Testing
+-------
+
+You can test multiple python versions simultaneously using tox. As mentioned above,
+we support python versions 2.6, 2.7, 3.3, and 3.4. Use pyenv to install any missing
+versions onto your machine. Once you have installed each version, you are ready to
+run tests. Simply type::
+
+   $ tox
+
+And the test runner will begin running tests against each python version. Note that
+the first time running tox will be slow -- it must build a virtual environment for
+each version of python specified in the ``tox.ini`` file. Subsequent executions
+of tox will be much faster.
+
+After installing the necessary python versions using pyenv and running tox, you
+may experience an error similar to the following::
+
+   ERROR: InvocationError: Failed to get version_info for python3.4: pyenv: python3.4: command not found
+
+   The `python3.4' command exists in these Python versions:
+     3.4.4
+
+To fix this, you must set a shell-specific Python version using the ``pyenv shell`` command.
+For example, to fix the error above, you would use the following command::
+
+   pyenv shell 3.4.4:system
+
+Your tests should now run without error. Note that there is nothing special about the version
+chosen in this example. You may encounter a similar error with python 3.3 or 2.7.
+
+
 Questions
 =========
 
