@@ -11,7 +11,7 @@ with open("wallet/__about__.py") as fp:
 setup(
     name="wallet",
     version=__about__["__version__"],
-    author="Stefan Lynggaard",
+    author="Urban Airship",
     author_email="support@urbanairship.com",
     url="http://urbanairship.com/",
     description="Python package for using the Urban Airship Wallet API",
