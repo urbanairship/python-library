@@ -26,6 +26,8 @@ See the `full documentation
 
 Client Setup
 ------------
+[Note: not going to include this specific example - just a placeholder for
+examples that we will include (ie "Get a Template", "Update a template", etc)]
 
     >>> import wallet as ua
     >>> ua_wallet = ua.Wallet("email", "api_key")

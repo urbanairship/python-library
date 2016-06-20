@@ -58,7 +58,7 @@ class Wallet(object):
 
         if response.status_code == 401:
             raise common.Unauthorized
-    #    elif not (200 <= response.status_code < 300):
-    #        raise common.WalletFailure.from_response(response)
+        elif not (200 <= response.status_code < 300):
+            raise common.WalletFailure.from_response(response)
 
         return response
