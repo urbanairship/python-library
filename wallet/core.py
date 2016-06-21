@@ -27,11 +27,10 @@ class Wallet(object):
             )
         }
 
-        if content_type:
+        if body:
             headers['Content-type'] = content_type
-        if version:
             headers['Api-Revision'] = version
-        if encoding:
+        else:
             headers['Content-Encoding'] = encoding
 
         logger.debug(
