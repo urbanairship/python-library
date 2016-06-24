@@ -2,6 +2,7 @@ import logging
 
 SERVER = 'wallet-api.urbanairship.com'
 BASE_URL = 'https://wallet-api.urbanairship.com/v1'
+TEMPLATE_URL = BASE_URL + '/template/{0}'
 
 logger = logging.getLogger('urbanairship')
 
