@@ -53,10 +53,6 @@ class AppleTemplate(object):
             for k, v in self.locations:
                 payload["userlocations"][k] = v
 
-        # if "beacons" in payload:
-        #     for k, v in self.beacons:
-        #         payload["beacons"][k] = v
-
         for field in payload["fields"]:
             for key, value in payload["fields"][field].items():
                 if key == "numberStyle":
