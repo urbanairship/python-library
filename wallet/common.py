@@ -3,6 +3,8 @@ import logging
 SERVER = 'wallet-api.urbanairship.com'
 BASE_URL = 'https://wallet-api.urbanairship.com/v1'
 TEMPLATE_URL = BASE_URL + '/template/{0}'
+PASS_URL = BASE_URL + '/pass/{0}'
+PASS_EXTERNAL_URL = BASE_URL + '/pass/id/{0}'
 
 logger = logging.getLogger('urbanairship')
 
