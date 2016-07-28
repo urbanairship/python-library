@@ -6,6 +6,10 @@ TEMPLATE_URL = BASE_URL + '/template/{0}'
 PASS_URL = BASE_URL + '/pass/{0}'
 PASS_EXTERNAL_URL = BASE_URL + '/pass/id/{0}'
 
+# Pass URLs
+PASS_ADD_LOCATION_URL = BASE_URL + '/pass/{0}/locations'
+PASS_DELETE_LOCATION_URL = BASE_URL + '/pass/{0}/location/{1}'
+
 logger = logging.getLogger('urbanairship')
 
 
