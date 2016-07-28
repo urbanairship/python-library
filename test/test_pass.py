@@ -13,6 +13,23 @@ CLIENT = wallet.Wallet('fake', 'client')
 class PassApiTest(unittest.TestCase):
 
     @mock.patch.object(wallet.Wallet, '_request')
+    def test_delete(self, mock_request):
+        response = requests.Response()
+        response.status_code = 200
+        mock_request.return_value = response
+
+        wal = wallet.delete_pass(CLIENT, pass_id=12345)
+        mock_request.assert_called_with(
+            'DELETE',
+            None,
+            wallet.common.PASS_BASE_URL.format(12345),
+            None,
+            1.2,
+            None
+        )
+        self.assertEqual(wal.status_code, 200)
+
+    @mock.patch.object(wallet.Wallet, '_request')
     def test_add_pass_locations(self, mock_request):
         location = {
             "longitude":-122.374,
@@ -64,4 +81,5 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
+
         self.assertEqual(wal.status_code, 200)

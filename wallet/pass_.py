@@ -7,6 +7,78 @@ from wallet import common
 LOGGER = logging.getLogger('urbanairship')
 
 
+def get_pass(wallet, pass_id=None, external_id=None):
+    """Retrieve a pass.
+
+    Args:
+        wallet (obj): A wallet client object.
+        pass_id (str): The pass ID of the pass you wish to retrieve.
+        pass_external_id (str): The external ID of the pass you wish to
+        retrieve.
+
+    Returns:
+        A pass object.
+
+    Example:
+        >>> my_pass = Pass.get_pass(pass_external_id=12345)
+        <id:67890745, templateId:51010>
+    """
+    if not (pass_id or external_id) or (pass_id and external_id):
+        raise ValueError('Please specify only one of pass_id or external_id.')
+
+    response = wallet.request(
+        method='GET',
+        body=None,
+        url=Pass.build_url(
+            common.PASS_BASE_URL,
+            main_id=pass_id,
+            pass_external_id=external_id
+        ),
+        version=1.2
+    )
+    payload = response.json()
+    return Pass.from_data(payload)
+
+
+def delete_pass(wallet, pass_id=None, external_id=None):
+    """Delete a pass.
+
+    Arguments:
+        wallet (obj): A UA Wallet object.
+        pass_id (str or int): The ID of the pass you wish to delete.
+        external_id (str or int): The external ID of the pass you wish
+            to delete.
+
+    Returns:
+        A response object.
+
+    Raises:
+        ValueError: If neither, or both, of pass_id and external_id
+            are specified.
+
+    Example:
+        >>> delete_pass(ua_wallet, pass_id='123456')
+        <Response [200]>
+    """
+    if not (pass_id or external_id) or (pass_id and external_id):
+        raise ValueError('Please specify only one of pass_id or external_id.')
+
+    response = wallet.request(
+        method='DELETE',
+        body=None,
+        url=Pass.build_url(
+            common.PASS_BASE_URL,
+            main_id=pass_id,
+            pass_external_id=external_id
+        ),
+        version=1.2
+    )
+    LOGGER.info('Successful pass deletion: {}'.format(
+        pass_id if pass_id else external_id
+    ))
+    return response
+
+
 def add_pass_locations(wallet, *args, **kwargs):
     """Add locations to a pass.
 
@@ -73,7 +145,6 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
             specified.
     Example:
         >>> my_pass.delete_location(ua_wallet, 12345, pass_id=44444)
-        <Response [200]>
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
@@ -99,31 +170,8 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
 class Pass(object):
 
     @classmethod
-    def get_pass(cls, wallet, pass_id=None, pass_external_id=None):
-        """Retrieve a pass.
-
-        Args:
-            wallet (obj): A wallet client object.
-            pass_id (str): The pass ID of the pass you wish to retrieve.
-            pass_external_id (str): The external ID of the pass you wish to
-            retrieve.
-
-        Returns:
-            An ApplePass or GooglePass object.
-
-        Example:
-            >>> my_pass = Pass.get_pass(pass_external_id=12345)
-            <id:67890745, templateId:51010>
-        """
-
-        response = wallet.request(
-            method='GET',
-            body=None,
-            url=Pass._build_url(pass_id, pass_external_id),
-            version=1.2
-        )
-        payload = response.json()
-        return payload
+    def from_data(cls, data):
+        return data
 
     @staticmethod
     def build_url(
