@@ -31,30 +31,47 @@ class PassApiTest(unittest.TestCase):
 
     @mock.patch.object(wallet.Wallet, '_request')
     def test_add_pass_locations(self, mock_request):
-        location = {
-            "longitude":-122.374,
-            "latitude":37.618,
-            "relevantText":"Hello loc0",
-            "streetAddress1":"address line #1",
-            "streetAddress2":"address line #2",
-            "city":"Palo Alto",
-            "region":"CA",
-            "regionCode":"94404",
-            "country":"US"
-        }
+        locations = [
+            {
+                "longitude":-122.374,
+                "latitude":37.618,
+                "relevantText":"Hello loc0",
+                "streetAddress1":"address line #1",
+                "streetAddress2":"address line #2",
+                "city":"Palo Alto",
+                "region":"CA",
+                "regionCode":"94404",
+                "country":"US"
+            },
+            {
+                "longitude":-122.374,
+                "latitude":37.618,
+                "relevantText":"Hello loc0",
+                "streetAddress1":"address line #1",
+                "streetAddress2":"address line #2",
+                "city":"Palo Alto",
+                "region":"CA",
+                "regionCode":"94405",
+                "country":"US"
+            }
+        ]
         body = json.dumps({
-            'locations': [location]
+            'locations': locations
         })
         response = requests.Response()
         response._content = json.dumps([
             {
-                'value': location,
+                'value': locations[0],
                 'passLocationId': 231
+            },
+            {
+                'value': locations[1],
+                'passLocationId': 312
             }
         ])
         mock_request.return_value = response
 
-        wal = wallet.add_pass_locations(CLIENT, location, pass_id=12345).json()
+        wal = wallet.add_pass_locations(CLIENT, locations, pass_id=12345).json()
         mock_request.assert_called_with(
             'POST',
             body,
@@ -63,8 +80,10 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal[0]['value'], location)
+        self.assertEqual(wal[0]['value'], locations[0])
         self.assertEqual(wal[0]['passLocationId'], 231)
+        self.assertEqual(wal[1]['value'], locations[1])
+        self.assertEqual(wal[1]['passLocationId'], 312)
 
     @mock.patch.object(wallet.Wallet, '_request')
     def test_delete_pass_location(self, mock_request):

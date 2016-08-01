@@ -4,7 +4,7 @@ import json
 from wallet import common
 
 
-LOGGER = logging.getLogger('urbanairship')
+logger = logging.getLogger('urbanairship')
 
 
 def get_pass(wallet, pass_id=None, external_id=None):
@@ -73,17 +73,19 @@ def delete_pass(wallet, pass_id=None, external_id=None):
         ),
         version=1.2
     )
-    LOGGER.info('Successful pass deletion: {}'.format(
+    logger.info('Successful pass deletion: {}'.format(
         pass_id if pass_id else external_id
     ))
     return response
 
 
-def add_pass_locations(wallet, *args, **kwargs):
+def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
     """Add locations to a pass.
 
     Arguments:
         wallet (Wallet object): A wallet client object.
+        locations (list): A list of dictionaries representing location
+            objects.
         pass_id (str): The ID of the pass you wish to add
             locations to.
         external_id (str): The external ID of the pass you wish to add
@@ -97,17 +99,11 @@ def add_pass_locations(wallet, *args, **kwargs):
             are specified.
 
     Example:
-        >>> my_pass.add_locations(location1, location2, pass_id=12345)
+        >>> add_locations(location1, location2, pass_id=12345)
         <Response [200]>
     """
-    pass_id = kwargs.pop('pass_id', None)
-    external_id = kwargs.pop('external_id', None)
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
-
-    locations = []
-    for location in args:
-        locations.append(location)
 
     response = wallet.request(
         method='POST',
@@ -120,7 +116,7 @@ def add_pass_locations(wallet, *args, **kwargs):
         content_type='application/json',
         version=1.2
     )
-    LOGGER.info('Successfully added {} locations to pass {}.'.format(
+    logger.info('Successfully added {} locations to pass {}.'.format(
         len(locations),
         pass_id if pass_id else external_id
     ))
@@ -143,8 +139,9 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
     Raises:
         ValueError: If both or neither of pass_id and external_id are
             specified.
+
     Example:
-        >>> my_pass.delete_location(ua_wallet, 12345, pass_id=44444)
+        >>> delete_location(ua_wallet, 12345, pass_id=44444)
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
@@ -160,7 +157,7 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
         ),
         version=1.2
     )
-    LOGGER.info('Successfully deleted location {} from pass {}.'.format(
+    logger.info('Successfully deleted location {} from pass {}.'.format(
         location_id,
         pass_id if pass_id else external_id
     ))
