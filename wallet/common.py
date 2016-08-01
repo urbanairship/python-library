@@ -13,7 +13,7 @@ TEMPLATE_BASE_URL = BASE_URL + '/template/{0}'
 # Pass URLs
 PASS_BASE_URL = BASE_URL + '/pass/{0}'
 
-LOGGER = logging.getLogger('urbanairship')
+logger = logging.getLogger('urbanairship')
 
 
 class Unauthorized(Exception):
@@ -22,10 +22,6 @@ class Unauthorized(Exception):
 
 class WalletFailure(Exception):
     """Raised when we get an error response from the server."""
-    error = None
-    error_code = None
-    details = None
-    response = None
 
     def __init__(self, error, error_code, details, response, *args):
         self.error = error
@@ -55,7 +51,7 @@ class WalletFailure(Exception):
             error_code = None
             details = response.content
 
-        LOGGER.error(
+        logger.error(
             "Request failed with status %d: '%s %s': %s",
             response.status_code, error_code, error, json.dumps(details))
 
@@ -94,6 +90,9 @@ class IteratorParent(six.Iterator):
                 raise StopIteration
 
     def _load_page(self):
+        if not self.base_url:
+            raise ValueError('base_url cannot be None.')
+
         response = self.wallet.request(
             method='GET',
             body=None,

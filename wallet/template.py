@@ -35,17 +35,18 @@ class TemplateList(common.IteratorParent):
     data_attribute = 'templateHeaders'
 
     def __init__(self, wallet, page_size=None, page=None, order=None, direction=None):
-        if direction not in [None, 'ASC', 'DESC']:
+        if direction not in {None, 'ASC', 'DESC'}:
             raise ValueError(
-                'Unrecognized direction {}. Please use one of \'ASC\' or \'DESC\''.format(direction)
+                'Unrecognized direction "{}". Please use one of "ASC" or "DESC"'.format(direction)
             )
+
         params = {
             'pageSize': page_size,
             'page': page,
             'order': order,
             'direction': direction
         }
-        params = {k: v for k, v in params.iteritems() if v != None}
+        params = {k: v for k, v in params.iteritems() if v is not None}
         super(TemplateList, self).__init__(wallet, params)
 
 
