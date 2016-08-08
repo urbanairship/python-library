@@ -6,10 +6,12 @@ import requests
 import wallet
 
 
-CLIENT = wallet.Wallet('fake', 'creds')
-
 
 class TemplateApiTest(unittest.TestCase):
+
+    def setUp(self):
+        self.client = wallet.Wallet('fake', 'creds')
+        super(TemplateApiTest, self).setUp()
 
     @mock.patch.object(wallet.Wallet, '_request')
     def test_listing(self, mock_request):
@@ -57,7 +59,7 @@ class TemplateApiTest(unittest.TestCase):
         })
         response._content = templates_json
         mock_request.return_value = response
-        listing_response = wallet.TemplateList(CLIENT)
+        listing_response = wallet.TemplateList(self.client)
         self.assertEqual(
             listing_response.next()['id'],
             '23595'
