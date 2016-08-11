@@ -187,14 +187,18 @@ class Pass(object):
             if main_id:
                 return base_url.format(main_id, location_id)
             else:
-                return base_url.format('id/' + str(pass_external_id), location_id)
+                return base_url.format(
+                    'id/' + str(pass_external_id), location_id
+                )
         else:
             if main_id and not (template_external_id or pass_external_id):
                 return base_url.format(main_id)
             elif template_external_id and not (main_id or pass_external_id):
                 return base_url.format('id/' + str(external_id))
             elif pass_external_id and main_id and not template_external_id:
-                return base_url.format(str(main_id) + '/id/' + str(pass_external_id))
+                return base_url.format(
+                    str(main_id) + '/id/' + str(pass_external_id)
+                )
             elif template_external_id and pass_external_id and not main_id:
                 return base_url.format(
                     'id/' + str(template_external_id) + '/id/' + str(pass_external_id)
