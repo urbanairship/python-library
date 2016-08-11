@@ -12,6 +12,8 @@ TEMPLATE_BASE_URL = BASE_URL + '/template/{0}'
 
 # Pass URLs
 PASS_BASE_URL = BASE_URL + '/pass/{0}'
+PASS_ADD_LOCATION_URL = BASE_URL + '/pass/{0}/locations'
+PASS_DELETE_LOCATION_URL = BASE_URL + '/pass/{0}/location/{1}'
 
 logger = logging.getLogger('urbanairship')
 
