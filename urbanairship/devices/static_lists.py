@@ -124,7 +124,7 @@ class Buffer(object):
         if size < 0:
             ret_list[-1], remainder = ret_list[-1][:size], ret_list[-1][size:]
             self.__buf.appendleft(remainder)
-        ret = ''.join(ret_list)
+        ret = b''.join(ret_list)
         self.__size -= len(ret)
         return ret
 
