@@ -27,7 +27,7 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal.status_code, 200)
+        self.assertEqual(wal, True)
 
     @mock.patch.object(wallet.Wallet, '_request')
     def test_add_pass_locations(self, mock_request):
@@ -73,7 +73,7 @@ class PassApiTest(unittest.TestCase):
 
         wal = wallet.add_pass_locations(
             CLIENT, locations, pass_id=12345
-        ).json()
+        )
         mock_request.assert_called_with(
             'POST',
             body,
@@ -107,4 +107,4 @@ class PassApiTest(unittest.TestCase):
             None
         )
 
-        self.assertEqual(wal.status_code, 200)
+        self.assertEqual(wal, True)

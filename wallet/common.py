@@ -9,11 +9,15 @@ BASE_URL = 'https://wallet-api.urbanairship.com/v1'
 
 # Template URLs
 TEMPLATE_BASE_URL = BASE_URL + '/template/{0}'
+TEMPLATE_DUPLICATE_URL = BASE_URL + '/template/duplicate/{0}'
+TEMPLATE_ADD_LOCATION_URL = BASE_URL + '/template/{0}/locations/'
+TEMPLATE_REMOVE_LOCATION_URL = BASE_URL + '/template/{0}/location/{1}'
 
 # Pass URLs
 PASS_BASE_URL = BASE_URL + '/pass/{0}'
 PASS_ADD_LOCATION_URL = BASE_URL + '/pass/{0}/locations'
 PASS_DELETE_LOCATION_URL = BASE_URL + '/pass/{0}/location/{1}'
+
 
 logger = logging.getLogger('urbanairship')
 

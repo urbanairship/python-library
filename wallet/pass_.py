@@ -50,7 +50,7 @@ def delete_pass(wallet, pass_id=None, external_id=None):
             to delete.
 
     Returns:
-        A response object.
+        A boolean representing success.
 
     Raises:
         ValueError: If neither, or both, of pass_id and external_id
@@ -58,7 +58,7 @@ def delete_pass(wallet, pass_id=None, external_id=None):
 
     Example:
         >>> delete_pass(ua_wallet, pass_id='123456')
-        <Response [200]>
+        True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
@@ -76,7 +76,7 @@ def delete_pass(wallet, pass_id=None, external_id=None):
     logger.info('Successful pass deletion: {}'.format(
         pass_id if pass_id else external_id
     ))
-    return response
+    return True
 
 
 def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
@@ -92,7 +92,7 @@ def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
             locations to.
 
     Returns:
-        A response object.
+        A list of objects containing the location value and passLocationId.
 
     Raises:
         ValueError: If neither, or both of, pass_id and external_id
@@ -100,7 +100,7 @@ def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
 
     Example:
         >>> add_locations(location1, location2, pass_id=12345)
-        <Response [200]>
+        True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
@@ -120,7 +120,7 @@ def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
         len(locations),
         pass_id if pass_id else external_id
     ))
-    return response
+    return response.json()
 
 
 def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
@@ -135,13 +135,15 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
             to delete locations from.
 
     Returns:
-        A response object.
+        A boolean representing success.
+
     Raises:
         ValueError: If both or neither of pass_id and external_id are
             specified.
 
     Example:
         >>> delete_location(ua_wallet, 12345, pass_id=44444)
+        True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
@@ -161,13 +163,17 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
         location_id,
         pass_id if pass_id else external_id
     ))
-    return response
+    return True
 
 
 class Pass(object):
 
     @classmethod
     def from_data(cls, data):
+        """
+        Todo:
+            This function is completed in another branch.
+        """
         return data
 
     @staticmethod
@@ -176,8 +182,7 @@ class Pass(object):
         main_id=None,
         template_external_id=None,
         pass_external_id=None,
-        location_id=None
-    ):
+        location_id=None):
         if base_url == common.PASS_ADD_LOCATION_URL:
             if main_id:
                 return base_url.format(main_id)
