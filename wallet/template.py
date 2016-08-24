@@ -125,7 +125,7 @@ def duplicate_template(wallet, template_id=None, external_id=None):
         ),
         version=1.2
     )
-    logger.info('Successful template deletion: {}'.format(
+    logger.info('Successfully created template copy: {}'.format(
         template_id if template_id else external_id
     ))
     return response.json()
