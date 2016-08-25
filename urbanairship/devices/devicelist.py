@@ -44,9 +44,12 @@ class ChannelInfo(object):
         obj.channel_id = payload[device_key]
         for key in payload:
             if key in ('created', 'last_registration'):
-                payload[key] = datetime.datetime.strptime(
-                    payload[key], '%Y-%m-%dT%H:%M:%S'
-                )
+                try:
+                    payload[key] = datetime.datetime.strptime(
+                        payload[key], '%Y-%m-%dT%H:%M:%S'
+                    )
+                except:
+                    payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj
 
@@ -81,12 +84,18 @@ class DevicePINInfo(object):
             version=3
         )
         payload = response.json()
-        payload['created'] = datetime.datetime.strptime(
-            payload['created'], '%Y-%m-%d %H:%M:%S'
-        )
-        payload['last_registration'] = datetime.datetime.strptime(
-            payload['last_registration'], '%Y-%m-%d %H:%M:%S'
-        )
+        try:
+            payload['created'] = datetime.datetime.strptime(
+                payload['created'], '%Y-%m-%d %H:%M:%S'
+            )
+        except:
+            payload['created'] = "UNKNOWN"
+        try:
+            payload['last_registration'] = datetime.datetime.strptime(
+                payload['last_registration'], '%Y-%m-%d %H:%M:%S'
+            )
+        except:
+            payload['last_registration'] = "UNKNOWN"
         return payload
 
     def __init__(self, airship):
@@ -210,8 +219,11 @@ class Feedback(object):
         )
         data = response.json()
         for r in data:
-            r['marked_inactive_on'] = datetime.datetime.strptime(
-                r['marked_inactive_on'],
-                '%Y-%m-%d %H:%M:%S'
-            )
+            try:
+                r['marked_inactive_on'] = datetime.datetime.strptime(
+                    r['marked_inactive_on'],
+                    '%Y-%m-%d %H:%M:%S'
+                )
+            except:
+                r['marked_inactive_on'] = "UNKNOWN"
         return data
