@@ -62,8 +62,6 @@ from .devices import (
 )
 
 from .reports import (
-    PerPushDetail,
-    PerPushSeries,
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
@@ -127,8 +125,6 @@ __all__ = [
     Segment,
     SegmentList,
     ChannelUninstall,
-    PerPushDetail,
-    PerPushSeries,
     NamedUser,
     NamedUserList,
     IndividualResponseStats,
