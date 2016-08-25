@@ -80,7 +80,7 @@ class TestDeviceListing(unittest.TestCase):
                             "opt_in": "false",
                             "background": "false",
                             "push_address": "dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We",
-                            'created': 'randomthing',
+                            'created': 'None',
                             "last_registration": "2016-08-22T17:20:27",
                             "named_user_id": "null",
                             "alias": "null",
@@ -118,6 +118,6 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(channel_responses[1].device_type, 'android')
 
             self.assertEquals(channel_responses[0].created, '2016-08-17T23:29:52')
-            self.assertEquals(channel_responses[1].created, 'UNKNOWN')
+            self.assertEquals(channel_responses[1].created, 'None')
 
     
