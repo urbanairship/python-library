@@ -17,18 +17,7 @@ Functionality
 =============
 
 Version 0.8 is a major upgrade and backwards incompatible with earlier
-versions.  This release focuses on support for Python 3 and the new
-version 3 push API and reports the APIs.
-
-To encourage the use of our SDK, which takes care of proper channel
-registration, support for device token registration has been removed.
-Support for v1 endpoints has also been removed and support for:
-
-* blackberry pin lookup,
-* lookup and listing for device tokens, and
-* sending to device tokens
-
-has been moved from v1 to v3.
+versions.  This release focuses on support for the reports APIs and some other additional features.
 
 A more detailed list of changes can be found in the CHANGELOG.
 
@@ -84,6 +73,7 @@ http://support.urbanairship.com/
 History
 =======
 
+* 0.8 Support for Reports APIs.
 * 0.7 Support for Python 3, major refactoring
 * 0.6 Major refactoring, support for push api v3
 * 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
