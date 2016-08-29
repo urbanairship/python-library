@@ -29,6 +29,6 @@ setup(
     ],
     install_requires=[
         'requests>=1.2',
-        'six>=1.10'
+        'six'
     ],
 )
