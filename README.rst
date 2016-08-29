@@ -11,7 +11,7 @@ app pages.
 Requirements
 ============
 
-As of version 0.8, Python 2.6, 2.7, 3.3 or 3.4 is required.
+As of version 0.8, Python 2.6, 2.7, 3.3 or 3.4 is required.  Newer versions of Python may also work.
 
 Functionality
 =============
