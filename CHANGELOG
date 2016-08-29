@@ -1,3 +1,8 @@
+0.8.1
+--------------------
+- Added missing module to the required dependencies.
+- Updated README information for version 8.
+
 0.8.0
 --------------------
 - Added support for reports including:
