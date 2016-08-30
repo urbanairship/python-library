@@ -17,7 +17,7 @@ VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
 
 def notification(alert=None, ios=None, android=None, amazon=None,
                  blackberry=None, wns=None, mpns=None, actions=None,
-                 interactive=None):
+                 interactive=None, in_app=None):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -51,6 +51,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
         payload['mpns'] = mpns
     if interactive is not None:
         payload['interactive'] = interactive
+    if in_app is not None:
+        payload['in_app'] = in_app
     if not payload:
         raise ValueError('Notification body may not be empty')
     return payload
@@ -319,6 +321,27 @@ def message(title, body, content_type=None, content_encoding=None,
         if not isinstance(options, dict):
             raise TypeError('options must be a dictionary')
         payload['options'] = options
+
+    return payload
+
+
+def in_app(alert, display_type, expiry=None, display=None, actions=None, interactive=None, extra=None):
+
+    payload = {}
+
+    payload['alert'] = alert
+    payload['display_type'] = display_type
+
+    if expiry is not None:
+        payload['expiry'] = expiry
+    if display is not None:
+        payload['display'] = display
+    if actions is not None:
+        payload['actions'] = actions
+    if interactive is not None:
+        payload['interactive'] = interactive
+    if extra is not None:
+        extra['extra'] = extra
 
     return payload
 
