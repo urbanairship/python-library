@@ -166,6 +166,44 @@ class TestPush(unittest.TestCase):
             }
         )
 
+    def test_in_app(self):
+        self.maxDiff = None
+
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.in_app = ua.in_app(
+            alert='Alert message',
+            display_type='banner',
+            interactive=ua.interactive(
+                type='ua_yes_no_foreground',
+                button_actions={
+                    'yes': ua.actions(open_={
+                        'type': 'url',
+                        'content': 'http://www.google.com'
+                    })
+                }
+            )
+        )
+
+        self.assertEqual(
+            p.in_app,
+            {
+                'alert': 'Alert message',
+                'display_type': 'banner',
+                'interactive': {
+                    'button_actions': {
+                        'yes': {
+                            'open': {
+                                'content': 'http://www.google.com',
+                                'type': 'url'
+                            }
+                        }
+                    },
+                    'type': 'ua_yes_no_foreground'
+                }
+            }
+        )
+
     def test_ios_alert_dict(self):
         p = ua.Push(None)
         p.audience = ua.all_
