@@ -174,6 +174,10 @@ class TestPush(unittest.TestCase):
         p.in_app = ua.in_app(
             alert='Alert message',
             display_type='banner',
+            display={
+                'position': 'top',
+                'duration': '500'
+            },
             interactive=ua.interactive(
                 type='ua_yes_no_foreground',
                 button_actions={
@@ -190,6 +194,10 @@ class TestPush(unittest.TestCase):
             {
                 'alert': 'Alert message',
                 'display_type': 'banner',
+                'display': {
+                    'position': 'top',
+                    'duration': '500'
+                },
                 'interactive': {
                     'button_actions': {
                         'yes': {
