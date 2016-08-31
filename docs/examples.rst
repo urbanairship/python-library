@@ -118,3 +118,33 @@ Scheduled iOS Push
    sched.push.device_types = ua.device_types('ios')
 
    sched.send()
+
+
+In-App Message to all devices
+-----------------------------
+
+.. code-block:: python
+
+    push = airship.create_push()
+    push.audience = ua.all_
+    push.device_types = ua.device_types('ios', 'android')
+
+    push.in_app = ua.in_app(
+            alert = "Alert message",
+            display_type = "banner",
+            display={
+                'position': 'top',
+                'duration': '500'
+            },
+            interactive = ua.interactive(
+                type = 'ua_yes_no_foreground',
+                button_actions={
+                    "yes": ua.actions(open_={
+                        "type":"url",
+                        "content":"http://www.google.com"
+                    })
+                }
+            )
+        )
+    push.send()
+
