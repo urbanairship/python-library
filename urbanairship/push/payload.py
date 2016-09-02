@@ -75,7 +75,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         a string
     :keyword title: Sets the title of the notification for Apple Watch. Must
         be a string
-    :keyword mutable_content: Optional, a boolean, one of true or false. Defaults to false.
+    :keyword mutable_content: Optional, a boolean. Defaults to false.
         When set to true, content may be modified by an extension.
         This flag will be automatically set to true if there is a media_attachment in the payload. iOS 10 or above.
     :keyword collapse_id: Optional, a string. When there is a newer message that renders an older,
