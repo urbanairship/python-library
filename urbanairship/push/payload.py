@@ -57,7 +57,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
-        extra=None, expiry=None, interactive=None, category=None, title=None):
+        extra=None, expiry=None, interactive=None, category=None, title=None,
+        mutable_content=None, collapse_id=None, subtitle=None, media_attachment=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -74,6 +75,17 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         a string
     :keyword title: Sets the title of the notification for Apple Watch. Must
         be a string
+    :keyword mutable_content: Optional, a boolean. Defaults to false.
+        When set to true, content may be modified by an extension.
+        This flag will be automatically set to true if there is a media_attachment in the payload. iOS 10 or above.
+    :keyword collapse_id: Optional, a string. When there is a newer message that renders an older,
+        related message irrelevant to the client app, the new message replaces the older message with the same collapse_id.
+        Similar to the GCM collapse_key. iOS 10 or above.
+    :keyword subtitle: Optional, a string that will display below the title of the notification.
+        This is provided as a convenience for setting the subtitle in the alert JSON object.
+        If a subtitle is also defined in the alert JSON object, this value is ignored. iOS 10 or above.
+    :keyword media_attachment: Optional, a dictionary object `Media Attachment <https://docs.urbanairship.com/api/ua.html#media-attachment>`_. Specifies a media attachment
+        to be handled by the UA Media Attachment Extension.
 
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'}) # doctest: +SKIP
@@ -111,6 +123,14 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         if not (isinstance(title, string_type)):
             raise ValueError('iOS title must be a string')
         payload['title'] = title
+    if mutable_content is not None:
+        payload['mutable_content'] = mutable_content
+    if collapse_id is not None:
+        payload['collapse_id'] = collapse_id
+    if subtitle is not None:
+        payload['subtitle'] = subtitle
+    if media_attachment is not None:
+        payload['media_attachment'] = media_attachment
 
     return payload
 
