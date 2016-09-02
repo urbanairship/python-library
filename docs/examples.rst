@@ -141,7 +141,7 @@ In-App Message to all devices
                 button_actions={
                     "yes": ua.actions(open_={
                         "type":"url",
-                        "content":"http://www.google.com"
+                        "content":"https://www.urbanairship.com"
                     })
                 }
             )

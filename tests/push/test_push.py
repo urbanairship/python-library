@@ -183,7 +183,7 @@ class TestPush(unittest.TestCase):
                 button_actions={
                     'yes': ua.actions(open_={
                         'type': 'url',
-                        'content': 'http://www.google.com'
+                        'content': 'https://www.urbanairship.com'
                     })
                 }
             )
@@ -202,7 +202,7 @@ class TestPush(unittest.TestCase):
                     'button_actions': {
                         'yes': {
                             'open': {
-                                'content': 'http://www.google.com',
+                                'content': 'https://www.urbanairship.com',
                                 'type': 'url'
                             }
                         }
