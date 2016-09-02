@@ -25,6 +25,25 @@ class TestMessage(unittest.TestCase):
                     expiry='time',
                     category='test',
                     title='title',
+                    subtitle='Subtitle',
+                    mutable_content=True,
+                    collapse_id='42',
+                    media_attachment={
+                        'content': {
+                            'title': 'Moustache Twirl',
+                            'body': 'Have you ever seen a moustache like this?!'
+                        },
+                        'options': {
+                            'crop': {
+                                'height': 0.5,
+                                'width': 0.5,
+                                'x': 0.25,
+                                'y': 0.25
+                            },
+                            'time': 15
+                        },
+                        'url': 'https://media.giphy.com/media/JYsWwF82EGnpC/giphy.gif'
+                    },
                     interactive={
                         'type': 'a_type',
                         'button_actions': {
@@ -49,6 +68,25 @@ class TestMessage(unittest.TestCase):
                     'expiry': 'time',
                     'category': 'test',
                     'title': 'title',
+                    'subtitle': 'Subtitle',
+                    'mutable_content': True,
+                    'collapse_id': '42',
+                    'media_attachment': {
+                        'content': {
+                            'title': 'Moustache Twirl',
+                            'body': 'Have you ever seen a moustache like this?!'
+                        },
+                        'options': {
+                            'crop': {
+                                'height': 0.5,
+                                'width': 0.5,
+                                'x': 0.25,
+                                'y': 0.25
+                            },
+                            'time': 15
+                        },
+                        'url': 'https://media.giphy.com/media/JYsWwF82EGnpC/giphy.gif'
+                    },
                     'interactive': {
                         'type': 'a_type',
                         'button_actions': {
