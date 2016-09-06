@@ -17,6 +17,7 @@ class Push(object):
         self.device_types = None
         self.options = None
         self.message = None
+        self.in_app = None
 
     @property
     def payload(self):
@@ -29,6 +30,8 @@ class Push(object):
             data['options'] = self.options
         if self.message is not None:
             data['message'] = self.message
+        if self.in_app is not None:
+            data['in_app'] = self.in_app
         return data
 
     def send(self):
