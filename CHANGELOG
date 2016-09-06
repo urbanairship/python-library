@@ -1,6 +1,6 @@
 1.0.0
 --------------------
-- Added support for In-App messaging.
+- Added support for In-App Messaging.
 - Added support for optional iOS 10 extras including:
     * Mutable content
     * Subtitle
