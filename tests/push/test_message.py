@@ -27,7 +27,6 @@ class TestMessage(unittest.TestCase):
                     title='title',
                     subtitle='Subtitle',
                     mutable_content=True,
-                    collapse_id='42',
                     media_attachment={
                         'content': {
                             'title': 'Moustache Twirl',
@@ -70,7 +69,6 @@ class TestMessage(unittest.TestCase):
                     'title': 'title',
                     'subtitle': 'Subtitle',
                     'mutable_content': True,
-                    'collapse_id': '42',
                     'media_attachment': {
                         'content': {
                             'title': 'Moustache Twirl',

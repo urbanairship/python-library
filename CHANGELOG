@@ -1,3 +1,11 @@
+1.0.0
+--------------------
+- Added support for In-App Messaging.
+- Added support for optional iOS 10 extras including:
+    * Mutable content
+    * Subtitle
+    * Media attachment
+
 0.8.1
 --------------------
 - Added missing module to the required dependencies.
