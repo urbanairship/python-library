@@ -11,13 +11,13 @@ app pages.
 Requirements
 ============
 
-As of version 0.8, Python 2.6, 2.7, 3.3 or 3.4 is required.  Newer versions of Python may also work.
+As of version 1.0, Python 2.6, 2.7, 3.3 or 3.4 is required.  Newer versions of Python may also work.
 
 Functionality
 =============
 
-Version 0.8 is a major upgrade and backwards incompatible with earlier
-versions.  This release focuses on support for the reports APIs and some other additional features.
+Version 1.0 is a feature upgrade and backwards incompatible with versions earlier than 0.8.
+This release focuses on support for In-App messaging along with new iOS 10 extras.
 
 A more detailed list of changes can be found in the CHANGELOG.
 
@@ -73,6 +73,7 @@ http://support.urbanairship.com/
 History
 =======
 
+* 1.0 Support for In-App and iOS 10
 * 0.8 Support for Reports APIs.
 * 0.7 Support for Python 3, major refactoring
 * 0.6 Major refactoring, support for push api v3
