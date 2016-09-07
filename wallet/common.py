@@ -28,7 +28,6 @@ class Unauthorized(Exception):
 
 class WalletFailure(Exception):
     """Raised when we get an error response from the server."""
-
     def __init__(self, error, error_code, details, response, *args):
         self.error = error
         self.error_code = error_code

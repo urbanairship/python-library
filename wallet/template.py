@@ -1,17 +1,171 @@
-import logging
 import json
+import logging
+from collections import defaultdict
 
-from wallet import common
+import common
+import wallet.fields as wf
+from wallet import util
 
 
 logger = logging.getLogger('urbanairship')
+
+
+class TemplateMetadata(util.Constant):
+    KEY_CLASS = 'TemplateMetadata'
+
+    VENDOR = 'vendor'
+    PROJECT_TYPE = 'project_type'
+    TEMPLATE_TYPE = 'template_type'
+    VENDOR_ID = 'vendorId'
+    DELETED = 'deleted'
+    DESCRIPTION = 'description'
+    NAME = 'name'
+    DISABLED = 'disabled'
+    TEMPLATE_ID = 'template_id'
+    PROJECT_ID = 'project_id'
+    TYPE = 'type_'
+
+
+class ProjectType(util.Constant):
+    """Class representing possible projectTypes."""
+    BOARDING_PASS = 'boardingPass'
+    COUPON = 'coupon'
+    EVENT_TICKET = 'eventTicket'
+    GENERIC = 'generic'
+    LOYALTY = 'loyalty'
+    GIFT_CARD = 'giftCard'
+    MEMBER_CARD = 'memberCard'
+
+
+class TemplateType(util.Constant):
+    """Class representing possible template types."""
+    BOARDING_PASS = 'Boarding Pass'
+    COUPON = 'Coupon'
+    EVENT_TICKET = 'Event Ticket'
+    GENERIC = 'Generic'
+    STORE_CARD = 'Store Card'
+    LOYALTY = 'Loyalty'
+    OFFER = 'Offer'
+    GIFT_CARD = 'Gift Card'
+
+
+class Type(util.Constant):
+    """These are template type, project type combinations that
+    are known to work.
+
+    .. note::
+
+        There are currently discrepencies between Apple's and
+        Google's acceptable (template)type and projectType
+        pairs. These tuples represent Apple's pairing. For google,
+        the _create_payload function under GoogleTemplate will perform
+        the necessary conversions, ensuring the projectType and type
+        keys are valid. In other words, these can be used for either
+        Apple or Google templates.
+    """
+    LOYALTY = (TemplateType.STORE_CARD, ProjectType.LOYALTY)
+    COUPON = (TemplateType.COUPON, ProjectType.COUPON)
+    GIFT_CARD = (TemplateType.STORE_CARD, ProjectType.GIFT_CARD)
+    MEMBER_CARD = (TemplateType.GENERIC, ProjectType.MEMBER_CARD)
+    EVENT_TICKET = (TemplateType.EVENT_TICKET, ProjectType.EVENT_TICKET)
+    BOARDING_PASS = (TemplateType.BOARDING_PASS, ProjectType.BOARDING_PASS)
+    GENERIC = (TemplateType.GENERIC, ProjectType.GENERIC)
+
+
+class TemplateHeader(util.Constant):
+    KEY_CLASS = 'TemplateHeader'
+
+    BACKGROUND_COLOR = 'background_color'
+    BACKGROUND_IMAGE = 'background_image'
+    BARCODE_ALT_TEXT = 'barcodeAltText'
+    BARCODE_ENCODING = 'barcode_encoding'
+    BARCODE_TYPE = 'barcode_type'
+    BARCODE_VALUE = 'barcode_value'
+    EXPIRATION_DATE = 'expirationDate'
+    FOOTER_IMAGE = 'footer_image'
+    FOREGROUND_COLOR = 'foreground_color'
+    ICON_IMAGE = 'icon_image'
+    LOGO_COLOR = 'logo_color'
+    LOGO_IMAGE = 'logo_image'
+    LOGO_TEXT = 'logo_text'
+    STRIP_IMAGE = 'strip_image'
+    SUPPRESS_STRIP_SHINE = 'suppress_strip_shine'
+    THUMBNAIL_IMAGE = 'thumbnail_image'
+    TRANSIT_TYPE = 'transitType'
+
+    @classmethod
+    def google_headers(cls):
+        return [
+            cls.BARCODE_ALT_TEXT,
+            cls.BARCODE_TYPE,
+            cls.BARCODE_ENCODING,
+            cls.BARCODE_VALUE,
+            cls.STRIP_IMAGE,
+            cls.SUPPRESS_STRIP_SHINE,
+            cls.EXPIRATION_DATE,
+        ]
+
+
+class BarcodeType(util.Constant):
+    PDF_417 = 'PDF_417'
+    AZTEC = 'AZTEC'
+    QR_CODE = 'QR_CODE'
+    CODE_128 = 'CODE_128'
+    UPC_A = 'UPC_A'
+    EAN_13 = 'EAN_13'
+    CODE_39 = 'CODE_39'
+
+    @classmethod
+    def apple_barcode(cls):
+        return [
+            cls.PDF_417,
+            cls.AZTEC,
+            cls.QR_CODE,
+            cls.CODE_128
+        ]
+
+
+class TransitType(util.Constant):
+    GENERIC = 'transitTypeGeneric'
+    BUS = 'transitTypeBus'
+    AIR = 'transitTypeAir'
+    BOAT = 'transitTypeBoat'
+    TRAIN = 'transitTypeTrain'
+
+
+class MessageModule(util.Constant):
+    KEY_CLASS = 'Message'
+    # Specific to message modules
+    ACTION_URI = 'actionUri'
+    ACTION_URI_DESCRIPTION = 'actionUriDescription'
+    IMAGE_URI = 'imageUri'
+    HEADER = 'header'
+    BODY = 'body'
+    IMAGE_DESCRIPTION = 'imageDescription'
+    START_TIME = 'startTime'
+    END_TIME = 'endTime'
+
+
+class OfferModule(util.Constant):
+    MULTI_USER_OFFER = 'multiUserOffer'
+    REDEMPTION_CHANNEL = 'redemptionChannel'
+    PROVIDER = 'provider'
+    ENDTIME = 'endTime'
+
+
+class ImageModule(util.Constant):
+    IMAGE = 'image'
+    IMAGE_DESCRIPTION = 'imageDescription'
+    HIDE_EMPTY = 'hideEmpty'
+    FORMAT_TYPE = 'formatType'
+    FIELD_TYPE = 'fieldType'
 
 
 def get_template(wallet, template_id=None, external_id=None):
     """Retrieve a template.
 
     Arguments:
-        wallet (obj): A wallet client object.
+        wallet (wallet.core.Wallet): A wallet client object.
         template_id (str or int): The template ID of the template you wish
             to delete.
         external_id (str or int): The external ID of the template you wish
@@ -32,6 +186,7 @@ def get_template(wallet, template_id=None, external_id=None):
         raise ValueError(
             'Please specify only one of template_id or external_id.'
         )
+
     response = wallet.request(
         method='GET',
         body=None,
@@ -43,17 +198,46 @@ def get_template(wallet, template_id=None, external_id=None):
         version=1.2
     )
     payload = response.json()
-    logger.info('Successfully retrieved template {}.'.format(
+    logger.info('Successfully retrieved template: {}.'.format(
         template_id if template_id else external_id
     ))
-    return Template.from_data(payload)
+    return _template_create_dispatch(payload)
+
+
+def _template_create_dispatch(data):
+    """Helper function, called by get_template. Determines whether
+    the retrieved template is Apple or Google.
+
+    Arguments:
+        data (dict): A dictionary to be loaded into an AppleTemplate or
+            GoogleTemplate object.
+    Raises:
+        ValueError: If the template vendor is not 'Apple' or 'Google'.
+        KeyError: If the json template structure is unrecognized.
+    Returns:
+        An Apple or Google template.
+    Example:
+        >>> template_create_dispatch(template_dictionary)
+        <Template name:SummerSale, vendor:Apple>
+    """
+    try:
+        vendor = data['templateHeader']['vendor']
+        if vendor == 'Apple':
+            return AppleTemplate.from_data(data)
+        elif vendor == 'Google':
+            return GoogleTemplate.from_data(data)
+        else:
+            raise ValueError('Unrecognized vendor: {}'.format(vendor))
+    except KeyError as k:
+        logger.exception('Unrecognized template structure: {}'.format(data))
+        raise k
 
 
 def delete_template(wallet, template_id=None, external_id=None):
     """Delete a template.
 
     Arguments:
-        wallet (obj): A UA Wallet object.
+        wallet (wallet.core.Wallet): A UA Wallet object.
         template_id (str or int): The ID of the template you wish to delete.
         external_id (str or int): The external ID of the template you wish
             to delete.
@@ -94,7 +278,7 @@ def duplicate_template(wallet, template_id=None, external_id=None):
     """Duplicate a template.
 
     Arguments:
-        wallet (obj): A UA Wallet object.
+        wallet (wallet.core.Wallet): A UA Wallet object.
         template_id (str or int): The ID of the template you wish to delete.
         external_id (str or int): The external ID of the template you wish
             to delete.
@@ -132,11 +316,12 @@ def duplicate_template(wallet, template_id=None, external_id=None):
 
 
 def add_template_locations(
-    wallet, locations, template_id=None, external_id=None):
+    wallet, locations, template_id=None, external_id=None
+):
     """Add locations to a template.
 
     Arguments:
-        wallet (Wallet object): A wallet client object.
+        wallet (wallet.core.Wallet): A wallet client object.
         locations (list of dicts): A list of location objects, represented
             as dictionaries.
         template_id (str): The ID of the template you wish to add
@@ -145,7 +330,7 @@ def add_template_locations(
             locations to.
 
     Returns:
-        A list of objects containing the location value, locationId,
+        A list of dicts, each containing the location value, locationId,
             and fieldId.
 
     Raises:
@@ -175,7 +360,7 @@ def add_template_locations(
         content_type='application/json',
         version=1.2
     )
-    logger.info('Successfully added {} locations to template {}.'.format(
+    logger.info("Successfully added {} locations to template '{}'.".format(
         len(locations),
         template_id if template_id else external_id
     ))
@@ -188,7 +373,7 @@ def remove_template_location(
     """Remove a location from a template
 
     Arguments:
-        wallet (Wallet object): A wallet client object.
+        wallet (wallet.core.Wallet): A wallet client object.
         location_id (str or int): The ID of the location you wish to remove.
         template_id (str or int): The ID of the template you wish to remove
             locations from.
@@ -222,42 +407,18 @@ def remove_template_location(
         ),
         version=1.2
     )
-    logger.info('Successfully removed location {} from template {}.'.format(
+    logger.info("Successfully removed location '{}' from template '{}'.".format(
         location_id,
         template_id if template_id else external_id
     ))
     return True
 
 
-class Template(object):
-
-    @classmethod
-    def from_data(cls, data):
-        """Create a template from a JSON payload.
-        """
-        return data
-
-    @staticmethod
-    def build_url(url, main_id=None, external_id=None, location_id=None):
-        if location_id:
-            if main_id:
-                return url.format(main_id, location_id)
-            else:
-                return url.format('id/' + str(external_id), location_id)
-        else:
-            if main_id and external_id:
-                return url.format(str(main_id) + '/id/' + str(external_id))
-            elif main_id:
-                return url.format(main_id)
-            else:
-                return url.format('id/' + str(external_id))
-
-
 class TemplateList(common.IteratorParent):
     """Forms a template listing request.
 
     Arguments:
-        wallet (Wallet client): The wallet client object.
+        wallet (wallet.core.Wallet): The wallet client object.
         page_size (int): The size of each page of the template listing
             response. Defaults to 10.
         page (int): The page to start the listing response on. Defaults
@@ -300,46 +461,740 @@ class TemplateList(common.IteratorParent):
         super(TemplateList, self).__init__(wallet, params)
 
 
-class AppleTemplate(object):
+class Template(object):
+    """Superclass for representing a wallet Template class. Should not be used
+    directly -- use AppleTemplate or GoogleTemplate to perform template
+    operations.
+    """
+    HEADERS = TemplateHeader
+    HEADER_MAP = {
+        TemplateHeader.BACKGROUND_COLOR:     {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.BACKGROUND_IMAGE:     {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.BARCODE_ALT_TEXT:     {'fieldType': 'barcode', 'formatType': 'String'},
+        TemplateHeader.BARCODE_ENCODING:     {'fieldType': 'barcode', 'formatType': 'String'},
+        TemplateHeader.BARCODE_TYPE:         {'fieldType': 'barcode', 'formatType': 'String'},
+        TemplateHeader.BARCODE_VALUE:        {'fieldType': 'barcode', 'formatType': 'String'},
+        TemplateHeader.EXPIRATION_DATE:      {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.FOOTER_IMAGE:         {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.FOREGROUND_COLOR:     {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.ICON_IMAGE:           {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.LOGO_COLOR:           {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.LOGO_IMAGE:           {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.LOGO_TEXT:            {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.STRIP_IMAGE:          {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.SUPPRESS_STRIP_SHINE: {'fieldType': 'topLevel', 'formatType': 'String'},
+        TemplateHeader.THUMBNAIL_IMAGE:      {'fieldType': 'image', 'formatType': 'String'},
+        TemplateHeader.TRANSIT_TYPE:         {'fieldType': 'passTop', 'formatType': 'String'},
+    }
+
+    METADATA = TemplateMetadata
+    READ_ONLY_METADATA = ['createdAt', 'template_id', 'updatedAt', 'project_id']
 
     def __init__(self):
-        self.url = None
-        self.template_id = None
+        self.headers = {}
+        self.fields = defaultdict(dict)
+        self.metadata = {}
+
+    def create(self, wallet, project_id=None, external_id=None):
+        """Create a template.
+
+        Arguments:
+            wallet (wallet.core.Wallet): A wallet client object.
+            project_id (str or int): A project ID.
+            external_id (str or int): An external ID.
+
+        Returns:
+            A dict containing the template ID.
+
+        Example:
+            >>> template.create_template(ua_wallet, project_id=12345)
+            {'templateId': 54321}
+        """
+        if not project_id:
+            try:
+                project_id = self.metadata[TemplateMetadata.PROJECT_ID]
+            except KeyError:
+                raise ValueError(
+                    "Either set project_id when calling update, \
+                    or set the project_id attribute via the add_metadata \
+                    method, e.g., your_template.add_metadata(project_id=1234)."
+                )
+
+        response = wallet.request(
+            method='POST',
+            body=json.dumps(self._create_payload()),
+            url=Template.build_url(
+                common.TEMPLATE_BASE_URL,
+                main_id=project_id,
+                external_id=external_id
+            ),
+            content_type='application/json',
+            version=1.2
+        )
+        template_id = response.json().get('templateId')
+        logger.info('Successful template creation -- ID: {}, EXTERNAL_ID: {}'.format(
+            template_id, external_id
+        ))
+        self.metadata[TemplateMetadata.TEMPLATE_ID] = template_id
+        return {'templateId': template_id}
+
+    def update(self, wallet, template_id=None, external_id=None):
+        """Update a template.
+
+        Arguments:
+            wallet (wallet.core.Wallet): A wallet client object.
+            template_id (str or int): A template ID.
+            external_id (str or int): An external ID.
+
+        Returns:
+            A boolean representing success.
+
+        Example:
+            >>> template.update(ua_wallet)
+            True
+        """
+        if template_id and external_id:
+            raise ValueError('Only set one of template_id or external_id.')
+        if not external_id and not template_id:
+            try:
+                template_id = self.metadata[TemplateMetadata.TEMPLATE_ID]
+            except KeyError:
+                raise ValueError(
+                    "Either set template_id or external_id when calling \
+                    update, or set the template id attribute via the \
+                    add_metadata method, e.g., \
+                    your_template.add_metadata(template_id=1234)."
+                )
+
+        response = wallet.request(
+            method='PUT',
+            body=json.dumps(self._create_payload()),
+            url=Template.build_url(
+                common.TEMPLATE_BASE_URL,
+                main_id=template_id,
+                external_id=external_id
+            ),
+            content_type='application/json',
+            version=1.2
+        )
+        logger.info('Successful template creation: {}'.format(
+            template_id if template_id else external_id
+        ))
+
+        return True
 
     @classmethod
     def from_data(cls, data):
+        """Create a template from a JSON payload."""
         template = cls()
-        template.headers = data.get("fieldsModel", {}).get("headers")
-        if not template.headers:
-            raise ValueError("missing headers")
-        template.fields = data.get("fieldsModel", {}).get("fields")
-        if not template.fields:
-            raise ValueError("missing fields")
-        template.beacons = data.get("fieldsModel", {}).get("beacons")
-        template.locations = data.get("userlocations")
-        template.templateHeaders = data["templateHeader"]
+        # Handle Metadata
+        template.metadata = data.get('templateHeader', {})
+        # Convert id values to descriptive keys
+        if template.metadata.get('id'):
+            template.metadata[TemplateMetadata.TEMPLATE_ID] = template.metadata['id']
+            del template.metadata['id']
+        if template.metadata.get('projectId'):
+            template.metadata[TemplateMetadata.PROJECT_ID] = template.metadata['projectId']
+            del template.metadata['projectId']
 
+        # Handle headers
+        template.headers = data.get('fieldsModel', {}).pop('headers', {})
+        if template.headers.get(TemplateHeader.BARCODE_TYPE):
+            no_pk = template.headers[TemplateHeader.BARCODE_TYPE]['value'].replace('PKB', 'B')
+            template.headers[TemplateHeader.BARCODE_TYPE]['value'] = no_pk
+
+        # Handle user_locations
+        if data.get('userlocations'):
+            template.user_locations = data.pop('userlocations')
         return template
 
-    def create_payload(self):
-        payload = {"headers": {}, "fields": {}}
-        for k, v in self.headers.iteritems():
-            payload["headers"][k] = v
+    """ Field manipulation """
+    def add_fields(self, *args):
+        """Add fields to the template/pass object.
 
-        for k, v in self.fields.iteritems():
-            payload["fields"][k] = v
+        Arguments:
+            args (Field objects): Field objects to add to your template or
+                pass.
 
-        for k, v in self.templateHeaders.iteritems():
-            payload[k] = v
+        Example:
+            >>> points_field = Field(name='Rewards Points', fieldType='primary')
+            >>> member_field = Field(name='Member Name', fieldType='secondary')
+            >>> my_template.add_fields(points_field, member_field)
+        """
+        for field in args:
+            self.fields[field.name] = field
 
-        if "userlocations" in payload:
-            for k, v in self.locations:
-                payload["userlocations"][k] = v
+    def remove_fields(self, *args):
+        """Removes fields from a template or pass
 
-        for field in payload["fields"]:
-            for key, value in payload["fields"][field].items():
-                if key == "numberStyle":
-                    new_value = value.replace("PKNumberStyle", "numberStyle")
-                    payload["fields"][field][key] = new_value
+        Arguments:
+            args (strings): The names of the fields to be deleted, e.g.,
+                'Rewards Points'/'Member Name'/'Background'
+
+        Example:
+            >>> my_template.remove_fields('Rewards Points', 'Member Name')
+        """
+        for name in args:
+            del self.fields[name]
+
+    def set_fields(self, *args):
+        """Reset the fields on a template or pass."""
+        self.fields.clear()
+        self.add_fields(*args)
+
+    """ Metadata manipulation. """
+    def add_metadata(self, **kwargs):
+        """Add metadata to your template or pass.
+
+        Arguments:
+            kwargs (key=val): Template header specifications. Note that the
+                keywords must be one of the keys/values listed in Headers
+                class.
+
+        Example:
+            >>> template.add_all_metadata(
+            ...     project_type='memberCard',
+            ...     template_type='Store Card',
+            ...     description='Hello this is a description'
+            ... )
+        """
+        for header, value in kwargs.iteritems():
+            TemplateMetadata.validate(header)
+            self._add_metadata_helper(header, value)
+
+    def remove_metadata(self, *args):
+        """Remove metadata from the template.
+
+        Arguments:
+            args (strings): Keys of the metadata values to remove.
+
+        Example:
+            >>> my_template.remove_metadata('projectType', 'description')
+        """
+        for name in args:
+            del self.metadata[name]
+
+    def set_metadata(self, **kwargs):
+        """Reset the template/pass metadata."""
+        self.metadata.clear()
+        self.add_metadata(**kwargs)
+
+    def _add_metadata_helper(self, name, value):
+        """Does validation on metadata (key, val) pairs, then set metadata
+        if it passes validation.
+        """
+        self.METADATA.validate(name)
+        if name == self.METADATA.TEMPLATE_TYPE:
+            self.metadata['type'] = value
+        elif name == self.METADATA.PROJECT_TYPE:
+            self.metadata['projectType'] = value
+        elif name == self.METADATA.TYPE:
+            Type.validate(value)
+            self.metadata['type'] = value[0]
+            self.metadata['projectType'] = value[1]
+        else:
+            self.metadata[name] = value
+
+    """ Header manipulation. """
+    def add_header(self, header, value, format_type=None, field_type=None):
+        """Add a header to your template.
+
+        Arguments:
+            header (str): The header, represented as a string
+                (e.g. 'logo_color')
+            value (str): The header value.
+
+        Raises:
+            ValueError: If the `header` is not contained in Header.values
+
+        Example:
+            >>> template.add_header('barcode_value', '123456789')
+        """
+        self.HEADERS.validate(header)
+        if header == self.HEADERS.BARCODE_TYPE:
+            BarcodeType.validate(value)
+
+        # Use the default formatType and fieldType values if not specified.
+        if format_type is None:
+            format_type = self.HEADER_MAP[header]['formatType']
+        if field_type is None:
+            field_type = self.HEADER_MAP[header]['fieldType']
+
+        self.headers[header] = {
+            'formatType': format_type,
+            'fieldType': field_type,
+            'value': value
+        }
+
+    def add_headers(self, **kwargs):
+        """Add multiple headers to your template.
+
+        Arguments:
+            kwargs (key=str): Header specifications. Note that the keywords
+                must be one of the keys listed in Header.values
+
+        Example:
+            >>> template.add_headers(
+            ...     barcode_value='iso-8859-1',
+            ...     logo_image='https://google.com/fun.png'
+            ... )
+        """
+        for header, value in kwargs.iteritems():
+            self.add_header(header, value)
+
+    def remove_headers(self, *args):
+        """Remove headers from your template.
+
+        Arguments:
+            args (list of strings): A list of header values to remove.
+
+        Example:
+            >>> template.remove_headers('logo_color', 'icon_image')
+        """
+        for header in args:
+            del self.headers[header]
+
+    def set_headers(self, **kwargs):
+        """Reset the template headers.
+
+        Arguments:
+            kwargs: Header specifications. Note that the keywords must be one
+                of the keys listed in Header.values
+
+        Example:
+            >>> template.set_headers(
+            ...     barcode_value='iso-8859-1',
+            ...     logo_image='https://google.com/fun.png'
+            ... )
+        """
+        self.headers.clear()
+        self.add_headers(**kwargs)
+
+    def view(self):
+        """View the entirety of the template, including keys that
+        are read_only.
+        """
+        payload = {'headers': self.headers}
+        payload.update(self.metadata)
+        return payload
+
+    def _create_payload(self):
+        payload = {'headers': {}}
+        for key, val in self.headers.iteritems():
+            payload['headers'][key] = val
+        for key, val in self.metadata.iteritems():
+            if key not in self.READ_ONLY_METADATA:
+                payload[key] = val
+        return payload
+
+    @staticmethod
+    def build_url(url, main_id=None, external_id=None, location_id=None):
+        if location_id and main_id:
+            return url.format(main_id, location_id)
+        elif location_id:
+            return url.format('id/' + str(external_id), location_id)
+        elif main_id and external_id:
+            return url.format(str(main_id) + '/id/' + str(external_id))
+        elif main_id:
+            return url.format(main_id)
+        else:
+            return url.format('id/' + str(external_id))
+
+
+class AppleTemplate(Template):
+    """Represents an Apple template object."""
+
+    def __init__(self):
+        super(AppleTemplate, self).__init__()
+        self.beacons = []
+        self.metadata['vendor'] = 'Apple'
+        self.metadata['vendorId'] = 1
+
+    @classmethod
+    def from_data(cls, data):
+        """Creates an Apple template from JSON data.
+
+        Arguments:
+            data (dict): The JSON data to convert to a template object.
+
+        Returns:
+            An AppleTemplate object.
+
+        Example:
+            >>> loyalty_template = AppleTemplate.from_data({
+            ...     'name': 'Loyalty Template',
+            ...     'description': 'A loyalty template',
+            ...     'fieldsModel': {
+            ...         'fields': {
+            ...             ...
+            ...         },
+            ...         'headers': {
+            ...             ...
+            ...         }
+            ...     },
+            ...     ...,
+            ...     'vendor': 'Apple'
+            ... })
+            <Template name:Loyalty Template, vendor:Apple>
+        """
+        template = super(AppleTemplate, cls).from_data(data)
+        fields = data.get('fieldsModel', {}).get('fields', {})
+        for name, json_field in fields.iteritems():
+            template.fields[name] = wf.Field.build_apple_field(
+                name, json_field
+            )
+        template.beacons = data.get('beacons', [])
+        return template
+
+    def view(self):
+        payload = super(AppleTemplate, self).view()
+        payload.update({'fields': {}, 'beacons': []})
+        for name, field in self.fields.iteritems():
+            payload['fields'][name] = field.build_apple_json()
+        payload['beacons'] = self.beacons
+        return payload
+
+    def add_header(self, header, value, format_type=None, field_type=None):
+        # Check Apple-specific enums
+        if header == self.HEADERS.TRANSIT_TYPE:
+            TransitType.validate(value)
+
+        super(AppleTemplate, self).add_header(
+            header, value, format_type, field_type
+        )
+
+        # Apple-specific validation
+        if (
+            header == TemplateHeader.BARCODE_TYPE and
+            value not in BarcodeType.apple_barcode()
+        ):
+            del self.headers[header]
+            raise ValueError(
+                "The barcode type '{}' is not valid for apple \
+                templates.".format(value)
+            )
+
+    def _create_payload(self):
+        """Build a JSON payload from the Template object.
+
+        Returns:
+            A dictionary representing a template.
+
+        Example:
+            >>> template._create_payload()
+            {'name': 'A Template', 'description': 'Some stuff', ...,
+                'infoModule': {...}}
+        """
+        payload = self.view()
+        return {key: val for key, val in payload.iteritems() if
+                key not in self.READ_ONLY_METADATA}
+
+    def add_beacon(self, uuid, relevant_text=None, major=None, minor=None):
+        """Add a beacon to the template.
+
+        Arguments:
+            uuid (str): An identifier for this location.
+            relevant_text (str): Text to display when a user approaches the
+                location.
+            major (int): A major location identifier.
+            minor (int): A minor location identifier.
+
+        Example:
+            >>> template.add_beacon(
+            ...     uuid='3526dee6-4ea8-11e6-beb8-9e71128cae77',
+            ...     relevant_text='You are near something cool.',
+            ...     major=2,
+            ...     minor=34
+            ... )
+        """
+        payload = {
+            'uuid': uuid,
+            'relevantText': relevant_text,
+            'major': major,
+            'minor': minor
+        }
+
+        self.beacons.append({
+            key: val for key, val in payload.iteritems() if val is not None
+        })
+
+
+    def remove_beacon(self, uuid):
+        """Remove a beacon from a template.
+
+        Arguments:
+            uuid (str): The UUID of the beacon you wish to remove.
+
+        Raises:
+            ValueError: When the uuid does not match any beacon associated
+                with the template
+
+        Example:
+            >>> template.remove_beacon('8054f07e-238f-439e-93eb-0c2fe6829541')
+        """
+        for index, beacon in enumerate(self.beacons):
+            if beacon['uuid'] == uuid:
+                del self.beacons[index]
+                return
+        raise ValueError("Beacon with UUID {} not found".format(uuid))
+
+
+class GoogleTemplate(Template):
+    """Represents a Google template object."""
+
+    # Some modules have reserved names (names that have special meaning and
+    # cannot be used for field names).
+    RESERVED_NAMES = {
+        wf.GoogleFieldType.INFO_MODULE: ['hexFontColor', 'hexBackgroundColor'],
+        wf.GoogleFieldType.TITLE_MODULE: ['image'],
+        wf.GoogleFieldType._IMAGE_MODULE: ['imageModulesData']
+    }
+
+    def __init__(self):
+        super(GoogleTemplate, self).__init__()
+        self.top_level_fields = defaultdict(dict)
+        self.messages = []
+        self.metadata['vendor'] = 'Google'
+        self.metadata['vendorId'] = 2
+
+    @classmethod
+    def from_data(cls, data):
+        """Creates a Google template from JSON data.
+
+        Arguments:
+            data (dict): The JSON data to convert to a template object.
+
+        Returns:
+            A GoogleTemplate object.
+
+        Example:
+            >>> loyalty_template = GoogleTemplate.from_data({
+            ...     'name': 'Loyalty Template',
+            ...     'description': 'A loyalty template',
+            ...     'fieldsModel': {
+            ...         'infoModule': {
+            ...             ...
+            ...         },
+            ...         ...,
+            ...         'headers': {
+            ...             ...
+            ...         }
+            ...     },
+            ...     ...,
+            ...     'vendor': 'Apple'
+            ... })
+            <Template name:Loyalty Template, vendor:Google>
+        """
+        template = super(GoogleTemplate, cls).from_data(data)
+        modules = data.get('fieldsModel', {})
+        for field_type, module_data in modules.iteritems():
+            if field_type == 'vendor':
+                continue
+            # Handling special modules
+            elif field_type == wf.GoogleFieldType._OFFER_MODULE:
+                template.set_offer(**module_data)
+            elif field_type == wf.GoogleFieldType._MESSAGE_MODULE:
+                template.messages = module_data
+            elif field_type == wf.GoogleFieldType._IMAGE_MODULE:
+                if module_data.get(wf.GoogleFieldType._IMAGE_MODULE):
+                    inner_module = module_data[wf.GoogleFieldType._IMAGE_MODULE]
+                    template.add_top_level_fields(
+                        wf.GoogleFieldType._IMAGE_MODULE,
+                        **inner_module
+                    )
+            else:
+                template._process_module_data(field_type, module_data)
+        return template
+
+    def view(self):
+        payload = super(GoogleTemplate, self).view()
+        payload.update({'fields': {}, 'messages': []})
+        for name, field in self.fields.iteritems():
+            payload['fields'][name] = field.build_google_json()
+        payload['top_level_fields'] = self.top_level_fields
+        payload['messages'] = self.messages
+        return payload
+
+    def add_header(self, header, value, format_type=None, field_type=None):
+        super(GoogleTemplate, self).add_header(
+            header, value, format_type, field_type
+        )
+
+        if header not in self.HEADERS.google_headers():
+            del self.headers[header]
+            raise ValueError(
+                "The header '{}' is not used with \
+                Google templates".format(header)
+            )
+
+    def add_top_level_fields(self, field_type, **kwargs):
+        """Add top level values to the specified module location.
+
+        Arguments:
+            location (str): The module being added to.
+            kwargs (key=str): A mapping of string keys to string values.
+
+        Raises:
+            ValueError: If the location is not specified
+
+        Example:
+            >>> template.add_top_level_fields(
+            ...     GoogleFieldType.TITLE_MODULE,
+            ...     image="https://google.com/images/asdfoi1.png",
+            ...     imageDescription="Logo Image"
+            ... )
+
+        """
+        wf.GoogleFieldType.validate(field_type, allow_private=True)
+        for key, val in kwargs.iteritems():
+            self.top_level_fields[field_type][key] = val
+
+    def set_title_image(self, image, description=None):
+        """Set the title image on a Google template.
+
+        Arguments:
+            image (str): An image URL.
+            description (str): A description of the associated image.
+
+        Example:
+            >>> template.set_title_image(
+            ...     'https://www.google.com/image.png',
+            ...     description='An image!'
+            ... )
+        """
+        if not description:
+            description = ''
+
+        self.add_top_level_fields(
+            wf.GoogleFieldType.TITLE_MODULE,
+            image=image,
+            imageDescription=description
+        )
+
+    def set_background_image(self, **kwargs):
+        """Set the background image on a Google template.
+
+        Arguments:
+            kwargs (key=val): Image module specifications. The keys must
+                be one of the class variables listed in the ImageModule
+                class.
+
+        Example:
+            >>> template.set_background_image(
+            ...     image='https://google.com/image.png',
+            ...     imageDescription='Super cool background image.'
+            ... )
+        """
+        inner_module = {}
+        for key, val in kwargs.iteritems():
+            ImageModule.validate(key)
+            inner_module[key] = val
+
+        self.add_top_level_fields(
+            wf.GoogleFieldType._IMAGE_MODULE,
+            **inner_module
+        )
+
+    def set_offer(self, **kwargs):
+        """Set the offer module, used for Android coupons.
+
+        Arguments:
+            kwargs (key=val): Offer module specifications. The keys
+                must be one of the class variables lised in the
+                OfferModule class.
+
+        Example:
+            >>> template.set_offer(
+            ...     multiUserOffer=False,
+            ...     redemptionChannel='both',
+            ...     provider='Urban Airship'
+            ... )
+        """
+        offer_body = {}
+        for key, val in kwargs.iteritems():
+            OfferModule.validate(key)
+            offer_body[key] = val
+        self.add_top_level_fields(wf.GoogleFieldType._OFFER_MODULE, **offer_body)
+
+    def add_message(self, **kwargs):
+        """Add a message to the template.
+
+        Arguments:
+            kwargs (key=val): Key-value pairs specifying a message. The keys
+                must be one of the class variables lised in the MessageModule
+                class.
+
+        Raises:
+            ValueError: If the body key is not specified.
+
+        Example:
+            >>> template.add_message(
+            ...     body='A message body',
+            ...     header='A message title'
+            ... )
+        """
+        message_body = {}
+        for key, val in kwargs.iteritems():
+            MessageModule.validate(key)
+            message_body[key] = val
+        if not message_body.get(MessageModule.BODY):
+            raise ValueError("The 'body' key must be specified for each message.")
+        self.messages.append(message_body)
+
+    def _create_payload(self):
+        """Create a payload to send to either the create/update endpoint."""
+        payload = super(GoogleTemplate, self)._create_payload()
+
+        # Handle type conversions
+        if payload['projectType'] == ProjectType.COUPON:
+            payload['type'] = TemplateType.OFFER
+        if payload['projectType'] == ProjectType.GIFT_CARD:
+            payload['type'] = TemplateType.GIFT_CARD
+        if payload['projectType'] == ProjectType.LOYALTY:
+            payload['type'] = TemplateType.LOYALTY
+
+        # Handle standard fields
+        for name, field in self.fields.iteritems():
+            if not payload.get(field['fieldType']):
+                payload[field['fieldType']] = {}
+            payload[field['fieldType']][field.name] = field.build_google_json()
+
+        # Handle top-level fields
+        for field_type, fields in self.top_level_fields.iteritems():
+            if not payload.get(field_type):
+                payload[field_type] = {}
+            payload[field_type].update(fields)
+
+        # Handle messages
+        if self.messages:
+            payload['messages'] = self.messages
 
         return payload
+
+    def _process_module_data(self, field_type, module_data):
+        for name, data in module_data.iteritems():
+            if name in GoogleTemplate.RESERVED_NAMES.get(field_type, []):
+                self._handle_reserved_names(field_type, name, data)
+            elif isinstance(data, dict):
+                self.fields[name] = wf.Field.build_google_field(name, data)
+            elif isinstance(data, str):
+                self.add_top_level_field(field_type, name, data)
+            else:
+                ValueError('Unrecognized Android template structure.')
+
+    def _handle_reserved_names(self, field_type, name, data):
+        """Handles specialized module data.
+        """
+        value = data.get(wf.Field.GOOGLE_VALUE_MAP[field_type])
+        if name == 'hexFontColor':
+            self.add_top_level_field(field_type, hexFontColor=value)
+        elif name == 'hexBackgroundColor':
+            self.add_top_level_field(field_type, hexBackgroundColor=value)
+        elif name == 'image':
+            self.add_top_level_fields(field_type, image=data['title.string'])
+            if 'description.string' in data:
+                self.add_top_level_fields(
+                    field_type, imageDescription=data['description.string']
+                )
+        else:
+            raise ValueError('Unrecognized reserved name: {}'.format(name))

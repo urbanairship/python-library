@@ -7,10 +7,11 @@ import requests
 import wallet
 
 
-CLIENT = wallet.Wallet('fake', 'client')
-
-
 class PassApiTest(unittest.TestCase):
+
+    def setUp(self):
+        self.client = wallet.Wallet('fake', 'creds')
+        super(PassApiTest, self).setUp()
 
     @mock.patch.object(wallet.Wallet, '_request')
     def test_delete(self, mock_request):
@@ -18,7 +19,7 @@ class PassApiTest(unittest.TestCase):
         response.status_code = 200
         mock_request.return_value = response
 
-        wal = wallet.delete_pass(CLIENT, pass_id=12345)
+        wal = wallet.delete_pass(self.client, pass_id=12345)
         mock_request.assert_called_with(
             'DELETE',
             None,
@@ -72,7 +73,7 @@ class PassApiTest(unittest.TestCase):
         mock_request.return_value = response
 
         wal = wallet.add_pass_locations(
-            CLIENT, locations, pass_id=12345
+            self.client, locations, pass_id=12345
         )
         mock_request.assert_called_with(
             'POST',
@@ -94,7 +95,7 @@ class PassApiTest(unittest.TestCase):
         mock_request.return_value = response
 
         wal = wallet.delete_pass_location(
-            CLIENT, 'location123', pass_id=12345
+            self.client, 'location123', pass_id=12345
         )
         mock_request.assert_called_with(
             'DELETE',

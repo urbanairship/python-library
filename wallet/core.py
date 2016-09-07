@@ -1,7 +1,8 @@
 import logging
 import requests
 
-from . import common, __about__
+from wallet import common, __about__
+
 
 logger = logging.getLogger('urbanairship')
 
@@ -30,7 +31,7 @@ class Wallet(object):
         if content_type:
             headers['Content-type'] = content_type
         if version:
-            headers['Api-Revision'] = version
+            headers['Api-Revision'] = str(version)
         if encoding:
             headers['Content-Encoding'] = encoding
 
