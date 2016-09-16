@@ -4,7 +4,7 @@ import requests
 from wallet import common, __about__
 
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger(__name__)
 
 
 class Wallet(object):

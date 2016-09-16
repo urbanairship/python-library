@@ -3,6 +3,55 @@ Passes
 ######
 
 
+***********
+Create Pass
+***********
+
+To `create a pass`_, use the ``Pass`` class' ``create`` method:
+
+.. code-block:: python
+
+   import wallet as ua
+
+
+   my_pass = ua.ApplePass()
+   member_name = ua.Field(
+       name='Member Name',
+       value='First Last'
+   )
+
+   my_pass.add_fields(member_name)
+   my_pass.set_expiration(datetime.datetime(2016, 12, 12))
+   my_pass.set_public_url('multiple')
+   response = my_pass.create(ua_wallet, template_id=12345)
+
+
+***********
+Update Pass
+***********
+
+To `update a pass`_, use the ``Pass`` class' ``update`` method:
+
+.. note::
+
+   Unlike the template update endpoint, the pass update endpoint accepts partial
+   updates. Consequently, you do not have to execute a get on the pass before
+   update.
+
+.. code-block:: python
+
+   import wallet as ua
+
+   my_pass = ua.ApplePass()
+   member_name = ua.Field(
+       name='Member Name',
+       value='First Last'
+   )
+
+   my_pass.add_fields(member_name)
+   response = my_pass.update(ua_wallet, template_id=12345)
+
+
 ********
 Get Pass
 ********
@@ -13,8 +62,28 @@ To `get a pass`_, use the ``get_pass`` method:
 
    import wallet as ua
 
-   ua_wal = ua.Wallet('email', 'api_key')
-   my_pass = ua.get_pass(ua_wal, pass_id='pass_id')
+   ua_wallet = ua.Wallet('email', 'api_key')
+
+   my_pass = ua.get_pass(ua_wallet, pass_id=12345)
+
+
+***********
+List Passes
+***********
+
+To get `a list of passes`_, use the ``PassList`` class:
+
+.. code-block:: python
+
+   import wallet as ua
+
+   ua_wallet = ua.Wallet('email', 'api_key')
+
+   pass_list = ua.TemplateList(ua_wallet)
+
+   for pass_ in pass_list:
+      print pass_
+
 
 
 ***********
@@ -28,8 +97,9 @@ To `delete a pass`_, use the ``delete_pass`` method:
    import wallet as ua
 
 
-   ua_wal = ua.Wallet('email', 'api_key')
-   my_pass = ua.delete_pass(ua_wal, pass_id='pass_id')
+   ua_wallet = ua.Wallet('email', 'api_key')
+
+   response = ua.delete_pass(ua_wallet, pass_id=12345)
 
 
 *********************
@@ -87,7 +157,10 @@ To `delete a location from a pass`, use the ``delete_pass_location`` method:
    ua.delete_pass_location(ua_wal, 1234567, pass_id=52431)
 
 
+.. _create a pass: http://docs.urbanairship.com/api/wallet.html#create-pass
+.. _update a pass: http://docs.urbanairship.com/api/wallet.html#update-pass
 .. _getting a pass: http://docs.urbanairship.com/api/wallet.html#get-pass
+.. _a list of passes: http://docs.urbanairship.com/api/wallet.html#list-passes
 .. _delete a pass: http://docs.urbanairship.com/api/wallet.html#delete-pass
 .. _add locations to a pass: http://docs.urbanairship.com/api/wallet.html#add-locations-to-pass
 .. _delete a location from a pass: http://docs.urbanairship.com/api/wallet.html#delete-location-from-pass

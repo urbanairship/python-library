@@ -1,12 +1,13 @@
+from collections import defaultdict
+import datetime
 import json
-import unittest
 import mock
 import requests
-from collections import defaultdict
+import unittest
 
 import wallet as ua
 from wallet import common
-from wallet.template import Template
+from wallet.templates import Template
 from template_builders import build_apple_loyalty, build_google_loyalty
 
 
@@ -704,8 +705,8 @@ class GoogleTemplateTest(unittest.TestCase):
             'An image!'
         )
 
-    def test_set_title_image(self):
-        self.template.set_title_image(
+    def test_set_logo_image(self):
+        self.template.set_logo_image(
             'https://imgur.com/cool_image.png', description='Image'
         )
         payload = self.template._create_payload()
@@ -716,8 +717,8 @@ class GoogleTemplateTest(unittest.TestCase):
 
     def test_set_background_image(self):
         self.template.set_background_image(
-            image='https://imgur.com/cool_image.png',
-            imageDescription='Super cool image'
+            'https://imgur.com/cool_image.png',
+            description='Super cool image'
         )
         payload = self.template._create_payload()
         self.assertEqual(
@@ -726,28 +727,30 @@ class GoogleTemplateTest(unittest.TestCase):
         )
 
     def test_set_offer(self):
+        date = datetime.datetime(2017,1,31)
+        offer_json = {
+            'multiUserOffer': False,
+            'redemptionChannel': 'both',
+            'provider': 'The provider',
+            'endTime': '2017-01-31T00:00'
+        }
         self.template.set_offer(
-            multiUserOffer=False,
-            redemptionChannel='both',
+            multi_user_offer=False,
+            redemption_channel='both',
             provider='The provider',
-            endTime='2017-01-30T00:00:00.000Z'
+            endtime=date
         )
 
-        payload = self.template._create_payload()
         self.assertEqual(
-            payload[ua.GoogleFieldType._OFFER_MODULE]['multiUserOffer'],
-            False
-        )
-        self.assertEqual(
-            payload[ua.GoogleFieldType._OFFER_MODULE]['provider'],
-            'The provider'
+            self.template.top_level_fields[ua.GoogleFieldType._OFFER_MODULE],
+            offer_json
         )
 
     def test_add_message(self):
         # Test error
         self.assertRaises(
             ValueError,
-            lambda: self.template.add_message(actionUri='http://google.com')
+            lambda: self.template.add_message(header="There's no body here!")
         )
 
         # Test minimal
@@ -759,7 +762,7 @@ class GoogleTemplateTest(unittest.TestCase):
         self.template.add_message(
             header='A title',
             body='Test body',
-            actionUri='https://urbanairship.com'
+            action_uri='https://urbanairship.com'
         )
         payload = self.template._create_payload()
         self.assertEqual(len(payload['messages']), 2)

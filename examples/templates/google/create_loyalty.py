@@ -92,18 +92,14 @@ google_loyalty.add_fields(
 )
 
 # Top level headers
-google_loyalty.add_top_level_fields(
-    ua.GoogleFieldType.TITLE_MODULE,
-    image='https://s3.amazonaws.com/passtools_prod/1/images/default-loyalty-logo.png',
-    imageDescription=''
+google_loyalty.set_logo_image(
+    'https://s3.amazonaws.com/passtools_prod/1/images/default-loyalty-logo.png',
+    description=''
 )
 
 google_loyalty.set_background_image(
-    image="https://s3.amazonaws.com/passtools_prod/1/images/4de615dc822e2559afd40a96a69cc07613bfa774_torus.png",
-    imageDescription='',
-    formatType='String',
-    fieldType='imageModulesData',
-    hideEmpty=False
+    "https://s3.amazonaws.com/passtools_prod/1/images/4de615dc822e2559afd40a96a69cc07613bfa774_torus.png",
+    description=''
 )
 
 print json.dumps(google_loyalty._create_payload(), sort_keys=True, indent=4)

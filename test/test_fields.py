@@ -103,11 +103,17 @@ class TestField(unittest.TestCase):
             'order': 1,
             'formatType': 'String'
         })
+
+        base_payload = self.min_apple_field._build_common_json()
         self.assertEqual(
-            extended_apple_json, self.min_apple_field.build_apple_json()
+            extended_apple_json, self.min_apple_field.build_apple_json(
+                base_payload
+            )
         )
         self.assertEqual(
-            self.full_apple_json[1], self.full_apple_field.build_apple_json()
+            self.full_apple_json[1], self.full_apple_field.build_apple_json(
+                base_payload
+            )
         )
 
     def test_build_google_json(self):
@@ -116,12 +122,18 @@ class TestField(unittest.TestCase):
             'order': 1,
             'formatType': 'String'
         })
+
+        base_payload = self.min_apple_field._build_common_json()
         self.assertEqual(
-            extended_google_json, self.min_google_field.build_google_json()
+            extended_google_json, self.min_google_field.build_google_json(
+                base_payload
+            )
         )
         self.assertEqual(
             self.full_google_json[1],
-            self.full_google_field.build_google_json()
+            self.full_google_field.build_google_json(
+                base_payload
+            )
         )
 
     def test_infer_number_style(self):

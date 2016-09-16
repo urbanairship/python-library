@@ -19,7 +19,7 @@ PASS_ADD_LOCATION_URL = BASE_URL + '/pass/{0}/locations'
 PASS_DELETE_LOCATION_URL = BASE_URL + '/pass/{0}/location/{1}'
 
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger(__name__)
 
 
 class Unauthorized(Exception):

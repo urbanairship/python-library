@@ -7,7 +7,7 @@ import wallet.fields as wf
 from wallet import util
 
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger(__name__)
 
 
 class TemplateMetadata(util.Constant):
@@ -133,34 +133,6 @@ class TransitType(util.Constant):
     TRAIN = 'transitTypeTrain'
 
 
-class MessageModule(util.Constant):
-    KEY_CLASS = 'Message'
-    # Specific to message modules
-    ACTION_URI = 'actionUri'
-    ACTION_URI_DESCRIPTION = 'actionUriDescription'
-    IMAGE_URI = 'imageUri'
-    HEADER = 'header'
-    BODY = 'body'
-    IMAGE_DESCRIPTION = 'imageDescription'
-    START_TIME = 'startTime'
-    END_TIME = 'endTime'
-
-
-class OfferModule(util.Constant):
-    MULTI_USER_OFFER = 'multiUserOffer'
-    REDEMPTION_CHANNEL = 'redemptionChannel'
-    PROVIDER = 'provider'
-    ENDTIME = 'endTime'
-
-
-class ImageModule(util.Constant):
-    IMAGE = 'image'
-    IMAGE_DESCRIPTION = 'imageDescription'
-    HIDE_EMPTY = 'hideEmpty'
-    FORMAT_TYPE = 'formatType'
-    FIELD_TYPE = 'fieldType'
-
-
 def get_template(wallet, template_id=None, external_id=None):
     """Retrieve a template.
 
@@ -230,7 +202,7 @@ def _template_create_dispatch(data):
             raise ValueError('Unrecognized vendor: {}'.format(vendor))
     except KeyError as k:
         logger.exception('Unrecognized template structure: {}'.format(data))
-        raise k
+        raise
 
 
 def delete_template(wallet, template_id=None, external_id=None):
@@ -411,6 +383,7 @@ def remove_template_location(
         location_id,
         template_id if template_id else external_id
     ))
+
     return True
 
 
@@ -515,9 +488,9 @@ class Template(object):
                 project_id = self.metadata[TemplateMetadata.PROJECT_ID]
             except KeyError:
                 raise ValueError(
-                    "Either set project_id when calling update, \
-                    or set the project_id attribute via the add_metadata \
-                    method, e.g., your_template.add_metadata(project_id=1234)."
+                    "Either set project_id when calling update, "
+                    "or set the project_id attribute via the add_metadata "
+                    "method, e.g., your_template.add_metadata(project_id=1234)."
                 )
 
         response = wallet.request(
@@ -560,10 +533,10 @@ class Template(object):
                 template_id = self.metadata[TemplateMetadata.TEMPLATE_ID]
             except KeyError:
                 raise ValueError(
-                    "Either set template_id or external_id when calling \
-                    update, or set the template id attribute via the \
-                    add_metadata method, e.g., \
-                    your_template.add_metadata(template_id=1234)."
+                    "Either set template_id or external_id when calling "
+                    "update, or set the template id attribute via the "
+                    "add_metadata method, e.g., "
+                    "your_template.add_metadata(template_id=1234)."
                 )
 
         response = wallet.request(
@@ -580,7 +553,6 @@ class Template(object):
         logger.info('Successful template creation: {}'.format(
             template_id if template_id else external_id
         ))
-
         return True
 
     @classmethod
@@ -787,6 +759,14 @@ class Template(object):
                 payload[key] = val
         return payload
 
+    """ Convenience methods for setting images. See
+    AppleTemplate/GoogleTemplate for specific overrides. """
+    def set_logo_image(self, value):
+        raise NotImplementedError
+
+    def set_background_image(self, value):
+        raise NotImplementedError
+
     @staticmethod
     def build_url(url, main_id=None, external_id=None, location_id=None):
         if location_id and main_id:
@@ -850,7 +830,8 @@ class AppleTemplate(Template):
         payload = super(AppleTemplate, self).view()
         payload.update({'fields': {}, 'beacons': []})
         for name, field in self.fields.iteritems():
-            payload['fields'][name] = field.build_apple_json()
+            base_payload = field._build_common_json()
+            payload['fields'][name] = field.build_apple_json(base_payload)
         payload['beacons'] = self.beacons
         return payload
 
@@ -870,8 +851,8 @@ class AppleTemplate(Template):
         ):
             del self.headers[header]
             raise ValueError(
-                "The barcode type '{}' is not valid for apple \
-                templates.".format(value)
+                "The barcode type '{}' is not valid for Apple "
+                "templates.".format(value)
             )
 
     def _create_payload(self):
@@ -918,7 +899,6 @@ class AppleTemplate(Template):
             key: val for key, val in payload.iteritems() if val is not None
         })
 
-
     def remove_beacon(self, uuid):
         """Remove a beacon from a template.
 
@@ -937,6 +917,15 @@ class AppleTemplate(Template):
                 del self.beacons[index]
                 return
         raise ValueError("Beacon with UUID {} not found".format(uuid))
+
+    def set_logo_image(self, value):
+        self.set_headers(logo_image=value)
+
+    def set_background_image(self, value):
+        self.set_headers(strip_image=value)
+
+    def set_icon_image(self, value):
+        self.add_headers(icon_image=value)
 
 
 class GoogleTemplate(Template):
@@ -992,7 +981,10 @@ class GoogleTemplate(Template):
                 continue
             # Handling special modules
             elif field_type == wf.GoogleFieldType._OFFER_MODULE:
-                template.set_offer(**module_data)
+                template.add_top_level_fields(
+                    wf.GoogleFieldType._OFFER_MODULE,
+                    **module_data
+                )
             elif field_type == wf.GoogleFieldType._MESSAGE_MODULE:
                 template.messages = module_data
             elif field_type == wf.GoogleFieldType._IMAGE_MODULE:
@@ -1010,7 +1002,8 @@ class GoogleTemplate(Template):
         payload = super(GoogleTemplate, self).view()
         payload.update({'fields': {}, 'messages': []})
         for name, field in self.fields.iteritems():
-            payload['fields'][name] = field.build_google_json()
+            base_payload = field._build_common_json()
+            payload['fields'][name] = field.build_google_json(base_payload)
         payload['top_level_fields'] = self.top_level_fields
         payload['messages'] = self.messages
         return payload
@@ -1023,8 +1016,8 @@ class GoogleTemplate(Template):
         if header not in self.HEADERS.google_headers():
             del self.headers[header]
             raise ValueError(
-                "The header '{}' is not used with \
-                Google templates".format(header)
+                "The header '{}' is not used with "
+                "Google templates".format(header)
             )
 
     def add_top_level_fields(self, field_type, **kwargs):
@@ -1049,17 +1042,18 @@ class GoogleTemplate(Template):
         for key, val in kwargs.iteritems():
             self.top_level_fields[field_type][key] = val
 
-    def set_title_image(self, image, description=None):
-        """Set the title image on a Google template.
+    def set_logo_image(self, value, description=None):
+        """Set the logo image for a Google template.
 
         Arguments:
-            image (str): An image URL.
-            description (str): A description of the associated image.
+            value (string): A URL pointing to an image.
+            description (string): An optional string describing the logo
+                image.
 
         Example:
-            >>> template.set_title_image(
-            ...     'https://www.google.com/image.png',
-            ...     description='An image!'
+            >>> template.set_logo_image(
+            ...     'https://imgur.com/cool_image.png',
+            ...     description='A super cool image'
             ... )
         """
         if not description:
@@ -1067,79 +1061,126 @@ class GoogleTemplate(Template):
 
         self.add_top_level_fields(
             wf.GoogleFieldType.TITLE_MODULE,
-            image=image,
+            image=value,
             imageDescription=description
         )
 
-    def set_background_image(self, **kwargs):
-        """Set the background image on a Google template.
+    def set_background_image(self, value, description=None):
+        """Set the background image for a Google template.
 
         Arguments:
-            kwargs (key=val): Image module specifications. The keys must
-                be one of the class variables listed in the ImageModule
-                class.
+            value (string): A URL pointing to an image.
+            description (string): An optional string describing the background
+                image.
 
         Example:
             >>> template.set_background_image(
-            ...     image='https://google.com/image.png',
-            ...     imageDescription='Super cool background image.'
+            ...     'https://imgur.com/cool_image.png',
+            ...     description='A super cool image'
             ... )
         """
-        inner_module = {}
-        for key, val in kwargs.iteritems():
-            ImageModule.validate(key)
-            inner_module[key] = val
+        if not description:
+            description = ''
 
         self.add_top_level_fields(
             wf.GoogleFieldType._IMAGE_MODULE,
-            **inner_module
+            **{'image': value, 'imageDescription': description}
         )
 
-    def set_offer(self, **kwargs):
-        """Set the offer module, used for Android coupons.
+    def set_offer(
+        self,
+        multi_user_offer=None,
+        endtime=None,
+        provider=None,
+        redemption_channel=None
+    ):
+        """Set the template offerModule.
 
         Arguments:
-            kwargs (key=val): Offer module specifications. The keys
-                must be one of the class variables lised in the
-                OfferModule class.
+            * multi_user_offer (bool): One of True or False. Indicates
+              whether the offer can be used by multiple users.
+            * endtime (datetime.datetime): The offer expiration date.
+            * provider (string): The provider name of the offer.
+            * redemption_channel (string): Can be one of ``'online'``,
+              ``'instore'``, ``'both'``, or ``'temporaryPriceReduction'``.
 
         Example:
             >>> template.set_offer(
-            ...     multiUserOffer=False,
-            ...     redemptionChannel='both',
-            ...     provider='Urban Airship'
+            ...     multi_user_offer=False,
+            ...     provider='UA'
+            ...     redemption_channel='both',
             ... )
         """
-        offer_body = {}
-        for key, val in kwargs.iteritems():
-            OfferModule.validate(key)
-            offer_body[key] = val
-        self.add_top_level_fields(wf.GoogleFieldType._OFFER_MODULE, **offer_body)
+        valid_chans = {'instore', 'online', 'both', 'temporaryPriceReduction'}
+        if redemption_channel and redemption_channel not in valid_chans:
+            raise ValueError(
+                "Unrecognized redemption_channel '{}'. Valid \
+                redemption_channels are: {}.".format(
+                    redemption_channel, ', '.join(valid_chans)
+                )
+            )
 
-    def add_message(self, **kwargs):
-        """Add a message to the template.
+        payload = {
+            'multiUserOffer': multi_user_offer,
+            'endTime': endtime.strftime('%Y-%m-%dT%H:%M') if endtime else None,
+            'provider': provider,
+            'redemptionChannel': redemption_channel
+        }
+        self.add_top_level_fields(
+            wf.GoogleFieldType._OFFER_MODULE,
+            **{key: val for key, val in payload.iteritems() if val != None}
+        )
+
+    def add_message(
+        self,
+        body=None,
+        header=None,
+        action_uri=None,
+        action_uri_description=None,
+        image_uri=None,
+        image_description=None,
+        starttime=None,
+        endtime=None
+    ):
+        """Add a message to a Google template.
 
         Arguments:
-            kwargs (key=val): Key-value pairs specifying a message. The keys
-                must be one of the class variables lised in the MessageModule
-                class.
-
-        Raises:
-            ValueError: If the body key is not specified.
+            * body (string): The message body.
+            * header (string): The message header.
+            * action_uri (string): The URI to which users are directed
+              upon clicking the message.
+            * action_uri_description (string): Description for the
+              ``action_uri``.
+            * image_uri (string): Specify an image to display with the
+              message.
+            * image_description (string): Description for the image.
+            * starttime (datetime.datetime): Valid ISO8805 date for start
+              time of a message.
+            * endtime (datetime.datetime): Valid ISO8805 date for end time of
+              a message.
 
         Example:
             >>> template.add_message(
             ...     body='A message body',
-            ...     header='A message title'
+            ...     header='A message header'
             ... )
         """
-        message_body = {}
-        for key, val in kwargs.iteritems():
-            MessageModule.validate(key)
-            message_body[key] = val
-        if not message_body.get(MessageModule.BODY):
+        if not body:
             raise ValueError("The 'body' key must be specified for each message.")
-        self.messages.append(message_body)
+
+        payload = {
+            'body': body,
+            'header': header,
+            'actionUri': action_uri,
+            'actionUriDescription': action_uri_description,
+            'imageUri': image_uri,
+            'imageDescription': image_description,
+            'startTime': starttime.strftime('%Y-%m-%dT%H:%M') if starttime else None,
+            'endTime': endtime.strftime('%Y-%m-%dT%H:%M') if endtime else None
+        }
+        self.messages.append(
+            {key: val for key, val in payload.iteritems() if val != None}
+        )
 
     def _create_payload(self):
         """Create a payload to send to either the create/update endpoint."""
@@ -1157,7 +1198,8 @@ class GoogleTemplate(Template):
         for name, field in self.fields.iteritems():
             if not payload.get(field['fieldType']):
                 payload[field['fieldType']] = {}
-            payload[field['fieldType']][field.name] = field.build_google_json()
+            base_payload = field._build_common_json()
+            payload[field['fieldType']][field.name] = field.build_google_json(base_payload)
 
         # Handle top-level fields
         for field_type, fields in self.top_level_fields.iteritems():

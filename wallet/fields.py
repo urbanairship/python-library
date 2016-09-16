@@ -1,9 +1,13 @@
 import collections
 import datetime
+import logging
+
 from six.moves.urllib import parse
 
 from wallet import util
 
+
+logger = logging.getLogger(__name__)
 
 class FieldKey(util.Constant):
     KEY_CLASS = 'Field'
@@ -127,11 +131,9 @@ class Field(collections.MutableMapping):
         if not name:
             raise ValueError('Must set field name.')
         self.name = name
-        self.values = {}
+        self.field_values = {}
         for key, val in kwargs.iteritems():
             self[key] = val
-        if not self.get('fieldType'):
-            self['fieldType'] = GoogleFieldType.NOT_ASSIGNED
 
     # Serialization / Deserialization methods for Apple & Google
     @classmethod
@@ -199,7 +201,7 @@ class Field(collections.MutableMapping):
             field['order'] = field._row_col_to_order(row, col)
         return field
 
-    def build_apple_json(self):
+    def build_apple_json(self, payload):
         """Take a field object, fill in necessary blanks for serialization.
 
         Returns:
@@ -223,8 +225,10 @@ class Field(collections.MutableMapping):
                 'numberStyle': 'numberStyleDecimal'
             }
         """
-        payload = self._serialize_common()
-        for key, value in self.values.iteritems():
+        if self['fieldType'] == GoogleFieldType.NOT_ASSIGNED:
+            return self.field_values
+
+        for key, value in self.field_values.iteritems():
             payload[key] = value
         if (
             payload['formatType'] == 'Number' and
@@ -233,7 +237,7 @@ class Field(collections.MutableMapping):
             payload['numberStyle'] = self._infer_number_style(self['value'])
         return payload
 
-    def build_google_json(self):
+    def build_google_json(self, payload):
         """This function takes converts the values into a google friendly
         module payload.
 
@@ -254,17 +258,55 @@ class Field(collections.MutableMapping):
             {'header': 'Some Text!', 'body': 'Blah blah blah', 'fieldType': 'textModule',
              'formatType': 'Number', 'numberStyle': 'numberStyleDecimal'}
         """
-        payload = self._serialize_common()
-        for key, value in self.values.iteritems():
+        if self['fieldType'] == GoogleFieldType.NOT_ASSIGNED:
+            return self.field_values
+
+        for key, value in self.field_values.iteritems():
             if key == 'label':
                 payload[self.GOOGLE_LABEL_MAP[self['fieldType']]] = value
             elif key == 'value':
                 payload[self.GOOGLE_VALUE_MAP[self['fieldType']]] = value
+            elif (
+                key == 'order' and
+                self.get('fieldType') == GoogleFieldType.TEXT_MODULE
+            ):
+                # Special case: Order does not work in text modules -- must
+                # reconvert to rows/cols.
+                payload['col'] = 0
+                payload['row'] = value - 1
             else:
                 payload[key] = value
         return payload
 
-    def _serialize_common(self):
+    def build_generic_json(self):
+        """When creating a field for a pass, there may be no way to
+        determine the fieldType. This method builds json for fields
+        where the vendor/fieldType may be unknown.
+        """
+        base_payload = self._build_common_json()
+        try:
+            # Handle known google fields
+            GoogleFieldType.validate(self.get('fieldType'))
+            return self.build_google_json(base_payload)
+        except ValueError:
+            pass
+
+        try:
+            AppleFieldType.validate(self.get('fieldType'))
+            return self.build_apple_json(base_payload)
+        except ValueError:
+            pass
+
+        if self.get('label') or self.get('value'):
+            logger.warning(
+                'fieldType not specified -- if field is used by a '
+                'Google pass, resulting field JSON may contain '
+                'innacurate label/value keys.'
+            )
+
+        return self.field_values
+
+    def _build_common_json(self):
         """Common serialization items. Things that happen for both Apple
         and Google.
 
@@ -284,7 +326,7 @@ class Field(collections.MutableMapping):
         if self.get('currencyCode'):
             CurrencyCode.validate(self['currencyCode'])
             payload['formatType'] = 'Currency' if not self.get('formatType') else self['formatType']
-        if not self.get('formatType'):
+        if not self.get('formatType') and self.get('value'):
             payload['formatType'] = self._infer_format_type(self['value'])
         if not self.get('order'):
             payload['order'] = 1
@@ -372,45 +414,45 @@ class Field(collections.MutableMapping):
         # Catch an invalid value
         if key == FieldKey.TEXT_ALIGNMENT:
             TextAlignment.validate(value)
-            self.values[key] = value
+            self.field_values[key] = value
         elif key == FieldKey.FORMAT_TYPE:
             FormatType.validate(value)
-            self.values[key] = value
+            self.field_values[key] = value
         elif key == FieldKey.NUMBER_STYLE:
             # Convert number style from PKNumberStyle to numberStyle, if necessary.
             value = value.replace('PKN', 'n')
             NumberStyle.validate(value)
-            self.values[key] = value
+            self.field_values[key] = value
         # Convert loyaltyPoints to pointsModule
         elif key == FieldKey.FIELD_TYPE:
             util.check_multiple(value, AppleFieldType, GoogleFieldType)
             if value == GoogleFieldType._LOYALTY_POINTS:
-                self.values[key] = GoogleFieldType.POINTS_MODULE
+                self.field_values[key] = GoogleFieldType.POINTS_MODULE
             else:
-                self.values[key] = value
+                self.field_values[key] = value
         else:
-            self.values[key] = value
+            self.field_values[key] = value
 
     def __getitem__(self, key):
-        return self.values[key]
+        return self.field_values[key]
 
     def __iter__(self):
-        return iter(self.values)
+        return iter(self.field_values)
 
     def __len__(self):
-        return len(self.values)
+        return len(self.field_values)
 
     def __delitem__(self, key):
-        del self.values[key]
+        del self.field_values[key]
 
     # Additional magic methods
     def __eq__(self, other):
         if self.__class__ != other.__class__:
             return False
-        return self.values == other.values and self.name == other.name
+        return self.field_values == other.field_values and self.name == other.name
 
     def __repr__(self):
         return '<Field name:{}, fieldType:{}>'.format(
             self.name,
-            self['fieldType']
+            self.get('fieldType')
         )

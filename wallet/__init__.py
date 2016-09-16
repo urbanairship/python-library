@@ -1,11 +1,13 @@
 from .core import Wallet
 from .common import Unauthorized, WalletFailure
-from .template import (
+from .templates import (
+    TemplateMetadata,
     TemplateType,
     ProjectType,
     Type,
     TemplateHeader,
     BarcodeType,
+    TransitType,
     get_template,
     delete_template,
     duplicate_template,
@@ -31,9 +33,12 @@ from .util import (
     rgb,
 )
 
-from .pass_ import (
+from .passes import (
     add_pass_locations,
     delete_pass_location,
     delete_pass,
-    Pass
+    get_pass,
+    PassList,
+    ApplePass,
+    GooglePass,
 )

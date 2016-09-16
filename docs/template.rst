@@ -49,14 +49,14 @@ To `create a template`_, use the ``Template`` class' ``create`` method:
        name='Program Name',
        label='Bleep',
        value='Program Name',
-       fieldType=ua.AppleFieldType.PRIMARY,
+       fieldType=ua.AppleFieldType.PRIMARY
    )
 
    points = ua.Field(
        name='Points',
        label='Points',
        value=1234.0,
-       fieldType=ua.AppleFieldType.HEADER,
+       fieldType=ua.AppleFieldType.HEADER
    )
 
    apple_loyalty.add_fields(
