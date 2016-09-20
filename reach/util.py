@@ -1,3 +1,9 @@
+import inspect
+import types
+
+import reach as ua
+
+
 class Constant(object):
     KEY_CLASS=None
 
@@ -55,6 +61,34 @@ def check_multiple(item, *args):
             errors.append(str(e))
     if len(errors) == len(args):
         raise ValueError('\n'.join(errors))
+
+
+def inherit_docs(cls):
+    """A class decorator that will pull method docstrings from a parent class
+    if not specified in the child class.
+    """
+    for name, func in vars(cls).items():
+        class_method = False
+        if isinstance(func, classmethod):
+            func = func.__func__
+            class_method = True
+
+        if isinstance(func, types.FunctionType) and not func.__doc__:
+            for parent in inspect.getmro(cls):
+                parfunc = getattr(parent, name, None)
+                if class_method:
+                    parfunc = parfunc.__func__
+                if parfunc and getattr(parfunc, '__doc__', None):
+                    func.__doc__ = parfunc.__doc__
+                    break
+    return cls
+
+
+def set_docstring(method):
+    def _decorator(func):
+        func.__doc__ = method.__doc__
+        return func
+    return _decorator
 
 
 def rgb(red, green, blue):

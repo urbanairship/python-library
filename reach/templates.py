@@ -296,9 +296,9 @@ def add_template_locations(
         reach (reach.core.Reach): A reach client object.
         locations (list of dicts): A list of location objects, represented
             as dictionaries.
-        template_id (str): The ID of the template you wish to add
+        template_id (str or int): The ID of the template you wish to add
             locations to.
-        external_id (str): The external ID of the template you wish to add
+        external_id (str or int): The external ID of the template you wish to add
             locations to.
 
     Returns:
@@ -469,7 +469,7 @@ class Template(object):
         self.metadata = {}
 
     def create(self, reach, project_id=None, external_id=None):
-        """Create a template.
+        """Submits a template create request to the API.
 
         Arguments:
             reach (reach.core.Reach): A reach client object.
@@ -512,7 +512,7 @@ class Template(object):
         return {'templateId': template_id}
 
     def update(self, reach, template_id=None, external_id=None):
-        """Update a template.
+        """Submits a template update request to the API.
 
         Arguments:
             reach (reach.core.Reach): A reach client object.
@@ -557,7 +557,32 @@ class Template(object):
 
     @classmethod
     def from_data(cls, data):
-        """Create a template from a JSON payload."""
+        """Create a template/pass from JSON data.
+
+        Arguments:
+            data (dict): The JSON data to convert to a template or pass
+                object.
+
+        Returns:
+            An Apple or Google template object.
+
+        Example:
+            >>> loyalty_template = AppleTemplate.from_data({
+            ...     'name': 'Loyalty Template',
+            ...     'description': 'A loyalty template',
+            ...     'fieldsModel': {
+            ...         'fields': {
+            ...             ...
+            ...         },
+            ...         'headers': {
+            ...             ...
+            ...         }
+            ...     },
+            ...     ...,
+            ...     'vendor': 'Apple'
+            ... })
+            <Template name:Loyalty Template, vendor:Apple>
+        """
         template = cls()
         # Handle Metadata
         template.metadata = data.get('templateHeader', {})
@@ -582,72 +607,120 @@ class Template(object):
 
     """ Field manipulation """
     def add_fields(self, *args):
-        """Add fields to the template/pass object.
+        """Add reach.fields.Field objects.
 
         Arguments:
-            args (Field objects): Field objects to add to your template or
+            args (reach.fields.Field): Field objects to add to your template or
                 pass.
 
         Example:
             >>> points_field = Field(name='Rewards Points', fieldType='primary')
             >>> member_field = Field(name='Member Name', fieldType='secondary')
-            >>> my_template.add_fields(points_field, member_field)
+            >>> template_or_pass.add_fields(points_field, member_field)
         """
         for field in args:
             self.fields[field.name] = field
 
     def remove_fields(self, *args):
-        """Removes fields from a template or pass
+        """Removes reach.fields.Field objects.
 
         Arguments:
-            args (strings): The names of the fields to be deleted, e.g.,
+            args (string): The names of the fields to be deleted, e.g.,
                 'Rewards Points'/'Member Name'/'Background'
 
         Example:
-            >>> my_template.remove_fields('Rewards Points', 'Member Name')
+            >>> template_or_pass.remove_fields('Rewards Points', 'Member Name')
         """
         for name in args:
             del self.fields[name]
 
     def set_fields(self, *args):
-        """Reset the fields on a template or pass."""
+        """Set the reach.fields.Field objects. Will overwrite any existing
+        fields set on the template or pass.
+
+        Arguments:
+            *args (reach.fields.Field): Field objects to add to your template or
+                pass.
+
+        Example:
+            >>> points_field = Field(name='Rewards Points', fieldType='primary')
+            >>> member_field = Field(name='Member Name', fieldType='secondary')
+            >>> template_or_pass.set_fields(points_field, member_field)
+        """
         self.fields.clear()
         self.add_fields(*args)
 
     """ Metadata manipulation. """
     def add_metadata(self, **kwargs):
-        """Add metadata to your template or pass.
+        """Add metadata items.
+
+        .. note::
+
+            If working with a template, acceptable keys are accessible through
+            TemplateMetadata. Likewise, if working with a pass, acceptable keys
+            are accessible through PassMetadata.
 
         Arguments:
-            kwargs (key=val): Template header specifications. Note that the
-                keywords must be one of the keys/values listed in Headers
-                class.
+            **kwargs: Key, value pairs specifying the metadata items to add.
 
         Example:
-            >>> template.add_all_metadata(
+            >>> template.add_metadata(
             ...     project_type='memberCard',
             ...     template_type='Store Card',
             ...     description='Hello this is a description'
             ... )
+            >>> # method is identical for passes, but acceptable keys differ
+            >>> pass_.add_metadata(
+            ...     pass_id=12345
+            ... )
         """
         for header, value in kwargs.iteritems():
-            TemplateMetadata.validate(header)
+            self.METADATA.validate(header)
             self._add_metadata_helper(header, value)
 
     def remove_metadata(self, *args):
-        """Remove metadata from the template.
+        """Remove metadata items
+
+        .. note::
+
+            If working with a template, acceptable strings are accessible through
+            TemplateMetadata. Likewise, if working with a pass, acceptable strings
+            are accessible through PassMetadata.
 
         Arguments:
-            args (strings): Keys of the metadata values to remove.
+            *args (strings): Keys of the metadata values to remove.
 
         Example:
             >>> my_template.remove_metadata('projectType', 'description')
+            >>> my_pass.remove_metadata('pass_id')
         """
         for name in args:
             del self.metadata[name]
 
     def set_metadata(self, **kwargs):
-        """Reset the template/pass metadata."""
+        """Remove all currently set metadata items and then add the
+        specified metadata
+
+        .. note::
+
+            If working with a template, acceptable keys are accessible through
+            TemplateMetadata. Likewise, if working with a pass, acceptable keys
+            are accessible through PassMetadata.
+
+        Arguments:
+            **kwargs: Key, value pairs specifying the metadata items to add.
+
+        Example:
+            >>> template.set_metadata(
+            ...     project_type='memberCard',
+            ...     template_type='Store Card',
+            ...     description='Hello this is a description'
+            ... )
+            >>> # method is identical for passes, but acceptable keys differ
+            >>> pass_.set_metadata(
+            ...     pass_id=12345
+            ... )
+        """
         self.metadata.clear()
         self.add_metadata(**kwargs)
 
@@ -669,7 +742,7 @@ class Template(object):
 
     """ Header manipulation. """
     def add_header(self, header, value, format_type=None, field_type=None):
-        """Add a header to your template.
+        """Add a header.
 
         Arguments:
             header (str): The header, represented as a string
@@ -680,7 +753,7 @@ class Template(object):
             ValueError: If the `header` is not contained in Header.values
 
         Example:
-            >>> template.add_header('barcode_value', '123456789')
+            >>> template_or_pass.add_header('barcode_value', '123456789')
         """
         self.HEADERS.validate(header)
         if header == self.HEADERS.BARCODE_TYPE:
@@ -699,14 +772,13 @@ class Template(object):
         }
 
     def add_headers(self, **kwargs):
-        """Add multiple headers to your template.
+        """Add multiple headers.
 
         Arguments:
-            kwargs (key=str): Header specifications. Note that the keywords
-                must be one of the keys listed in Header.values
+            **kwargs: Key, value pairs specifying header values.
 
         Example:
-            >>> template.add_headers(
+            >>> template_or_pass.add_headers(
             ...     barcode_value='iso-8859-1',
             ...     logo_image='https://google.com/fun.png'
             ... )
@@ -715,22 +787,23 @@ class Template(object):
             self.add_header(header, value)
 
     def remove_headers(self, *args):
-        """Remove headers from your template.
+        """Remove headers.
 
         Arguments:
-            args (list of strings): A list of header values to remove.
+            *args (list of strings): A list of header values to remove.
 
         Example:
-            >>> template.remove_headers('logo_color', 'icon_image')
+            >>> template_or_pass.remove_headers('logo_color', 'icon_image')
         """
         for header in args:
             del self.headers[header]
 
     def set_headers(self, **kwargs):
-        """Reset the template headers.
+        """Remove all currently set headers and then add the
+        specified headers.
 
         Arguments:
-            kwargs: Header specifications. Note that the keywords must be one
+            **kwargs: Header specifications. Note that the keywords must be one
                 of the keys listed in Header.values
 
         Example:
@@ -743,14 +816,24 @@ class Template(object):
         self.add_headers(**kwargs)
 
     def view(self):
-        """View the entirety of the template, including keys that
-        are read_only.
+        """View the entirety of the template or pass, including keys that
+        are read-only.
+
+        Returns:
+            A dict representing the template or pass.
+
+        Example:
+            >>> my_template.view()
+            {'headers': {...}, 'fields': {...}, 'key1': 'val1', ... }
         """
         payload = {'headers': self.headers}
         payload.update(self.metadata)
         return payload
 
     def _create_payload(self):
+        """Formats the payload for a request. Filters out read-only items,
+        and handles formatting differences between Apple and Google.
+        """
         payload = {'headers': {}}
         for key, val in self.headers.iteritems():
             payload['headers'][key] = val
@@ -762,9 +845,25 @@ class Template(object):
     """ Convenience methods for setting images. See
     AppleTemplate/GoogleTemplate for specific overrides. """
     def set_logo_image(self, value):
+        """Set the logo image.
+
+        Arguments:
+            value (str): A URL path to an image.
+
+        Example:
+            >>> template_or_pass.set_logo_image('https://urbanairship.com/cool_image.png')
+        """
         raise NotImplementedError
 
     def set_background_image(self, value):
+        """Set the background image.
+
+        Arguments:
+            value (str): A URL path to an image.
+
+        Example:
+            >>> template_or_pass.set_background_image('https://urbanairship.com/cool_image.png')
+        """
         raise NotImplementedError
 
     @staticmethod
@@ -781,6 +880,7 @@ class Template(object):
             return url.format('id/' + str(external_id))
 
 
+@util.inherit_docs
 class AppleTemplate(Template):
     """Represents an Apple template object."""
 
@@ -792,31 +892,6 @@ class AppleTemplate(Template):
 
     @classmethod
     def from_data(cls, data):
-        """Creates an Apple template from JSON data.
-
-        Arguments:
-            data (dict): The JSON data to convert to a template object.
-
-        Returns:
-            An AppleTemplate object.
-
-        Example:
-            >>> loyalty_template = AppleTemplate.from_data({
-            ...     'name': 'Loyalty Template',
-            ...     'description': 'A loyalty template',
-            ...     'fieldsModel': {
-            ...         'fields': {
-            ...             ...
-            ...         },
-            ...         'headers': {
-            ...             ...
-            ...         }
-            ...     },
-            ...     ...,
-            ...     'vendor': 'Apple'
-            ... })
-            <Template name:Loyalty Template, vendor:Apple>
-        """
         template = super(AppleTemplate, cls).from_data(data)
         fields = data.get('fieldsModel', {}).get('fields', {})
         for name, json_field in fields.iteritems():
@@ -856,20 +931,17 @@ class AppleTemplate(Template):
             )
 
     def _create_payload(self):
-        """Build a JSON payload from the Template object.
-
-        Returns:
-            A dictionary representing a template.
-
-        Example:
-            >>> template._create_payload()
-            {'name': 'A Template', 'description': 'Some stuff', ...,
-                'infoModule': {...}}
-        """
         payload = self.view()
         return {key: val for key, val in payload.iteritems() if
                 key not in self.READ_ONLY_METADATA}
 
+    def set_logo_image(self, value):
+        self.set_headers(logo_image=value)
+
+    def set_background_image(self, value):
+        self.set_headers(strip_image=value)
+
+    # Apple-specific methods
     def add_beacon(self, uuid, relevant_text=None, major=None, minor=None):
         """Add a beacon to the template.
 
@@ -918,16 +990,19 @@ class AppleTemplate(Template):
                 return
         raise ValueError("Beacon with UUID {} not found".format(uuid))
 
-    def set_logo_image(self, value):
-        self.set_headers(logo_image=value)
-
-    def set_background_image(self, value):
-        self.set_headers(strip_image=value)
-
     def set_icon_image(self, value):
+        """Set the icon image.
+
+        Arguments:
+            value (str): A URL path to an image.
+
+        Example:
+            >>> template_or_pass.set_logo_image('https://urbanairship.com/cool_image.png')
+        """
         self.add_headers(icon_image=value)
 
 
+@util.inherit_docs
 class GoogleTemplate(Template):
     """Represents a Google template object."""
 
@@ -946,34 +1021,9 @@ class GoogleTemplate(Template):
         self.metadata['vendor'] = 'Google'
         self.metadata['vendorId'] = 2
 
+    # Override methods
     @classmethod
     def from_data(cls, data):
-        """Creates a Google template from JSON data.
-
-        Arguments:
-            data (dict): The JSON data to convert to a template object.
-
-        Returns:
-            A GoogleTemplate object.
-
-        Example:
-            >>> loyalty_template = GoogleTemplate.from_data({
-            ...     'name': 'Loyalty Template',
-            ...     'description': 'A loyalty template',
-            ...     'fieldsModel': {
-            ...         'infoModule': {
-            ...             ...
-            ...         },
-            ...         ...,
-            ...         'headers': {
-            ...             ...
-            ...         }
-            ...     },
-            ...     ...,
-            ...     'vendor': 'Apple'
-            ... })
-            <Template name:Loyalty Template, vendor:Google>
-        """
         template = super(GoogleTemplate, cls).from_data(data)
         modules = data.get('fieldsModel', {})
         for field_type, module_data in modules.iteritems():
@@ -1008,6 +1058,36 @@ class GoogleTemplate(Template):
         payload['messages'] = self.messages
         return payload
 
+    def _create_payload(self):
+        payload = super(GoogleTemplate, self)._create_payload()
+
+        # Handle type conversions
+        if payload['projectType'] == ProjectType.COUPON:
+            payload['type'] = TemplateType.OFFER
+        if payload['projectType'] == ProjectType.GIFT_CARD:
+            payload['type'] = TemplateType.GIFT_CARD
+        if payload['projectType'] == ProjectType.LOYALTY:
+            payload['type'] = TemplateType.LOYALTY
+
+        # Handle standard fields
+        for name, field in self.fields.iteritems():
+            if not payload.get(field['fieldType']):
+                payload[field['fieldType']] = {}
+            base_payload = field._build_common_json()
+            payload[field['fieldType']][field.name] = field.build_google_json(base_payload)
+
+        # Handle top-level fields
+        for field_type, fields in self.top_level_fields.iteritems():
+            if not payload.get(field_type):
+                payload[field_type] = {}
+            payload[field_type].update(fields)
+
+        # Handle messages
+        if self.messages:
+            payload['messages'] = self.messages
+
+        return payload
+
     def add_header(self, header, value, format_type=None, field_type=None):
         super(GoogleTemplate, self).add_header(
             header, value, format_type, field_type
@@ -1019,28 +1099,6 @@ class GoogleTemplate(Template):
                 "The header '{}' is not used with "
                 "Google templates".format(header)
             )
-
-    def add_top_level_fields(self, field_type, **kwargs):
-        """Add top level values to the specified module location.
-
-        Arguments:
-            location (str): The module being added to.
-            kwargs (key=str): A mapping of string keys to string values.
-
-        Raises:
-            ValueError: If the location is not specified
-
-        Example:
-            >>> template.add_top_level_fields(
-            ...     GoogleFieldType.TITLE_MODULE,
-            ...     image="https://google.com/images/asdfoi1.png",
-            ...     imageDescription="Logo Image"
-            ... )
-
-        """
-        wf.GoogleFieldType.validate(field_type, allow_private=True)
-        for key, val in kwargs.iteritems():
-            self.top_level_fields[field_type][key] = val
 
     def set_logo_image(self, value, description=None):
         """Set the logo image for a Google template.
@@ -1087,6 +1145,29 @@ class GoogleTemplate(Template):
             **{'image': value, 'imageDescription': description}
         )
 
+    # Google-specific methods
+    def add_top_level_fields(self, field_type, **kwargs):
+        """Add top level values to the specified module location.
+
+        Arguments:
+            location (str): The module being added to.
+            **kwargs: A mapping of string keys to string values.
+
+        Raises:
+            ValueError: If the location is not specified
+
+        Example:
+            >>> template.add_top_level_fields(
+            ...     GoogleFieldType.TITLE_MODULE,
+            ...     image="https://google.com/images/asdfoi1.png",
+            ...     imageDescription="Logo Image"
+            ... )
+
+        """
+        wf.GoogleFieldType.validate(field_type, allow_private=True)
+        for key, val in kwargs.iteritems():
+            self.top_level_fields[field_type][key] = val
+
     def set_offer(
         self,
         multi_user_offer=None,
@@ -1094,7 +1175,7 @@ class GoogleTemplate(Template):
         provider=None,
         redemption_channel=None
     ):
-        """Set the template offerModule.
+        """Set the offerModule.
 
         Arguments:
             * multi_user_offer (bool): One of True or False. Indicates
@@ -1142,7 +1223,7 @@ class GoogleTemplate(Template):
         starttime=None,
         endtime=None
     ):
-        """Add a message to a Google template.
+        """Add a message object.
 
         Arguments:
             * body (string): The message body.
@@ -1182,38 +1263,9 @@ class GoogleTemplate(Template):
             {key: val for key, val in payload.iteritems() if val != None}
         )
 
-    def _create_payload(self):
-        """Create a payload to send to either the create/update endpoint."""
-        payload = super(GoogleTemplate, self)._create_payload()
-
-        # Handle type conversions
-        if payload['projectType'] == ProjectType.COUPON:
-            payload['type'] = TemplateType.OFFER
-        if payload['projectType'] == ProjectType.GIFT_CARD:
-            payload['type'] = TemplateType.GIFT_CARD
-        if payload['projectType'] == ProjectType.LOYALTY:
-            payload['type'] = TemplateType.LOYALTY
-
-        # Handle standard fields
-        for name, field in self.fields.iteritems():
-            if not payload.get(field['fieldType']):
-                payload[field['fieldType']] = {}
-            base_payload = field._build_common_json()
-            payload[field['fieldType']][field.name] = field.build_google_json(base_payload)
-
-        # Handle top-level fields
-        for field_type, fields in self.top_level_fields.iteritems():
-            if not payload.get(field_type):
-                payload[field_type] = {}
-            payload[field_type].update(fields)
-
-        # Handle messages
-        if self.messages:
-            payload['messages'] = self.messages
-
-        return payload
-
     def _process_module_data(self, field_type, module_data):
+        """Handle each module (e.g. textModulesData, etc).
+        """
         for name, data in module_data.iteritems():
             if name in GoogleTemplate.RESERVED_NAMES.get(field_type, []):
                 self._handle_reserved_names(field_type, name, data)

@@ -266,6 +266,7 @@ class PassList(common.IteratorParent):
         super(PassList, self).__init__(reach, params)
 
 
+@util.inherit_docs
 class Pass(Template):
 
     METADATA = ['publicUrl']
@@ -405,6 +406,13 @@ class Pass(Template):
         return {key: val for key, val in payload.iteritems() if
                 key not in self.READ_ONLY_METADATA}
 
+    def _add_metadata_helper(self, name, value):
+        # publicUrl metadata is handled differently from other metadata keys
+        if name == PassMetadata.PUBLIC_URL:
+            self.set_public_url(value)
+        else:
+            super(Pass, self)._add_metadata_helper(name, value)
+
     # Additional convenience methods
     def set_expiration(self, date):
         """Set the pass expiration date.
@@ -479,6 +487,7 @@ class Pass(Template):
         )
 
 
+@util.inherit_docs
 class ApplePass(Pass):
 
     def __init__(self):
@@ -506,43 +515,24 @@ class ApplePass(Pass):
         date_str = date.strftime('%Y-%m-%dT%H:%M')
         self.headers['expirationDate'] = {'value': date_str}
 
+    @util.set_docstring(ua.AppleTemplate.add_beacon)
     def add_beacon(self, uuid, relevant_text=None, major=None, minor=None):
-        """Add a beacon to the pass.
-
-        Arguments:
-            uuid (str): An identifier for this beacon.
-            relevant_text (str): Text to display when approaching the beacon.
-            major (int): A major beacon identifier.
-            minor (int): A minor beacon identifier.
-
-        Example:
-            >>> my_pass.add_beacon(
-            ...     '3526dee6-4ea8-11e6-beb8-9e71128cae77',
-            ...     relevant_text='You are near something cool.',
-            ...     major=2,
-            ...     minor=34
-            ... )
-        """
         self._apple_features.add_beacon(uuid, relevant_text, major, minor)
 
+    @util.set_docstring(ua.AppleTemplate.remove_beacon)
     def remove_beacon(self, uuid):
-        """Remove a beacon from a pass.
-
-        Arguments:
-            uuid (str): The UUID of the beacon you wish to remove.
-
-        Example:
-            >>> my_pass.remove_beacon('8054f07e-238f-439e-93eb-0c2fe6829541')
-        """
         self._apple_features.remove_beacon(uuid)
 
+    @util.set_docstring(ua.AppleTemplate.set_logo_image)
     def set_logo_image(self, value):
         self._apple_features.set_logo_image(value)
 
+    @util.set_docstring(ua.AppleTemplate.set_background_image)
     def set_background_image(self, value):
-        self._apple_features.set_background_image(value)
+        self._apple_features.set_background_image(strip_image=value)
 
 
+@util.inherit_docs
 class GooglePass(Pass):
 
     def __init__(self):
@@ -589,32 +579,12 @@ class GooglePass(Pass):
         return payload
 
     def set_expiration(self, date):
-        """Set the pass expiration date.
-
-        Arguments:
-            date (datetime): A python datetime object.
-
-        Example:
-            >>> my_pass.set_expiration(datetime.datetime(2016,10,13))
-        """
         date_str = date.strftime('%Y-%m-%dT%H:%M')
         self._google_features.top_level_fields['endTime'] = {'value': date_str}
 
     # Google-specific methods
+    @util.set_docstring(ua.GoogleTemplate.set_logo_image)
     def set_logo_image(self, value, description=None):
-        """Set the logo image for a Google pass.
-
-        Arguments:
-            value (string): A URL pointing to an image.
-            description (string): An optional string describing the logo
-                image.
-
-        Example:
-            >>> my_pass.set_logo_image(
-            ...     'https://imgur.com/cool_image.png',
-            ...     description='A super cool image'
-            ... )
-        """
         if not description:
             description = ''
 
@@ -623,24 +593,11 @@ class GooglePass(Pass):
             'description.string': description
         }
 
-    def set_background_image(self, value, description=None, **kwargs):
-        """Set the background image for a Google pass.
+    @util.set_docstring(ua.GoogleTemplate.set_background_image)
+    def set_background_image(self, value, description=None):
+        self._google_features.set_background_image(value, description)
 
-        Arguments:
-            value (string): A URL pointing to an image.
-            description (string): An optional string describing the background
-                image.
-            **kwargs: Additional valid imageModule keys -- key can be one of
-                ``'hideEmpty'``, ``'formatType'```, or ``'fieldType'``.
-
-        Example:
-            >>> my_pass.set_background_image(
-            ...     'https://imgur.com/cool_image.png',
-            ...     description='A super cool image'
-            ... )
-        """
-        self._google_features.set_background_image(value, description, **kwargs)
-
+    @util.set_docstring(ua.GoogleTemplate.set_offer)
     def set_offer(
         self,
         multi_user_offer=None,
@@ -648,26 +605,11 @@ class GooglePass(Pass):
         provider=None,
         redemption_channel=None
     ):
-        """Set the offerModule on a Google pass.
-
-        Arguments:
-            * multi_user_offer (bool): One of True or False. Indicates
-              whether the offer can be used by multiple users.
-            * endtime (datetime.datetime): The offer expiration date.
-            * provider (string): The provider name of the offer.
-            * redemption_channel (string): Can be one of ``'online'``,
-              ``'instore'``, ``'both'``, or ``'temporaryPriceReduction'``.
-
-        Example:
-            >>> my_pass.set_offer(
-            ...     multi_user_offer=False,
-            ...     provider='UA'
-            ... )
-        """
         self._google_features.set_offer(
             multi_user_offer, endtime, provider, redemption_channel
         )
 
+    @util.set_docstring(ua.GoogleTemplate.add_message)
     def add_message(
         self,
         body=None,
@@ -679,29 +621,6 @@ class GooglePass(Pass):
         starttime=None,
         endtime=None
     ):
-        """Add a message to a Google pass.
-
-        Arguments:
-            * body (string): The message body.
-            * header (string): The message header.
-            * action_uri (string): The URI to which users are directed
-              upon clicking the message.
-            * action_uri_description (string): Description for the
-              ``action_uri``.
-            * image_uri (string): Specify an image to display with the
-              message.
-            * image_description (string): Description for the image.
-            * starttime (datetime.datetime): Valid ISO8805 date for start
-              time of a message.
-            * endtime (datetime.datetime): Valid ISO8805 date for end time of
-              a message.
-
-        Example:
-            >>> my_pass.add_message(
-            ...     body='A message body',
-            ...     header='A message header'
-            ... )
-        """
         self._google_features.add_message(
             body,
             header,
