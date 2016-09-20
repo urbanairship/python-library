@@ -1,5 +1,5 @@
-from .core import Wallet
-from .common import Unauthorized, WalletFailure
+from .core import Reach
+from .common import Unauthorized, ReachFailure
 from .templates import (
     TemplateMetadata,
     TemplateType,

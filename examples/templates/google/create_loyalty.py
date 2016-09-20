@@ -1,9 +1,9 @@
-import wallet as ua
+import reach as ua
 import os
 import json
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 google_loyalty = ua.GoogleTemplate()
 
@@ -104,5 +104,5 @@ google_loyalty.set_background_image(
 
 print json.dumps(google_loyalty._create_payload(), sort_keys=True, indent=4)
 
-response = google_loyalty.create(ua_wallet, project_id=51597)
+response = google_loyalty.create(ua_reach, project_id=51597)
 print response

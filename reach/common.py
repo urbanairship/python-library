@@ -4,8 +4,8 @@ import json
 import six
 
 
-SERVER = 'wallet-api.urbanairship.com'
-BASE_URL = 'https://wallet-api.urbanairship.com/v1'
+SERVER = 'reach-api.urbanairship.com'
+BASE_URL = 'https://reach-api.urbanairship.com/v1'
 
 # Template URLs
 TEMPLATE_BASE_URL = BASE_URL + '/template/{0}'
@@ -26,14 +26,14 @@ class Unauthorized(Exception):
     """Raised when we get a 401 from the server"""
 
 
-class WalletFailure(Exception):
+class ReachFailure(Exception):
     """Raised when we get an error response from the server."""
     def __init__(self, error, error_code, details, response, *args):
         self.error = error
         self.error_code = error_code
         self.details = details
         self.response = response
-        super(WalletFailure, self).__init__(*args)
+        super(ReachFailure, self).__init__(*args)
 
     @classmethod
     def from_response(cls, response):
@@ -44,7 +44,7 @@ class WalletFailure(Exception):
                 failure object.
 
         Returns:
-            A WalletFailure object.
+            A ReachFailure object.
         """
         try:
             payload = response.json()
@@ -75,8 +75,8 @@ class IteratorParent(six.Iterator):
     base_url = None
     data_attribute = None
 
-    def __init__(self, wallet, params):
-        self.wallet = wallet
+    def __init__(self, reach, params):
+        self.reach = reach
         self.params = params
         self._token_iter = iter(())
         self.page_count = None
@@ -98,7 +98,7 @@ class IteratorParent(six.Iterator):
         if not self.base_url:
             raise ValueError('base_url cannot be None.')
 
-        response = self.wallet.request(
+        response = self.reach.request(
             method='GET',
             body=None,
             url=self.base_url,

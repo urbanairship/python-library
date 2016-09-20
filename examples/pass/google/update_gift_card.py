@@ -1,9 +1,9 @@
 import os
 import json
-import wallet as ua
+import reach as ua
 
 
-ua_wallet = ua.Wallet("maxdelgiudice@gmail.com", os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach("maxdelgiudice@gmail.com", os.environ['REACH_KEY_RAW'])
 
 pass_ = ua.ApplePass()
 
@@ -17,5 +17,5 @@ balance = ua.Field(
 pass_.add_fields(balance)
 
 print(json.dumps(pass_._create_payload(), indent=4, sort_keys=True))
-response = pass_.update(ua_wallet, pass_id=20714020)
+response = pass_.update(ua_reach, pass_id=20714020)
 print response

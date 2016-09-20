@@ -1,9 +1,9 @@
-import wallet as ua
+import reach as ua
 import os
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 
-response = ua.duplicate_template(ua_wallet, template_id=12345)
+response = ua.duplicate_template(ua_reach, template_id=12345)
 print response

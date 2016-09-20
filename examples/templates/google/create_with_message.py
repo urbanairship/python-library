@@ -1,10 +1,10 @@
-import wallet as ua
-from wallet import GoogleFieldType
+import reach as ua
+from reach import GoogleFieldType
 import os
 import json
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 google_loyalty = ua.GoogleTemplate()
 
@@ -104,5 +104,5 @@ google_loyalty.add_message(
 )
 
 print json.dumps(google_loyalty._create_payload(), sort_keys=True, indent=4)
-response = google_loyalty.create(ua_wallet, project_id=50785)
+response = google_loyalty.create(ua_reach, project_id=50785)
 print response

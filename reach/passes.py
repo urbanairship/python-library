@@ -1,9 +1,9 @@
 import logging
 import json
 
-import wallet as ua
-from wallet import common, util
-from wallet.templates import Template
+import reach as ua
+from reach import common, util
+from reach.templates import Template
 
 
 logger = logging.getLogger(__name__)
@@ -14,11 +14,11 @@ class PassMetadata(util.Constant):
     TEMPLATE_ID = 'template_id'
 
 
-def get_pass(wallet, pass_id=None, external_id=None):
+def get_pass(reach, pass_id=None, external_id=None):
     """Retrieve a pass.
 
     Args:
-        wallet (obj): A wallet client object.
+        reach (obj): A reach client object.
         pass_id (str): The pass ID of the pass you wish to retrieve.
         pass_external_id (str): The external ID of the pass you wish to
         retrieve.
@@ -33,7 +33,7 @@ def get_pass(wallet, pass_id=None, external_id=None):
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
 
-    response = wallet.request(
+    response = reach.request(
         method='GET',
         body=None,
         url=Pass.build_url(
@@ -66,11 +66,11 @@ def _pass_dispatch(data):
     raise ValueError("Unrecognized pass structure.")
 
 
-def delete_pass(wallet, pass_id=None, external_id=None):
+def delete_pass(reach, pass_id=None, external_id=None):
     """Delete a pass.
 
     Arguments:
-        wallet (obj): A UA Wallet object.
+        reach (reach.Reach): A UA reach object.
         pass_id (str or int): The ID of the pass you wish to delete.
         external_id (str or int): The external ID of the pass you wish
             to delete.
@@ -83,13 +83,13 @@ def delete_pass(wallet, pass_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> delete_pass(ua_wallet, pass_id='123456')
+        >>> delete_pass(reach, pass_id='123456')
         True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
 
-    response = wallet.request(
+    response = reach.request(
         method='DELETE',
         body=None,
         url=Pass.build_url(
@@ -105,11 +105,11 @@ def delete_pass(wallet, pass_id=None, external_id=None):
     return True
 
 
-def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
+def add_pass_locations(reach, locations, pass_id=None, external_id=None):
     """Add locations to a pass.
 
     Arguments:
-        wallet (Wallet object): A wallet client object.
+        reach (reach.core.Reach): A reach client object.
         locations (list): A list of dictionaries representing location
             objects.
         pass_id (str): The ID of the pass you wish to add
@@ -125,13 +125,13 @@ def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> add_locations(location1, location2, pass_id=12345)
+        >>> add_locations(ua_reach, location1, location2, pass_id=12345)
         True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
 
-    response = wallet.request(
+    response = reach.request(
         method='POST',
         body=json.dumps({"locations": locations}),
         url=Pass.build_url(
@@ -149,11 +149,11 @@ def add_pass_locations(wallet, locations, pass_id=None, external_id=None):
     return response.json()
 
 
-def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
+def delete_pass_location(reach, location_id, pass_id=None, external_id=None):
     """Delete a location from a pass.
 
     Arguments:
-        wallet (Wallet object): A wallet client object.
+        reach (reach.core.Reach): A reach client object.
         location_id (str or int): The ID of the location you wish to delete.
         pass_id (str or itn): The ID of the pass you wish to delete
             locations from.
@@ -168,13 +168,13 @@ def delete_pass_location(wallet, location_id, pass_id=None, external_id=None):
             specified.
 
     Example:
-        >>> delete_location(ua_wallet, 12345, pass_id=44444)
+        >>> delete_location(ua_reach, 12345, pass_id=44444)
         True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
         raise ValueError('Please specify only one of pass_id or external_id.')
 
-    response = wallet.request(
+    response = reach.request(
         method='DELETE',
         body=None,
         url=Pass.build_url(
@@ -196,7 +196,7 @@ class PassList(common.IteratorParent):
     """Forms a pass listing request.
 
     Arguments:
-        wallet (Wallet client): The wallet client object.
+        reach (reach.core.Reach): The reach client object.
         template_id (int): An integer ID specifing the template you would like to
             retrieve passes from.
         status (string): An optional string, can be one of ``"installed"``,
@@ -212,7 +212,7 @@ class PassList(common.IteratorParent):
             ``"ASC"`` or ``"DESC"``. Defaults to ``"DESC"``.
 
     Example:
-        >>> pass_list = PassList(ua_wallet)
+        >>> pass_list = PassList(ua_reach)
         >>> for item in pass_list:
         ...     print item['createdAt']
         ...
@@ -225,7 +225,7 @@ class PassList(common.IteratorParent):
 
     def __init__(
         self,
-        wallet,
+        reach,
         status=None,
         template_id=None,
         page_size=None,
@@ -263,7 +263,7 @@ class PassList(common.IteratorParent):
         }
 
         params = {k: v for k, v in params.iteritems() if v is not None}
-        super(PassList, self).__init__(wallet, params)
+        super(PassList, self).__init__(reach, params)
 
 
 class Pass(Template):
@@ -273,11 +273,11 @@ class Pass(Template):
         'url', 'status', 'updatedAt', 'pass_id', 'template_id', 'createdAt', 'serialNumber', 'tags'
     ]
 
-    def create(self, wallet, template_id=None, template_ext_id=None, pass_ext_id=None):
+    def create(self, reach, template_id=None, template_ext_id=None, pass_ext_id=None):
         """Create a pass.
 
         Arguments:
-            wallet (wallet.Wallet): A wallet client object.
+            reach (reach.core.Reach): A reach client object.
             template_id (str/int): A template ID.
             template_ext_id (str/int): A template external ID.
             pass_ext_id (str/int): A pass external ID.
@@ -290,7 +290,7 @@ class Pass(Template):
                 are specified.
 
         Example:
-            >>> my_pass.create(ua_wallet, project_id=12345)
+            >>> my_pass.create(ua_reach, project_id=12345)
             {'id': 123456, 'url': 'https://blah.com'}
         """
         if template_id and template_ext_id:
@@ -298,7 +298,7 @@ class Pass(Template):
                 "'template_id' and 'template_ext_id' cannot both be set"
             )
 
-        response = wallet.request(
+        response = reach.request(
             method='POST',
             body=json.dumps(self._create_payload()),
             url=Pass.build_url(
@@ -317,11 +317,11 @@ class Pass(Template):
         self.metadata['id'] = pass_id
         return {'id': pass_id, 'url': response.json()['url']}
 
-    def update(self, wallet, pass_id=None, external_id=None):
+    def update(self, reach, pass_id=None, external_id=None):
         """Update a pass.
 
         Arguments:
-            wallet (obj): A wallet client object.
+            reach (reach.core.Reach): A reach client object.
             pass_id (str): ID of the pass to update.
             external_id (str): External ID of the pass to update.
 
@@ -333,7 +333,7 @@ class Pass(Template):
                 are specified.
 
         Example:
-            >>> my_pass.update(ua_wallet)
+            >>> my_pass.update(ua_reach)
             {'ticketId': 4125123}
         """
         if pass_id and external_id:
@@ -347,7 +347,7 @@ class Pass(Template):
                     "calling update, or set the pass 'id' attribute."
                 )
 
-        response = wallet.request(
+        response = reach.request(
             method='PUT',
             body=json.dumps(self._create_payload()),
             url=Pass.build_url(

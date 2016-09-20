@@ -1,6 +1,6 @@
 """ Pre-defined templates to be used in tests.
 """
-import wallet as ua
+import reach as ua
 
 
 # Apple loyalty template

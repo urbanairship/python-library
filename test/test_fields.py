@@ -1,6 +1,6 @@
 import unittest
-import wallet as ua
-from wallet.fields import Field
+import reach as ua
+from reach.fields import Field
 
 
 class TestField(unittest.TestCase):

@@ -1,10 +1,10 @@
 import os
 import json
-import wallet as ua
+import reach as ua
 import datetime
 
 
-ua_wallet = ua.Wallet("maxdelgiudice@gmail.com", os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach("maxdelgiudice@gmail.com", os.environ['REACH_KEY_RAW'])
 
 my_pass = ua.GooglePass()
 
@@ -20,5 +20,5 @@ my_pass.add_fields(gift_card_deetz)
 print json.dumps(my_pass._create_payload(), indent=4)
 
 # Apple: 53438, Google: 53464
-response = my_pass.create(ua_wallet, template_id=53438)
+response = my_pass.create(ua_reach, template_id=53438)
 print response

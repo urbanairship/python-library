@@ -5,23 +5,23 @@ import unittest
 import mock
 import requests
 
-import wallet as ua
-from wallet.passes import Pass
+import reach as ua
+from reach.passes import Pass
 
 
 class PassApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
         super(PassApiTest, self).setUp()
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_delete(self, mock_request):
         response = requests.Response()
         response.status_code = 200
         mock_request.return_value = response
 
-        wal = ua.delete_pass(self.client, pass_id=12345)
+        reach_response = ua.delete_pass(self.client, pass_id=12345)
         mock_request.assert_called_with(
             'DELETE',
             None,
@@ -30,9 +30,9 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal, True)
+        self.assertEqual(reach_response, True)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_add_pass_locations(self, mock_request):
         locations = [
             {
@@ -74,7 +74,7 @@ class PassApiTest(unittest.TestCase):
         ])
         mock_request.return_value = response
 
-        wal = ua.add_pass_locations(
+        reach_response = ua.add_pass_locations(
             self.client, locations, pass_id=12345
         )
         mock_request.assert_called_with(
@@ -85,18 +85,18 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal[0]['value'], locations[0])
-        self.assertEqual(wal[0]['passLocationId'], 231)
-        self.assertEqual(wal[1]['value'], locations[1])
-        self.assertEqual(wal[1]['passLocationId'], 312)
+        self.assertEqual(reach_response[0]['value'], locations[0])
+        self.assertEqual(reach_response[0]['passLocationId'], 231)
+        self.assertEqual(reach_response[1]['value'], locations[1])
+        self.assertEqual(reach_response[1]['passLocationId'], 312)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_delete_pass_location(self, mock_request):
         response = requests.Response()
         response.status_code = 200
         mock_request.return_value = response
 
-        wal = ua.delete_pass_location(
+        reach_response = ua.delete_pass_location(
             self.client, 'location123', pass_id=12345
         )
         mock_request.assert_called_with(
@@ -110,9 +110,9 @@ class PassApiTest(unittest.TestCase):
             None
         )
 
-        self.assertEqual(wal, True)
+        self.assertEqual(reach_response, True)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_get_pass(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -148,7 +148,7 @@ class PassApiTest(unittest.TestCase):
             None
         )
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_list_passes(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -207,9 +207,9 @@ class PassTest(unittest.TestCase):
         )
         pass_.add_fields(member_name)
         self.pass_ = pass_
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_create_pass(self, mock_request):
         response = requests.Response()
         response._content = json.dumps({
@@ -230,7 +230,7 @@ class PassTest(unittest.TestCase):
         )
         self.assertEqual(self.pass_.metadata['id'], '12345678')
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_update_pass(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -308,7 +308,7 @@ class ApplePassTest(unittest.TestCase):
         )
         pass_.add_fields(member_name)
         self.pass_ = pass_
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
 
     def test_add_remove_beacons(self):
         beacon = {
@@ -351,7 +351,7 @@ class GooglePassTest(unittest.TestCase):
         )
         pass_.add_fields(member_name)
         self.pass_ = pass_
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
 
     def test_set_expiration(self):
         self.pass_.set_expiration(datetime.datetime(2014, 8, 6))

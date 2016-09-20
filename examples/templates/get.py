@@ -2,14 +2,14 @@ import os
 import sys
 import json
 
-import wallet as ua
+import reach as ua
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 # 1. Get the template
-apple_gift_card = ua.get_template(ua_wallet, template_id=sys.argv[1])
-response = apple_gift_card.create(ua_wallet)
+apple_gift_card = ua.get_template(ua_reach, template_id=sys.argv[1])
+response = apple_gift_card.create(ua_reach)
 print response
 
 try:

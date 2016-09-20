@@ -1,9 +1,9 @@
-import wallet as ua
+import reach as ua
 import os
 
 
-ua_wallet = ua.Wallet("maxdelgiudice@gmail.com", os.environ['WALLET_KEY_RAW'])
-pass_obj = ua.PassList(ua_wallet)
+ua_reach = ua.Reach("maxdelgiudice@gmail.com", os.environ['REACH_KEY_RAW'])
+pass_obj = ua.PassList(ua_reach)
 
 
 if __name__ == '__main__':

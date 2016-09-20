@@ -5,25 +5,25 @@ import mock
 import requests
 import unittest
 
-import wallet as ua
-from wallet import common
-from wallet.templates import Template
+import reach as ua
+from reach import common
+from reach.templates import Template
 from template_builders import build_apple_loyalty, build_google_loyalty
 
 
 class TemplateApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
         super(TemplateApiTest, self).setUp()
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_delete(self, mock_request):
         response = requests.Response()
         response.status_code = 200
         mock_request.return_value = response
 
-        wt = ua.delete_template(self.client, template_id=12345)
+        reach_response = ua.delete_template(self.client, template_id=12345)
         mock_request.assert_called_with(
             'DELETE',
             None,
@@ -33,9 +33,9 @@ class TemplateApiTest(unittest.TestCase):
             None
         )
 
-        self.assertEqual(wt, True)
+        self.assertEqual(reach_response, True)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_add_template_locations(self, mock_request):
         location = {
             "longitude": -122.374,
@@ -61,7 +61,7 @@ class TemplateApiTest(unittest.TestCase):
         ])
         mock_request.return_value = response
 
-        wal = ua.add_template_locations(
+        reach_response = ua.add_template_locations(
             self.client, [location], template_id=12345
         )
         mock_request.assert_called_with(
@@ -72,17 +72,17 @@ class TemplateApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal[0]['value'], location)
-        self.assertEqual(wal[0]['locationId'], 231)
-        self.assertEqual(wal[0]['fieldId'], 312)
+        self.assertEqual(reach_response[0]['value'], location)
+        self.assertEqual(reach_response[0]['locationId'], 231)
+        self.assertEqual(reach_response[0]['fieldId'], 312)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_remove_template_location(self, mock_request):
         response = requests.Response()
         response.status_code = 200
         mock_request.return_value = response
 
-        wal = ua.remove_template_location(
+        reach_response = ua.remove_template_location(
             self.client, 'location123', template_id=12345
         )
         mock_request.assert_called_with(
@@ -93,9 +93,9 @@ class TemplateApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal, True)
+        self.assertEqual(reach_response, True)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_duplicate_template(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -103,7 +103,7 @@ class TemplateApiTest(unittest.TestCase):
             {'templateId': 54321}
         )
         mock_request.return_value = response
-        wal = ua.duplicate_template(self.client, template_id=12345)
+        reach_response = ua.duplicate_template(self.client, template_id=12345)
         mock_request.assert_called_with(
             'POST',
             None,
@@ -112,9 +112,9 @@ class TemplateApiTest(unittest.TestCase):
             1.2,
             None
         )
-        self.assertEqual(wal['templateId'], 54321)
+        self.assertEqual(reach_response['templateId'], 54321)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_get_apple_template(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -155,7 +155,7 @@ class TemplateApiTest(unittest.TestCase):
             None
         )
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_get_google_template(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -199,7 +199,7 @@ class TemplateApiTest(unittest.TestCase):
             None
         )
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_listing(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -217,7 +217,7 @@ class TemplateApiTest(unittest.TestCase):
                    'updatedAt': '2013-07-01T18:28:54.000Z',
                    'description': 'description',
                    'createdAt': '2013-07-01T18:28:54.000Z',
-                   'name': 'New Wallet Template',
+                   'name': 'New Reach Template',
                    'disabled': 'False'
                 },
                 {
@@ -554,10 +554,10 @@ class AppleTemplateTest(unittest.TestCase):
 
     def setUp(self):
         self.template = build_apple_loyalty()
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
         super(AppleTemplateTest, self).setUp()
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_create_template(self, mock_request):
         response = requests.Response()
         response._content = json.dumps({'templateId': 54123})
@@ -575,7 +575,7 @@ class AppleTemplateTest(unittest.TestCase):
         )
         self.assertEqual(create_response['templateId'], 54123)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_update_template(self, mock_request):
         response = requests.Response()
         response.status_code = 200
@@ -628,10 +628,10 @@ class GoogleTemplateTest(unittest.TestCase):
 
     def setUp(self):
         self.template = build_google_loyalty()
-        self.client = ua.Wallet('fake', 'creds')
+        self.client = ua.Reach('fake', 'creds')
         super(GoogleTemplateTest, self).setUp()
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_create_template(self, mock_request):
         response = requests.Response()
         response._content = json.dumps({'templateId': 54321})
@@ -649,7 +649,7 @@ class GoogleTemplateTest(unittest.TestCase):
         )
         self.assertEqual(create_response['templateId'], 54321)
 
-    @mock.patch.object(ua.Wallet, '_request')
+    @mock.patch.object(ua.Reach, '_request')
     def test_update_template(self, mock_request):
         response = requests.Response()
         response.status_code = 200

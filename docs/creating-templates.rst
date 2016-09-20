@@ -15,9 +15,9 @@ following imports/constants are defined:
 
 .. sourcecode:: python
 
-   import wallet as ua
+   import reach as ua
 
-   client = ua.Wallet('you@example.com', 'wallet-key')
+   client = ua.Reach('you@example.com', 'reach-key')
 
    # Initialize the template -- in this example, we create an apple template.
    my_template = ua.AppleTemplate()

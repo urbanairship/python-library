@@ -1,9 +1,9 @@
-import wallet as ua
+import reach as ua
 import os
 import json
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 
 # Step 1: Create the template and add top-level values
@@ -86,5 +86,5 @@ apple_member_card.add_fields(
 )
 
 print json.dumps(apple_member_card._create_payload(), sort_keys=True, indent=4)
-response = apple_member_card.create(ua_wallet, project_id=50866)
+response = apple_member_card.create(ua_reach, project_id=50866)
 print response

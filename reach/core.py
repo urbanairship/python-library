@@ -1,13 +1,13 @@
 import logging
 import requests
 
-from wallet import common, __about__
+from reach import common, __about__
 
 
 logger = logging.getLogger(__name__)
 
 
-class Wallet(object):
+class Reach(object):
 
     def __init__(self, email_addy, api_key):
         self.email_addy = email_addy
@@ -23,7 +23,7 @@ class Wallet(object):
     def _request(self, method, body, url, content_type=None, version=None,
                  params=None, encoding=None):
         headers = {
-            'User-agent': 'UAWalletPythonLib/{0}'.format(
+            'User-agent': 'UAReachPythonLib/{0}'.format(
                 __about__.__version__
             )
         }
@@ -60,6 +60,6 @@ class Wallet(object):
         if response.status_code == 401:
             raise common.Unauthorized
         elif not (200 <= response.status_code < 300):
-            raise common.WalletFailure.from_response(response)
+            raise common.ReachFailure.from_response(response)
 
         return response

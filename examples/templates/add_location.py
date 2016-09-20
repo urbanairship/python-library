@@ -1,8 +1,8 @@
-import wallet as ua
+import reach as ua
 import os
 
 
-ua_wallet = ua.Wallet(os.environ['PERSONAL_EMAIL'], os.environ['WALLET_KEY_RAW'])
+ua_reach = ua.Reach(os.environ['PERSONAL_EMAIL'], os.environ['REACH_KEY_RAW'])
 
 location = {
     "longitude": -80.1918,
@@ -10,7 +10,7 @@ location = {
 }
 
 response = ua.add_template_locations(
-    ua_wallet,
+    ua_reach,
     [location],
     template_id=52587
 )

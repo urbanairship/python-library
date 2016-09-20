@@ -4,7 +4,7 @@ import logging
 
 from six.moves.urllib import parse
 
-from wallet import util
+from reach import util
 
 
 logger = logging.getLogger(__name__)

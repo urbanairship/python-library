@@ -1,9 +1,9 @@
-import wallet as ua
+import reach as ua
 import os
 
 
-ua_wallet = ua.Wallet("me@example.com", os.environ['WALLET_KEY_RAW'])
-list_obj = ua.TemplateList(ua_wallet)
+ua_reach = ua.Reach("me@example.com", os.environ['REACH_KEY_RAW'])
+list_obj = ua.TemplateList(ua_reach)
 
 for item in list_obj:
     print item

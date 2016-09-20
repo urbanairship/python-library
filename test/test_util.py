@@ -1,6 +1,6 @@
 import unittest
 
-from wallet import util
+from reach import util
 
 
 class TestEnum(unittest.TestCase):

@@ -5,18 +5,18 @@ except ImportError:
 
 __about__ = {}
 
-with open("wallet/__about__.py") as fp:
+with open("reach/__about__.py") as fp:
     exec(fp.read(), None, __about__)
 
 setup(
-    name="wallet",
+    name="reach",
     version=__about__["__version__"],
     author="Urban Airship",
     author_email="support@urbanairship.com",
     url="http://urbanairship.com/",
-    description="Python package for using the Urban Airship Wallet API",
+    description="Python package for using the Urban Airship Reach API",
     long_description=open('README.rst').read(),
-    packages=["wallet"],
+    packages=["reach"],
     license='BSD License',
     classifiers=[
         'Development Status :: Beta',

@@ -3,8 +3,8 @@ import logging
 from collections import defaultdict
 
 import common
-import wallet.fields as wf
-from wallet import util
+import reach.fields as wf
+from reach import util
 
 
 logger = logging.getLogger(__name__)
@@ -133,11 +133,11 @@ class TransitType(util.Constant):
     TRAIN = 'transitTypeTrain'
 
 
-def get_template(wallet, template_id=None, external_id=None):
+def get_template(reach, template_id=None, external_id=None):
     """Retrieve a template.
 
     Arguments:
-        wallet (wallet.core.Wallet): A wallet client object.
+        reach (reach.core.Reach): A reach client object.
         template_id (str or int): The template ID of the template you wish
             to delete.
         external_id (str or int): The external ID of the template you wish
@@ -159,7 +159,7 @@ def get_template(wallet, template_id=None, external_id=None):
             'Please specify only one of template_id or external_id.'
         )
 
-    response = wallet.request(
+    response = reach.request(
         method='GET',
         body=None,
         url=Template.build_url(
@@ -205,11 +205,11 @@ def _template_create_dispatch(data):
         raise
 
 
-def delete_template(wallet, template_id=None, external_id=None):
+def delete_template(reach, template_id=None, external_id=None):
     """Delete a template.
 
     Arguments:
-        wallet (wallet.core.Wallet): A UA Wallet object.
+        reach (reach.core.Reach): A UA Reach object.
         template_id (str or int): The ID of the template you wish to delete.
         external_id (str or int): The external ID of the template you wish
             to delete.
@@ -222,7 +222,7 @@ def delete_template(wallet, template_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> delete_template(ua_wallet, template_id=123456)
+        >>> delete_template(ua_reach, template_id=123456)
         True
     """
     if not (template_id or external_id) or (template_id and external_id):
@@ -230,7 +230,7 @@ def delete_template(wallet, template_id=None, external_id=None):
             'Please specify only one of template_id or external_id.'
         )
 
-    response = wallet.request(
+    response = reach.request(
         method='DELETE',
         body=None,
         url=Template.build_url(
@@ -246,11 +246,11 @@ def delete_template(wallet, template_id=None, external_id=None):
     return True
 
 
-def duplicate_template(wallet, template_id=None, external_id=None):
+def duplicate_template(reach, template_id=None, external_id=None):
     """Duplicate a template.
 
     Arguments:
-        wallet (wallet.core.Wallet): A UA Wallet object.
+        reach (reach.core.Reach): A UA Reach object.
         template_id (str or int): The ID of the template you wish to delete.
         external_id (str or int): The external ID of the template you wish
             to delete.
@@ -263,7 +263,7 @@ def duplicate_template(wallet, template_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> duplicate_template(ua_wallet, template_id=12345)
+        >>> duplicate_template(ua_reach, template_id=12345)
         {'templateId': 12346}
     """
     if not (template_id or external_id) or (template_id and external_id):
@@ -271,7 +271,7 @@ def duplicate_template(wallet, template_id=None, external_id=None):
             'Please specify only one of template_id or external_id.'
         )
 
-    response = wallet.request(
+    response = reach.request(
         method='POST',
         body=None,
         url=Template.build_url(
@@ -288,12 +288,12 @@ def duplicate_template(wallet, template_id=None, external_id=None):
 
 
 def add_template_locations(
-    wallet, locations, template_id=None, external_id=None
+    reach, locations, template_id=None, external_id=None
 ):
     """Add locations to a template.
 
     Arguments:
-        wallet (wallet.core.Wallet): A wallet client object.
+        reach (reach.core.Reach): A reach client object.
         locations (list of dicts): A list of location objects, represented
             as dictionaries.
         template_id (str): The ID of the template you wish to add
@@ -311,7 +311,7 @@ def add_template_locations(
 
     Example:
         >>> add_template_locations(
-        ...     ua_wallet, [location1, location2], template_id=12345
+        ...     ua_reach, [location1, location2], template_id=12345
         ... )
         [{'value': { '...' }, 'locationId': 12345, 'fieldId': 54321},
          {'value': { '...' }, 'locationId': 56789, 'fieldId': 98765}]
@@ -321,7 +321,7 @@ def add_template_locations(
             'Please specify only one of template_id or external_id.'
         )
 
-    response = wallet.request(
+    response = reach.request(
         method='POST',
         body=json.dumps({'locations': locations}),
         url=Template.build_url(
@@ -340,12 +340,12 @@ def add_template_locations(
 
 
 def remove_template_location(
-        wallet, location_id, template_id=None, external_id=None
+        reach, location_id, template_id=None, external_id=None
 ):
     """Remove a location from a template
 
     Arguments:
-        wallet (wallet.core.Wallet): A wallet client object.
+        reach (reach.core.Reach): A reach client object.
         location_id (str or int): The ID of the location you wish to remove.
         template_id (str or int): The ID of the template you wish to remove
             locations from.
@@ -360,7 +360,7 @@ def remove_template_location(
             specified.
 
     Example:
-        >>> remove_template_location(ua_wallet, 12345, template_id=44444)
+        >>> remove_template_location(ua_reach, 12345, template_id=44444)
         True
     """
     if not (template_id or external_id) or (template_id and external_id):
@@ -368,7 +368,7 @@ def remove_template_location(
             'Please specify only one of template_id or external_id.'
         )
 
-    response = wallet.request(
+    response = reach.request(
         method='DELETE',
         body=None,
         url=Template.build_url(
@@ -391,7 +391,7 @@ class TemplateList(common.IteratorParent):
     """Forms a template listing request.
 
     Arguments:
-        wallet (wallet.core.Wallet): The wallet client object.
+        reach (reach.core.Reach): The reach client object.
         page_size (int): The size of each page of the template listing
             response. Defaults to 10.
         page (int): The page to start the listing response on. Defaults
@@ -416,7 +416,7 @@ class TemplateList(common.IteratorParent):
     data_attribute = 'templateHeaders'
 
     def __init__(
-            self, wallet, page_size=None, page=None, order=None, direction=None
+            self, reach, page_size=None, page=None, order=None, direction=None
     ):
         if direction not in {None, 'ASC', 'DESC'}:
             raise ValueError(
@@ -431,11 +431,11 @@ class TemplateList(common.IteratorParent):
             'direction': direction
         }
         params = {k: v for k, v in params.iteritems() if v is not None}
-        super(TemplateList, self).__init__(wallet, params)
+        super(TemplateList, self).__init__(reach, params)
 
 
 class Template(object):
-    """Superclass for representing a wallet Template class. Should not be used
+    """Superclass for representing a reach Template class. Should not be used
     directly -- use AppleTemplate or GoogleTemplate to perform template
     operations.
     """
@@ -468,11 +468,11 @@ class Template(object):
         self.fields = defaultdict(dict)
         self.metadata = {}
 
-    def create(self, wallet, project_id=None, external_id=None):
+    def create(self, reach, project_id=None, external_id=None):
         """Create a template.
 
         Arguments:
-            wallet (wallet.core.Wallet): A wallet client object.
+            reach (reach.core.Reach): A reach client object.
             project_id (str or int): A project ID.
             external_id (str or int): An external ID.
 
@@ -480,7 +480,7 @@ class Template(object):
             A dict containing the template ID.
 
         Example:
-            >>> template.create_template(ua_wallet, project_id=12345)
+            >>> template.create_template(ua_reach, project_id=12345)
             {'templateId': 54321}
         """
         if not project_id:
@@ -493,7 +493,7 @@ class Template(object):
                     "method, e.g., your_template.add_metadata(project_id=1234)."
                 )
 
-        response = wallet.request(
+        response = reach.request(
             method='POST',
             body=json.dumps(self._create_payload()),
             url=Template.build_url(
@@ -511,11 +511,11 @@ class Template(object):
         self.metadata[TemplateMetadata.TEMPLATE_ID] = template_id
         return {'templateId': template_id}
 
-    def update(self, wallet, template_id=None, external_id=None):
+    def update(self, reach, template_id=None, external_id=None):
         """Update a template.
 
         Arguments:
-            wallet (wallet.core.Wallet): A wallet client object.
+            reach (reach.core.Reach): A reach client object.
             template_id (str or int): A template ID.
             external_id (str or int): An external ID.
 
@@ -523,7 +523,7 @@ class Template(object):
             A boolean representing success.
 
         Example:
-            >>> template.update(ua_wallet)
+            >>> template.update(ua_reach)
             True
         """
         if template_id and external_id:
@@ -539,7 +539,7 @@ class Template(object):
                     "your_template.add_metadata(template_id=1234)."
                 )
 
-        response = wallet.request(
+        response = reach.request(
             method='PUT',
             body=json.dumps(self._create_payload()),
             url=Template.build_url(
