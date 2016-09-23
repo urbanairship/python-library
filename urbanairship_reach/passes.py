@@ -1,9 +1,9 @@
 import logging
 import json
 
-import reach as ua
-from reach import common, util
-from reach.templates import Template
+import urbanairship_reach as ua
+from urbanairship_reach import common, util
+from urbanairship_reach.templates import Template
 
 
 logger = logging.getLogger(__name__)
@@ -18,13 +18,13 @@ def get_pass(reach, pass_id=None, external_id=None):
     """Retrieve a pass.
 
     Args:
-        reach (obj): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         pass_id (str): The pass ID of the pass you wish to retrieve.
         pass_external_id (str): The external ID of the pass you wish to
         retrieve.
 
     Returns:
-        A pass object.
+        An ApplePass or GooglePass object.
 
     Example:
         >>> my_pass = Pass.get_pass(pass_external_id=12345)
@@ -70,7 +70,7 @@ def delete_pass(reach, pass_id=None, external_id=None):
     """Delete a pass.
 
     Arguments:
-        reach (reach.Reach): A UA reach object.
+        reach (reach.Reach): A UA urbanairship_reach object.
         pass_id (str or int): The ID of the pass you wish to delete.
         external_id (str or int): The external ID of the pass you wish
             to delete.
@@ -83,7 +83,7 @@ def delete_pass(reach, pass_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> delete_pass(reach, pass_id='123456')
+        >>> delete_pass(urbanairship_reach, pass_id='123456')
         True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
@@ -109,7 +109,7 @@ def add_pass_locations(reach, locations, pass_id=None, external_id=None):
     """Add locations to a pass.
 
     Arguments:
-        reach (reach.core.Reach): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         locations (list): A list of dictionaries representing location
             objects.
         pass_id (str): The ID of the pass you wish to add
@@ -153,7 +153,7 @@ def delete_pass_location(reach, location_id, pass_id=None, external_id=None):
     """Delete a location from a pass.
 
     Arguments:
-        reach (reach.core.Reach): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         location_id (str or int): The ID of the location you wish to delete.
         pass_id (str or itn): The ID of the pass you wish to delete
             locations from.
@@ -196,7 +196,7 @@ class PassList(common.IteratorParent):
     """Forms a pass listing request.
 
     Arguments:
-        reach (reach.core.Reach): The reach client object.
+        reach (reach.core.Reach): The urbanairship_reach client object.
         template_id (int): An integer ID specifing the template you would like to
             retrieve passes from.
         status (string): An optional string, can be one of ``"installed"``,
@@ -278,7 +278,7 @@ class Pass(Template):
         """Create a pass.
 
         Arguments:
-            reach (reach.core.Reach): A reach client object.
+            reach (reach.core.Reach): A urbanairship_reach client object.
             template_id (str/int): A template ID.
             template_ext_id (str/int): A template external ID.
             pass_ext_id (str/int): A pass external ID.
@@ -322,7 +322,7 @@ class Pass(Template):
         """Update a pass.
 
         Arguments:
-            reach (reach.core.Reach): A reach client object.
+            reach (reach.core.Reach): A urbanairship_reach client object.
             pass_id (str): ID of the pass to update.
             external_id (str): External ID of the pass to update.
 
@@ -394,7 +394,7 @@ class Pass(Template):
         payload = super(Pass, self)._create_payload()
         payload['fields'] = {}
         for name, field in self.fields.iteritems():
-            payload['fields'][name] = field.build_generic_json()
+            payload['fields'][name] = field.build_pass_json()
         for name, item in self.metadata.iteritems():
             payload[name] = item
         return {key: val for key, val in payload.iteritems() if val}
@@ -525,11 +525,7 @@ class ApplePass(Pass):
 
     @util.set_docstring(ua.AppleTemplate.set_logo_image)
     def set_logo_image(self, value):
-        self._apple_features.set_logo_image(value)
-
-    @util.set_docstring(ua.AppleTemplate.set_background_image)
-    def set_background_image(self, value):
-        self._apple_features.set_background_image(strip_image=value)
+        self.add_headers(logo_image=value)
 
 
 @util.inherit_docs

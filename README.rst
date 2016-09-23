@@ -1,4 +1,3 @@
-
 About
 =====
 
@@ -19,27 +18,21 @@ Version 0.1.0 is the initial release.  This release focuses on support for
 
 Usage
 =====
-[Note: update urls when the docs go live]
 
-See the `full documentation
+To get started, simply import the library and set up a client:
+
+.. sourcecode:: python
+
+   import urbanairship_reach as ua
+
+
+   client = ua.Reach('email', 'wallet_key')
+
+
+   # Example: getting a pass
+   my_pass = ua.get_pass(client, pass_id=12345)
+
+For more details on using the library, please see the `full documentation
 <http://docs.urbanairship.com/reference/libraries/python>`__, as well as the
 `Urban Airship API Documentation
-<http://docs.urbanairship.com/api/wallet>`__.
-
-Client Setup
-------------
-[Note: not going to include this specific example - just a placeholder for
-examples that we will include (ie "Get a Template", "Update a template", etc)]
-
-    >>> import reach as ua
-    >>> ua_reach = ua.Reach("email", "api_key")
-
-examples that we will include (ie "Get a Template", "Update a template", etc)]
-
-    >>> import reach as ua
-    >>> ua_reach = ua.Reach("email", "api_key")
-
-examples that we will include (ie "Get a Template", "Update a template", etc)]
-
-    >>> import reach as ua
-    >>> ua_reach = ua.Reach("email", "api_key")
+<http://docs.urbanairship.com/api/wallet.html>`__.

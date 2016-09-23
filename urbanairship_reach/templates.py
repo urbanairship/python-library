@@ -3,8 +3,8 @@ import logging
 from collections import defaultdict
 
 import common
-import reach.fields as wf
-from reach import util
+import urbanairship_reach.fields as wf
+from urbanairship_reach import util
 
 
 logger = logging.getLogger(__name__)
@@ -137,7 +137,7 @@ def get_template(reach, template_id=None, external_id=None):
     """Retrieve a template.
 
     Arguments:
-        reach (reach.core.Reach): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         template_id (str or int): The template ID of the template you wish
             to delete.
         external_id (str or int): The external ID of the template you wish
@@ -293,7 +293,7 @@ def add_template_locations(
     """Add locations to a template.
 
     Arguments:
-        reach (reach.core.Reach): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         locations (list of dicts): A list of location objects, represented
             as dictionaries.
         template_id (str or int): The ID of the template you wish to add
@@ -339,13 +339,13 @@ def add_template_locations(
     return response.json()
 
 
-def remove_template_location(
+def delete_template_location(
         reach, location_id, template_id=None, external_id=None
 ):
     """Remove a location from a template
 
     Arguments:
-        reach (reach.core.Reach): A reach client object.
+        reach (reach.core.Reach): A urbanairship_reach client object.
         location_id (str or int): The ID of the location you wish to remove.
         template_id (str or int): The ID of the template you wish to remove
             locations from.
@@ -360,7 +360,7 @@ def remove_template_location(
             specified.
 
     Example:
-        >>> remove_template_location(ua_reach, 12345, template_id=44444)
+        >>> delete_template_location(ua_reach, 12345, template_id=44444)
         True
     """
     if not (template_id or external_id) or (template_id and external_id):
@@ -391,7 +391,7 @@ class TemplateList(common.IteratorParent):
     """Forms a template listing request.
 
     Arguments:
-        reach (reach.core.Reach): The reach client object.
+        reach (reach.core.Reach): The urbanairship_reach client object.
         page_size (int): The size of each page of the template listing
             response. Defaults to 10.
         page (int): The page to start the listing response on. Defaults
@@ -435,7 +435,7 @@ class TemplateList(common.IteratorParent):
 
 
 class Template(object):
-    """Superclass for representing a reach Template class. Should not be used
+    """Superclass for representing a urbanairship_reach Template class. Should not be used
     directly -- use AppleTemplate or GoogleTemplate to perform template
     operations.
     """
@@ -472,7 +472,7 @@ class Template(object):
         """Submits a template create request to the API.
 
         Arguments:
-            reach (reach.core.Reach): A reach client object.
+            reach (reach.core.Reach): A urbanairship_reach client object.
             project_id (str or int): A project ID.
             external_id (str or int): An external ID.
 
@@ -493,9 +493,11 @@ class Template(object):
                     "method, e.g., your_template.add_metadata(project_id=1234)."
                 )
 
+        payload = self._create_payload()
+        self._validate(payload)
         response = reach.request(
             method='POST',
-            body=json.dumps(self._create_payload()),
+            body=json.dumps(payload),
             url=Template.build_url(
                 common.TEMPLATE_BASE_URL,
                 main_id=project_id,
@@ -515,7 +517,7 @@ class Template(object):
         """Submits a template update request to the API.
 
         Arguments:
-            reach (reach.core.Reach): A reach client object.
+            reach (reach.core.Reach): A urbanairship_reach client object.
             template_id (str or int): A template ID.
             external_id (str or int): An external ID.
 
@@ -539,9 +541,11 @@ class Template(object):
                     "your_template.add_metadata(template_id=1234)."
                 )
 
+        payload = self._create_payload()
+        self._validate(payload)
         response = reach.request(
             method='PUT',
-            body=json.dumps(self._create_payload()),
+            body=json.dumps(payload),
             url=Template.build_url(
                 common.TEMPLATE_BASE_URL,
                 main_id=template_id,
@@ -607,7 +611,7 @@ class Template(object):
 
     """ Field manipulation """
     def add_fields(self, *args):
-        """Add reach.fields.Field objects.
+        """Add urbanairship_reach.fields.Field objects.
 
         Arguments:
             args (reach.fields.Field): Field objects to add to your template or
@@ -622,7 +626,7 @@ class Template(object):
             self.fields[field.name] = field
 
     def remove_fields(self, *args):
-        """Removes reach.fields.Field objects.
+        """Removes urbanairship_reach.fields.Field objects.
 
         Arguments:
             args (string): The names of the fields to be deleted, e.g.,
@@ -635,7 +639,7 @@ class Template(object):
             del self.fields[name]
 
     def set_fields(self, *args):
-        """Set the reach.fields.Field objects. Will overwrite any existing
+        """Set the urbanairship_reach.fields.Field objects. Will overwrite any existing
         fields set on the template or pass.
 
         Arguments:
@@ -842,29 +846,9 @@ class Template(object):
                 payload[key] = val
         return payload
 
-    """ Convenience methods for setting images. See
-    AppleTemplate/GoogleTemplate for specific overrides. """
-    def set_logo_image(self, value):
-        """Set the logo image.
-
-        Arguments:
-            value (str): A URL path to an image.
-
-        Example:
-            >>> template_or_pass.set_logo_image('https://urbanairship.com/cool_image.png')
-        """
-        raise NotImplementedError
-
-    def set_background_image(self, value):
-        """Set the background image.
-
-        Arguments:
-            value (str): A URL path to an image.
-
-        Example:
-            >>> template_or_pass.set_background_image('https://urbanairship.com/cool_image.png')
-        """
-        raise NotImplementedError
+    @staticmethod
+    def _validate(payload):
+        pass
 
     @staticmethod
     def build_url(url, main_id=None, external_id=None, location_id=None):
@@ -905,8 +889,8 @@ class AppleTemplate(Template):
         payload = super(AppleTemplate, self).view()
         payload.update({'fields': {}, 'beacons': []})
         for name, field in self.fields.iteritems():
-            base_payload = field._build_common_json()
-            payload['fields'][name] = field.build_apple_json(base_payload)
+            field._build_common_template_json()
+            payload['fields'][name] = field.build_apple_json()
         payload['beacons'] = self.beacons
         return payload
 
@@ -936,10 +920,19 @@ class AppleTemplate(Template):
                 key not in self.READ_ONLY_METADATA}
 
     def set_logo_image(self, value):
-        self.set_headers(logo_image=value)
+        """Set the logo image.
 
-    def set_background_image(self, value):
-        self.set_headers(strip_image=value)
+        Notes:
+            This is mainly here to provide parity with the GoogleTemplate
+            class. You could equivalently do template_or_pass.set_headers(logo_image='image')
+
+        Arguments:
+            value (str): A URL path to an image.
+
+        Example:
+            >>> template_or_pass.set_logo_image('https://urbanairship.com/cool_image.png')
+        """
+        self.set_headers(logo_image=value)
 
     # Apple-specific methods
     def add_beacon(self, uuid, relevant_text=None, major=None, minor=None):
@@ -989,17 +982,6 @@ class AppleTemplate(Template):
                 del self.beacons[index]
                 return
         raise ValueError("Beacon with UUID {} not found".format(uuid))
-
-    def set_icon_image(self, value):
-        """Set the icon image.
-
-        Arguments:
-            value (str): A URL path to an image.
-
-        Example:
-            >>> template_or_pass.set_logo_image('https://urbanairship.com/cool_image.png')
-        """
-        self.add_headers(icon_image=value)
 
 
 @util.inherit_docs
@@ -1052,8 +1034,8 @@ class GoogleTemplate(Template):
         payload = super(GoogleTemplate, self).view()
         payload.update({'fields': {}, 'messages': []})
         for name, field in self.fields.iteritems():
-            base_payload = field._build_common_json()
-            payload['fields'][name] = field.build_google_json(base_payload)
+            field._build_common_template_json()
+            payload['fields'][name] = field.build_google_template_json()
         payload['top_level_fields'] = self.top_level_fields
         payload['messages'] = self.messages
         return payload
@@ -1073,8 +1055,8 @@ class GoogleTemplate(Template):
         for name, field in self.fields.iteritems():
             if not payload.get(field['fieldType']):
                 payload[field['fieldType']] = {}
-            base_payload = field._build_common_json()
-            payload[field['fieldType']][field.name] = field.build_google_json(base_payload)
+            field._build_common_template_json()
+            payload[field['fieldType']][field.name] = field.build_google_template_json()
 
         # Handle top-level fields
         for field_type, fields in self.top_level_fields.iteritems():
@@ -1101,7 +1083,7 @@ class GoogleTemplate(Template):
             )
 
     def set_logo_image(self, value, description=None):
-        """Set the logo image for a Google template.
+        """Set the logo image.
 
         Arguments:
             value (string): A URL pointing to an image.
@@ -1124,7 +1106,7 @@ class GoogleTemplate(Template):
         )
 
     def set_background_image(self, value, description=None):
-        """Set the background image for a Google template.
+        """Set the background image.
 
         Arguments:
             value (string): A URL pointing to an image.
@@ -1292,3 +1274,12 @@ class GoogleTemplate(Template):
                 )
         else:
             raise ValueError('Unrecognized reserved name: {}'.format(name))
+
+    @staticmethod
+    def _validate_payload(payload):
+        """Validates the structure of a Google Template.
+        """
+        if not payload.get(ua.GoogleFieldType.TITLE_MODULE):
+            raise ValueError('Must add a title field to the template.')
+        if not payload.get(ua.GoogleFieldType.TITLE_MODULE, {}).get('image'):
+            raise ValueError("Must use set_logo_image to set your template's logo image.")

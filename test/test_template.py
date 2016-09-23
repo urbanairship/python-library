@@ -5,9 +5,9 @@ import mock
 import requests
 import unittest
 
-import reach as ua
-from reach import common
-from reach.templates import Template
+import urbanairship_reach as ua
+from urbanairship_reach import common
+from urbanairship_reach.templates import Template
 from template_builders import build_apple_loyalty, build_google_loyalty
 
 
@@ -82,7 +82,7 @@ class TemplateApiTest(unittest.TestCase):
         response.status_code = 200
         mock_request.return_value = response
 
-        reach_response = ua.remove_template_location(
+        reach_response = ua.delete_template_location(
             self.client, 'location123', template_id=12345
         )
         mock_request.assert_called_with(

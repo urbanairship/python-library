@@ -4,8 +4,7 @@ import json
 import six
 
 
-SERVER = 'reach-api.urbanairship.com'
-BASE_URL = 'https://reach-api.urbanairship.com/v1'
+BASE_URL = 'https://wallet-api.urbanairship.com/v1'
 
 # Template URLs
 TEMPLATE_BASE_URL = BASE_URL + '/template/{0}'

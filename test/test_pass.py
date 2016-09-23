@@ -5,8 +5,9 @@ import unittest
 import mock
 import requests
 
-import reach as ua
-from reach.passes import Pass
+import pass_builders
+import urbanairship_reach as ua
+from urbanairship_reach.passes import Pass
 
 
 class PassApiTest(unittest.TestCase):
@@ -147,6 +148,30 @@ class PassApiTest(unittest.TestCase):
             1.2,
             None
         )
+
+    def test_pass_dispatch(self):
+        min_apple_json = {
+            'fields': {
+                'Points': {
+                    'fieldType': 'primary',
+                    "numberStyle": 'numberStyleDecimal',
+                    'value': 33.0
+                }
+            }
+        }
+        apple_pass = ua.passes._pass_dispatch(min_apple_json)
+        self.assertEquals(apple_pass.__class__.__name__, 'ApplePass')
+
+        min_google_json = {
+            'fields': {
+                'Points': {
+                    'fieldType': 'pointsModule',
+                    'value': 33.0
+                }
+            }
+        }
+        google_pass = ua.passes._pass_dispatch(min_google_json)
+        self.assertEquals(google_pass.__class__.__name__, 'GooglePass')
 
     @mock.patch.object(ua.Reach, '_request')
     def test_list_passes(self, mock_request):
@@ -301,13 +326,7 @@ class PassTest(unittest.TestCase):
 class ApplePassTest(unittest.TestCase):
 
     def setUp(self):
-        pass_ = ua.ApplePass()
-        member_name = ua.Field(
-            name='Member Name',
-            value='First Last'
-        )
-        pass_.add_fields(member_name)
-        self.pass_ = pass_
+        self.pass_ = pass_builders.build_apple_pass()
         self.client = ua.Reach('fake', 'creds')
 
     def test_add_remove_beacons(self):
@@ -332,25 +351,27 @@ class ApplePassTest(unittest.TestCase):
     def test_set_expiration(self):
         self.pass_.set_expiration(datetime.datetime(2014, 8, 6))
         json_payload = self.pass_._create_payload()
-        self.assertEqual(len(json_payload['headers']), 1)
+        self.assertEqual(len(json_payload['headers']), 2)
         self.assertEqual(
-            json_payload['headers'],
-            {
-                'expirationDate': {'value': '2014-08-06T00:00'}
-            }
+            json_payload['headers']['expirationDate'],
+            {'value': '2014-08-06T00:00'}
         )
 
+    def test_set_logo_image(self):
+        self.pass_.set_logo_image('https://urbanairship.com/cool_image.png')
+        self.assertEqual(
+            self.pass_._create_payload()['headers']['logo_image'],
+            {
+                'value': 'https://urbanairship.com/cool_image.png',
+                'fieldType': 'image',
+                'formatType': 'String'
+            }
+        )
 
 class GooglePassTest(unittest.TestCase):
 
     def setUp(self):
-        pass_ = ua.GooglePass()
-        member_name = ua.Field(
-            name='Member Name',
-            value='First Last'
-        )
-        pass_.add_fields(member_name)
-        self.pass_ = pass_
+        self.pass_ = pass_builders.build_google_pass()
         self.client = ua.Reach('fake', 'creds')
 
     def test_set_expiration(self):
@@ -363,6 +384,42 @@ class GooglePassTest(unittest.TestCase):
                 'value': '2014-08-06T00:00'
             }
         )
+
+    def test_field_json(self):
+        view_json = {
+            "Program Points": {
+                "label": "UPDATED_LABEL",
+                "value": "UPDATED_VALUE"
+            },
+            "Program Details": {
+                "label": "UPDATED_LABEL",
+                "value": "UPDATED_VALUE"
+            },
+            "Tier": {
+                "label": "UPDATED_LABEL",
+                "value": "UPDATED_VALUE"
+            },
+            "Merchant Website": {
+                "label": "UPDATED_LABEL",
+                "value": "UPDATED_VALUE"
+            },
+            "Loyalty Program Name": {
+                "label": "UPDATED_LABEL",
+                "value": "UPDATED_VALUE"
+            }
+        }
+
+        program_points = ua.Field(name='Program Points', label='UPDATED_LABEL', value='UPDATED_VALUE')
+        program_details = ua.Field(name='Program Details', label='UPDATED_LABEL', value='UPDATED_VALUE')
+        tier = ua.Field(name='Tier', label='UPDATED_LABEL', value='UPDATED_VALUE')
+        merchant_website = ua.Field(name='Merchant Website', label='UPDATED_LABEL', value='UPDATED_VALUE')
+        program_name = ua.Field(name='Loyalty Program Name', label='UPDATED_LABEL', value='UPDATED_VALUE')
+        self.pass_.set_fields(
+            program_points, program_details, tier, merchant_website, program_name
+        )
+
+        self.assertEquals(self.pass_._create_payload()['fields'], view_json)
+        self.assertEquals(self.pass_.view()['fields'], view_json)
 
     def test_set_offer(self):
         self.assertEqual(len(self.pass_._create_payload()['fields']), 1)
@@ -393,6 +450,13 @@ class GooglePassTest(unittest.TestCase):
             description='The logo image'
         )
         self.assertEqual(
+            self.pass_.view()['top_level_fields']['image'],
+            {
+                'title.string': 'https://urbanairship.com/cool_image.png',
+                'description.string': 'The logo image'
+            }
+        )
+        self.assertEqual(
             self.pass_._create_payload()['fields']['image'],
             {
                 'title.string': 'https://urbanairship.com/cool_image.png',
@@ -404,6 +468,13 @@ class GooglePassTest(unittest.TestCase):
         self.pass_.set_background_image(
             value='https://urbanairship.com/cool_image.png',
             description='The background image'
+        )
+        self.assertEqual(
+            self.pass_.view()['top_level_fields'][ua.GoogleFieldType._IMAGE_MODULE],
+            {
+                'image': 'https://urbanairship.com/cool_image.png',
+                'imageDescription': 'The background image'
+            }
         )
         self.assertEqual(
             self.pass_._create_payload()['fields'][ua.GoogleFieldType._IMAGE_MODULE],

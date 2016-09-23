@@ -343,6 +343,8 @@ Constant                        Associated String
 =============================== =================
 
 
+.. _numberStyle:
+
 numberStyle (Apple Only)
 ========================
 

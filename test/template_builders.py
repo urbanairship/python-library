@@ -1,6 +1,6 @@
 """ Pre-defined templates to be used in tests.
 """
-import reach as ua
+import urbanairship_reach as ua
 
 
 # Apple loyalty template
@@ -109,8 +109,7 @@ def build_google_loyalty():
     template.add_metadata(
         name='Loyalty Copy',
         description='Loyalty description',
-        template_type='Loyalty',
-        project_type='loyalty'
+        type_=ua.Type.LOYALTY
     )
 
     template.add_headers(
@@ -188,6 +187,10 @@ def build_google_loyalty():
         tier,
         program_details,
         loyalty_program
+    )
+
+    template.set_logo_image(
+        'https://s3.amazonaws.com/passtools_prod/1/images/default-loyalty-logo.png'
     )
 
     return template

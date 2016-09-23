@@ -1,6 +1,6 @@
 import unittest
-import reach as ua
-from reach.fields import Field
+import urbanairship_reach as ua
+from urbanairship_reach.fields import Field
 
 
 class TestField(unittest.TestCase):
@@ -104,16 +104,12 @@ class TestField(unittest.TestCase):
             'formatType': 'String'
         })
 
-        base_payload = self.min_apple_field._build_common_json()
+        self.min_apple_field._build_common_template_json()
         self.assertEqual(
-            extended_apple_json, self.min_apple_field.build_apple_json(
-                base_payload
-            )
+            extended_apple_json, self.min_apple_field.build_apple_json()
         )
         self.assertEqual(
-            self.full_apple_json[1], self.full_apple_field.build_apple_json(
-                base_payload
-            )
+            self.full_apple_json[1], self.full_apple_field.build_apple_json()
         )
 
     def test_build_google_json(self):
@@ -123,18 +119,55 @@ class TestField(unittest.TestCase):
             'formatType': 'String'
         })
 
-        base_payload = self.min_apple_field._build_common_json()
+        self.min_google_field._build_common_template_json()
         self.assertEqual(
-            extended_google_json, self.min_google_field.build_google_json(
-                base_payload
-            )
+            extended_google_json, self.min_google_field.build_google_template_json()
         )
         self.assertEqual(
-            self.full_google_json[1],
-            self.full_google_field.build_google_json(
-                base_payload
-            )
+            self.full_google_json[1], self.full_google_field.build_google_template_json()
         )
+
+    def test_build_generic_json(self):
+        field = Field(name='Member Name', value='First Last')
+        payload = field.build_pass_json()
+        self.assertEquals(payload, {'value': 'First Last'})
+
+        google_field = Field(
+            name='Test', fieldType=ua.GoogleFieldType.TEXT_MODULE, value='Hello'
+        )
+        payload = google_field.build_pass_json()
+        self.assertEquals(payload, {'fieldType': 'textModulesData', 'value': 'Hello'})
+
+        apple_field = Field(
+            name='Test', fieldType=ua.AppleFieldType.PRIMARY, formatType='Number', value=1234
+        )
+        payload = apple_field.build_pass_json()
+        self.assertEquals(
+            payload,
+            {
+                'formatType': 'Number',
+                'value': 1234,
+                'fieldType': 'primary',
+                'numberStyle': 'numberStyleDecimal'
+            }
+        )
+
+    def test_build_common_json(self):
+        # Test setting Currency formatType
+        field = Field(name='Value', currencyCode='USD')
+        field._build_common_template_json()
+        self.assertEquals(field.field_values['formatType'], 'Currency')
+
+        # Test that infer_format_type is triggered
+        field = Field(name='Member Name', value='Hello there')
+        field._build_common_template_json()
+        self.assertEquals(field.field_values['formatType'], 'String')
+
+        # Test that order and fieldType are set
+        field = Field(name='Member Name')
+        field._build_common_template_json()
+        self.assertEquals(field.field_values['order'], 1)
+        self.assertEquals(field.field_values['fieldType'], 'notAssigned')
 
     def test_infer_number_style(self):
         self.assertEqual(
@@ -149,6 +182,10 @@ class TestField(unittest.TestCase):
         self.assertEqual(
             Field._infer_number_style('1234e2'), ua.NumberStyle.SCIENTIFIC
         )
+        self.assertEqual(
+            Field._infer_number_style('1234E2'), ua.NumberStyle.SCIENTIFIC
+        )
+        self.assertRaises(ValueError, Field._infer_number_style, {})
 
     def test_row_col_to_order(self):
         self.assertEqual(Field._row_col_to_order(0, 0), 1)
@@ -173,14 +210,43 @@ class TestField(unittest.TestCase):
         self.assertEqual(Field._infer_format_type(123.321), 'Number')
         self.assertEqual(Field._infer_format_type('123.01'), 'Number')
         self.assertEqual(Field._infer_format_type('123'), 'Number')
+        self.assertEqual(Field._infer_format_type('1.233e4'), 'Number')
         self.assertEqual(
             Field._infer_format_type('http://google.com/cool_gif.gif'), 'URL'
         )
         self.assertEqual(
             Field._infer_format_type('2016-01-01T19:00:00Z'), 'Date'
         )
+        self.assertRaises(ValueError, Field._infer_format_type, {})
 
-    def test_field_manipulations(self):
+    def test_setitem(self):
+        gf = Field(
+            name='Member Name',
+            fieldType=ua.GoogleFieldType.TEXT_MODULE
+        )
+        af = Field(
+            name='Member Name',
+            fieldType=ua.AppleFieldType.PRIMARY
+        )
+        # Test google field label/value conversions
+        gf['header'] = 'Hello hello'
+        gf['body'] = 'This is the body'
+        self.assertEquals(gf['label'], 'Hello hello')
+        self.assertEquals(gf['value'], 'This is the body')
+        # Test invalid key
+        self.assertRaises(ValueError, gf.__setitem__, 'doesntExist', 'Who Cares?')
+        # Test invalid values
+        self.assertRaises(ValueError, af.__setitem__, 'textAlignment', 'blah')
+        self.assertRaises(ValueError, af.__setitem__, 'formatType', 'bool')
+        self.assertRaises(ValueError, af.__setitem__, 'numberStyle', 'wrong')
+        # Test numberStyle replacement
+        af['numberStyle'] = 'PKNumberStyleDecimal'
+        self.assertEquals(af['numberStyle'], 'numberStyleDecimal')
+        # Test loyaltyPoints replacement
+        gf['fieldType'] = ua.GoogleFieldType._LOYALTY_POINTS
+        self.assertEquals(gf['fieldType'], ua.GoogleFieldType.POINTS_MODULE)
+
+    def test_other_field_manipulations(self):
         f = Field(
             name='Member Name',
             label='Member Name',
@@ -205,3 +271,5 @@ class TestField(unittest.TestCase):
             fieldType=ua.AppleFieldType.PRIMARY
         )
         self.assertEqual(f, updated_f)
+        self.assertEqual(len(f), 3)
+

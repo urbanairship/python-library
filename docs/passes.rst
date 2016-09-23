@@ -159,7 +159,7 @@ To `delete a location from a pass`, use the ``delete_pass_location`` method:
 
 .. _create a pass: http://docs.urbanairship.com/api/wallet.html#create-pass
 .. _update a pass: http://docs.urbanairship.com/api/wallet.html#update-pass
-.. _getting a pass: http://docs.urbanairship.com/api/wallet.html#get-pass
+.. _get a pass: http://docs.urbanairship.com/api/wallet.html#get-pass
 .. _a list of passes: http://docs.urbanairship.com/api/wallet.html#list-passes
 .. _delete a pass: http://docs.urbanairship.com/api/wallet.html#delete-pass
 .. _add locations to a pass: http://docs.urbanairship.com/api/wallet.html#add-locations-to-pass

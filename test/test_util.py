@@ -1,6 +1,6 @@
 import unittest
 
-from reach import util
+from urbanairship_reach import util
 
 
 class TestEnum(unittest.TestCase):
@@ -16,13 +16,13 @@ class TestEnum(unittest.TestCase):
         self.assertRaises(ValueError, ExampleEnum.validate, 'privatevalue')
 
 
-def example_function(self):
+def example_function():
     """Here are some docs"""
     return True
 
 
 @util.set_docstring(example_function)
-def example_function_no_docs(self):
+def example_function_no_docs():
     return False
 
 

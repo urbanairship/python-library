@@ -12,7 +12,7 @@ from .templates import (
     delete_template,
     duplicate_template,
     add_template_locations,
-    remove_template_location,
+    delete_template_location,
     TemplateList,
     AppleTemplate,
     GoogleTemplate,

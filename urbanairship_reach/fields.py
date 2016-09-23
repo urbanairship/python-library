@@ -1,10 +1,11 @@
 import collections
+import copy
 import datetime
 import logging
 
 from six.moves.urllib import parse
 
-from reach import util
+from urbanairship_reach import util
 
 
 logger = logging.getLogger(__name__)
@@ -201,7 +202,7 @@ class Field(collections.MutableMapping):
             field['order'] = field._row_col_to_order(row, col)
         return field
 
-    def build_apple_json(self, payload):
+    def build_apple_json(self):
         """Take a field object, fill in necessary blanks for serialization.
 
         Returns:
@@ -228,24 +229,22 @@ class Field(collections.MutableMapping):
         if self['fieldType'] == GoogleFieldType.NOT_ASSIGNED:
             return self.field_values
 
-        for key, value in self.field_values.iteritems():
-            payload[key] = value
+        payload = copy.deepcopy(self.field_values)
         if (
-            payload['formatType'] == 'Number' and
+            payload.get('formatType') == 'Number' and
             not payload.get('numberStyle')
         ):
             payload['numberStyle'] = self._infer_number_style(self['value'])
         return payload
 
-    def build_google_json(self, payload):
-        """This function takes converts the values into a google friendly
-        module payload.
+    def build_google_template_json(self):
+        """This function converts a field object into a properly-formatted
+        Google template field.
 
         Returns:
             A dictionary representing a field (module item) object for a Google
-                Template. Will automatically convert value/label to the
-                appropriate keys given the module type (e.g., header/body for
-                TEXT_MODULE).
+            Template. Will automatically convert value/label to the appropriate
+            keys given the module type (e.g., header/body for TEXT_MODULE).
 
         Example:
             >>> f = Field(
@@ -255,62 +254,29 @@ class Field(collections.MutableMapping):
             ...     fieldType=GoogleFieldType.TEXT_MODULE
             ... )
             >>> f.serialize_to_google()
-            {'header': 'Some Text!', 'body': 'Blah blah blah', 'fieldType': 'textModule',
-             'formatType': 'Number', 'numberStyle': 'numberStyleDecimal'}
+            {'header': 'label', 'body': 1234, 'fieldType': 'textModule',
+             'formatType': 'Number'}
         """
         if self['fieldType'] == GoogleFieldType.NOT_ASSIGNED:
             return self.field_values
 
+        payload = {}
         for key, value in self.field_values.iteritems():
             if key == 'label':
                 payload[self.GOOGLE_LABEL_MAP[self['fieldType']]] = value
             elif key == 'value':
                 payload[self.GOOGLE_VALUE_MAP[self['fieldType']]] = value
-            elif (
-                key == 'order' and
-                self.get('fieldType') == GoogleFieldType.TEXT_MODULE
-            ):
-                # Special case: Order does not work in text modules -- must
-                # reconvert to rows/cols.
-                payload['col'] = 0
-                payload['row'] = value - 1
             else:
                 payload[key] = value
+        payload = self._common_google_processing(payload)
         return payload
 
-    def build_generic_json(self):
-        """When creating a field for a pass, there may be no way to
-        determine the fieldType. This method builds json for fields
-        where the vendor/fieldType may be unknown.
-        """
-        base_payload = self._build_common_json()
-        try:
-            # Handle known google fields
-            GoogleFieldType.validate(self.get('fieldType'))
-            return self.build_google_json(base_payload)
-        except ValueError:
-            pass
-
-        try:
-            AppleFieldType.validate(self.get('fieldType'))
-            return self.build_apple_json(base_payload)
-        except ValueError:
-            pass
-
-        if self.get('label') or self.get('value'):
-            logger.warning(
-                'fieldType not specified -- if field is used by a '
-                'Google pass, resulting field JSON may contain '
-                'innacurate label/value keys.'
-            )
-
-        return self.field_values
-
-    def _build_common_json(self):
+    def _build_common_template_json(self):
         """Common serialization items. Things that happen for both Apple
         and Google.
 
-        Notes:
+        .. note::
+
             * If currencyCode is specified and formatType isn't, validate
             currencyCode and set formatType to 'Currency'.
             * If formatType isn't specified, use the general _infer_format_type
@@ -322,17 +288,57 @@ class Field(collections.MutableMapping):
             A dict object -- represents key val pairs not represented directly
             in the object but that can be inferred from the object data.
         """
-        payload = {}
         if self.get('currencyCode'):
             CurrencyCode.validate(self['currencyCode'])
-            payload['formatType'] = 'Currency' if not self.get('formatType') else self['formatType']
+            self['formatType'] = 'Currency' if not self.get('formatType') else self['formatType']
         if not self.get('formatType') and self.get('value'):
-            payload['formatType'] = self._infer_format_type(self['value'])
+            self['formatType'] = self._infer_format_type(self['value'])
         if not self.get('order'):
-            payload['order'] = 1
+            self['order'] = 1
         if not self.get('fieldType'):
-            payload['fieldType'] = 'notAssigned'
-        return payload
+            self['fieldType'] = 'notAssigned'
+
+    def build_google_pass_json(self):
+        """This function converts a field object into a properly-formatted
+        Google pass field.
+
+        Returns:
+            A dictionary representing a field (module item) object for a Google
+            Pass.
+
+        Example:
+            >>> f = Field(
+            ...     name='Some Text',
+            ...     label='Points',
+            ...     value=1234,
+            ...     fieldType=GoogleFieldType.TEXT_MODULE
+            ... )
+            >>> f.serialize_to_google()
+            {'label': 'Points', 'value': 1234, 'fieldType': 'textModule'}
+        """
+        payload = copy.deepcopy(self.field_values)
+        return self._common_google_processing(payload)
+
+    def build_pass_json(self):
+        """When creating a field for a pass, there may be no way to
+        determine the fieldType. This method builds json for fields
+        where the vendor/fieldType may be unknown.
+
+        """
+        try:
+            # Handle known google fields
+            GoogleFieldType.validate(self.get('fieldType'))
+            return self.build_google_pass_json()
+        except ValueError:
+            pass
+
+        try:
+            AppleFieldType.validate(self.get('fieldType'))
+            return self.build_apple_json()
+        except ValueError:
+            pass
+
+        return self.field_values
 
     # Apple/Google Helper functions
     @staticmethod
@@ -376,12 +382,14 @@ class Field(collections.MutableMapping):
                 int(value)
                 return 'Number'
             except ValueError:
-                try:
-                    # Handles scientific notation as well.
-                    float(value)
-                    return 'Number'
-                except ValueError:
-                    pass
+                pass
+
+            try:
+                # Handles scientific notation as well.
+                float(value)
+                return 'Number'
+            except ValueError:
+                pass
 
             # Date values
             try:
@@ -400,6 +408,18 @@ class Field(collections.MutableMapping):
             return 'Number'
         else:
             raise ValueError('Unrecognized value type: {}'.format(type(value)))
+
+    @staticmethod
+    def _common_google_processing(payload):
+        if (
+            payload.get('order') and
+            payload.get('fieldType') == GoogleFieldType.TEXT_MODULE
+        ):
+            # Special case: Order does not work in text modules -- must
+            # reconvert to rows/cols.
+            payload['col'], payload['row'] = 0, payload['order'] - 1
+            del payload['order']
+        return payload
 
     # Dictionary implementation
     def __setitem__(self, key, value):
