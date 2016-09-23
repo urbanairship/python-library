@@ -9,14 +9,14 @@ Installation
 
 You can install the library via ``pip``::
 
-   $ pip install urbanairship_reach
+   $ pip install uareach
 
 
 *******
 Logging
 *******
 
-``reach`` uses the standard logging module for integration into
+``uareach`` uses the standard logging module for integration into
 an application's existing logging. If you do not have logging
 configured otherwise, your application can set it up like so:
 
@@ -30,7 +30,7 @@ logging.
 
 .. code-block:: python
 
-   logging.getLogger('urbanairship').setLevel(logging.DEBUG)
+   logging.getLogger('uareach').setLevel(logging.DEBUG)
 
 As of Python 2.7, ``DeprecationWarning`` warnings are silenced by default. To
 enable them, use the ``warnings`` module:
@@ -77,4 +77,4 @@ Walkthroughs
 
    creating-templates
 
-.. _github: https://github.com/urbanairship/reach-python-library
+.. _github: https://github.com/urbanairship/uareach-python-library

@@ -1,7 +1,7 @@
 import logging
 import requests
 
-from urbanairship_reach import common, __about__
+from uareach import common, __about__
 
 
 logger = logging.getLogger(__name__)

@@ -5,9 +5,9 @@ import mock
 import requests
 import unittest
 
-import urbanairship_reach as ua
-from urbanairship_reach import common
-from urbanairship_reach.templates import Template
+import uareach as ua
+from uareach import common
+from uareach.templates import Template
 from template_builders import build_apple_loyalty, build_google_loyalty
 
 
@@ -596,7 +596,7 @@ class AppleTemplateTest(unittest.TestCase):
     def test_add_header(self):
         self.assertEqual(
             self.template.headers['barcode_type']['value'],
-            ua.BarcodeType.PDF_417
+            ua.BarcodeType.convert_to_apple(ua.BarcodeType.PDF_417)
         )
 
         # Check barcode validation

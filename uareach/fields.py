@@ -5,7 +5,7 @@ import logging
 
 from six.moves.urllib import parse
 
-from urbanairship_reach import util
+from uareach import util
 
 
 logger = logging.getLogger(__name__)

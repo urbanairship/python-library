@@ -6,8 +6,8 @@ import mock
 import requests
 
 import pass_builders
-import urbanairship_reach as ua
-from urbanairship_reach.passes import Pass
+import uareach as ua
+from uareach.passes import Pass
 
 
 class PassApiTest(unittest.TestCase):

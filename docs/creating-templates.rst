@@ -15,7 +15,7 @@ following imports/constants are defined:
 
 .. sourcecode:: python
 
-   import reach as ua
+   import uareach as ua
 
    client = ua.Reach('you@example.com', 'reach-key')
 

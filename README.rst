@@ -1,7 +1,7 @@
 About
 =====
 
-The Urbanairship ``reach`` (formerly known as ``wallet``) library is a Python library for
+The Urbanairship ``uareach`` (formerly known as ``wallet``) library is a Python library for
 using the `Urban Airship Reach <http://urbanairship.com/>`__ web service API.
 
 
@@ -23,7 +23,7 @@ To get started, simply import the library and set up a client:
 
 .. sourcecode:: python
 
-   import urbanairship_reach as ua
+   import uareach as ua
 
 
    client = ua.Reach('email', 'wallet_key')
@@ -33,6 +33,5 @@ To get started, simply import the library and set up a client:
    my_pass = ua.get_pass(client, pass_id=12345)
 
 For more details on using the library, please see the `full documentation
-<http://docs.urbanairship.com/reference/libraries/python>`__, as well as the
-`Urban Airship API Documentation
-<http://docs.urbanairship.com/api/wallet.html>`__.
+<http://docs.urbanairship.com/reference/libraries>`__, as well as the
+`Urban Airship API Documentation <http://docs.urbanairship.com/api/wallet.html>`__.

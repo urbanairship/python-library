@@ -1,9 +1,9 @@
 import logging
 import json
 
-import urbanairship_reach as ua
-from urbanairship_reach import common, util
-from urbanairship_reach.templates import Template
+import uareach as ua
+from uareach import common, util
+from uareach.templates import Template
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ def get_pass(reach, pass_id=None, external_id=None):
     """Retrieve a pass.
 
     Args:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         pass_id (str): The pass ID of the pass you wish to retrieve.
         pass_external_id (str): The external ID of the pass you wish to
         retrieve.
@@ -70,7 +70,7 @@ def delete_pass(reach, pass_id=None, external_id=None):
     """Delete a pass.
 
     Arguments:
-        reach (reach.Reach): A UA urbanairship_reach object.
+        reach (reach.Reach): A UA uareach object.
         pass_id (str or int): The ID of the pass you wish to delete.
         external_id (str or int): The external ID of the pass you wish
             to delete.
@@ -83,7 +83,7 @@ def delete_pass(reach, pass_id=None, external_id=None):
             are specified.
 
     Example:
-        >>> delete_pass(urbanairship_reach, pass_id='123456')
+        >>> delete_pass(uareach, pass_id='123456')
         True
     """
     if not (pass_id or external_id) or (pass_id and external_id):
@@ -109,7 +109,7 @@ def add_pass_locations(reach, locations, pass_id=None, external_id=None):
     """Add locations to a pass.
 
     Arguments:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         locations (list): A list of dictionaries representing location
             objects.
         pass_id (str): The ID of the pass you wish to add
@@ -153,7 +153,7 @@ def delete_pass_location(reach, location_id, pass_id=None, external_id=None):
     """Delete a location from a pass.
 
     Arguments:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         location_id (str or int): The ID of the location you wish to delete.
         pass_id (str or itn): The ID of the pass you wish to delete
             locations from.
@@ -196,7 +196,7 @@ class PassList(common.IteratorParent):
     """Forms a pass listing request.
 
     Arguments:
-        reach (reach.core.Reach): The urbanairship_reach client object.
+        reach (reach.core.Reach): The uareach client object.
         template_id (int): An integer ID specifing the template you would like to
             retrieve passes from.
         status (string): An optional string, can be one of ``"installed"``,
@@ -278,7 +278,7 @@ class Pass(Template):
         """Create a pass.
 
         Arguments:
-            reach (reach.core.Reach): A urbanairship_reach client object.
+            reach (reach.core.Reach): A uareach client object.
             template_id (str/int): A template ID.
             template_ext_id (str/int): A template external ID.
             pass_ext_id (str/int): A pass external ID.
@@ -322,7 +322,7 @@ class Pass(Template):
         """Update a pass.
 
         Arguments:
-            reach (reach.core.Reach): A urbanairship_reach client object.
+            reach (reach.core.Reach): A uareach client object.
             pass_id (str): ID of the pass to update.
             external_id (str): External ID of the pass to update.
 

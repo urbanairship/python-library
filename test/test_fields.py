@@ -1,6 +1,6 @@
 import unittest
-import urbanairship_reach as ua
-from urbanairship_reach.fields import Field
+import uareach as ua
+from uareach.fields import Field
 
 
 class TestField(unittest.TestCase):

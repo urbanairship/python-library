@@ -49,7 +49,7 @@ copyright = u'2015, Urban Airship'
 
 __about__ = {}
 
-with open("../urbanairship_reach/__about__.py") as fp:
+with open("../uareach/__about__.py") as fp:
     exec(fp.read(), None, __about__)
 
 # The short X.Y version.

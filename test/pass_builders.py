@@ -1,4 +1,4 @@
-import urbanairship_reach as ua
+import uareach as ua
 
 
 def build_apple_pass():

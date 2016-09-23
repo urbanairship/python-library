@@ -1,6 +1,6 @@
 """ Pre-defined templates to be used in tests.
 """
-import urbanairship_reach as ua
+import uareach as ua
 
 
 # Apple loyalty template

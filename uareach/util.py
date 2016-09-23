@@ -1,7 +1,7 @@
 import inspect
 import types
 
-import urbanairship_reach as ua
+import uareach as ua
 
 
 class Constant(object):

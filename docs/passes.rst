@@ -11,8 +11,10 @@ To `create a pass`_, use the ``Pass`` class' ``create`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
+
+   client = ua.Reach('email', 'api_key')
 
    my_pass = ua.ApplePass()
    member_name = ua.Field(
@@ -23,7 +25,7 @@ To `create a pass`_, use the ``Pass`` class' ``create`` method:
    my_pass.add_fields(member_name)
    my_pass.set_expiration(datetime.datetime(2016, 12, 12))
    my_pass.set_public_url('multiple')
-   response = my_pass.create(ua_reach, template_id=12345)
+   response = my_pass.create(client, template_id=12345)
 
 
 ***********
@@ -40,7 +42,10 @@ To `update a pass`_, use the ``Pass`` class' ``update`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
+
+
+   client = ua.Reach('email', 'api_key')
 
    my_pass = ua.ApplePass()
    member_name = ua.Field(
@@ -49,7 +54,7 @@ To `update a pass`_, use the ``Pass`` class' ``update`` method:
    )
 
    my_pass.add_fields(member_name)
-   response = my_pass.update(ua_reach, template_id=12345)
+   response = my_pass.update(client, template_id=12345)
 
 
 ********
@@ -60,11 +65,11 @@ To `get a pass`_, use the ``get_pass`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
-   my_pass = ua.get_pass(ua_reach, pass_id=12345)
+   my_pass = ua.get_pass(client, pass_id=12345)
 
 
 ***********
@@ -75,11 +80,11 @@ To get `a list of passes`_, use the ``PassList`` class:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
-   pass_list = ua.TemplateList(ua_reach)
+   pass_list = ua.TemplateList(client)
 
    for pass_ in pass_list:
       print pass_
@@ -94,12 +99,12 @@ To `delete a pass`_, use the ``delete_pass`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
-   response = ua.delete_pass(ua_reach, pass_id=12345)
+   response = ua.delete_pass(client, pass_id=12345)
 
 
 *********************
@@ -110,9 +115,9 @@ To `add locations to a pass`, use the ``add_pass_locations`` function:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_wal = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
    location_1 = {
        "longitude":-122.374,
@@ -137,7 +142,7 @@ To `add locations to a pass`, use the ``add_pass_locations`` function:
        "country":"US"
    }
 
-   ua.add_pass_locations(ua_wal, location_1, location_2, pass_id=12345)
+   ua.add_pass_locations(client, location_1, location_2, pass_id=12345)
 
 
 *************************
@@ -148,13 +153,13 @@ To `delete a location from a pass`, use the ``delete_pass_location`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_wal = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
 
-   ua.delete_pass_location(ua_wal, 1234567, pass_id=52431)
+   ua.delete_pass_location(client, 1234567, pass_id=52431)
 
 
 .. _create a pass: http://docs.urbanairship.com/api/wallet.html#create-pass

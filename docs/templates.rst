@@ -17,10 +17,10 @@ To `create a template`_, use the ``Template`` class' ``create`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
    # 1. Initialize an Apple template; add metadata like name, description, etc
    apple_loyalty = ua.AppleTemplate()
@@ -65,7 +65,7 @@ To `create a template`_, use the ``Template`` class' ``create`` method:
    )
 
    # 4. Call the create method
-   response = my_template.create(ua_reach, project_id=12345)
+   response = my_template.create(client, project_id=12345)
 
 
 ***************
@@ -76,19 +76,19 @@ To `update a template`, use the ``Template`` class' ``update`` method:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
    # 1. Get a template to update
-   my_template = ua.get_template(ua_reach, template_id=12345)
+   my_template = ua.get_template(client, template_id=12345)
 
    # 2. Example: Update the template's 'Member Name' field
    member_name = my_template.fields['Member Name']
    member_name['value'] = 'The Biebz'
 
    # 3. Call the update method on the reach instance
-   response = my_template.update(ua_reach)
+   response = my_template.update(client)
 
 .. note::
 
@@ -106,10 +106,10 @@ To `get a template`_, use the ``get_template`` function:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_reach = ua.Reach('email', 'api_key')
-   my_template = ua.get_template(ua_reach, template_id=12345)
+   client = ua.Reach('email', 'api_key')
+   my_template = ua.get_template(client, template_id=12345)
 
 
 **************
@@ -120,11 +120,11 @@ To get `a list of templates`_, use the ``TemplateList`` class:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
-   template_list = ua.TemplateList(ua_reach)
+   template_list = ua.TemplateList(client)
 
    for template_header in template_list:
       print template_header
@@ -138,11 +138,11 @@ To `delete a template`_,  use the ``delete_template`` function:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
-   response = ua.delete_template(ua_reach, template_id=12345)
+   client = ua.Reach('email', 'api_key')
+   response = ua.delete_template(client, template_id=12345)
 
 
 
@@ -159,11 +159,11 @@ put the newly created template in the same project as the original:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
-   response = ua.duplicate_template(ua_reach, template_id=12345)
+   client = ua.Reach('email', 'api_key')
+   response = ua.duplicate_template(client, template_id=12345)
 
 
 *************************
@@ -174,10 +174,10 @@ To `add locations to a template`_, use the ``add_template_locations`` function:
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
 
    # Minimal location object
    location_1 = {
@@ -199,7 +199,7 @@ To `add locations to a template`_, use the ``add_template_locations`` function:
    }
 
    response = ua.add_template_locations(
-       ua_reach, [location_1, location_2], template_id=12345
+       client, [location_1, location_2], template_id=12345
    )
 
 
@@ -211,12 +211,12 @@ To `remove a location from a template`_, use the ``remove_template_location`` fu
 
 .. code-block:: python
 
-   import reach as ua
+   import uareach as ua
 
 
-   ua_reach = ua.Reach('email', 'api_key')
+   client = ua.Reach('email', 'api_key')
    response = ua.remove_template_location(
-      ua_reach, 12345678, template_id=12345
+      client, 12345678, template_id=12345
    )
 
 .. _create a template: http://docs.urbanairship.com/api/wallet.html#create-template

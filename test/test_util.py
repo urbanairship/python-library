@@ -1,6 +1,6 @@
 import unittest
 
-from urbanairship_reach import util
+from uareach import util
 
 
 class TestEnum(unittest.TestCase):

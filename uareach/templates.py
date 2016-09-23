@@ -3,8 +3,8 @@ import logging
 from collections import defaultdict
 
 import common
-import urbanairship_reach.fields as wf
-from urbanairship_reach import util
+import uareach.fields as wf
+from uareach import util
 
 
 logger = logging.getLogger(__name__)
@@ -116,13 +116,17 @@ class BarcodeType(util.Constant):
     CODE_39 = 'CODE_39'
 
     @classmethod
-    def apple_barcode(cls):
-        return [
-            cls.PDF_417,
-            cls.AZTEC,
-            cls.QR_CODE,
-            cls.CODE_128
-        ]
+    def convert_to_apple(cls, value):
+        if value == cls.PDF_417:
+            return 'PKBarcodeFormatPDF417'
+        elif value == cls.AZTEC:
+            return 'PKBarcodeFormatAztec'
+        elif value == cls.QR_CODE:
+            return 'PKBarcodeFormatQR'
+        elif value == cls.CODE_128:
+            return 'PKBarcodeFormatCode128'
+        else:
+            raise ValueError("Invalid Apple barcode_type '{}'".format(value))
 
 
 class TransitType(util.Constant):
@@ -137,7 +141,7 @@ def get_template(reach, template_id=None, external_id=None):
     """Retrieve a template.
 
     Arguments:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         template_id (str or int): The template ID of the template you wish
             to delete.
         external_id (str or int): The external ID of the template you wish
@@ -293,7 +297,7 @@ def add_template_locations(
     """Add locations to a template.
 
     Arguments:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         locations (list of dicts): A list of location objects, represented
             as dictionaries.
         template_id (str or int): The ID of the template you wish to add
@@ -345,7 +349,7 @@ def delete_template_location(
     """Remove a location from a template
 
     Arguments:
-        reach (reach.core.Reach): A urbanairship_reach client object.
+        reach (reach.core.Reach): A uareach client object.
         location_id (str or int): The ID of the location you wish to remove.
         template_id (str or int): The ID of the template you wish to remove
             locations from.
@@ -391,7 +395,7 @@ class TemplateList(common.IteratorParent):
     """Forms a template listing request.
 
     Arguments:
-        reach (reach.core.Reach): The urbanairship_reach client object.
+        reach (reach.core.Reach): The uareach client object.
         page_size (int): The size of each page of the template listing
             response. Defaults to 10.
         page (int): The page to start the listing response on. Defaults
@@ -435,7 +439,7 @@ class TemplateList(common.IteratorParent):
 
 
 class Template(object):
-    """Superclass for representing a urbanairship_reach Template class. Should not be used
+    """Superclass for representing a uareach Template class. Should not be used
     directly -- use AppleTemplate or GoogleTemplate to perform template
     operations.
     """
@@ -472,7 +476,7 @@ class Template(object):
         """Submits a template create request to the API.
 
         Arguments:
-            reach (reach.core.Reach): A urbanairship_reach client object.
+            reach (reach.core.Reach): A uareach client object.
             project_id (str or int): A project ID.
             external_id (str or int): An external ID.
 
@@ -517,7 +521,7 @@ class Template(object):
         """Submits a template update request to the API.
 
         Arguments:
-            reach (reach.core.Reach): A urbanairship_reach client object.
+            reach (reach.core.Reach): A uareach client object.
             template_id (str or int): A template ID.
             external_id (str or int): An external ID.
 
@@ -611,7 +615,7 @@ class Template(object):
 
     """ Field manipulation """
     def add_fields(self, *args):
-        """Add urbanairship_reach.fields.Field objects.
+        """Add uareach.fields.Field objects.
 
         Arguments:
             args (reach.fields.Field): Field objects to add to your template or
@@ -626,7 +630,7 @@ class Template(object):
             self.fields[field.name] = field
 
     def remove_fields(self, *args):
-        """Removes urbanairship_reach.fields.Field objects.
+        """Removes uareach.fields.Field objects.
 
         Arguments:
             args (string): The names of the fields to be deleted, e.g.,
@@ -639,7 +643,7 @@ class Template(object):
             del self.fields[name]
 
     def set_fields(self, *args):
-        """Set the urbanairship_reach.fields.Field objects. Will overwrite any existing
+        """Set the uareach.fields.Field objects. Will overwrite any existing
         fields set on the template or pass.
 
         Arguments:
@@ -904,15 +908,12 @@ class AppleTemplate(Template):
         )
 
         # Apple-specific validation
-        if (
-            header == TemplateHeader.BARCODE_TYPE and
-            value not in BarcodeType.apple_barcode()
-        ):
-            del self.headers[header]
-            raise ValueError(
-                "The barcode type '{}' is not valid for Apple "
-                "templates.".format(value)
-            )
+        if header == TemplateHeader.BARCODE_TYPE:
+            try:
+                self.headers[header]['value'] = BarcodeType.convert_to_apple(value)
+            except ValueError:
+                del self.headers[header]
+                raise
 
     def _create_payload(self):
         payload = self.view()
