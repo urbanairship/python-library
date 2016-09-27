@@ -19,8 +19,8 @@ setup(
     packages=["uareach"],
     license='BSD License',
     classifiers=[
-        'Development Status :: Beta',
-        'Environment :: Client Side REST Interface',
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
