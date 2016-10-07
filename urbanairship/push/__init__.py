@@ -33,6 +33,7 @@ from .payload import (
     options,
     actions,
     interactive,
+    in_app,
 )
 
 from .schedule import (
@@ -82,5 +83,6 @@ __all__ = [
     actions,
     interactive,
     scheduled_time,
-    local_scheduled_time
+    local_scheduled_time,
+    in_app
 ]

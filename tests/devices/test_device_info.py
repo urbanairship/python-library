@@ -58,7 +58,7 @@ class TestDeviceInfo(unittest.TestCase):
                         'background': 'false',
                         'push_address': '3C0590EBCC11618723B3D4C8AA60BCFB6',
                         'created': '2014-04-17T23:35:15',
-                        'last_registration': '2014-08-11T20:47:28',
+                        'last_registration': 'None',
                         'alias': 'null',
                         'tags': ['test_tag'],
                         'ios': {
@@ -86,12 +86,6 @@ class TestDeviceInfo(unittest.TestCase):
                     '%Y-%m-%dT%H:%M:%S'
                 )
             )
-            last_registration_date = (
-                datetime.datetime.strptime(
-                    '2014-08-11T20:47:28',
-                    '%Y-%m-%dT%H:%M:%S'
-                )
-            )
 
             self.assertEqual(channel_lookup.channel_id, channel_id)
             self.assertEqual(channel_lookup.device_type, 'ios')
@@ -107,7 +101,7 @@ class TestDeviceInfo(unittest.TestCase):
             )
             self.assertEqual(
                 channel_lookup.last_registration,
-                last_registration_date
+                'UNKNOWN'
             )
             self.assertEqual(
                 channel_lookup.ios,

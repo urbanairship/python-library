@@ -1,6 +1,4 @@
-import json
 import logging
-import warnings
 
 import requests
 
@@ -20,11 +18,13 @@ class Airship(object):
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
-    def request(self, method, body, url, content_type=None, version=None, params=None):
-        return self._request(method, body, url, content_type, version, params)
+    def request(self, method, body, url,
+                content_type=None, version=None, params=None):
+        return self._request(method, body, url,
+                             content_type, version, params)
 
     def _request(self, method, body, url, content_type=None,
-            version=None, params=None, encoding=None):
+                 version=None, params=None, encoding=None):
 
         headers = \
                 {'User-agent': 'UAPythonLib/{0}'.format(__about__.__version__)}

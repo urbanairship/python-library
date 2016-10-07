@@ -30,6 +30,7 @@ from .push import (
     wns_payload,
     mpns_payload,
     message,
+    in_app,
     device_types,
     options,
     actions,
@@ -62,8 +63,6 @@ from .devices import (
 )
 
 from .reports import (
-    PerPushDetail,
-    PerPushSeries,
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
@@ -107,6 +106,7 @@ __all__ = [
     wns_payload,
     mpns_payload,
     message,
+    in_app,
     options,
     actions,
     interactive,
@@ -127,8 +127,6 @@ __all__ = [
     Segment,
     SegmentList,
     ChannelUninstall,
-    PerPushDetail,
-    PerPushSeries,
     NamedUser,
     NamedUserList,
     IndividualResponseStats,

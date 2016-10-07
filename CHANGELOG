@@ -1,22 +1,37 @@
-0.7.5
+1.0.0
 --------------------
-- added support for reports including:
-    * individual push response
-    * devices
-    * push
-    * response report
-    * response listing
-    * app opens
-    * time in app
-    * opt-in
-    * opt-out
-- added support for channel tags
-- deprecated previous tags functionality including:
+- Added support for In-App Messaging.
+- Added support for optional iOS 10 extras including:
+    * Mutable content
+    * Subtitle
+    * Media attachment
+
+0.8.1
+--------------------
+- Added missing module to the required dependencies.
+- Updated README information for version 8.
+
+0.8.0
+--------------------
+- Added support for reports including:
+    * Individual push response
+    * Devices
+    * Push
+    * Response report
+    * Response listing
+    * App opens
+    * Time in app
+    * Opt-in
+    * Opt-out
+- Added support for channel tags
+- Deprecated previous tags functionality including:
     * Tag
     * TagList
     * DeleteTag
     * BatchTag
-- added support for static lists
+- Added support for static lists
+- Fixed issue with handling missing/mis-formatted date-times in device lookups
+- Removed per push detail report functionality, as those APIs are no longer recommended.
 
 --------------------
 0.7.4
