@@ -14,7 +14,10 @@ elif PY2:
 
 # Valid autobadge values: auto, +N, -N
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
-
+VALID_ANDROID_CATEGORIES = [
+    "alarm", "call", "email", "err", "event", "msg", "promo",
+    "recommendation", "service", "social", "status", "sys", "transport"
+]
 
 def notification(alert=None, ios=None, android=None, amazon=None,
                  blackberry=None, wns=None, mpns=None, actions=None,
@@ -143,7 +146,9 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
 
 def android(alert=None, collapse_key=None, time_to_live=None,
             delay_while_idle=False, extra=None, interactive=None,
-            local_only=None, wearable=None):
+            local_only=None, wearable=None, delivery_priority=None,
+            style=None, title=None, summary=None, sound=None, priority=None,
+            category=None, visibility=None, public_notification=None):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -161,6 +166,20 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword wearable: Optional object to define a wearable notification
         with the following optional fields: background_image, extra_pages, and
         interactive.
+    :keyword delivery_priority: Optional string of either 'high' or 'normal'.
+        Sets the GCM priority.
+    :keyword style: Optional object. Defines an advanced style.
+    :keyword title: Optional string. Represents the title of the notification.
+    :keyword summary: Optional string. Represents a summary of the
+        notification.
+    :keyword sound: Optional string. Represents a sound file name included
+        in the app resources.
+    :keyword priority: Optional integer between -2 and 2. An Android L feature
+        that determines location sort order.
+    :keyword category: Optional string. An Android category.
+    :keyword visibility: Option integer between -1 and 1.
+    :keyword public_notification: Optional object. A notification to show on the
+        lock screen instead instead of the redacted one.
 
 
     See
@@ -196,6 +215,43 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         if not (isinstance(wearable, dict)):
             raise ValueError('Android wearable must be a dictionary')
         payload['wearable'] = wearable
+    if delivery_priority is not None:
+        if delivery_priority not in {'high', 'normal'}:
+            raise ValueError(
+                "delivery_priority must be set to one of 'high' or 'normal'."
+            )
+        payload["delivery_priority"] = delivery_priority
+    if style is not None:
+        payload['style'] = style
+    if title is not None:
+        payload['title'] = title
+    if summary is not None:
+        payload['summary'] = summary
+    if sound is not None:
+        payload['sound'] = sound
+    if priority is not None:
+        if priority not in range(-2, 3):
+            raise ValueError(
+                'priority must be set to one of {}.'.format(
+                    ', '.join([str(i) for i in range(-2, 3)])
+            ))
+        payload['priority'] = priority
+    if category is not None:
+        if category not in VALID_ANDROID_CATEGORIES:
+            raise ValueError(
+                'category must be set to one of {}.'.format(
+                    ', '.join(VALID_ANDROID_CATEGORIES)
+            ))
+        payload['category'] = category
+    if visibility is not None:
+        if visibility not in range(-1, 2):
+            raise ValueError(
+                'visibility must be set to one of {}.'.format(
+                    ', '.join([str(i) for i in range(-1, 2)])
+            ))
+        payload['visibility'] = visibility
+    if public_notification is not None:
+        payload['public_notification'] = public_notification
 
     return payload
 
