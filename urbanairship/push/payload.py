@@ -64,7 +64,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
         extra=None, expiry=None, interactive=None, category=None, title=None,
-        mutable_content=None, subtitle=None, media_attachment=None):
+        mutable_content=None, subtitle=None, media_attachment=None,
+        priority=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -132,6 +133,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['subtitle'] = subtitle
     if media_attachment is not None:
         payload['media_attachment'] = media_attachment
+    if priority is not None:
+        if priority not in {10, 5}:
+            raise ValueError('iOS priority must be set to one of 5 or 10.')
+        payload['priority'] = priority
 
     return payload
 
