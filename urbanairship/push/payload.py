@@ -257,7 +257,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
 
 
 def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
-           title=None, summary=None, interactive=None):
+           title=None, summary=None, interactive=None, style=None, sound=None):
     """Amazon specific platform override payload.
 
     All keyword arguments are optional.
@@ -296,6 +296,10 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['summary'] = summary
     if interactive is not None:
         payload['interactive'] = interactive
+    if style is not None:
+        payload['style'] = style
+    if sound is not None:
+        payload['sound'] = sound
     return payload
 
 

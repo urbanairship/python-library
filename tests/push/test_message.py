@@ -195,7 +195,6 @@ class TestMessage(unittest.TestCase):
         )
 
     def test_android(self):
-        self.maxDiff = True
         self.assertEqual(
             ua.notification(
                 android=ua.android(
@@ -365,7 +364,14 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    style={
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    sound='cowbell.mp3'
                 )
             ),
             {
@@ -388,7 +394,14 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    'style': {
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    'sound': 'cowbell.mp3'
                 }
             }
         )
