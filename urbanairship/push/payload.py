@@ -605,3 +605,56 @@ def style(style_type, content, title=None, summary=None):
         'title': title, 'summary': summary
     }
     return {key: val for key, val in payload.iteritems() if val}
+
+
+def media_attachment(url, content=None, options=None):
+    """iOS media_attachment builder.
+
+    :keyword url: String. Specifies the URL to be downloaded by the UA
+        Media Attachment extension.
+    :keyword content: Optional dictionary. Describes portions of the
+        notification that should be modified if the media attachment
+        succeeds. See :func:`content`.
+    :keyword options: Optional dictionary. Describes how to display the
+        resource given by the URL. See :func:`options`.
+    """
+    payload = {'url': url, 'content': content, 'options': options}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def content(title=None, subtitle=None, body=None):
+    """iOS content builder. Each argument describes the portions of the
+    notifcation that should be modified if the media_attachment succeeds.
+
+    :keyword title: String.
+    :keyword subtitle: String.
+    :keyword body: String.
+    """
+    payload = {'title': title, 'subtitle': subtitle, 'options': options}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def options(crop=None, time=None, hidden=None):
+    """iOS options builder.
+
+    :keyword crop: Optional dictionary. Describes the crop parameters to be
+        used in the thumbnail. See :func:`crop`.
+    :keyword time: Optional float. The frame of the animated resource
+        that should be used in the thumbnail.
+    :keyword hidden: Optional boolean. When True, hide the media_attachment
+        thumbnail.
+    """
+    payload = {'crop': crop, 'time': time, 'hidden': hidden}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def crop(x=None, y=None, width=None, height=None):
+    """iOS crop builder.
+
+    :keyword x: Optional float. The X offset where the crop begins.
+    :keyword y: Optional float. The Y offset where the crop begins.
+    :keyword width: Optional float. The width of the final crop.
+    :keyword height: Optional float. The height of the final crop.
+    """
+    payload = {'x': x, 'y': y, 'width': width, 'height': height}
+    return {key: val for key, val in payload.iteritems() if val}
