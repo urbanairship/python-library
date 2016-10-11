@@ -547,3 +547,57 @@ def interactive(type=None, button_actions=None):
         raise AttributeError("'interactive' must have a type attribute")
 
     return payload
+
+
+def wearable(background_image=None, extra_pages=None, interactive=None):
+    """Android wearable payload builder.
+
+    :keyword background_image: Optional string. A URL that specifies the
+        background image to display on a wearable device.
+    :keyword extra_pages: Optional array of objects.
+    :keyword iinteractive: Optional object. Override the interactive
+        notification payload for the wearable device.
+    """
+    payload = {
+        'background_image': background_image,
+        'extra_pages': extra_pages,
+        'interactive': interactive
+    }
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def public_notification(title=None, alert=None, summary=None):
+    """Android L public notification payload builder.
+
+    :keyword title: Optional string. The notification title.
+    :keyword alert: Optional string. The notification alert.
+    :keyword summary: Optional string. The notification summary.
+    """
+    payload = {'title': title, 'alert': alert, 'summary': summary}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def style(style_type, content, title=None, summary=None):
+    """Android/Amazon style builder.
+
+    :keyword style_type: String. Must be one of "big_text", "big_picture",
+        or "inbox".
+    :keyword content: String or array of strings. Content of the style object.
+        If style_type is set to "inbox", this will be an array of strings.
+        Otherwise, it will be a single string.
+    :keyword title: Optional string. Override the notification.
+    :keyword summary: Optional string. Override the summary of the notification.
+
+    """
+    mapping = {
+        'big_text': 'big_text', 'big_picture': 'big_picture', 'inbox': 'lines'
+    }
+    if style_type not in mapping.keys():
+        raise ValueError('style_type must be one of {}.'.format(
+            ', '.join(mapping.keys())
+        ))
+    payload = {
+        'type': style_type, mapping[style_type]: content,
+        'title': title, 'summary': summary
+    }
+    return {key: val for key, val in payload.iteritems() if val}
