@@ -14,7 +14,10 @@ elif PY2:
 
 # Valid autobadge values: auto, +N, -N
 VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
-
+VALID_ANDROID_CATEGORIES = [
+    "alarm", "call", "email", "err", "event", "msg", "promo",
+    "recommendation", "service", "social", "status", "sys", "transport"
+]
 
 def notification(alert=None, ios=None, android=None, amazon=None,
                  blackberry=None, wns=None, mpns=None, actions=None,
@@ -64,7 +67,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 
 def ios(alert=None, badge=None, sound=None, content_available=False,
         extra=None, expiry=None, interactive=None, category=None, title=None,
-        mutable_content=None, subtitle=None, media_attachment=None):
+        mutable_content=None, subtitle=None, media_attachment=None,
+        priority=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -132,13 +136,19 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         payload['subtitle'] = subtitle
     if media_attachment is not None:
         payload['media_attachment'] = media_attachment
+    if priority is not None:
+        if priority not in {10, 5}:
+            raise ValueError('iOS priority must be set to one of 5 or 10.')
+        payload['priority'] = priority
 
     return payload
 
 
 def android(alert=None, collapse_key=None, time_to_live=None,
             delay_while_idle=False, extra=None, interactive=None,
-            local_only=None, wearable=None):
+            local_only=None, wearable=None, delivery_priority=None,
+            style=None, title=None, summary=None, sound=None, priority=None,
+            category=None, visibility=None, public_notification=None):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -156,6 +166,20 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword wearable: Optional object to define a wearable notification
         with the following optional fields: background_image, extra_pages, and
         interactive.
+    :keyword delivery_priority: Optional string of either 'high' or 'normal'.
+        Sets the GCM priority.
+    :keyword style: Optional object. Defines an advanced style.
+    :keyword title: Optional string. Represents the title of the notification.
+    :keyword summary: Optional string. Represents a summary of the
+        notification.
+    :keyword sound: Optional string. Represents a sound file name included
+        in the app resources.
+    :keyword priority: Optional integer between -2 and 2. An Android L feature
+        that determines location sort order.
+    :keyword category: Optional string. An Android category.
+    :keyword visibility: Option integer between -1 and 1.
+    :keyword public_notification: Optional object. A notification to show on the
+        lock screen instead instead of the redacted one.
 
 
     See
@@ -191,12 +215,49 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         if not (isinstance(wearable, dict)):
             raise ValueError('Android wearable must be a dictionary')
         payload['wearable'] = wearable
+    if delivery_priority is not None:
+        if delivery_priority not in {'high', 'normal'}:
+            raise ValueError(
+                "delivery_priority must be set to one of 'high' or 'normal'."
+            )
+        payload["delivery_priority"] = delivery_priority
+    if style is not None:
+        payload['style'] = style
+    if title is not None:
+        payload['title'] = title
+    if summary is not None:
+        payload['summary'] = summary
+    if sound is not None:
+        payload['sound'] = sound
+    if priority is not None:
+        if priority not in range(-2, 3):
+            raise ValueError(
+                'priority must be set to one of {}.'.format(
+                    ', '.join([str(i) for i in range(-2, 3)])
+            ))
+        payload['priority'] = priority
+    if category is not None:
+        if category not in VALID_ANDROID_CATEGORIES:
+            raise ValueError(
+                'category must be set to one of {}.'.format(
+                    ', '.join(VALID_ANDROID_CATEGORIES)
+            ))
+        payload['category'] = category
+    if visibility is not None:
+        if visibility not in range(-1, 2):
+            raise ValueError(
+                'visibility must be set to one of {}.'.format(
+                    ', '.join([str(i) for i in range(-1, 2)])
+            ))
+        payload['visibility'] = visibility
+    if public_notification is not None:
+        payload['public_notification'] = public_notification
 
     return payload
 
 
 def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
-           title=None, summary=None, interactive=None):
+           title=None, summary=None, interactive=None, style=None, sound=None):
     """Amazon specific platform override payload.
 
     All keyword arguments are optional.
@@ -235,6 +296,10 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
         payload['summary'] = summary
     if interactive is not None:
         payload['interactive'] = interactive
+    if style is not None:
+        payload['style'] = style
+    if sound is not None:
+        payload['sound'] = sound
     return payload
 
 
@@ -486,3 +551,110 @@ def interactive(type=None, button_actions=None):
         raise AttributeError("'interactive' must have a type attribute")
 
     return payload
+
+
+def wearable(background_image=None, extra_pages=None, interactive=None):
+    """Android wearable payload builder.
+
+    :keyword background_image: Optional string. A URL that specifies the
+        background image to display on a wearable device.
+    :keyword extra_pages: Optional array of objects.
+    :keyword iinteractive: Optional object. Override the interactive
+        notification payload for the wearable device.
+    """
+    payload = {
+        'background_image': background_image,
+        'extra_pages': extra_pages,
+        'interactive': interactive
+    }
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def public_notification(title=None, alert=None, summary=None):
+    """Android L public notification payload builder.
+
+    :keyword title: Optional string. The notification title.
+    :keyword alert: Optional string. The notification alert.
+    :keyword summary: Optional string. The notification summary.
+    """
+    payload = {'title': title, 'alert': alert, 'summary': summary}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def style(style_type, content, title=None, summary=None):
+    """Android/Amazon style builder.
+
+    :keyword style_type: String. Must be one of "big_text", "big_picture",
+        or "inbox".
+    :keyword content: String or array of strings. Content of the style object.
+        If style_type is set to "inbox", this will be an array of strings.
+        Otherwise, it will be a single string.
+    :keyword title: Optional string. Override the notification.
+    :keyword summary: Optional string. Override the summary of the notification.
+
+    """
+    mapping = {
+        'big_text': 'big_text', 'big_picture': 'big_picture', 'inbox': 'lines'
+    }
+    if style_type not in mapping.keys():
+        raise ValueError('style_type must be one of {}.'.format(
+            ', '.join(mapping.keys())
+        ))
+    payload = {
+        'type': style_type, mapping[style_type]: content,
+        'title': title, 'summary': summary
+    }
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def media_attachment(url, content=None, options=None):
+    """iOS media_attachment builder.
+
+    :keyword url: String. Specifies the URL to be downloaded by the UA
+        Media Attachment extension.
+    :keyword content: Optional dictionary. Describes portions of the
+        notification that should be modified if the media attachment
+        succeeds. See :func:`content`.
+    :keyword options: Optional dictionary. Describes how to display the
+        resource given by the URL. See :func:`options`.
+    """
+    payload = {'url': url, 'content': content, 'options': options}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def content(title=None, subtitle=None, body=None):
+    """iOS content builder. Each argument describes the portions of the
+    notifcation that should be modified if the media_attachment succeeds.
+
+    :keyword title: String.
+    :keyword subtitle: String.
+    :keyword body: String.
+    """
+    payload = {'title': title, 'subtitle': subtitle, 'options': options}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def options(crop=None, time=None, hidden=None):
+    """iOS options builder.
+
+    :keyword crop: Optional dictionary. Describes the crop parameters to be
+        used in the thumbnail. See :func:`crop`.
+    :keyword time: Optional float. The frame of the animated resource
+        that should be used in the thumbnail.
+    :keyword hidden: Optional boolean. When True, hide the media_attachment
+        thumbnail.
+    """
+    payload = {'crop': crop, 'time': time, 'hidden': hidden}
+    return {key: val for key, val in payload.iteritems() if val}
+
+
+def crop(x=None, y=None, width=None, height=None):
+    """iOS crop builder.
+
+    :keyword x: Optional float. The X offset where the crop begins.
+    :keyword y: Optional float. The Y offset where the crop begins.
+    :keyword width: Optional float. The width of the final crop.
+    :keyword height: Optional float. The height of the final crop.
+    """
+    payload = {'x': x, 'y': y, 'width': width, 'height': height}
+    return {key: val for key, val in payload.iteritems() if val}

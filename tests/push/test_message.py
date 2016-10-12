@@ -53,7 +53,8 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    priority=10
                 )
             ),
             {
@@ -95,7 +96,8 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    'priority': 10
                 }
             }
         )
@@ -238,6 +240,24 @@ class TestMessage(unittest.TestCase):
                                 }
                             }
                         }
+                    },
+                    delivery_priority='high',
+                    style={
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    title='A title',
+                    summary='A summary',
+                    sound='cowbell.mp3',
+                    priority=-1,
+                    category='alarm',
+                    visibility=0,
+                    public_notification={
+                        'title': 'A title',
+                        'alert': 'An alert',
+                        'summary': 'A summary'
                     }
                 )
             ),
@@ -285,6 +305,24 @@ class TestMessage(unittest.TestCase):
                                 }
                             }
                         }
+                    },
+                    'delivery_priority': 'high',
+                    'style': {
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    'title': 'A title',
+                    'summary': 'A summary',
+                    'sound': 'cowbell.mp3',
+                    'priority': -1,
+                    'category': 'alarm',
+                    'visibility': 0,
+                    'public_notification': {
+                        'title': 'A title',
+                        'alert': 'An alert',
+                        'summary': 'A summary'
                     }
                 }
             }
@@ -326,7 +364,14 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    style={
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    sound='cowbell.mp3'
                 )
             ),
             {
@@ -349,7 +394,14 @@ class TestMessage(unittest.TestCase):
                                 'add_tag': 'clicked_no'
                             }
                         }
-                    }
+                    },
+                    'style': {
+                        'type': 'big_picture',
+                        'big_picture': 'bigpic.png',
+                        'title': 'A title',
+                        'summary': 'A summary'
+                    },
+                    'sound': 'cowbell.mp3'
                 }
             }
         )
@@ -606,23 +658,21 @@ class TestMessage(unittest.TestCase):
         )
 
     def test_wearable(self):
+        wearable = ua.wearable(
+            background_image='http://example.com/background.png',
+            extra_pages=[{'title': 'title', 'alert': 'wearable alert'}],
+            interactive=ua.interactive(
+                type='a_type',
+                button_actions={'yes': {'add_tag': 'clicked_yes'}}
+            )
+        )
+
+
         self.assertEqual(
             ua.android(
                 alert='android alert',
                 local_only=False,
-                wearable={
-                    'background_image': 'http://example.com/background.png',
-                    'extra_pages': [
-                        {'title': 'title', 'alert': 'wearable alert'}
-                    ],
-                    'interactive': {
-                        'type': 'a_type',
-                        'button_actions': {
-                            'yes': {'add_tag': 'clicked_yes'}
-                        }
-                    }
-
-                }
+                wearable=wearable
             ),
             {
                 'alert': 'android alert',
@@ -639,5 +689,39 @@ class TestMessage(unittest.TestCase):
                         }
                     }
                 }
+            }
+        )
+
+    def test_style(self):
+        style = ua.style(
+            style_type='big_picture',
+            content='bigpic.png',
+            title='A title',
+            summary='A summary'
+        )
+
+        self.assertEqual(
+            style,
+            {
+                'type': 'big_picture',
+                'big_picture': 'bigpic.png',
+                'title': 'A title',
+                'summary': 'A summary'
+            }
+        )
+
+    def test_public_notification(self):
+        public_notification = ua.public_notification(
+            alert='An alert',
+            title='A title',
+            summary='A summary'
+        )
+
+        self.assertEqual(
+            public_notification,
+            {
+                'title': 'A title',
+                'alert': 'An alert',
+                'summary': 'A summary'
             }
         )

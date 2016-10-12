@@ -34,6 +34,9 @@ from .payload import (
     actions,
     interactive,
     in_app,
+    wearable,
+    style,
+    public_notification,
 )
 
 from .schedule import (
