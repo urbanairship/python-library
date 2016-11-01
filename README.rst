@@ -71,33 +71,31 @@ Development
 Testing
 -------
 
-You can test multiple python versions simultaneously using tox. As mentioned above,
-we support python versions 2.6, 2.7, 3.3, and 3.4. Use pyenv to install any missing
-versions onto your machine. Once you have installed each version, you are ready to
-run tests. Simply type::
+You can test multiple python versions simultaneously using tox. Follow these steps
+to get started:
 
-   $ tox
+1. **Install pyenv/python versions**: If you don't have ``pyenv`` installed, go install
+   that now. Once you've done that, install the supported python versions::
 
-And the test runner will begin running tests against each python version. Note that
-the first time running tox will be slow -- it must build a virtual environment for
-each version of python specified in the ``tox.ini`` file. Subsequent executions
-of tox will be much faster.
+      $ pyenv install 2.7.12
+      $ pyenv install 3.3.5
+      $ pyenv install 3.4.5
 
-After installing the necessary python versions using pyenv and running tox, you
-may experience an error similar to the following::
+   There is a more recent version of python 3.3 (3.3.6) available, but for some reason,
+   pyenv will not link the interpreter correctly. Best to stick with 3.3.5.
 
-   ERROR: InvocationError: Failed to get version_info for python3.4: pyenv: python3.4: command not found
+2. **Set global versions of python**: Use pyenv to specify global versions of python::
 
-   The `python3.4' command exists in these Python versions:
-     3.4.4
+      $ pyenv global 2.7.12 3.3.5 3.4.5
 
-To fix this, you must set a shell-specific Python version using the ``pyenv shell`` command.
-For example, to fix the error above, you would use the following command::
+3. **Run tox**: You should now have everything in place to run our tests in multiple
+   python environments::
 
-   pyenv shell 3.4.4:system
+      $ tox
 
-Your tests should now run without error. Note that there is nothing special about the version
-chosen in this example. You may encounter a similar error with python 3.3 or 2.7.
+   Your first time running tox will take awhile -- the tool will create a .tox/ folder
+   that contains a separate environment for each python version. Subsequent runs will
+   be much faster.
 
 
 Questions
