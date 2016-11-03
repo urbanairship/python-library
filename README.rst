@@ -64,39 +64,6 @@ Sending a rich app page to a single iOS device
     ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
     >>> push.send()
 
-Development
-===========
-
-
-Testing
--------
-
-You can test multiple python versions simultaneously using tox. Follow these steps
-to get started:
-
-1. **Install pyenv/python versions**: If you don't have ``pyenv`` installed, go install
-   that now. Once you've done that, install the supported python versions::
-
-      $ pyenv install 2.7.12
-      $ pyenv install 3.3.5
-      $ pyenv install 3.4.5
-
-   There is a more recent version of python 3.3 (3.3.6) available, but for some reason,
-   pyenv will not link the interpreter correctly. Best to stick with 3.3.5.
-
-2. **Set global versions of python**: Use pyenv to specify global versions of python::
-
-      $ pyenv global 2.7.12 3.3.5 3.4.5
-
-3. **Run tox**: You should now have everything in place to run our tests in multiple
-   python environments::
-
-      $ tox
-
-   Your first time running tox will take awhile -- the tool will create a .tox/ folder
-   that contains a separate environment for each python version. Subsequent runs will
-   be much faster.
-
 
 Questions
 =========
