@@ -1,4 +1,4 @@
 requests>=1.2
+six
 nose
 mock
-six

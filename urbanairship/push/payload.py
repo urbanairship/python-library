@@ -567,7 +567,7 @@ def wearable(background_image=None, extra_pages=None, interactive=None):
         'extra_pages': extra_pages,
         'interactive': interactive
     }
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
 
 
 def public_notification(title=None, alert=None, summary=None):
@@ -578,7 +578,7 @@ def public_notification(title=None, alert=None, summary=None):
     :keyword summary: Optional string. The notification summary.
     """
     payload = {'title': title, 'alert': alert, 'summary': summary}
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
 
 
 def style(style_type, content, title=None, summary=None):
@@ -604,7 +604,7 @@ def style(style_type, content, title=None, summary=None):
         'type': style_type, mapping[style_type]: content,
         'title': title, 'summary': summary
     }
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
 
 
 def media_attachment(url, content=None, options=None):
@@ -619,7 +619,7 @@ def media_attachment(url, content=None, options=None):
         resource given by the URL. See :func:`options`.
     """
     payload = {'url': url, 'content': content, 'options': options}
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
 
 
 def content(title=None, subtitle=None, body=None):
@@ -631,21 +631,7 @@ def content(title=None, subtitle=None, body=None):
     :keyword body: String.
     """
     payload = {'title': title, 'subtitle': subtitle, 'options': options}
-    return {key: val for key, val in payload.iteritems() if val != None}
-
-
-def options(crop=None, time=None, hidden=None):
-    """iOS options builder.
-
-    :keyword crop: Optional dictionary. Describes the crop parameters to be
-        used in the thumbnail. See :func:`crop`.
-    :keyword time: Optional float. The frame of the animated resource
-        that should be used in the thumbnail.
-    :keyword hidden: Optional boolean. When True, hide the media_attachment
-        thumbnail.
-    """
-    payload = {'crop': crop, 'time': time, 'hidden': hidden}
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
 
 
 def crop(x=None, y=None, width=None, height=None):
@@ -657,4 +643,4 @@ def crop(x=None, y=None, width=None, height=None):
     :keyword height: Optional float. The height of the final crop.
     """
     payload = {'x': x, 'y': y, 'width': width, 'height': height}
-    return {key: val for key, val in payload.iteritems() if val != None}
+    return {key: val for key, val in iter(payload.items()) if val != None}
