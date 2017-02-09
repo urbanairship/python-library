@@ -72,77 +72,6 @@ class ChannelInfo(object):
         return cls.from_payload(payload[data_attribute], id_key)
 
 
-class DevicePINInfo(object):
-    @classmethod
-    def pin_lookup(cls, airship, device_pin):
-        """Retrieve information about this BlackBerry PIN"""
-        url = common.DEVICE_PIN_URL + device_pin
-        response = airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
-        payload = response.json()
-        try:
-            payload['created'] = datetime.datetime.strptime(
-                payload['created'], '%Y-%m-%d %H:%M:%S'
-            )
-        except:
-            payload['created'] = "UNKNOWN"
-        try:
-            payload['last_registration'] = datetime.datetime.strptime(
-                payload['last_registration'], '%Y-%m-%d %H:%M:%S'
-            )
-        except:
-            payload['last_registration'] = "UNKNOWN"
-        return payload
-
-    def __init__(self, airship):
-        self.airship = airship
-
-    def register(self, pin, pin_alias=None, tags=None):
-        try:
-            int(pin, 16)
-            if len(pin) != 8:
-                raise ValueError
-        except ValueError:
-            print('Device pin must be an 8 digit hex string')
-            raise
-        payload = {}
-        if pin_alias:
-            payload['alias'] = pin_alias
-        if tags:
-            payload['tags'] = tags
-
-        resp = self.airship.request(
-            method='PUT',
-            url=common.DEVICE_PIN_URL + pin,
-            body=json.dumps(payload),
-            content_type='application/json',
-            version=3
-        )
-        logger.info("Registered device pin %s", pin)
-        return resp.json()
-
-    def deactivate(self, pin):
-        try:
-            int(pin, 16)
-            if len(pin) != 8:
-                raise ValueError
-        except ValueError:
-            print('Device pin must be an 8 digit hex string')
-            raise
-        resp = self.airship.request(
-            method='DELETE',
-            url=common.DEVICE_PIN_URL + pin,
-            body=None,
-            version=3
-        )
-        logger.info("Deactived device pin %s", pin)
-        return resp
-
-
 class DeviceTokenList(common.IteratorParent):
     """Iterator for listing all device tokens for this application.
 
@@ -181,18 +110,6 @@ class APIDList(DeviceTokenList):
     next_url = common.APID_URL
     data_attribute = 'apids'
     id_key = 'apid'
-
-
-class DevicePINList(DeviceTokenList):
-    """Iterator for listing all device PINs for this application.
-
-    :ivar limit: Number of entries to fetch in each page request.
-    :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
-
-    """
-    next_url = common.DEVICE_PIN_URL
-    data_attribute = 'device_pins'
-    id_key = 'device_pin'
 
 
 class Feedback(object):

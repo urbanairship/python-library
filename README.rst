@@ -40,15 +40,14 @@ Simple iOS Push
     >>> push.device_types = ua.device_types('ios')
     >>> push.send()
 
-Broadcast to iOS, Android, and BlackBerry devices
+Broadcast to iOS and Android devices
 -------------------------------------------------
     >>> push = airship.create_push()
     >>> push.audience = ua.all_
     >>> push.notification = ua.notification(
     ...     ios=ua.ios(alert='Hello iOS'),
     ...     android=ua.android(alert='Hello Android'),
-    ...     blackberry=ua.blackberry(alert='Hello BlackBerry'))
-    >>> push.device_types = ua.device_types('ios', 'android', 'blackberry')
+    >>> push.device_types = ua.device_types('ios', 'android')
     >>> push.send()
 
 Sending a rich app page to a single iOS device
@@ -78,7 +77,7 @@ History
 * 0.8 Support for Reports APIs.
 * 0.7 Support for Python 3, major refactoring
 * 0.6 Major refactoring, support for push api v3
-* 0.5 Added Android, Blackberry, Rich Push, and scheduled notifications
+* 0.5 Added Android, Rich Push, and scheduled notifications
 * 0.4 Added batch push
 * 0.3 Added deregister, device token list, other minor improvements
 * 0.2 Added tags, broadcast, feedback

@@ -32,11 +32,6 @@ class TestAudience(unittest.TestCase):
                 {'device_token': '0' * 64}
             ),
             (
-                ua.device_pin,
-                '12345678',
-                {'device_pin': '12345678'}
-            ),
-            (
                 ua.apid,
                 '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
                 {'apid': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
@@ -80,8 +75,6 @@ class TestAudience(unittest.TestCase):
             (ua.device_token, 'f' * 65),
             (ua.device_token, '0123'),
             (ua.device_token, 'X' * 64),
-            (ua.device_pin, '1234567'),
-            (ua.device_pin, 'x' * 8),
             (ua.apid, 'foobar'),
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef33'),
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
