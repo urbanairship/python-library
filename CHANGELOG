@@ -1,3 +1,7 @@
+1.x.x tbd
+--------------------
+- Removed Blackberry support
+
 1.0.0
 --------------------
 - Added support for In-App Messaging.
@@ -84,6 +88,7 @@
 - moved support from v1 to v3 for:
   * sending to device tokens and apids
   * device token and apid lookup and listing
+  * blackberry pin lookup
 - added support for sending to channels
 - added channels lookup and listing
 - added support for amazon device type
