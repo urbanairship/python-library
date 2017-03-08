@@ -64,18 +64,18 @@ single piece of text:
 You can override the payload with platform-specific values as well.
 
 .. automodule:: urbanairship.push.payload
-   :members: notification, ios, android, blackberry, wns_payload, mpns_payload
+   :members: notification, ios, android, wns_payload, mpns_payload
 
 In-App Message
 --------------
 
-The in-app message payload is an object assigned to the in_app attribute 
-on a push object. Aside from the display and display_type attributes, 
-which specify the appearance of the in-app message, the in_app object looks 
+The in-app message payload is an object assigned to the in_app attribute
+on a push object. Aside from the display and display_type attributes,
+which specify the appearance of the in-app message, the in_app object looks
 very similar to a push object.  In-app messages do not require push.notification to be set:
 
 .. code-block:: python
-    
+
     push.in_app = ua.in_app(
       alert="Alert Message",
       display_type="banner"
@@ -167,7 +167,7 @@ types you wish to target, either with a list of strings:
 
 .. code-block:: python
 
-   push.device_types = ua.device_types('ios', 'blackberry')
+   push.device_types = ua.device_types('ios', 'android')
 
 or with the ``all_`` shortcut.
 

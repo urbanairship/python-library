@@ -1,3 +1,7 @@
+1.x.x tbd
+--------------------
+- Removed Blackberry support
+
 1.0.0
 --------------------
 - Added support for In-App Messaging.
@@ -102,7 +106,7 @@
 --------------------
 0.6.3
 --------------------
-- added extras to Rich Push message creation  
+- added extras to Rich Push message creation
 - removed deprecated last_seen location argument
 - fixed bug that didn't allow iOS alerts to be dictionaries
 

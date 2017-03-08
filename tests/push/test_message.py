@@ -422,41 +422,6 @@ class TestMessage(unittest.TestCase):
             }
         )
 
-    def test_blackberry(self):
-        self.assertEqual(
-            ua.notification(
-                blackberry=ua.blackberry(
-                    alert='Hello',
-                )
-            ),
-            {
-                'blackberry': {
-                    'body': 'Hello',
-                    'content_type': 'text/plain',
-                }
-            }
-        )
-
-        self.assertEqual(
-            ua.notification(
-                blackberry=ua.blackberry(
-                    body='Hello',
-                    content_type='text/html',
-                )
-            ),
-            {
-                'blackberry': {
-                    'body': 'Hello',
-                    'content_type': 'text/html',
-                }
-            }
-        )
-        self.assertRaises(
-            ValueError,
-            ua.blackberry,
-            body='Hello'
-        )
-
     def test_wns_payload(self):
         self.assertEqual(
             ua.notification(

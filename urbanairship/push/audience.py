@@ -1,7 +1,6 @@
 import re
 
 DEVICE_TOKEN_FORMAT = re.compile(r'^[0-9a-fA-F]{64}$')
-PIN_FORMAT = re.compile(r'^[0-9a-fA-F]{8}$')
 UUID_FORMAT = re.compile(
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}'
     r'-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
@@ -37,13 +36,6 @@ def device_token(token):
     if not DEVICE_TOKEN_FORMAT.match(token):
         raise ValueError('Invalid device token')
     return {'device_token': token.upper().strip()}
-
-
-def device_pin(pin):
-    """Select a single BlackBerry PIN"""
-    if not PIN_FORMAT.match(pin):
-        raise ValueError('Invalid BlackBerry PIN')
-    return {'device_pin': pin.lower().strip()}
 
 
 def apid(uuid):

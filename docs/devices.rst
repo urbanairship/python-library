@@ -4,7 +4,7 @@ Retrieving Device Information
 Channel Listing
 ---------------
 
-Device lists are fetched by instantiating an iterator object 
+Device lists are fetched by instantiating an iterator object
 using :py:class:`ChannelList`.
 
 .. code-block:: python
@@ -24,7 +24,7 @@ using :py:class:`ChannelList`.
 
 Channel Lookup
 --------------
-     
+
 Device metadata is fetched for a specific channel by using
 :py:class:`ChannelLookup:lookup`.
 
@@ -42,72 +42,11 @@ Device metadata is fetched for a specific channel by using
    :noindex:
 
 
-Blackberry PIN Register
------------------------
-
-Register a PIN with the application. This will mark the PIN as active in
-the system. You can also set up an alias and tags for the pin.
-
-.. code-block:: python
-
-    import urbanairship as ua
-    airship = ua.Airship(app_key, app_secret)
-    device_pin = ua.DevicePINInfo(airship)
-    resp = device_pin.register(
-        'device_pin',
-        'pin_alias',
-        ['tag1', 'tag2']
-    )
-    print(resp)
-
-.. note::
-
-    ``device_pin`` must be an 8 digit hex string.
-    ``pin_alias`` and ``tags`` are optional parameters for this command.
-    If no ``pin_alias`` is provided, any existing alias will be removed from the device
-    record. To empty the tag set, send an empty array of tags. If the tags
-    array is missing from the request, the tags will not be modified.
-
-
-Blackberry PIN Lookup
----------------------
-
-Device metadata is fetched by instantiating a lookup for a specific
-device PIN by using :py:class:`DevicePINInfo:pin_lookup`
-
-.. code-block:: python
-
-   import urbanairship as ua
-   airship = ua.Airship(app_key, app_secret)
-
-   device_pin_info = ua.DevicePINInfo.pin_lookup(airship, device_pin)
-   print (device_pin_info) 
-
-.. automodule:: urbanairship.devices.devicelist
-   :members: DevicePINInfo
-   :noindex:
-
-
-Blackberry PIN Deactivate
--------------------------
-
-Deactive a Blackberry pin for the application.
-
-.. code-block:: python
-
-    import urbanairship as ua
-    airship = ua.Airship(app_key, app_secret)
-    device_pin_info = ua.DevicePINInfo(airship)
-    resp = device_pin_info.deactivate('12345678')
-    print(resp)
-
-
 Device Listing
 --------------
 
 Device lists are fetched by instantiating an iterator object for each
-type of device. The available iterators are :py:class:`DeviceTokenList`,
-:py:class:`APIDList`, and :py:class:`DevicePINList`.
+type of device. The available iterators are :py:class:`DeviceTokenList` and :py:class:`APIDList`.
 
 .. code-block:: python
 
@@ -118,7 +57,7 @@ type of device. The available iterators are :py:class:`DeviceTokenList`,
       print (dt.device_token, dt.tags or [], dt.active)
 
 .. automodule:: urbanairship.devices.devicelist
-   :members: DeviceTokenList, DevicePINList, APIDList, DeviceInfo
+   :members: DeviceTokenList, APIDList, DeviceInfo
    :noindex:
 
 Feedback
