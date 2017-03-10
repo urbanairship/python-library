@@ -64,7 +64,7 @@ single piece of text:
 You can override the payload with platform-specific values as well.
 
 .. automodule:: urbanairship.push.payload
-   :members: notification, ios, android, wns_payload, mpns_payload
+   :members: notification, ios, android, wns_payload
 
 In-App Message
 --------------

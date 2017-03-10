@@ -477,61 +477,6 @@ class TestMessage(unittest.TestCase):
         self.assertRaises(ValueError, ua.wns_payload, alert='Hello',
                           tile='Foo')
 
-    def test_mpns_payload(self):
-        self.assertEqual(
-            ua.notification(
-                mpns=ua.mpns_payload(
-                    alert='Hello',
-                )
-            ),
-            {
-                'mpns': {
-                    'alert': 'Hello',
-                }
-            }
-        )
-
-        self.assertEqual(
-            ua.notification(
-                mpns=ua.mpns_payload(
-                    toast={
-                        'key': 'Hello'
-                    },
-                )
-            ),
-            {
-                'mpns': {
-                    'toast': {
-                        'key': 'Hello'
-                    },
-                }
-            }
-        )
-
-        self.assertEqual(
-            ua.notification(
-                mpns=ua.mpns_payload(
-                    tile={
-                        'key': 'Hello'
-                    },
-                )
-            ),
-            {
-                'mpns': {
-                    'tile': {
-                        'key': 'Hello'
-                    },
-                }
-            }
-        )
-
-        self.assertRaises(
-            ValueError,
-            ua.mpns_payload,
-            alert='Hello',
-            tile='Foo'
-        )
-
     def test_rich_push(self):
         self.assertEqual(
             ua.message(

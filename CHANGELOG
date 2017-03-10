@@ -1,6 +1,6 @@
-1.x.x tbd
+1.1.0
 --------------------
-- Removed Blackberry support
+- Removed Blackberry and MPNS support
 
 1.0.0
 --------------------
