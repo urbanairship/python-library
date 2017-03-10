@@ -42,11 +42,6 @@ class TestAudience(unittest.TestCase):
                 {'wns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
-                ua.mpns,
-                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
-                {'mpns': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
-            ),
-            (
                 ua.tag,
                 'test',
                 {'tag': 'test'}
@@ -79,7 +74,6 @@ class TestAudience(unittest.TestCase):
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef33'),
             (ua.apid, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
             (ua.wns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
-            (ua.mpns, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef'),
         )
 
         for selector, value in selectors:

@@ -52,13 +52,6 @@ def wns(uuid):
     return {'wns': uuid.lower().strip()}
 
 
-def mpns(uuid):
-    """Select a single Windows Phone 8 APID"""
-    if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid mpns')
-    return {'mpns': uuid.lower().strip()}
-
-
 def tag(tag):
     """Select a single tag."""
     return {'tag': tag}
