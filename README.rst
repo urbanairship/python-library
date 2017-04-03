@@ -33,7 +33,7 @@ Simple iOS Push
 ---------------
 
     >>> import urbanairship as ua
-    >>> airship = ua.Airship('application_key','master_secret')
+    >>> airship = ua.Airship('application_key', 'master_secret')
     >>> push = airship.create_push()
     >>> push.audience = ua.or_(ua.alias('adam'), ua.ios_channel('some_ios_channel'))
     >>> push.notification = ua.notification(alert='Hello')
@@ -41,7 +41,7 @@ Simple iOS Push
     >>> push.send()
 
 Broadcast to iOS and Android devices
--------------------------------------------------
+------------------------------------
     >>> push = airship.create_push()
     >>> push.audience = ua.all_
     >>> push.notification = ua.notification(
@@ -53,7 +53,7 @@ Broadcast to iOS and Android devices
 Sending a rich app page to a single iOS device
 ----------------------------------------------
     >>> import urbanairship as ua
-    >>> airship = ua.Airship('application_key','master_secret')
+    >>> airship = ua.Airship('application_key', 'master_secret')
     >>> push = airship.create_push()
     >>> push.audience = ua.ios_channel('some_ios_channel')
     >>> push.notification = ua.notification(alert='Hello')
@@ -63,6 +63,16 @@ Sending a rich app page to a single iOS device
     ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
     >>> push.send()
 
+Web Push to a tag
+-----------------
+
+    >>> import urbanairship as ua
+    >>> airship = ua.Airship('application_key', 'master_secret')
+    >>> push = airship.create_push()
+    >>> push.audience = ua.tag('web_tag')
+    >>> push.notification = ua.notification(alert='Hello')
+    >>> push.device_types = ua.device_types('web')
+    >>> push.send()
 
 Questions
 =========

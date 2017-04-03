@@ -382,8 +382,26 @@ class TestChannelTags(unittest.TestCase):
             ]
         )
 
+    def test_web_audience(self):
+        self.channel_tags.set_audience(web='web_audience')
+        self.channel_tags.add('group_name', 'tag4')
+        result = self.channel_tags.send()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    'ok': True,
+                }
+            ]
+        )
+
     def test_all_audiences(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience('ios_audience',
+                                       'android_audience',
+                                       'amazon_audience',
+                                       'web_audience'
+                                       )
         self.channel_tags.add('group_name', 'tag1')
         result = self.channel_tags.send()
 
@@ -397,7 +415,12 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_add_and_remove(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience(
+            'ios_audience',
+            'android_audience',
+            'amazon_audience',
+            'web_audience'
+        )
         self.channel_tags.add('group_name', 'tag1')
         self.channel_tags.remove('group2_name', 'tag2')
         result = self.channel_tags.send()
@@ -412,7 +435,11 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_add_and_remove_and_set(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience(
+            'ios_audience',
+            'android_audience',
+            'amazon_audience'
+        )
         self.channel_tags.add('group_name', 'tag1')
         self.channel_tags.remove('group2_name', 'tag2')
         self.channel_tags.set('group3_name', 'tag3')
@@ -423,7 +450,12 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_remove_and_set(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience(
+            'ios_audience',
+            'android_audience',
+            'amazon_audience'
+            'web_audience'
+        )
         self.channel_tags.remove('group2_name', 'tag2')
         self.channel_tags.set('group3_name', 'tag3')
 
@@ -433,7 +465,11 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_set(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience('ios_audience',
+                                       'android_audience',
+                                       'amazon_audience',
+                                       'web_audience'
+                                       )
         self.channel_tags.set('group3_name', 'tag3')
         result = self.channel_tags.send()
 
@@ -447,7 +483,11 @@ class TestChannelTags(unittest.TestCase):
         )
 
     def test_tag_lists(self):
-        self.channel_tags.set_audience('ios_audience', 'android_audience', 'amazon_audience')
+        self.channel_tags.set_audience(
+            'ios_audience',
+            'android_audience',
+            'amazon_audience'
+        )
         self.channel_tags.set('group3_name', ['tag1', 'tag2', 'tag3'])
         result = self.channel_tags.send()
 

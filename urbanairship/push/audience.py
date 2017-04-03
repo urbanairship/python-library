@@ -45,6 +45,13 @@ def apid(uuid):
     return {'apid': uuid.lower().strip()}
 
 
+def channel(uuid):
+    """Select a single Web Channel"""
+    if not UUID_FORMAT.match(uuid):
+        raise ValueError('Invalid Channel')
+    return {'channel': uuid.lower().strip()}
+
+
 def wns(uuid):
     """Select a single Windows 8 APID"""
     if not UUID_FORMAT.match(uuid):
@@ -88,6 +95,7 @@ def and_(*children):
 
     """
     return {'and': [child for child in children]}
+
 
 def not_(child):
     """Select devices that does not match the given selectors.

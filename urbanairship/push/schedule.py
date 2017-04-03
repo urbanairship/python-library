@@ -7,6 +7,7 @@ def scheduled_time(timestamp):
 
     return {'scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
 
+
 def local_scheduled_time(timestamp):
     """Specify a time for the delivery of this push in device local time.
 
@@ -15,4 +16,3 @@ def local_scheduled_time(timestamp):
     """
 
     return {'local_scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
-

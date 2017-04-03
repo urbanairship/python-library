@@ -50,6 +50,14 @@ Complex audience with platform specifics
       extra={'articleid': '12345'},
       summary='This is a short message summary',
       )
+      web=ua.web(
+      alert='We are in your browser!',
+      title='Hello Sunshine',
+      icon={
+            'url': 'https://www.example.com/Sunshine_icon.png'
+            },
+      extra={'article_id': '67890'}
+      )
    )
    push.device_types = ua.device_types('ios', 'android', 'amazon')
    push.send()
@@ -82,6 +90,27 @@ Single iOS Rich Push with notification
    push.device_types = ua.device_types('ios')
    push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
    push.send()
+
+
+Web Push to a device with full web payload
+------------------------------------------
+
+.. code-block:: python
+
+    push = airship.create_push()
+    push.audience = ua.channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
+    push.notification = ua.notification(
+        alert="We are in your browser now!"
+        web=ua.web(
+            icon={
+            'url': 'https://www.example.com/Sunshine_icon.png'
+            },
+	        title='Hello Sunshine',
+	        extra={'article_id': '12345'},
+        )
+    )
+    push.device_types = ua.device_types('web')
+    push.send()
 
 
 Rich Push with extra and without notification

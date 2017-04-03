@@ -3,7 +3,7 @@ Tags
 
 This reference covers tag operations on channels.
 
-For more information, see: http://docs.urbanairship.com/api/ua.html#tags.
+For more information, see: https://docs.urbanairship.com/api/ua/#api-tags.
 
 
 ChannelTags
@@ -79,7 +79,8 @@ Add one or more channels to a particular tag. For more information, see
    devices = ua.Tag(airship, 'working_tag')
    devices.add(
        ios_channels=['ios_channel_id'],
-       android_channels=['android_channel_id', 'android_channel_id_2']
+       android_channels=['android_channel_id', 'android_channel_id_2'],
+       channels=['channel_id_3', 'channel_id_4']
    )
 
 .. automodule:: urbanairship.devices.tag
@@ -99,7 +100,8 @@ see: `documentation on adding and removing devices from a tag <adding>`_.
    devices = ua.Tag(airship, 'working_tag')
    devices.remove(
        ios_channels=['ios_channel_id'],
-       android_channels=['android_channel_id', 'android_channel_id_2']
+       android_channels=['android_channel_id', 'android_channel_id_2'],
+       channels=['channel_id_3', 'channel_id_4']
    )
 
 .. automodule:: urbanairship.devices.tag
@@ -149,6 +151,7 @@ Note:
    send_batch.add_amazon_channel(
        'amazon_channel_id', ['tag11', 'portland_OR']
    )
+   send_batch.add_channel('channel_id', ['tag13', 'tag14'])
    send_batch.send_request()
 
 .. automodule:: urbanairship.devices.tag
@@ -158,5 +161,5 @@ Note:
 
 .. _adding: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
 .. _removing: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
-.. _deleting: http://docs.urbanairship.com/api/ua.html#deleting-a-tag
+.. _deleting: https://docs.urbanairship.com/api/ua/#api-tags
 .. _batch: http://docs.urbanairship.com/api/ua.html#batch-modification-of-tags

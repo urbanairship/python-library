@@ -50,6 +50,54 @@ class TestPush(unittest.TestCase):
             }
         )
 
+    def test_web_push(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Hello',
+            web={
+                'title': 'This is a title.',
+                'icon': {'url': 'https://example.com/icon.png'},
+                'extra': {'attribute': 'id'}
+            }
+        )
+        p.device_types = 'web'
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': 'web',
+                'notification': {
+                    'alert': 'Hello',
+                    'web': {
+                        'title': 'This is a title.',
+                        'icon': {'url': 'https://example.com/icon.png'},
+                        'extra': {'attribute': 'id'}
+                    },
+                }
+            }
+        )
+
+    def test_web_push_to_channel(self):
+        p = ua.Push(None)
+        p.audience = ua.channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
+        p.notification = ua.notification(
+            alert='Hello individual'
+        )
+        p.device_types= 'web'
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': {
+                    'channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
+                },
+                'notification': {'alert': 'Hello individual'},
+                'device_types': 'web'
+            }
+        )
+
     def test_actions(self):
         p = ua.Push(None)
         p.audience = ua.all_

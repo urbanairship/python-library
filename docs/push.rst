@@ -167,7 +167,7 @@ types you wish to target, either with a list of strings:
 
 .. code-block:: python
 
-   push.device_types = ua.device_types('ios', 'android')
+   push.device_types = ua.device_types('ios', 'android', 'web')
 
 or with the ``all_`` shortcut.
 

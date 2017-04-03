@@ -1,3 +1,10 @@
+1.2.0
+--------------------
+- Added support for Web Push
+    * Web platform override
+    * Push to channel
+- Added support for web device type
+
 1.1.0
 --------------------
 - Removed Blackberry and MPNS support
@@ -40,68 +47,68 @@
 --------------------
 0.7.4
 --------------------
-- fix missing reports module in package
+- Fix missing reports module in package
 
 --------------------
 0.7.3
 --------------------
-- added support for named user API
-    * associate a channel id with a named user
-    * disassociate a channel id with a named user
-    * look up information for a named user
-    * add, remove, and set tags to a named user
-- added support for per-push reporting
-    * lookup analytics details for push IDs
-    * lookup time series data for a push ID with precision and range
-- added support for Android wearable key
-- added support for Apple Watch title and category keys
+- Added support for named user API
+    * Associate a channel id with a named user
+    * Disassociate a channel id with a named user
+    * Look up information for a named user
+    * Add, remove, and set tags to a named user
+- Added support for per-push reporting
+    * Lookup analytics details for push IDs
+    * Lookup time series data for a push ID with precision and range
+- Added support for Android wearable key
+- Added support for Apple Watch title and category keys
 
 --------------------
 0.7.2
 --------------------
-- added support for segments API
-    * list all segments
-    * lookup single segment information
-    * create new segment
-    * modify existing segment
-    * delete an existing segment
-- added support for Channel Uninstall API
-- added support for interactive notifications
-- added support for the category field
-- added support for icons and options parameters for the rich push object
+- Added support for segments API
+    * List all segments
+    * Lookup single segment information
+    * Create new segment
+    * Modify existing segment
+    * Delete an existing segment
+- Added support for Channel Uninstall API
+- Added support for interactive notifications
+- Added support for the category field
+- Added support for icons and options parameters for the rich push object
 
 --------------------
 0.7.1
 --------------------
-- version bump for packaging fix
+- Version bump for packaging fix
 
 --------------------
 0.7.0
 --------------------
-- added Python 3 compatibility
-- removed support for v1 endpoints:
+- Added Python 3 compatibility
+- Removed support for v1 endpoints:
   * /push/batch/
   * /push/broadcast/
   * /airmail/send/
   * /airmail/send/broadcast
-- removed device token registration
-- moved support from v1 to v3 for:
-  * sending to device tokens and apids
-  * device token and apid lookup and listing
-  * blackberry pin lookup
-- added support for sending to channels
-- added channels lookup and listing
-- added support for amazon device type
-- added push to local time
-- added actions
-- added support for the tag api:
-  * tag listing
-  * adding and removing devices from tags
-  * deleting tags
-  * tag batch modification
-- added support for expiry/TTL
-- improved date parsing in feedback response
-- updated docs
+- Removed device token registration
+- Moved support from v1 to v3 for:
+  * Sending to device tokens and apids
+  * Device token and apid lookup and listing
+  * Blackberry pin lookup
+- Added support for sending to channels
+- Added channels lookup and listing
+- Added support for amazon device type
+- Added push to local time
+- Added actions
+- Added support for the tag api:
+  * Tag listing
+  * Adding and removing devices from tags
+  * Deleting tags
+  * Tag batch modification
+- Added support for expiry/TTL
+- Improved date parsing in feedback response
+- Updated docs
 
 --------------------
 0.6.3

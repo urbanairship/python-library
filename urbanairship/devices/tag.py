@@ -108,7 +108,7 @@ class BatchTag(object):
 
     def __init__(self, airship):
         warnings.warn(
-            'The BatchTag object has been deprecated. Please use ChannelTags '+
+            'The BatchTag object has been deprecated. Please use ChannelTags ' +
             'instead.',
             DeprecationWarning
         )
@@ -124,6 +124,7 @@ class BatchTag(object):
 
     def add_amazon_channel(self, channel, tags):
         self.changelist.append({'amazon_channel': channel, 'tags': tags})
+
 
     def send_request(self):
         """Issue API Request
@@ -153,13 +154,15 @@ class ChannelTags(object):
         self.remove_group = {}
         self.set_group = {}
 
-    def set_audience(self, ios=None, android=None, amazon=None):
+    def set_audience(self, ios=None, android=None, amazon=None, web=None):
         if ios is not None:
             self.audience['ios_channel'] = ios
         if android is not None:
             self.audience['android_channel'] = android
         if amazon is not None:
             self.audience['amazon_channel'] = amazon
+        if web is not None:
+            self.audience['channel'] = web
 
     def add(self, group_name, tags):
         self.add_group[group_name] = tags
