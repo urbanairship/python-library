@@ -65,7 +65,7 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 def ios(alert=None, badge=None, sound=None, content_available=False,
         extra=None, expiry=None, interactive=None, category=None, title=None,
         mutable_content=None, subtitle=None, media_attachment=None,
-        priority=None):
+        priority=None, collapse_id=None):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary.
@@ -96,6 +96,11 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         `Media Attachment <https://docs.urbanairship.com/api/ua.html#media-attachment>`_.
         Specifies a media attachment to be handled by the UA Media Attachment
         Extension.
+    :keyword collapse_id: Optional, a string. When there is a newer message
+        that renders an older, related message irrelevant to the client app,
+        the new message replaces the older message with the same collapse_id.
+        Similar to the GCM collapse_key. The value of this key must not exceed
+        64 bytes. iOS 10 or above.
 
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'}) # doctest: +SKIP
@@ -143,6 +148,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         if priority not in {10, 5}:
             raise ValueError('iOS priority must be set to one of 5 or 10.')
         payload['priority'] = priority
+    if collapse_id is not None:
+        if not (isinstance(collapse_id, string_type)):
+            raise ValueError('iOS collapse_id must be a string')
+        payload['collapse_id'] = collapse_id
 
     return payload
 

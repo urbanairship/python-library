@@ -1,12 +1,11 @@
-1.2.0
+1.1.0
 --------------------
-- Added support for Web Push
+- Added support for Web Notify
     * Web platform override
     * Push to channel
 - Added support for web device type
-
-1.1.0
---------------------
+- Added support for optional iOS 10 extra:
+    * Collapse ID
 - Removed Blackberry and MPNS support
 
 1.0.0

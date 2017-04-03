@@ -54,7 +54,8 @@ class TestMessage(unittest.TestCase):
                             }
                         }
                     },
-                    priority=10
+                    priority=10,
+                    collapse_id='a'
                 )
             ),
             {
@@ -97,7 +98,8 @@ class TestMessage(unittest.TestCase):
                             }
                         }
                     },
-                    'priority': 10
+                    'priority': 10,
+                    'collapse_id': 'a'
                 }
             }
         )
