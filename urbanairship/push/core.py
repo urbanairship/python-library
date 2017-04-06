@@ -54,7 +54,7 @@ class Push(object):
 
         data = response.json()
         logger.info('Push successful. push_ids: %s',
-                    ', '.join(data['push_ids']))
+                    ', '.join(data.get('push_ids', [])))
 
         return PushResponse(response)
 
