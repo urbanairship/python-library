@@ -1,4 +1,5 @@
-1.1.0
+--------------------
+2.0.0
 --------------------
 - Added support for Web Notify
     * Web platform override
@@ -7,7 +8,9 @@
 - Added support for optional iOS 10 extra:
     * Collapse ID
 - Removed Blackberry and MPNS support
+- Added logging enhancement
 
+--------------------
 1.0.0
 --------------------
 - Added support for In-App Messaging.
@@ -16,11 +19,13 @@
     * Subtitle
     * Media attachment
 
+--------------------
 0.8.1
 --------------------
 - Added missing module to the required dependencies.
 - Updated README information for version 8.
 
+____________________
 0.8.0
 --------------------
 - Added support for reports including:

@@ -40,7 +40,7 @@ from .payload import (
 
 from .schedule import (
     scheduled_time,
-    local_scheduled_time
+    local_scheduled_time,
 )
 
 # Common selector for audience & device_types
