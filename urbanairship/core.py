@@ -11,9 +11,14 @@ logger = logging.getLogger('urbanairship')
 
 class Airship(object):
 
-    def __init__(self, key, secret):
+    def __init__(self, key, secret, timeout=None):
+        """
+        :param timeout: (optional) Float describing the timeout of 
+                        the request (in seconds).
+        """
         self.key = key
         self.secret = secret
+        self.timeout = timeout
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
@@ -47,7 +52,8 @@ class Airship(object):
         )
 
         response = self.session.request(
-            method, url, data=body, params=params, headers=headers)
+            method, url, data=body, params=params, headers=headers,
+            timeout=self.timeout)
 
         logger.debug(
             'Received %s response. Headers:\n\t%s\nBody:\n\t%s',
