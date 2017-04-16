@@ -60,7 +60,7 @@ class AirshipFailure(Exception):
         """
 
         try:
-            payload = response.json()
+            payload = response.json
             error = payload.get('error')
             error_code = payload.get('error_code')
             details = payload.get('details')
