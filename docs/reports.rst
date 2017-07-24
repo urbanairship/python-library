@@ -61,14 +61,6 @@ For more information, see `the API documentation on Push Reports
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
 
-.. Hiding the perpush endpoints for now per GAG-705 (until rate limiting is in place)
-
-   Per Push Reporting
-   ==================
-   Retrieve data specific to the performance of an individual push.
-   For more information, see `the API documentation on per push reporting
-   <http://docs.urbanairship.com/api/ua.html#per-push-reporting>`_
-
 
 Response Report
 ===============
