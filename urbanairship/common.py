@@ -62,7 +62,7 @@ class AirshipFailure(Exception):
             payload = response.json()
             error = payload.get('error')
             error_code = payload.get('error_code')
-            details = json.dumps(payload.get('details'))
+            details = json.dumps(payload.get('details').decode(encoding='UTF-8'))
         except ValueError, TypeError:
             error = response.reason
             error_code = response.status_code
