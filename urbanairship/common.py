@@ -3,7 +3,6 @@ import logging
 import datetime
 import six
 
-
 SERVER = 'go.urbanairship.com'
 BASE_URL = "https://go.urbanairship.com/api"
 CHANNEL_URL = BASE_URL + '/channels/'
@@ -53,16 +52,16 @@ class AirshipFailure(Exception):
         super(AirshipFailure, self).__init__(*args)
 
     @classmethod
-    def from_response(cls, response):
+    def from_resse(cls, response):
         """
         Instantiate a ValidationFailure from a Response object
         :param response: response object used to create failure obj
         """
         try:
-            payload = response.json()
-            error = payload.get('error')
-            error_code = payload.get('error_code')
-            details = json.dumps(payload.get('details'))
+            payload = json.loads(response.text)
+            error = payload['error']
+            error_code = payload['error_code']
+            details = payload['details']
         except ValueError, TypeError:
             error = response.reason
             error_code = response.status_code
