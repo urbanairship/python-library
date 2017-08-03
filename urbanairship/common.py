@@ -52,7 +52,7 @@ class AirshipFailure(Exception):
         super(AirshipFailure, self).__init__(*args)
 
     @classmethod
-    def from_resse(cls, response):
+    def from_response(cls, response):
         """
         Instantiate a ValidationFailure from a Response object
         :param response: response object used to create failure obj
