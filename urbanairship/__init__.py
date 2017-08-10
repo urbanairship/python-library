@@ -44,6 +44,7 @@ from .push import (
 from .devices import (
     ChannelList,
     ChannelInfo,
+    OpenChannel,
     DeviceTokenList,
     APIDList,
     Feedback,
