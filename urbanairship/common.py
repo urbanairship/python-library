@@ -58,7 +58,7 @@ class AirshipFailure(Exception):
         :param response: response object used to create failure obj
         """
         try:
-            payload = json.loads(response.text)
+            payload = response.json()
             error = payload['error']
             error_code = payload['error_code']
             details = payload['details']
