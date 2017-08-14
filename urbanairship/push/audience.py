@@ -52,6 +52,13 @@ def channel(uuid):
     return {'channel': uuid.lower().strip()}
 
 
+def open_channel(uuid):
+    """Select a single Open Channel"""
+    if not UUID_FORMAT.match(uuid):
+        raise ValueError('Invalid Open Channel')
+    return {'open_channel': uuid.lower().strip()}
+
+
 def wns(uuid):
     """Select a single Windows 8 APID"""
     if not UUID_FORMAT.match(uuid):
