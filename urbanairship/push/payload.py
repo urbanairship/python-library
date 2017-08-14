@@ -150,7 +150,7 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     if media_attachment is not None:
         payload['media_attachment'] = media_attachment
     if priority is not None:
-        if priority not in {10, 5}:
+        if priority not in set((10, 5)):
             raise ValueError('iOS priority must be set to one of 5 or 10.')
         payload['priority'] = priority
     if collapse_id is not None:
@@ -233,7 +233,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
             raise ValueError('Android wearable must be a dictionary')
         payload['wearable'] = wearable
     if delivery_priority is not None:
-        if delivery_priority not in {'high', 'normal'}:
+        if delivery_priority not in set(('high', 'normal')):
             raise ValueError(
                 "delivery_priority must be set to one of 'high' or 'normal'."
             )
@@ -608,7 +608,9 @@ def wearable(background_image=None, extra_pages=None, interactive=None):
         'extra_pages': extra_pages,
         'interactive': interactive
     }
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
 
 
 def public_notification(title=None, alert=None, summary=None):
@@ -619,7 +621,9 @@ def public_notification(title=None, alert=None, summary=None):
     :keyword summary: Optional string. The notification summary.
     """
     payload = {'title': title, 'alert': alert, 'summary': summary}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
 
 
 def style(style_type, content, title=None, summary=None):
@@ -645,7 +649,9 @@ def style(style_type, content, title=None, summary=None):
         'type': style_type, mapping[style_type]: content,
         'title': title, 'summary': summary
     }
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
 
 
 def media_attachment(url, content=None, options=None):
@@ -660,7 +666,9 @@ def media_attachment(url, content=None, options=None):
         resource given by the URL. See :func:`options`.
     """
     payload = {'url': url, 'content': content, 'options': options}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
 
 
 def content(title=None, subtitle=None, body=None):
@@ -672,7 +680,9 @@ def content(title=None, subtitle=None, body=None):
     :keyword body: String.
     """
     payload = {'title': title, 'subtitle': subtitle, 'options': options}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
 
 
 def crop(x=None, y=None, width=None, height=None):
@@ -684,4 +694,6 @@ def crop(x=None, y=None, width=None, height=None):
     :keyword height: Optional float. The height of the final crop.
     """
     payload = {'x': x, 'y': y, 'width': width, 'height': height}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return dict(
+        (key, val) for key, val in iter(payload.items()) if val != None
+    )
