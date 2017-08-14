@@ -64,8 +64,7 @@ class TestOpenChannel(unittest.TestCase):
         channel.address = address
         channel.opt_in = True
 
-        with self.assertRaises(ValueError):
-            channel.create(airship)
+        self.assertRaises(ValueError, channel.create, airship)
 
     def test_create_channel_requires_address(self):
         platform = 'a_platform'
@@ -76,8 +75,7 @@ class TestOpenChannel(unittest.TestCase):
         channel.open_platform = platform
         channel.opt_in = True
 
-        with self.assertRaises(ValueError):
-            channel.create(airship)
+        self.assertRaises(ValueError, channel.create, airship)
 
     def test_create_channel_requires_opt_in(self):
         address = 'some_address'
@@ -89,8 +87,7 @@ class TestOpenChannel(unittest.TestCase):
         channel.address = address
         channel.open_platform = platform
 
-        with self.assertRaises(ValueError):
-            channel.create(airship)
+        self.assertRaises(ValueError, channel.create, airship)
 
     def test_create_channel_requires_set_tag_if_tags(self):
         address = 'some_address'
@@ -104,5 +101,4 @@ class TestOpenChannel(unittest.TestCase):
 
         channel.tags = ['some_tags', 'another_one']
 
-        with self.assertRaises(ValueError):
-            channel.create(airship)
+        self.assertRaises(ValueError, channel.create, airship)
