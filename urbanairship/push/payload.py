@@ -190,7 +190,7 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword priority: Optional integer between -2 and 2. An Android L feature
         that determines location sort order.
     :keyword category: Optional string. An Android category.
-    :keyword visibility: Option integer between -1 and 1.
+    :keyword visibility: Optional integer between -1 and 1.
     :keyword public_notification: Optional object. A notification to show on
         the lock screen instead instead of the redacted one.
     :keyword notification_tag: Optional string. A string identifier used to 
