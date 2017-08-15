@@ -27,7 +27,7 @@ class TestOpenChannel(unittest.TestCase):
             channel.open_platform = platform
             channel.opt_in = True
 
-            channel.create(airship, hydrate=False)
+            channel.create(airship)
 
             self.assertEqual(channel.channel_id, channel_id)
 
@@ -51,7 +51,7 @@ class TestOpenChannel(unittest.TestCase):
             channel.opt_in = True
             channel.tags = ['a_tag']
 
-            channel.create(airship, set_tags=True, hydrate=False)
+            channel.create(airship, set_tags=True)
 
             self.assertEqual(channel.channel_id, channel_id)
 

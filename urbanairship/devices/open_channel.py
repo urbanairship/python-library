@@ -20,7 +20,7 @@ class OpenChannel(object):
     last_registration = None
     tags = None
 
-    def create(self, airship, set_tags=None, hydrate=True):
+    def create(self, airship, set_tags=None):
         """Create this OpenChannel object with the API."""
 
         if self.tags and set_tags is None:
@@ -67,10 +67,6 @@ class OpenChannel(object):
                 self.channel_id, self.address
             )
         )
-
-        if hydrate:
-            payload = self._get_payload_for_id(airship, self.channel_id)
-            self.from_payload(payload)
 
         return response
 

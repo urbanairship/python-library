@@ -77,7 +77,7 @@ Open Channels are registered by using :py:class:`OpenChannel`.
    my_channel.opt_in = True
    my_channel.create(airship)
 
-   print (my_channel.channel_id, my_channel.address, my_channel.created)
+   print (my_channel.channel_id, my_channel.address)
 
 Existing channels can be updated by using the update method on
 :py:class:`OpenChannel`.
@@ -87,7 +87,9 @@ Existing channels can be updated by using the update method on
    import urbanairship as ua
    airship = ua.Airship(app_key, app_secret)
 
-   my_channel = ua.OpenChannel.from_id('4e517ffb-af1a-4383-b0a7-e76561053749')
+   my_channel = ua.OpenChannel.from_id(
+       airship, '4e517ffb-af1a-4383-b0a7-e76561053749'
+   )
    my_channel.tags = ['a_new_tag']
    my_channel.update(airship, set_tags=True)
 
