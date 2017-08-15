@@ -69,7 +69,7 @@ Open Channels are registered by using :py:class:`OpenChannel`.
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.Airship(app_key, app_secret)
+   airship = ua.Airship(app_key, master_secret)
 
    my_channel = ua.OpenChannel()
    my_channel.address = 'my_email@example.com'
@@ -85,7 +85,7 @@ Existing channels can be updated by using the update method on
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.Airship(app_key, app_secret)
+   airship = ua.Airship(app_key, master_secret)
 
    my_channel = ua.OpenChannel.from_id(
        airship, '4e517ffb-af1a-4383-b0a7-e76561053749'
