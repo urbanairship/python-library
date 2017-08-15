@@ -263,7 +263,8 @@ class TestMessage(unittest.TestCase):
                     },
                     notification_tag='test_notification_tag',
                     notification_channel='test_notification_channel',
-                    icon='test_drawable_res.png'
+                    icon='test_drawable_res.png',
+                    icon_color='#ff00bb'
                 )
             ),
             {
@@ -331,7 +332,8 @@ class TestMessage(unittest.TestCase):
                     },
                     'notification_tag': 'test_notification_tag',
                     'notification_channel': 'test_notification_channel',
-                    'icon': 'test_drawable_res.png'
+                    'icon': 'test_drawable_res.png',
+                    'icon_color': '#ff00bb'
                 }
             }
         )
