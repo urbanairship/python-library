@@ -160,7 +160,8 @@ def android(alert=None, collapse_key=None, time_to_live=None,
             delay_while_idle=False, extra=None, interactive=None,
             local_only=None, wearable=None, delivery_priority=None,
             style=None, title=None, summary=None, sound=None, priority=None,
-            category=None, visibility=None, public_notification=None):
+            category=None, visibility=None, public_notification=None,
+            notification_tag=None, notification_channel=None, icon=None):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -192,6 +193,12 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword visibility: Option integer between -1 and 1.
     :keyword public_notification: Optional object. A notification to show on
         the lock screen instead instead of the redacted one.
+    :keyword notification_tag: Optional string. A string identifier used to 
+        replace an existing notification in the notification drawer.
+    :keyword notification_channel: Optional string.  An identifier of a 
+        notification channel predefined by the application.
+    :keyword icon: Optional string. The name of a drawable in the 
+        application’s resource directory.
 
 
     See
@@ -267,6 +274,12 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['visibility'] = visibility
     if public_notification is not None:
         payload['public_notification'] = public_notification
+    if notification_tag is not None:
+        payload['notification_tag'] = notification_tag
+    if notification_channel is not None:
+        payload['notification_channel'] = notification_channel
+    if icon is not None:
+        payload['icon'] = icon
 
     return payload
 

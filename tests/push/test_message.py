@@ -260,7 +260,10 @@ class TestMessage(unittest.TestCase):
                         'title': 'A title',
                         'alert': 'An alert',
                         'summary': 'A summary'
-                    }
+                    },
+                    notification_tag='test_notification_tag',
+                    notification_channel='test_notification_channel',
+                    icon='test_drawable_res.png'
                 )
             ),
             {
@@ -325,7 +328,10 @@ class TestMessage(unittest.TestCase):
                         'title': 'A title',
                         'alert': 'An alert',
                         'summary': 'A summary'
-                    }
+                    },
+                    'notification_tag': 'test_notification_tag',
+                    'notification_channel': 'test_notification_channel',
+                    'icon': 'test_drawable_res.png'
                 }
             }
         )
