@@ -284,7 +284,8 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     if icon is not None:
         payload['icon'] = icon
     if icon_color is not None:
-        if isinstance(icon_color, string_type) and not VALID_ICON_COLOR.match(icon_color):
+        if (isinstance(icon_color, string_type) 
+            and not VALID_ICON_COLOR.match(icon_color)):
             raise ValueError('icon_color must be in format #rrggbb')
         payload['icon_color'] = icon_color
 
