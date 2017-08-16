@@ -46,8 +46,7 @@ for more information.
     longitude and latitude are required parameters that must be numbers.
     Type is an optional parameter.
 
-.. automodule:: urbanairship.push.locationfinder
-    :members: LocationFinder
+.. automodule:: urbanairship.devices.locationfinder
 
 
 Bounding Box Lookup

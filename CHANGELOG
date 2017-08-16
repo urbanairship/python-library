@@ -1,4 +1,18 @@
 --------------------
+2.1.0
+--------------------
+
+- Added support for Open Channels
+    * Create and update open channels
+    * Push to open channels
+    * Open channel platform overrides
+- Added new properties to the ChannelInfo object
+- Added Android platform overrides for Android O
+- Fix to handle non-JSON responses gracefully
+- Various docs fixes and updates
+- Fixed Travis yml to remove Python 2.6 check (support removed in 2.0.0)
+
+--------------------
 2.0.0
 --------------------
 - Added support for Web Notify

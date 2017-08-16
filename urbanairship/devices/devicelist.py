@@ -7,35 +7,47 @@ logger = logging.getLogger('urbanairship')
 
 
 class ChannelInfo(object):
-    """Information object for iOS, Android and Amazon device channels.
+    """Information object for iOS, Android, and Amazon device channels, as well
+        as web notify and open channels.
 
+    :ivar address: Replaces ``push_address`` for open channels.
+    :ivar alias: alias associated with this device, if any.
+    :ivar background: bool; whether the device is opted in to background push.
     :ivar channel_id: Channel ID for the device.
+    :ivar created: UTC date and time the system initially saw the device.
     :ivar device_type: Type of the device, e.g. ``ios``.
     :ivar installed: bool; whether the app is installed on the device.
-    :ivar opt_in: bool; whether the device is opted in to push.
-    :ivar background: bool; whether the device is opted in to background push.
-    :ivar push_address: Address we use to push to the device (device token,
-        GCM registration ID, etc,).
-    :ivar created: UTC date and time the system initially saw the device.
     :ivar last_registration: UTC date and time the system last received a
         registration call for the device.
+    :ivar named_user_id: named user associated with this device, if any.
+    :ivar opt_in: bool; whether the device is opted in to push.
+    :ivar push_address: Address we use to push to the device (device token,
+        GCM registration ID, etc,). Not present for open channels (see
+        ``address`` above).
+    :ivar tag_groups: tags associated with non-"device" tag groups, if any.
     :ivar tags: list of tags associated with this device, if any.
-    :ivar alias: alias associated with this device, if any.
-    :ivar ios: iOS specific information, e.g. ``badge``and ``quiet_time``.
+    :ivar ios: iOS specific information, e.g. ``badge`` and ``quiet_time``.
+    :ivar open: open channel specific information, e.g. ``identifiers`` and
+        ``open_platform_name``.
+    :ivar web: web notify specific information, e.g. ``subscription``.
 
     """
 
+    address = None
+    alias = None
+    background = None
     channel_id = None
+    created = None
     device_type = None
     installed = None
-    opt_in = None
-    background = None
-    push_address = None
-    created = None
     last_registration = None
+    opt_in = None
+    push_address = None
+    tag_groups = None
     tags = None
-    alias = None
     ios = None
+    open = None
+    web = None
 
     @classmethod
     def from_payload(cls, payload, device_key):
