@@ -23,6 +23,10 @@ from .channel_uninstall import (
     ChannelUninstall
 )
 
+from .open_channel import (
+    OpenChannel
+)
+
 from .named_users import (
     NamedUser,
     NamedUserList

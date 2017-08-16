@@ -60,6 +60,44 @@ type of device. The available iterators are :py:class:`DeviceTokenList` and :py:
    :members: DeviceTokenList, APIDList, DeviceInfo
    :noindex:
 
+
+Open Channel Registration
+--------------
+
+Open Channels are registered by using :py:class:`OpenChannel`.
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   my_channel = ua.OpenChannel()
+   my_channel.address = 'my_email@example.com'
+   my_channel.open_platform = 'email'
+   my_channel.opt_in = True
+   my_channel.create(airship)
+
+   print (my_channel.channel_id, my_channel.address)
+
+Existing channels can be updated by using the update method on
+:py:class:`OpenChannel`.
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   my_channel = ua.OpenChannel.from_id(
+       airship, '4e517ffb-af1a-4383-b0a7-e76561053749'
+   )
+   my_channel.tags = ['a_new_tag']
+   my_channel.update(airship, set_tags=True)
+
+.. automodule:: urbanairship.devices.open_channel
+   :members: OpenChannel
+   :noindex:
+
+
 Feedback
 --------
 Feedback returns a list of dictionaries of device tokens/APIDs that the

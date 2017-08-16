@@ -22,6 +22,11 @@ class TestAudience(unittest.TestCase):
                 {'amazon_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
             ),
             (
+                ua.open_channel,
+                '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3',
+                {'open_channel': '074e84a2-9ed9-4eee-9ca4-cc597bfdbef3'}
+            ),
+            (
                 ua.device_token,
                 'f' * 64,
                 {'device_token': 'F' * 64},
@@ -66,6 +71,7 @@ class TestAudience(unittest.TestCase):
             (ua.ios_channel, '074e84a2-9ed9-4eee-9ca4-cc597bfdbef34'),
             (ua.android_channel, '074e84a2-9ed9-Beee-9ca4-ccc597bfdbef3'),
             (ua.amazon_channel, '074e84a2-Red9-5eee-0ca4-cc597bfdbef3'),
+            (ua.open_channel, '074e84a2-OPEN-UP-0ca4-cc597bfdbef3'),
             (ua.device_token, 'f' * 63),
             (ua.device_token, 'f' * 65),
             (ua.device_token, '0123'),
