@@ -368,11 +368,12 @@ def open_platform(alert=None, title=None, extra=None):
         payload sent to the device.
 
 
-    >>> open_platform(extra={'link': 'urbanairship.com'},
+    >>> sms_overrides = open_platform(extra={'link': 'urbanairship.com'},
     ...    alert='Hello!',
     ...    title='See my new homepage!') # doctest: +SKIP
     {'title': 'See my new homepage!', 'extra': {'link': 'urbanairship.com'},
      'alert': 'Hello!'}
+    >>> notification(open_platform={'sms': sms_overrides}) # doctest: +SKIP
 
     """
     payload = {}
@@ -502,7 +503,8 @@ def device_types(*types):
     if len(types) == 1 and types[0] == 'all':
         return 'all'
     for t in types:
-        if t not in ('ios', 'android', 'amazon', 'wns', 'web'):
+        is_open = isinstance(t, string_type) and t.startswith('open::')
+        if t not in ('ios', 'android', 'amazon', 'wns', 'web') and not is_open:
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
 
