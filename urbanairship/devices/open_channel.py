@@ -8,8 +8,6 @@ logger = logging.getLogger('urbanairship')
 
 
 class OpenChannel(object):
-    _airship = None
-
     channel_id = None
     address = None
     open_platform = None
@@ -121,13 +119,15 @@ class OpenChannel(object):
 
         return response
 
-    def from_payload(self, payload):
-        """Set attributes of the OpenChannel from a payload."""
+    @classmethod
+    def from_payload(cls, payload):
+        """Instantiate an OpenChannel from a payload."""
+        obj = cls()
         for key in payload:
             # Extract the open channel data
             if key == 'open':
-                self.open_platform = payload['open'].get('open_platform_name')
-                self.identifiers = payload['open'].get('identifiers', [])
+                obj.open_platform = payload['open'].get('open_platform_name')
+                obj.identifiers = payload['open'].get('identifiers', [])
                 continue
 
             if key in ('created', 'last_registration'):
@@ -137,12 +137,14 @@ class OpenChannel(object):
                     )
                 except:
                     payload[key] = "UNKNOWN"
-            setattr(self, key, payload[key])
+            setattr(obj, key, payload[key])
 
-        return self
+        return obj
 
-    @staticmethod
-    def _get_payload_for_id(airship, channel_id):
+    @classmethod
+    def from_id(cls, airship, channel_id):
+        """Retrieves an open channel from the provided channel ID."""
+
         url = common.CHANNEL_URL + channel_id
         response = airship._request(
             method='GET',
@@ -150,13 +152,6 @@ class OpenChannel(object):
             url=url,
             version=3
         )
-        return response.json()['channel']
+        payload = response.json().get('channel')
 
-    @classmethod
-    def from_id(cls, airship, channel_id):
-        """Retrieves an open channel from the provided channel ID."""
-
-        payload = cls._get_payload_for_id(airship, channel_id)
-
-        obj = cls()
-        return obj.from_payload(payload)
+        return cls.from_payload(payload)
