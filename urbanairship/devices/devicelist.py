@@ -11,25 +11,26 @@ class ChannelInfo(object):
         as web notify and open channels.
 
     :ivar address: Replaces ``push_address`` for open channels.
-    :ivar alias: alias associated with this device, if any.
-    :ivar background: bool; whether the device is opted in to background push.
+    :ivar alias: Alias associated with this device, if any.
+    :ivar background: Bool; whether the device is opted in to background push.
     :ivar channel_id: Channel ID for the device.
     :ivar created: UTC date and time the system initially saw the device.
     :ivar device_type: Type of the device, e.g. ``ios``.
-    :ivar installed: bool; whether the app is installed on the device.
+    :ivar installed: Bool; whether the app is installed on the device.
     :ivar last_registration: UTC date and time the system last received a
         registration call for the device.
-    :ivar named_user_id: named user associated with this device, if any.
-    :ivar opt_in: bool; whether the device is opted in to push.
+    :ivar named_user_id: Named user associated with this device, if any.
+    :ivar opt_in: Bool; whether the device is opted in to push or other visible
+        notifications.
     :ivar push_address: Address we use to push to the device (device token,
         GCM registration ID, etc,). Not present for open channels (see
         ``address`` above).
-    :ivar tag_groups: tags associated with non-"device" tag groups, if any.
-    :ivar tags: list of tags associated with this device, if any.
+    :ivar tag_groups: Tags associated with non-"device" tag groups, if any.
+    :ivar tags: List of tags associated with this device, if any.
     :ivar ios: iOS specific information, e.g. ``badge`` and ``quiet_time``.
-    :ivar open: open channel specific information, e.g. ``identifiers`` and
+    :ivar open: Open channel specific information, e.g. ``identifiers`` and
         ``open_platform_name``.
-    :ivar web: web notify specific information, e.g. ``subscription``.
+    :ivar web: Web notify specific information, e.g. ``subscription``.
 
     """
 
@@ -82,6 +83,41 @@ class ChannelInfo(object):
         )
         payload = response.json()
         return cls.from_payload(payload[data_attribute], id_key)
+
+
+class DeviceInfo(object):
+    """Information object for a single device.
+
+    :ivar active: bool; Whether the device is opted in to push or other visible
+        notifications.
+    :ivar alias: Alias associated with this device, if any.
+    :ivar created: UTC date and time the system initially saw the device.
+    :ivar device_type: Type of the device, e.g. ``device_token``, ``apid``.
+    :ivar id: Device identifier. Also available at the attribute named by the
+        ``device_type``.
+    :ivar tags: List of tags associated with this device, if any.
+    :ivar apid: Same as device identifier if apid device type.
+    :ivar device_token: Same as device identifier if device_token device type.
+
+    """
+    
+    id = None
+    device_type = None
+    active = None
+    tags = None
+    alias = None
+
+    @classmethod
+    def from_payload(cls, payload, device_key):
+        """Create based on results from a DeviceTokenList or APIDList iterator.
+
+        """
+        obj = cls()
+        obj.id = payload[device_key]
+        obj.device_type = device_key
+        for key in payload:
+            setattr(obj, key, payload[key])
+        return obj
 
 
 class DeviceTokenList(common.IteratorParent):
