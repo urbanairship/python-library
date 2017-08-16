@@ -18,6 +18,7 @@ VALID_ANDROID_CATEGORIES = [
     "alarm", "call", "email", "err", "event", "msg", "promo",
     "recommendation", "service", "social", "status", "sys", "transport"
 ]
+VALID_ICON_COLOR = re.compile(r'^#[0-9a-f]{6}$')
 
 
 def notification(alert=None, ios=None, android=None, amazon=None,
@@ -160,7 +161,9 @@ def android(alert=None, collapse_key=None, time_to_live=None,
             delay_while_idle=False, extra=None, interactive=None,
             local_only=None, wearable=None, delivery_priority=None,
             style=None, title=None, summary=None, sound=None, priority=None,
-            category=None, visibility=None, public_notification=None):
+            category=None, visibility=None, public_notification=None,
+            notification_tag=None, notification_channel=None, icon=None,
+            icon_color=None):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -189,10 +192,17 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword priority: Optional integer between -2 and 2. An Android L feature
         that determines location sort order.
     :keyword category: Optional string. An Android category.
-    :keyword visibility: Option integer between -1 and 1.
+    :keyword visibility: Optional integer between -1 and 1.
     :keyword public_notification: Optional object. A notification to show on
         the lock screen instead instead of the redacted one.
-
+    :keyword notification_tag: Optional string. A string identifier used to 
+        replace an existing notification in the notification drawer.
+    :keyword notification_channel: Optional string.  An identifier of a 
+        notification channel predefined by the application.
+    :keyword icon: Optional string. The name of a drawable in the 
+        application’s resource directory.
+    :keyword icon_color: Optional. A string in the format of #rrggbb that 
+        defines the notification accent color.
 
     See
     `GCM Advanced Topics <http://developer.android.com/google/gcm/adv.html>`_
@@ -267,6 +277,18 @@ def android(alert=None, collapse_key=None, time_to_live=None,
         payload['visibility'] = visibility
     if public_notification is not None:
         payload['public_notification'] = public_notification
+    if notification_tag is not None:
+        payload['notification_tag'] = notification_tag
+    if notification_channel is not None:
+        payload['notification_channel'] = notification_channel
+    if icon is not None:
+        payload['icon'] = icon
+    if icon_color is not None:
+        if (isinstance(icon_color, string_type) 
+            and not VALID_ICON_COLOR.match(icon_color)):
+            raise ValueError('icon_color must be in format #rrggbb')
+        payload['icon_color'] = icon_color
+
 
     return payload
 
