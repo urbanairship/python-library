@@ -2,11 +2,11 @@ We only accept issues for bug reporting purposes.
 
 **All feature requests, implementation concerns or general queries should be sent to our [support team](https://support.urbanairship.com/).**
 
-Before completeing the form below, please check the following:
+Before completing the form below, please check the following:
 
 [] You are using the most recent version of the library. 
 [] You are using a supported version of Python for that library version. 
-[] This issue is reproducable. 
+[] This issue is reproducible. 
 
 ## Expected Behavior
 <!--- Tell us what should happen -->
