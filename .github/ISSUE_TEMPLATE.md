@@ -4,9 +4,9 @@ We only accept issues for bug reporting purposes.
 
 Before completing the form below, please check the following:
 
-[] You are using the most recent version of the library. 
-[] You are using a supported version of Python for that library version. 
-[] This issue is reproducible. 
+[ ] You are using the most recent version of the library. 
+[ ] You are using a supported version of Python for that library version. 
+[ ] This issue is reproducible. 
 
 ## Expected Behavior
 <!--- Tell us what should happen -->
@@ -19,7 +19,7 @@ Before completing the form below, please check the following:
 
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include your implementation code if possible and relevent -->
+<!--- reproduce this bug. Include your implementation code if possible and relevant -->
 1.
 2.
 3.
