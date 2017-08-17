@@ -1,7 +1,6 @@
 --------------------
 2.1.0
 --------------------
-
 - Added support for Open Channels
     * Create and update open channels
     * Push to open channels
@@ -11,6 +10,7 @@
 - Fix to handle non-JSON responses gracefully
 - Fix to actually use ChannelInfo and DeviceInfo objects for listing devices
 - Various docs fixes and updates
+- Added template for pull requests
 - Fixed Travis yml to remove Python 2.6 check (support removed in 2.0.0)
 
 --------------------
