@@ -117,7 +117,11 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(channel_responses[0].device_type, 'ios')
             self.assertEquals(channel_responses[1].device_type, 'android')
 
-            self.assertEquals(channel_responses[0].created, '2016-08-17T23:29:52')
-            self.assertEquals(channel_responses[1].created, 'None')
-
-    
+            self.assertEquals(
+                channel_responses[0].created,
+                datetime.datetime.strptime(
+                    '2016-08-17T23:29:52',
+                    '%Y-%m-%dT%H:%M:%S'
+                )
+            )
+            self.assertEquals(channel_responses[1].created, 'UNKNOWN')

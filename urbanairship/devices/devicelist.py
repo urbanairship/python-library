@@ -7,8 +7,7 @@ logger = logging.getLogger('urbanairship')
 
 
 class ChannelInfo(object):
-    """Information object for iOS, Android, and Amazon device channels, as well
-        as web notify and open channels.
+    """Information object for iOS, Android, Amazon, web, and open channels.
 
     :ivar address: Replaces ``push_address`` for open channels.
     :ivar alias: Alias associated with this device, if any.
@@ -116,6 +115,13 @@ class DeviceInfo(object):
         obj.id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
+            if key in 'created':
+                try:
+                    payload[key] = datetime.datetime.strptime(
+                        payload[key], '%Y-%m-%d %H:%M:%S'
+                    )
+                except:
+                    payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj
 
@@ -130,6 +136,7 @@ class DeviceTokenList(common.IteratorParent):
     next_url = common.DEVICE_TOKEN_URL
     data_attribute = 'device_tokens'
     id_key = 'device_token'
+    instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):
         params = {'limit': limit} if limit else {}
@@ -146,6 +153,7 @@ class ChannelList(DeviceTokenList):
     next_url = common.CHANNEL_URL
     data_attribute = 'channels'
     id_key = 'channel_id'
+    instance_class = ChannelInfo
 
 
 class APIDList(DeviceTokenList):
@@ -158,6 +166,7 @@ class APIDList(DeviceTokenList):
     next_url = common.APID_URL
     data_attribute = 'apids'
     id_key = 'apid'
+    instance_class = DeviceInfo
 
 
 class Feedback(object):

@@ -82,56 +82,6 @@ class AirshipFailure(Exception):
         )
 
 
-class IteratorParent(six.Iterator):
-    next_url = None
-    data_attribute = None
-    data_list = None
-    params = None
-    id_key = None
-
-    def __init__(self, airship, params):
-        self.airship = airship
-        self.params = params
-        self._token_iter = iter(())
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        try:
-            return IteratorDataObj.from_payload(
-                next(self._token_iter),
-                self.id_key
-            )
-        except StopIteration:
-            if self._load_page():
-                return IteratorDataObj.from_payload(
-                    next(self._token_iter),
-                    self.id_key
-                )
-            else:
-                raise StopIteration
-
-    def _load_page(self):
-        if not self.next_url:
-            return False
-        response = self.airship.request(
-            method='GET',
-            body=None,
-            url=self.next_url,
-            version=3,
-            params=self.params
-        )
-        self.params = None
-        self._page = response.json()
-        check_url = self._page.get('next_page')
-        if check_url == self.next_url:
-            return False
-        self.next_url = check_url
-        self._token_iter = iter(self._page[self.data_attribute])
-        return True
-
-
 @six.python_2_unicode_compatible
 class IteratorDataObj(object):
     @classmethod
@@ -161,3 +111,54 @@ class IteratorDataObj(object):
             ):
                 print_str += attr + ': ' + str(getattr(self, attr)) + ', '
         return print_str[:-2]
+
+class IteratorParent(six.Iterator):
+    next_url = None
+    data_attribute = None
+    data_list = None
+    params = None
+    id_key = None
+    instance_class = IteratorDataObj
+
+    def __init__(self, airship, params):
+        self.airship = airship
+        self.params = params
+        self._token_iter = iter(())
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            return self.instance_class.from_payload(
+                next(self._token_iter),
+                self.id_key
+            )
+        except StopIteration:
+            if self._load_page():
+                return self.instance_class.from_payload(
+                    next(self._token_iter),
+                    self.id_key
+                )
+            else:
+                raise StopIteration
+
+    def _load_page(self):
+        if not self.next_url:
+            return False
+        response = self.airship.request(
+            method='GET',
+            body=None,
+            url=self.next_url,
+            version=3,
+            params=self.params
+        )
+        self.params = None
+        self._page = response.json()
+        check_url = self._page.get('next_page')
+        if check_url == self.next_url:
+            return False
+        self.next_url = check_url
+        self._token_iter = iter(self._page[self.data_attribute])
+        return True
+

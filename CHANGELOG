@@ -9,6 +9,7 @@
 - Added new properties to the ChannelInfo object
 - Added Android platform overrides for Android O
 - Fix to handle non-JSON responses gracefully
+- Fix to actually use ChannelInfo and DeviceInfo objects for listing devices
 - Various docs fixes and updates
 - Fixed Travis yml to remove Python 2.6 check (support removed in 2.0.0)
 
