@@ -6,6 +6,6 @@ The Contributor License Agreement (CLA) below is to ensure that when someone con
 
 Please read through the agreement at the URL below. 
 
-If you have questions about this agreement or why we need it, please contact us at https://support.urbanairship.com/, or by phone at (800) 720-2098.
+If you have questions about this agreement or why we need it please contact us at https://support.urbanairship.com/.
 
 [Contribution Agreement](https://docs.urbanairship.com/contribution-agreement/)
