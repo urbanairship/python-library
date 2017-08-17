@@ -13,10 +13,10 @@ class ChannelInfo(object):
     :ivar alias: Alias associated with this device, if any.
     :ivar background: Bool; whether the device is opted in to background push.
     :ivar channel_id: Channel ID for the device.
-    :ivar created: UTC date and time the system initially saw the device.
+    :ivar created: UTC datetime when the system initially saw the device.
     :ivar device_type: Type of the device, e.g. ``ios``.
     :ivar installed: Bool; whether the app is installed on the device.
-    :ivar last_registration: UTC date and time the system last received a
+    :ivar last_registration: UTC datetime when the system last received a
         registration call for the device.
     :ivar named_user_id: Named user associated with this device, if any.
     :ivar opt_in: Bool; whether the device is opted in to push or other visible
@@ -90,7 +90,7 @@ class DeviceInfo(object):
     :ivar active: bool; Whether the device is opted in to push or other visible
         notifications.
     :ivar alias: Alias associated with this device, if any.
-    :ivar created: UTC date and time the system initially saw the device.
+    :ivar created: UTC datetime when the system initially saw the device.
     :ivar device_type: Type of the device, e.g. ``device_token``, ``apid``.
     :ivar id: Device identifier. Also available at the attribute named by the
         ``device_type``.

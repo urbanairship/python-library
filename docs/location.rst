@@ -47,6 +47,7 @@ for more information.
     Type is an optional parameter.
 
 .. automodule:: urbanairship.devices.locationfinder
+    :members: LocationFinder
 
 
 Bounding Box Lookup
