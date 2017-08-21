@@ -1,5 +1,4 @@
 import datetime
-import json
 import logging
 from urbanairship import common
 
@@ -99,7 +98,7 @@ class DeviceInfo(object):
     :ivar device_token: Same as device identifier if device_token device type.
 
     """
-    
+
     id = None
     device_type = None
     active = None

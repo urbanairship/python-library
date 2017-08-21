@@ -19,4 +19,3 @@ class TestSchedule(unittest.TestCase):
             ua.local_scheduled_time(d),
             {'local_scheduled_time': '2015-01-01T12:56:00'}
         )
-

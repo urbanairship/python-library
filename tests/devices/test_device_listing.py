@@ -20,7 +20,7 @@ class TestDeviceListing(unittest.TestCase):
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    "ok":"true",
+                    "ok": "true",
                     "channels": [
                         {
                             "channel_id": "2ce7bb20-03a1-417d-bef5-61306e3755d7",
@@ -124,7 +124,7 @@ class TestDeviceListing(unittest.TestCase):
                     ]
                 }
             ).encode('utf-8')
-            
+
             response.status_code = 200
             mock_request.return_value = response
 
@@ -139,9 +139,15 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(channel_responses[1].channel_id, self.channel2)
             self.assertEquals(channel_responses[2].channel_id, self.channel3)
 
-            self.assertEquals(channel_responses[0].push_address, self.push_address1)
-            self.assertEquals(channel_responses[1].push_address, self.push_address2)
-            self.assertEquals(channel_responses[2].push_address, self.push_address3)
+            self.assertEquals(
+                channel_responses[0].push_address, self.push_address1
+            )
+            self.assertEquals(
+                channel_responses[1].push_address, self.push_address2
+            )
+            self.assertEquals(
+                channel_responses[2].push_address, self.push_address3
+            )
 
             self.assertEquals(channel_responses[0].device_type, 'ios')
             self.assertEquals(channel_responses[1].device_type, 'android')

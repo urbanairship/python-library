@@ -1,4 +1,3 @@
-import json
 import logging
 import datetime
 import six
@@ -112,6 +111,7 @@ class IteratorDataObj(object):
                 print_str += attr + ': ' + str(getattr(self, attr)) + ', '
         return print_str[:-2]
 
+
 class IteratorParent(six.Iterator):
     next_url = None
     data_attribute = None
@@ -161,4 +161,3 @@ class IteratorParent(six.Iterator):
         self.next_url = check_url
         self._token_iter = iter(self._page[self.data_attribute])
         return True
-

@@ -151,4 +151,5 @@ __all__ = [
 # Silence urllib3 INFO logging by default
 
 import logging
-logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
+logging.getLogger('requests.packages.urllib3.connectionpool')\
+    .setLevel(logging.WARNING)

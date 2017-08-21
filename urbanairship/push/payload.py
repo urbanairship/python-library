@@ -98,8 +98,8 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         JSON object.
         If a subtitle is also defined in the alert JSON object, this value is
         ignored. iOS 10 or above.
-    :keyword media_attachment: Optional, a dictionary object
-        `Media Attachment <https://docs.urbanairship.com/api/ua.html#media-attachment>`_.
+    :keyword media_attachment: Optional, a dictionary object `Media Attachment
+        <https://docs.urbanairship.com/api/ua/#media-attachment>`_.
         Specifies a media attachment to be handled by the UA Media Attachment
         Extension.
     :keyword collapse_id: Optional, a string. When there is a newer message
@@ -200,13 +200,13 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     :keyword visibility: Optional integer between -1 and 1.
     :keyword public_notification: Optional object. A notification to show on
         the lock screen instead instead of the redacted one.
-    :keyword notification_tag: Optional string. A string identifier used to 
+    :keyword notification_tag: Optional string. A string identifier used to
         replace an existing notification in the notification drawer.
-    :keyword notification_channel: Optional string.  An identifier of a 
+    :keyword notification_channel: Optional string.  An identifier of a
         notification channel predefined by the application.
-    :keyword icon: Optional string. The name of a drawable in the 
+    :keyword icon: Optional string. The name of a drawable in the
         application’s resource directory.
-    :keyword icon_color: Optional. A string in the format of #rrggbb that 
+    :keyword icon_color: Optional. A string in the format of #rrggbb that
         defines the notification accent color.
 
     See
@@ -289,11 +289,10 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     if icon is not None:
         payload['icon'] = icon
     if icon_color is not None:
-        if (isinstance(icon_color, string_type) 
-            and not VALID_ICON_COLOR.match(icon_color)):
+        if (isinstance(icon_color, string_type) and not
+                VALID_ICON_COLOR.match(icon_color)):
             raise ValueError('icon_color must be in format #rrggbb')
         payload['icon_color'] = icon_color
-
 
     return payload
 
@@ -633,7 +632,7 @@ def wearable(background_image=None, extra_pages=None, interactive=None):
         'extra_pages': extra_pages,
         'interactive': interactive
     }
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
 def public_notification(title=None, alert=None, summary=None):
@@ -644,7 +643,7 @@ def public_notification(title=None, alert=None, summary=None):
     :keyword summary: Optional string. The notification summary.
     """
     payload = {'title': title, 'alert': alert, 'summary': summary}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
 def style(style_type, content, title=None, summary=None):
@@ -656,7 +655,8 @@ def style(style_type, content, title=None, summary=None):
         If style_type is set to "inbox", this will be an array of strings.
         Otherwise, it will be a single string.
     :keyword title: Optional string. Override the notification.
-    :keyword summary: Optional string. Override the summary of the notification.
+    :keyword summary: Optional string. Override the summary of the
+        notification.
 
     """
     mapping = {
@@ -670,7 +670,7 @@ def style(style_type, content, title=None, summary=None):
         'type': style_type, mapping[style_type]: content,
         'title': title, 'summary': summary
     }
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
 def media_attachment(url, content=None, options=None):
@@ -685,7 +685,7 @@ def media_attachment(url, content=None, options=None):
         resource given by the URL. See :func:`options`.
     """
     payload = {'url': url, 'content': content, 'options': options}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
 def content(title=None, subtitle=None, body=None):
@@ -697,7 +697,7 @@ def content(title=None, subtitle=None, body=None):
     :keyword body: String.
     """
     payload = {'title': title, 'subtitle': subtitle, 'options': options}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
 def crop(x=None, y=None, width=None, height=None):
@@ -709,4 +709,4 @@ def crop(x=None, y=None, width=None, height=None):
     :keyword height: Optional float. The height of the final crop.
     """
     payload = {'x': x, 'y': y, 'width': width, 'height': height}
-    return {key: val for key, val in iter(payload.items()) if val != None}
+    return {key: val for key, val in iter(payload.items()) if val is not None}

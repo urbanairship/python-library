@@ -1,6 +1,5 @@
 from urbanairship import common
 from datetime import datetime
-from abc import abstractmethod
 
 
 class IndividualResponseStats(object):
@@ -18,10 +17,13 @@ class ResponseList(common.IteratorParent):
     next_url = common.REPORTS_URL + 'responses/list'
     data_attribute = 'pushes'
 
-    def __init__(self, airship, start_date, end_date, limit=None, start_id=None):
+    def __init__(
+            self, airship, start_date, end_date, limit=None, start_id=None
+    ):
         if not airship or not start_date or not end_date:
-            raise TypeError('airship, start_date, and end_date cannot be empty')
-        if not isinstance(start_date, datetime) or not isinstance(end_date, datetime):
+            raise TypeError('airship, start_date, & end_date cannot be empty')
+        if not isinstance(start_date, datetime) or not \
+                isinstance(end_date, datetime):
             raise TypeError('start_date and end_date must be datetime objects')
         params = {
             'start': start_date.strftime('%Y-%m-%d %H:%M:%S'),
@@ -48,7 +50,9 @@ class DevicesReport(object):
         params = {
             'date': date.strftime('%Y-%m-%dT%H:%M:%S')
         }
-        response = self.airship._request('GET', None, url, version=3, params=params)
+        response = self.airship._request(
+            'GET', None, url, version=3, params=params
+        )
         return response.json()
 
 
@@ -59,10 +63,13 @@ class OptInList(common.IteratorParent):
     def __init__(self, airship, start_date, end_date, precision):
         if not airship or not start_date or not end_date or not precision:
             raise TypeError('None of the function parameters can be empty')
-        if not isinstance(start_date, datetime) or not isinstance(end_date, datetime):
+        if not isinstance(start_date, datetime) or not \
+                isinstance(end_date, datetime):
             raise TypeError('start_date and end_date must be datetime objects')
         if precision not in ['HOURLY', 'DAILY', 'MONTHLY']:
-            raise ValueError("Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'")
+            raise ValueError(
+                "Precision must be 'HOURLY', 'DAILY', or 'MONTHLY'"
+            )
         params = {
             'start': start_date.strftime('%Y-%m-%d %H:%M:%S'),
             'end': end_date.strftime('%Y-%m-%d %H:%M:%S'),

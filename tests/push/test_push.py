@@ -85,7 +85,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(
             alert='Hello individual'
         )
-        p.device_types= 'web'
+        p.device_types = 'web'
 
         self.assertEqual(
             p.payload,
@@ -103,8 +103,7 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert='Hello',
-            open_platform={'email':
-                {
+            open_platform={'email': {
                     'title': 'This is a title.',
                     'extra': {'attribute': 'id'}
                 }
@@ -133,7 +132,7 @@ class TestPush(unittest.TestCase):
         p.notification = ua.notification(
             alert='Hello individual'
         )
-        p.device_types= 'open::sms'
+        p.device_types = 'open::sms'
 
         self.assertEqual(
             p.payload,
