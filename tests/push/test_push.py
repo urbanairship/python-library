@@ -128,7 +128,7 @@ class TestPush(unittest.TestCase):
 
     def test_open_channel_push_to_channel(self):
         p = ua.Push(None)
-        p.audience = ua.channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
+        p.audience = ua.open_channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
         p.notification = ua.notification(
             alert='Hello individual'
         )
@@ -138,7 +138,7 @@ class TestPush(unittest.TestCase):
             p.payload,
             {
                 'audience': {
-                    'channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
+                    'open_channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
                 },
                 'notification': {'alert': 'Hello individual'},
                 'device_types': 'open::sms'
