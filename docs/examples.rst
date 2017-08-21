@@ -112,6 +112,7 @@ Web Push to a device with full web payload
     push.device_types = ua.device_types('web')
     push.send()
 
+
 Open Channels send to a device with full open channel payload
 -------------------------------------------------------------
 
@@ -129,6 +130,7 @@ Open Channels send to a device with full open channel payload
         )
     push.device_types = ua.device_types('open::email')
     push.send()
+
 
 Message Center send with extra and without notification
 -------------------------------------------------------

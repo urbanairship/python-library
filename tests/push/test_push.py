@@ -98,6 +98,54 @@ class TestPush(unittest.TestCase):
             }
         )
 
+    def test_open_channel_push(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Hello',
+            open_platform={'email':
+                {
+                    'title': 'This is a title.',
+                    'extra': {'attribute': 'id'}
+                }
+            }
+        )
+        p.device_types = 'open::email'
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': 'open::email',
+                'notification': {
+                    'alert': 'Hello',
+                    'open::email': {
+                        'title': 'This is a title.',
+                        'extra': {'attribute': 'id'}
+                    },
+                }
+            }
+        )
+
+    def test_open_channel_push_to_channel(self):
+        p = ua.Push(None)
+        p.audience = ua.channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
+        p.notification = ua.notification(
+            alert='Hello individual'
+        )
+        p.device_types= 'open::sms'
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': {
+                    'channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
+                },
+                'notification': {'alert': 'Hello individual'},
+                'device_types': 'open::sms'
+            }
+        )
+
     def test_actions(self):
         p = ua.Push(None)
         p.audience = ua.all_
