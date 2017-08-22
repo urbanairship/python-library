@@ -3,6 +3,7 @@ from .devicelist import (
     ChannelInfo,
     DeviceTokenList,
     APIDList,
+    DeviceInfo,
     Feedback,
 )
 

@@ -34,7 +34,8 @@ class StaticList(object):
     def upload(self, csv_file):
         """Upload a CSV file to a static list
 
-        :param csv_file: open file descriptor with two column format: identifier_type, identifier
+        :param csv_file: open file descriptor with two column format:
+            identifier_type, identifier
         :return: http response
         """
 
@@ -64,7 +65,9 @@ class StaticList(object):
             payload['extra'] = self.extra
         body = json.dumps(payload).encode('utf-8')
         url = common.LISTS_URL + self.name
-        response = self.airship._request('PUT', body, url, 'application/json', version=3)
+        response = self.airship._request(
+            'PUT', body, url, 'application/json', version=3
+        )
         return response.json()
 
     @classmethod
@@ -101,7 +104,8 @@ class StaticLists(common.IteratorParent):
     data_attribute = 'lists'
 
     def __init__(self, airship):
-        super(StaticLists,self).__init__(airship, None)
+        super(StaticLists, self).__init__(airship, None)
+
 
 class Buffer(object):
     def __init__(self):

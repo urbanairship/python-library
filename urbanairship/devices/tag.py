@@ -108,8 +108,8 @@ class BatchTag(object):
 
     def __init__(self, airship):
         warnings.warn(
-            'The BatchTag object has been deprecated. Please use ChannelTags ' +
-            'instead.',
+            'The BatchTag object has been deprecated. Please use ' +
+            'ChannelTags instead.',
             DeprecationWarning
         )
         self._airship = airship
@@ -124,7 +124,6 @@ class BatchTag(object):
 
     def add_amazon_channel(self, channel, tags):
         self.changelist.append({'amazon_channel': channel, 'tags': tags})
-
 
     def send_request(self):
         """Issue API Request

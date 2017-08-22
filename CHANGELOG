@@ -1,7 +1,19 @@
 --------------------
-2.0.1
+3.0.0
 --------------------
 - Added template for pull requests
+- Added support for Open Channels
+    * Create and update open channels
+    * Push to open channels
+    * Open channel platform overrides
+- Added Android platform overrides for Android O
+- Added new properties to the ChannelInfo object
+- Fix to actually use ChannelInfo and DeviceInfo objects for listing devices,
+    including Python datetimes for date/time fields
+- Fix to handle non-JSON responses gracefully
+- Fix Travis yml to remove Python 2.6 check (support removed in 2.0.0)
+- Various docs fixes and updates
+- Now supporting and testing for Python 3.5 and 3.6 compatibility
 
 --------------------
 2.0.0

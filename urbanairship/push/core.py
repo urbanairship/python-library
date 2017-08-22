@@ -137,7 +137,7 @@ class ScheduledPush(object):
         """Cancel a previously scheduled notification."""
         if not self.url:
             raise ValueError('Cannot cancel ScheduledPush without url.')
-        
+
         self._airship._request(
             method='DELETE',
             body=None,

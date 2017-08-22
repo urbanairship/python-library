@@ -10,8 +10,6 @@ import urbanairship as ua
 
 class TestNamedUser(unittest.TestCase):
     def test_Named_User(self):
-        name = 'named_user_id'
-
         ok_true = json.dumps({'ok': True}).encode('utf-8')
 
         associate_response = requests.Response()

@@ -9,15 +9,16 @@ Please include link to open issue if applicable.
 
 * I've tested in virtual environments for python versions:
 
-[ ] 2.7
-[ ] 3.3
-[ ] 3.4
-[ ] 3.6 (coming soon)
+- [ ] 2.7
+- [ ] 3.3
+- [ ] 3.4
+- [ ] 3.5
+- [ ] 3.6
 
 ### Urban Airship Contribution Agreement
 https://docs.urbanairship.com/contribution-agreement/
 
-[ ] I've filled out and signed UA's contribution agreement form.
+- [ ] I've filled out and signed UA's contribution agreement form.
 
 ### Screenshots
 * If applicable
