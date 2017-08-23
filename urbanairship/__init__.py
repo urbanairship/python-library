@@ -4,6 +4,7 @@ from .common import AirshipFailure, Unauthorized
 from .push import (
     Push,
     ScheduledPush,
+    TemplatePush,
     all_,
     ios_channel,
     android_channel,
@@ -41,6 +42,7 @@ from .push import (
     scheduled_time,
     local_scheduled_time,
     named_user,
+    merge_data,
 )
 
 from .devices import (
@@ -85,6 +87,7 @@ __all__ = [
     all_,
     Push,
     ScheduledPush,
+    TemplatePush,
     ios_channel,
     android_channel,
     amazon_channel,
@@ -146,6 +149,7 @@ __all__ = [
     StaticLists,
     LocationFinder,
     named_user,
+    merge_data,
 ]
 
 # Silence urllib3 INFO logging by default

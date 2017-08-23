@@ -17,6 +17,7 @@ SEGMENTS_URL = BASE_URL + '/segments/'
 REPORTS_URL = BASE_URL + '/reports/'
 LISTS_URL = BASE_URL + '/lists/'
 LOCATION_URL = BASE_URL + '/location/'
+TEMPLATES_URL = BASE_URL + '/templates/'
 
 NAMED_USER_URL = BASE_URL + '/named_users/'
 NAMED_USER_TAG_URL = NAMED_USER_URL + 'tags/'
