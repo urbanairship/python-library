@@ -269,3 +269,35 @@ notification, you can update or cancel it before it's sent.
 
    # Cancel
    schedule.cancel()
+
+
+Personalized Push with a Template
+---------------------------------
+
+If you want to use an existing template to send a push, follow this example:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   push = airship.create_template_push()
+   push.audience = ua.ios_channel('b8f9b663-0a3b-cf45-587a-be880946e881')
+   push.device_types = ua.device_types('ios')
+   push.merge_data = ua.merge_data(
+       template_id='ef34a8d9-0ad7-491c-86b0-aea74da15161',
+       substitutions={
+           'FIRST_NAME': 'Bob',
+           'LAST_NAME': 'Smith',
+           'TITLE': ''
+       }
+   )
+   push.send()
+
+Notice that you do not include a notification, as that is already defined by
+the template. Instead, you include merge data, which is made up of the template
+ID and the field substitutions. The example above sends to a particular iOS
+channel.
+
+.. autoclass:: urbanairship.push.core.TemplatePush
+   :members:
