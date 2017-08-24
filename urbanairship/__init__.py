@@ -43,6 +43,8 @@ from .push import (
     local_scheduled_time,
     named_user,
     merge_data,
+    TemplateInfo,
+    TemplateList,
 )
 
 from .devices import (
@@ -150,6 +152,8 @@ __all__ = [
     LocationFinder,
     named_user,
     merge_data,
+    TemplateInfo,
+    TemplateList,
 ]
 
 # Silence urllib3 INFO logging by default

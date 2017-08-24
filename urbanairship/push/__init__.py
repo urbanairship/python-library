@@ -47,6 +47,8 @@ from .schedule import (
 
 from .template import (
     merge_data,
+    TemplateInfo,
+    TemplateList,
 )
 
 # Common selector for audience & device_types
