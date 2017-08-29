@@ -113,8 +113,27 @@ Web Push to a device with full web payload
     push.send()
 
 
-Rich Push with extra and without notification
----------------------------------------------
+Open Channels send to a device with full open channel payload
+-------------------------------------------------------------
+
+.. code-block:: python
+
+    push = airship.create_push()
+    push.audience = ua.open_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
+    email_overrides = ua.open_platform(
+        title='See my new homepage!',
+        extra={'link': 'urbanairship.com'}
+        )
+    push.notification = ua.notification(
+        alert="We are in your email now!",
+        open_platform={'email': email_overrides}
+        )
+    push.device_types = ua.device_types('open::email')
+    push.send()
+
+
+Message Center send with extra and without notification
+-------------------------------------------------------
 
 .. code-block:: python
 

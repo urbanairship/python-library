@@ -16,7 +16,7 @@ using :py:class:`ChannelList`.
    for channel in ua.ChannelList(airship):
        channel_id = channel.channel_id
        print (channel.channel_id, channel.device_type, channel.tags,
-              channel.push_address, channel.alias, channel.opt_in)
+              channel.push_address, channel.named_user_id, channel.opt_in)
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelList, ChannelInfo
@@ -35,7 +35,7 @@ Device metadata is fetched for a specific channel by using
 
    channel = ua.ChannelInfo.lookup(airship, device_channel)
    print (channel.channel_id, channel.device_type, channel.tags,
-          channel.push_address, channel.alias, channel.opt_in)
+          channel.push_address, channel.named_user_id, channel.opt_in)
 
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelInfo
@@ -62,7 +62,7 @@ type of device. The available iterators are :py:class:`DeviceTokenList` and :py:
 
 
 Open Channel Registration
---------------
+-------------------------
 
 Open Channels are registered by using :py:class:`OpenChannel`.
 

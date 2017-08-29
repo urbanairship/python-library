@@ -49,6 +49,7 @@ from .devices import (
     OpenChannel,
     DeviceTokenList,
     APIDList,
+    DeviceInfo,
     Feedback,
     TagList,
     Tag,
@@ -121,6 +122,7 @@ __all__ = [
     OpenChannel,
     DeviceTokenList,
     APIDList,
+    DeviceInfo,
     TagList,
     Tag,
     DeleteTag,
@@ -149,4 +151,5 @@ __all__ = [
 # Silence urllib3 INFO logging by default
 
 import logging
-logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
+logging.getLogger('requests.packages.urllib3.connectionpool')\
+    .setLevel(logging.WARNING)

@@ -24,7 +24,11 @@ class TestStaticList(unittest.TestCase):
             self.assertEqual(results, {'ok': True})
 
     def test_upload(self):
-        data = ['alias,stevenh'.split(','), 'alias,marianb'.split(','), 'named_user,billg'.split(',')]
+        data = [
+            'alias,stevenh'.split(','),
+            'alias,marianb'.split(','),
+            'named_user,billg'.split(',')
+        ]
         self.path = 'test_data.csv'
 
         with open(self.path, "wt") as csv_file:
@@ -130,24 +134,36 @@ class TestStaticLists(unittest.TestCase):
         self.assertEqual(responses[0].name, 'ca-testlist')
         self.assertEqual(responses[0].description, 'this little list')
         self.assertEqual(responses[0].extra, {'key': 'value'})
-        self.assertEqual(responses[0].created, datetime(2015, 6, 29, 23, 42, 39))
-        self.assertEqual(responses[0].last_updated, datetime(2015, 6, 30, 23, 42, 39))
+        self.assertEqual(
+            responses[0].created, datetime(2015, 6, 29, 23, 42, 39)
+        )
+        self.assertEqual(
+            responses[0].last_updated, datetime(2015, 6, 30, 23, 42, 39)
+        )
         self.assertEqual(responses[0].channel_count, 123)
         self.assertEqual(responses[0].status, 'ready')
 
         self.assertEqual(responses[1].name, 'ca-testlist2')
         self.assertEqual(responses[1].description, 'this little list2')
         self.assertEqual(responses[1].extra, {'key': 'value'})
-        self.assertEqual(responses[1].created, datetime(2015, 5, 29, 23, 42, 39))
-        self.assertEqual(responses[1].last_updated, datetime(2015, 5, 30, 23, 42, 39))
+        self.assertEqual(
+            responses[1].created, datetime(2015, 5, 29, 23, 42, 39)
+        )
+        self.assertEqual(
+            responses[1].last_updated, datetime(2015, 5, 30, 23, 42, 39)
+             )
         self.assertEqual(responses[1].channel_count, 23)
         self.assertEqual(responses[1].status, 'processing')
 
         self.assertEqual(responses[2].name, 'ca-testlist3')
         self.assertEqual(responses[2].description, 'this little list3')
         self.assertEqual(responses[2].extra, {'key': 'value'})
-        self.assertEqual(responses[2].created, datetime(2015, 4, 29, 23, 42, 39))
-        self.assertEqual(responses[2].last_updated, datetime(2015, 4, 30, 23, 42, 39))
+        self.assertEqual(
+            responses[2].created, datetime(2015, 4, 29, 23, 42, 39)
+        )
+        self.assertEqual(
+            responses[2].last_updated, datetime(2015, 4, 30, 23, 42, 39)
+        )
         self.assertEqual(responses[2].channel_count, 1500)
         self.assertEqual(responses[2].status, 'ready')
 
@@ -201,15 +217,23 @@ class TestStaticLists(unittest.TestCase):
         self.assertEqual(responses[0].name, 'ca-testlist')
         self.assertEqual(responses[0].description, 'this little list')
         self.assertEqual(responses[0].extra, {'key': 'value'})
-        self.assertEqual(responses[0].created, datetime(2015, 6, 29, 23, 42, 39))
-        self.assertEqual(responses[0].last_updated, datetime(2015, 6, 30, 23, 42, 39))
+        self.assertEqual(
+            responses[0].created, datetime(2015, 6, 29, 23, 42, 39)
+        )
+        self.assertEqual(
+            responses[0].last_updated, datetime(2015, 6, 30, 23, 42, 39)
+        )
         self.assertEqual(responses[0].channel_count, 123)
         self.assertEqual(responses[0].status, 'ready')
 
         self.assertEqual(responses[1].name, 'ca-testlist2')
         self.assertEqual(responses[1].description, 'this little list2')
         self.assertEqual(responses[1].extra, {'key': 'value'})
-        self.assertEqual(responses[1].created, datetime(2015, 5, 29, 23, 42, 39))
-        self.assertEqual(responses[1].last_updated, datetime(2015, 5, 30, 23, 42, 39))
+        self.assertEqual(
+            responses[1].created, datetime(2015, 5, 29, 23, 42, 39)
+        )
+        self.assertEqual(
+            responses[1].last_updated, datetime(2015, 5, 30, 23, 42, 39)
+        )
         self.assertEqual(responses[1].channel_count, 23)
         self.assertEqual(responses[1].status, 'processing')

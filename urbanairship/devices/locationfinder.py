@@ -40,7 +40,8 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        coor_are_valid = isinstance(latitude, (int, float)) and isinstance(longitude, (int, float))
+        coor_are_valid = isinstance(latitude, (int, float)) \
+            and isinstance(longitude, (int, float))
 
         if not coor_are_valid:
             raise TypeError('latitude and longitude need to be numbers')
@@ -66,7 +67,9 @@ class LocationFinder(object):
             str(latitude), str(longitude)))
         return resp.json()
 
-    def bounding_box_lookup(self, lat1, long1, lat2, long2, location_type=None):
+    def bounding_box_lookup(
+            self, lat1, long1, lat2, long2, location_type=None
+    ):
         """Lookup a location by bounding box
 
         :param lat1: First latitude of the location
@@ -77,8 +80,10 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        loc1_valid = isinstance(lat1, (float, int)) and isinstance(long1, (float, int))
-        loc2_valid = isinstance(lat2, (float, int)) and isinstance(long2, (float, int))
+        loc1_valid = isinstance(lat1, (float, int)) \
+            and isinstance(long1, (float, int))
+        loc2_valid = isinstance(lat2, (float, int)) \
+            and isinstance(long2, (float, int))
 
         if not loc1_valid or not loc2_valid:
             raise TypeError('lat1, long1, lat2, and long2 need to be numbers')
@@ -150,8 +155,11 @@ class LocationFinder(object):
             version=3,
             params=params
         )
-        logger.info('Retrieved location info by polygon id: %s and zoom: %s' % (
-            polygon_id, str(zoom)))
+        logger.info(
+            'Retrieved location info by polygon id: %s and zoom: %s' % (
+                polygon_id, str(zoom)
+            )
+        )
         return resp.json()
 
     def date_ranges(self):

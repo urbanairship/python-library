@@ -529,7 +529,6 @@ class TestMessage(unittest.TestCase):
         )
 
     def options(self):
-        airship = ua.Airship('key', 'secret')
         push = ua.Push(None)
         push.audience = ua.all_
         push.notification = ua.notification(alert='Hello Expiry')
@@ -586,7 +585,6 @@ class TestMessage(unittest.TestCase):
                 button_actions={'yes': {'add_tag': 'clicked_yes'}}
             )
         )
-
 
         self.assertEqual(
             ua.android(
