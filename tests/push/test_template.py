@@ -1,3 +1,7 @@
+import datetime
+import json
+import mock
+import requests
 import unittest
 
 import urbanairship as ua
@@ -35,22 +39,103 @@ class TestTemplatePush(unittest.TestCase):
             }
         )
 
-""" Notes for more template tests and docs
 
-Lookup
+class TestTemplate(unittest.TestCase):
+    def test_template_lookup(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
+                    'created_at': '2017-08-30T23:04:54.014Z',
+                    'modified_at': '2017-08-31T00:02:41.493Z',
+                    'last_used': None,
+                    'name': 'Welcome Message',
+                    'description': 'Our welcome message',
+                    'variables': [
+                        {
+                            'key': 'TITLE',
+                            'name': 'Title',
+                            'description': 'e.g. Mr, Ms, Dr, etc.',
+                            'default_value': ''
+                        },
+                        {
+                            'key': 'FIRST_NAME',
+                            'name': 'First Name',
+                            'description': 'Given name',
+                            'default_value': None
+                        },
+                        {
+                            'key': 'LAST_NAME',
+                            'name': 'Last Name',
+                            'description': 'Family name',
+                            'default_value': None
+                        }
+                    ],
+                    'push': {
+                        'notification': {
+                            'alert': 'Hello {{FIRST_NAME}}, this is your'
+                                     'welcome message!'
+                        }
+                    }
+                }
+            ).encode('utf-8')
 
-In [3]: template = ua.TemplateInfo.lookup(airship, '230ab223-7cce-48d8-be28-46f717a42985')
+            response.status_code = 200
+            mock_request.return_value = response
 
-In [4]: print (template.template_id, template.created_at, template.modified_at, template.last_used, template.name, template.description, template.variables, template.push)
-(u'230ab223-7cce-48d8-be28-46f717a42985', datetime.datetime(2016, 6, 28, 19, 18, 0, 366000), datetime.datetime(2016, 6, 28, 19, 56, 31, 877000), datetime.datetime(2017, 8, 23, 23, 52, 1, 180000), u'Pet Sounds', u'What kind of animal noises do you like?', [{u'default_value': u'\U0001f434', u'name': u'Animal emoji', u'key': u'animal', u'description': u"The emoji of a user's animal."}, {u'default_value': u'Bob', u'name': u'First Name', u'key': u'first_name', u'description': u'First name of user.'}, {u'default_value': u'Neigh', u'name': u'Animal Noise', u'key': u'noise', u'description': u"The noise the user's animal makes."}], {u'notification': {u'android': {u'title': u'Pet Sounds {{animal}}', u'summary': u'{{animal}}'}, u'ios': {u'sound': u'cat.caf', u'badge': u'+1', u'title': u'Pet Sounds {{animal}}'}, u'actions': {u'open': {u'content': u'http://babygoatsandfriends.tumblr.com', u'type': u'deep_link'}}, u'alert': u'Hi {{ first_name }}, the {{ animal }} goes {{ noise }}!'}})
+        airship = ua.Airship('key', 'secret')
+        template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+        template_lookup = ua.Template.lookup(airship, template_id)
 
-{"ok":true,"template":{"id":"230ab223-7cce-48d8-be28-46f717a42985","name":"Pet Sounds","description":"What kind of animal noises do you like?","variables":[{"key":"animal","name":"Animal emoji","description":"The emoji of a user's animal.","default_value":"🐴"},{"key":"first_name","name":"First Name","description":"First name of user.","default_value":"Bob"},{"key":"noise","name":"Animal Noise","description":"The noise the user's animal makes.","default_value":"Neigh"}],"created_at":"2016-06-28T19:18:00.366Z","modified_at":"2016-06-28T19:56:31.877Z","push":{"notification":{"android":{"summary":"{{animal}}","title":"Pet Sounds {{animal}}"},"ios":{"sound":"cat.caf","badge":"+1","title":"Pet Sounds {{animal}}"},"actions":{"open":{"content":"http://babygoatsandfriends.tumblr.com","type":"deep_link"}},"alert":"Hi {{ first_name }}, the {{ animal }} goes {{ noise }}!"}},"last_used":"2017-08-23T23:52:01.180Z"}}
+        date_created = (
+            datetime.datetime.strptime(
+                '2017-08-30T23:04:54.014Z',
+                '%Y-%m-%dT%H:%M:%S.%fZ'
+            )
+        )
+        date_modified = (
+            datetime.datetime.strptime(
+                '2017-08-31T00:02:41.493Z',
+                '%Y-%m-%dT%H:%M:%S.%fZ'
+            )
+        )
 
-Listing
-
-# TODO: don't forget to test NEXTs (test for channel listing too why not)
-
-In [5]: for template in ua.TemplateList(airship):
-   ...:     template_id = template.template_id
-   ...:     print (template.template_id, template.created_at, template.modified_at, template.last_used, template.name, template.description, template.variables, template.push)
-"""
+        self.assertEqual(template_lookup.template_id, template_id)
+        self.assertEqual(template_lookup.created, date_created)
+        self.assertEqual(template_lookup.created, date_modified)
+        self.assertEqual(template_lookup.last_used, 'UNKNOWN')
+        self.assertEqual(template_lookup.name, 'Welcome Message')
+        self.assertEqual(template_lookup.description, 'Our welcome message')
+        self.assertEqual(
+            template_lookup.variables,
+            [
+                {
+                    'key': 'TITLE',
+                    'name': 'Title',
+                    'description': 'e.g. Mr, Ms, Dr, etc.',
+                    'default_value': ''
+                },
+                {
+                    'key': 'FIRST_NAME',
+                    'name': 'First Name',
+                    'description': 'Given name',
+                    'default_value': None
+                },
+                {
+                    'key': 'LAST_NAME',
+                    'name': 'Last Name',
+                    'description': 'Family name',
+                    'default_value': None
+                }
+            ]
+        )
+        self.assertEqual(
+            template_lookup.push,
+            {
+                'notification': {
+                    'alert': 'Hello {{FIRST_NAME}}, this is your '
+                             'welcome message!'
+                }
+            }
+        )

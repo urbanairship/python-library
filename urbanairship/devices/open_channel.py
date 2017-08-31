@@ -30,7 +30,7 @@ class OpenChannel(object):
             raise ValueError('Must set address before creation.')
 
         if not self.open_platform:
-            raise ValueError('Must set open_platforn before creation.')
+            raise ValueError('Must set open_platform before creation.')
 
         if not self.opt_in:
             raise ValueError('Must set opt_in before creation.')

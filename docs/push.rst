@@ -66,6 +66,7 @@ You can override the payload with platform-specific values as well.
 .. automodule:: urbanairship.push.payload
    :members: notification, ios, android, wns_payload, open_platform
 
+
 In-App Message
 --------------
 
@@ -87,6 +88,7 @@ very similar to a push object.  In-app messages do not require push.notification
 .. automodule:: urbanairship.push.payload
    :members: in_app
    :noindex:
+
 
 Actions
 -------
@@ -117,6 +119,7 @@ http://docs.urbanairship.com/api/ua.html#actions, example:
 .. automodule:: urbanairship.push.payload
    :members: notification, actions, ios, android, amazon
    :noindex:
+
 
 Interactive Notifications
 -------------------------
@@ -294,6 +297,7 @@ If you want to use an existing template to send a push, follow this example:
    )
    push.send()
 
+
 Notice that you do not include a notification, as that is already defined by
 the template. Instead, you include merge data, which is made up of the template
 ID and the field substitutions. The example above sends to a particular iOS
@@ -301,3 +305,140 @@ channel.
 
 .. autoclass:: urbanairship.push.core.TemplatePush
    :members:
+
+
+Template Lookup
+---------------
+
+Look up a previously created template:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   template = ua.Template.lookup(
+       airship, 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   )
+   print (
+       template.template_id, template.created_at, template.modified_at,
+       template.last_used, template.name, template.description,
+       template.variables, template.push
+   )
+
+.. autoclass:: urbanairship.push.template.Template
+   :members:
+
+
+Template Listing
+----------------
+
+List all previously created templates on an app:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   for template in ua.TemplateList(airship):
+      template_id = template.template_id
+      print (
+          template.template_id, template.created_at, template.modified_at,
+          template.last_used, template.name, template.description,
+          template.variables, template.push
+      )
+
+
+.. autoclass:: urbanairship.push.template.TemplateList
+   :members:
+
+
+Template Creation
+-----------------
+
+Create a new template:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   new_template = ua.Template()
+   new_template.name = 'Welcome Message'
+   new_template.description = 'Our welcome message'
+   new_template.variables = [
+        {
+            "key": "TITLE",
+            "name": "Title",
+            "description": "e.g. Mr., Ms., Dr., etc.",
+            "default_value": ""
+        },
+        {
+            "key": "FIRST_NAME",
+            "name": "First Name",
+            "description": "Given name",
+            "default_value": None
+        },
+        {
+            "key": "LAST_NAME",
+            "name": "Last Name",
+            "description": "Family name",
+            "default_value": None
+        }
+   ]
+   new_template.push = {
+       "notification": {
+           "alert": "Hello {{TITLE}} {{FIRST_NAME}} {{LAST_NAME}}!"
+       }
+   }
+   print new_template.create(airship)
+   print new_template.template_id  # To get the template ID for future use
+
+
+Template Update
+---------------
+
+You can look up an existing template, put it in a Template object, then
+change only what needs to be changed:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   updated_template = ua.Template.lookup(airship, template_id)
+   updated_template.push = {
+       "notification": {
+           "alert": "Goodbye {{TITLE}} {{FIRST_NAME}} {{LAST_NAME}}!"
+       }
+   }
+   print updated_template.update(airship)
+
+
+You can also start from scratch. Define all the components of the template as
+in the Create example (but don't run .create), then:
+
+.. code-block:: python
+
+   template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   print updated_template.update(airship, template_id)
+
+
+Template Deletion
+-----------------
+
+You can delete a template either from an existing template object you have
+or just with a template ID:
+
+.. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   template_to_delete.delete(airship)  # A Template object
+
+   #Or
+   template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   ua.Template.delete(airship, template_id)
+

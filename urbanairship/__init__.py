@@ -5,6 +5,8 @@ from .push import (
     Push,
     ScheduledPush,
     TemplatePush,
+    Template,
+    TemplateList,
     all_,
     ios_channel,
     android_channel,
@@ -43,8 +45,6 @@ from .push import (
     local_scheduled_time,
     named_user,
     merge_data,
-    TemplateInfo,
-    TemplateList,
 )
 
 from .devices import (
@@ -152,7 +152,7 @@ __all__ = [
     LocationFinder,
     named_user,
     merge_data,
-    TemplateInfo,
+    Template,
     TemplateList,
 ]
 

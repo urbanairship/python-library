@@ -47,7 +47,7 @@ from .schedule import (
 
 from .template import (
     merge_data,
-    TemplateInfo,
+    Template,
     TemplateList,
 )
 
@@ -65,6 +65,8 @@ __all__ = [
     Push,
     ScheduledPush,
     TemplatePush,
+    Template,
+    TemplateList,
     ios_channel,
     android_channel,
     amazon_channel,

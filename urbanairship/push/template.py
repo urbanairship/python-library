@@ -1,15 +1,33 @@
-import logging
 import datetime
+import json
+import logging
 
 from urbanairship import common
+
 
 logger = logging.getLogger('urbanairship')
 
 
-class TemplateInfo(object):
+class Template(object):
     """Information object for a template.
 
-    # TODO: add ivars here
+    :ivar template_id: UUID; the ID of this template, set automatically.
+    :ivar created_at: UTC datetime when the template was created.
+    :ivar modified_at: UTC datetime when the template was last modified.
+    :ivar last_used: UTC datetime when the template was last used for a push
+        notification. Will be set to 'UNKNOWN' if never used.
+    :ivar name: Required, name of the template, set during
+        creation/modification.
+    :ivar description: Optional, description of the template, set during
+        creation/modification.
+    :ivar variables: Required, an array of `Template Variable Objects
+        <https://docs.urbanairship.com/api/ua/#template-variable-object>`_.
+    :ivar push: Optional, a  push specification object, as defined by the `Push
+        Object specification
+        <https://docs.urbanairship.com/api/ua/#push-object>`_, but does not
+        include ``audience`` or ``device_types`` since those are set when push
+        messages are sent. Message Center ``message`` is also not supported in
+        Templates at this time.
 
     """
 
@@ -19,8 +37,125 @@ class TemplateInfo(object):
     last_used = None
     name = None
     description = None
-    variables = None
-    push = None
+    variables = []
+    push = {}
+
+    @property
+    def payload(self):
+        data = {
+            'name': self.name,
+            'variables': self.variables,
+            'push': self.push
+        }
+        if self.description is not None:
+            data['description'] = self.description
+        return data
+
+    def create(self, airship):
+        """Create a notification template with the API.
+
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+
+        """
+
+        if not self.name:
+            raise ValueError('Must set name before template creation.')
+
+        if not self.variables:
+            raise ValueError('Must set variables before template creation.')
+
+        if not self.push:
+            raise ValueError('Must set push before template creation.')
+
+        if 'message' in self.push.keys():
+            raise ValueError(
+                'Message center is not supported by templates.'
+            )
+
+        body = json.dumps(self.payload)
+        response = airship._request(
+            method='POST',
+            body=body,
+            url=common.TEMPLATES_URL,
+            content_type='application/json',
+            version=3
+        )
+        self.template_id = response.json().get('template_id')
+        logger.info(
+            'Successful template creation for template {0}'
+            .format(self.template_id)
+        )
+
+        return response
+
+    def update(self, airship, template_id=None):
+        """Update a template with the API.
+
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+
+        """
+
+        if not template_id and not self.template_id:
+            raise ValueError('Cannot update template without ID.')
+        if template_id:
+            self.template_id = template_id
+
+        if not self.name:
+            raise ValueError('Must set name before template update.')
+
+        if not self.variables:
+            raise ValueError('Must set variables before template update.')
+
+        if not self.push:
+            raise ValueError('Must set push before template update.')
+
+        if 'message' in self.push.keys():
+            raise ValueError(
+                'Message center is not supported by templates.'
+            )
+
+        body = json.dumps(self.payload)
+        response = airship._request(
+            method='POST',
+            body=body,
+            url=common.TEMPLATES_URL + self.template_id,
+            content_type='application/json',
+            version=3
+        )
+        logger.info(
+            'Successful template update for template {0}'
+            .format(self.template_id)
+        )
+
+        return response
+
+    def delete(self, airship, template_id=None):
+        """Delete a previously created template.
+
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+
+        """
+
+        if not template_id and not self.template_id:
+            raise ValueError('Cannot delete template without ID.')
+        if template_id:
+            self.template_id = template_id
+
+        response = airship._request(
+            method='DELETE',
+            body=None,
+            url=common.TEMPLATES_URL + self.template_id,
+            version=3
+        )
+        logger.info(
+            'Successful template delete for template {0}'
+            .format(self.template_id)
+        )
+
+        return response
 
     @classmethod
     def from_payload(cls, payload, template_key):
@@ -34,7 +169,7 @@ class TemplateInfo(object):
                         payload[key], '%Y-%m-%dT%H:%M:%S.%fZ'
                     )
                 except:
-                    payload[key] = "UNKNOWN"
+                    payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
         return obj
 
@@ -61,20 +196,18 @@ class TemplateList(common.IteratorParent):
     """Iterator for listing all templates for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
-    :returns: Each ``next`` returns a :py:class:`TemplateInfo` object.
+    :returns: Each ``next`` returns a :py:class:`Template` object.
 
     """
     next_url = common.TEMPLATES_URL
     data_attribute = 'templates'
     id_key = 'id'
-    instance_class = TemplateInfo
+    instance_class = Template
 
     def __init__(self, airship, limit=None):
         params = {'limit': limit} if limit else {}
         super(TemplateList, self).__init__(airship, params)
 
-
-# TODO: create template, update template, delete template
 
 def merge_data(template_id, substitutions):
     """Template push merge_data creation.
