@@ -58,7 +58,9 @@ class TestPush(unittest.TestCase):
             web={
                 'title': 'This is a title.',
                 'icon': {'url': 'https://example.com/icon.png'},
-                'extra': {'attribute': 'id'}
+                'extra': {'attribute': 'id'},
+                'time_to_live': 12345,
+                'interaction_required': False
             }
         )
         p.device_types = 'web'
@@ -73,7 +75,9 @@ class TestPush(unittest.TestCase):
                     'web': {
                         'title': 'This is a title.',
                         'icon': {'url': 'https://example.com/icon.png'},
-                        'extra': {'attribute': 'id'}
+                        'extra': {'attribute': 'id'},
+                        'time_to_live': 12345,
+                        'interaction_required': False
                     },
                 }
             }
