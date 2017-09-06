@@ -97,26 +97,38 @@ class Template(object):
 
         """
 
-        if not template_id and not self.template_id:
-            raise ValueError('Cannot update template without ID.')
-        if template_id:
-            self.template_id = template_id
+        update_payload = {}
 
-        if not self.name:
-            raise ValueError('Must set name before template update.')
+        if not self.name and not self.description \
+                and not self.push and not self.variables:
+            raise ValueError(
+                'Must set at least one of name, description, push, or '
+                'variables before template update.'
+            )
 
-        if not self.variables:
-            raise ValueError('Must set variables before template update.')
+        if self.name:
+            update_payload['name'] = self.name
 
-        if not self.push:
-            raise ValueError('Must set push before template update.')
+        if self.description:
+            update_payload['description'] = self.description
 
         if 'message' in self.push.keys():
             raise ValueError(
                 'Message center is not supported by templates.'
             )
 
-        body = json.dumps(self.payload)
+        if self.push:
+            update_payload['push'] = self.push
+
+        if self.variables:
+            update_payload['variables'] = self.variables
+
+        if not template_id and not self.template_id:
+            raise ValueError('Cannot update template without ID.')
+        if template_id:
+            self.template_id = template_id
+
+        body = json.dumps(update_payload)
         response = airship._request(
             method='POST',
             body=body,
