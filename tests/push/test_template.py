@@ -46,36 +46,39 @@ class TestTemplate(unittest.TestCase):
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
-                    'created_at': '2017-08-30T23:04:54.014Z',
-                    'modified_at': '2017-08-31T00:02:41.493Z',
-                    'last_used': None,
-                    'name': 'Welcome Message',
-                    'description': 'Our welcome message',
-                    'variables': [
-                        {
-                            'key': 'TITLE',
-                            'name': 'Title',
-                            'description': 'e.g. Mr, Ms, Dr, etc.',
-                            'default_value': ''
-                        },
-                        {
-                            'key': 'FIRST_NAME',
-                            'name': 'First Name',
-                            'description': 'Given name',
-                            'default_value': None
-                        },
-                        {
-                            'key': 'LAST_NAME',
-                            'name': 'Last Name',
-                            'description': 'Family name',
-                            'default_value': None
-                        }
-                    ],
-                    'push': {
-                        'notification': {
-                            'alert': 'Hello {{FIRST_NAME}}, this is your'
-                                     'welcome message!'
+                    "ok": True,
+                    "template": {
+                        'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
+                        'created_at': '2017-08-30T23:04:54.014Z',
+                        'modified_at': '2017-08-31T00:02:41.493Z',
+                        'last_used': None,
+                        'name': 'Welcome Message',
+                        'description': 'A welcome message',
+                        'variables': [
+                            {
+                                'key': 'TITLE',
+                                'name': 'Title',
+                                'description': 'e.g. Mr, Ms, Dr, etc.',
+                                'default_value': ''
+                            },
+                            {
+                                'key': 'FIRST_NAME',
+                                'name': 'First Name',
+                                'description': 'Given name',
+                                'default_value': None
+                            },
+                            {
+                                'key': 'LAST_NAME',
+                                'name': 'Last Name',
+                                'description': 'Family name',
+                                'default_value': None
+                            }
+                        ],
+                        'push': {
+                            'notification': {
+                                'alert': 'Hello {{FIRST_NAME}}, this is your '
+                                         'welcome message!'
+                            }
                         }
                     }
                 }
@@ -84,58 +87,58 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-        airship = ua.Airship('key', 'secret')
-        template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
-        template_lookup = ua.Template.lookup(airship, template_id)
+            airship = ua.Airship('key', 'secret')
+            template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+            template_lookup = ua.Template.lookup(airship, template_id)
 
-        date_created = (
-            datetime.datetime.strptime(
-                '2017-08-30T23:04:54.014Z',
-                '%Y-%m-%dT%H:%M:%S.%fZ'
+            date_created = (
+                datetime.datetime.strptime(
+                    '2017-08-30T23:04:54.014Z',
+                    '%Y-%m-%dT%H:%M:%S.%fZ'
+                )
             )
-        )
-        date_modified = (
-            datetime.datetime.strptime(
-                '2017-08-31T00:02:41.493Z',
-                '%Y-%m-%dT%H:%M:%S.%fZ'
+            date_modified = (
+                datetime.datetime.strptime(
+                    '2017-08-31T00:02:41.493Z',
+                    '%Y-%m-%dT%H:%M:%S.%fZ'
+                )
             )
-        )
 
-        self.assertEqual(template_lookup.template_id, template_id)
-        self.assertEqual(template_lookup.created, date_created)
-        self.assertEqual(template_lookup.created, date_modified)
-        self.assertEqual(template_lookup.last_used, 'UNKNOWN')
-        self.assertEqual(template_lookup.name, 'Welcome Message')
-        self.assertEqual(template_lookup.description, 'Our welcome message')
-        self.assertEqual(
-            template_lookup.variables,
-            [
+            self.assertEqual(template_lookup.template_id, template_id)
+            self.assertEqual(template_lookup.created_at, date_created)
+            self.assertEqual(template_lookup.modified_at, date_modified)
+            self.assertEqual(template_lookup.last_used, 'UNKNOWN')
+            self.assertEqual(template_lookup.name, 'Welcome Message')
+            self.assertEqual(template_lookup.description, 'A welcome message')
+            self.assertEqual(
+                template_lookup.variables,
+                [
+                    {
+                        'key': 'TITLE',
+                        'name': 'Title',
+                        'description': 'e.g. Mr, Ms, Dr, etc.',
+                        'default_value': ''
+                    },
+                    {
+                        'key': 'FIRST_NAME',
+                        'name': 'First Name',
+                        'description': 'Given name',
+                        'default_value': None
+                    },
+                    {
+                        'key': 'LAST_NAME',
+                        'name': 'Last Name',
+                        'description': 'Family name',
+                        'default_value': None
+                    }
+                ]
+            )
+            self.assertEqual(
+                template_lookup.push,
                 {
-                    'key': 'TITLE',
-                    'name': 'Title',
-                    'description': 'e.g. Mr, Ms, Dr, etc.',
-                    'default_value': ''
-                },
-                {
-                    'key': 'FIRST_NAME',
-                    'name': 'First Name',
-                    'description': 'Given name',
-                    'default_value': None
-                },
-                {
-                    'key': 'LAST_NAME',
-                    'name': 'Last Name',
-                    'description': 'Family name',
-                    'default_value': None
+                    'notification': {
+                        'alert': 'Hello {{FIRST_NAME}}, this is your '
+                                 'welcome message!'
+                    }
                 }
-            ]
-        )
-        self.assertEqual(
-            template_lookup.push,
-            {
-                'notification': {
-                    'alert': 'Hello {{FIRST_NAME}}, this is your '
-                             'welcome message!'
-                }
-            }
-        )
+            )
