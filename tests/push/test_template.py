@@ -110,7 +110,7 @@ class TestTemplate(unittest.TestCase):
             self.assertEqual(template_lookup.last_used, 'UNKNOWN')
             self.assertEqual(template_lookup.name, 'Welcome Message')
             self.assertEqual(template_lookup.description, 'A welcome message')
-            self.assertEqual(
+            self.assertItemsEqual(
                 template_lookup.variables,
                 [
                     {
@@ -133,7 +133,7 @@ class TestTemplate(unittest.TestCase):
                     }
                 ]
             )
-            self.assertEqual(
+            self.assertItemsEqual(
                 template_lookup.push,
                 {
                     'notification': {
@@ -280,7 +280,7 @@ class TestTemplate(unittest.TestCase):
             }
         }
 
-        self.assertEqual(
+        self.assertItemsEqual(
             t.payload,
             {
                 'push': {
@@ -395,16 +395,6 @@ class TestTemplate(unittest.TestCase):
                 'default_value': 'Meow'
             }
         ]
-
-        self.assertRaises(ValueError, template.create, airship)
-
-    def test_create_template_requires_variables(self):
-        airship = ua.Airship('key', 'secret')
-        template = ua.Template()
-        # Do not set variables
-        template.name = 'Cat sound'
-        template.description = 'The cat says...'
-        template.push = {'notification': {'alert': 'The cat says {{SOUND}}'}}
 
         self.assertRaises(ValueError, template.create, airship)
 

@@ -61,9 +61,8 @@ class OpenChannel(object):
         self.channel_id = response.json().get('channel_id')
 
         logger.info(
-            'Successful open channel creation: {0} ({1})'.format(
-                self.channel_id, self.address
-            )
+            'Successful open channel creation: %s (%s)',
+            self.channel_id, self.address
         )
 
         return response
@@ -112,9 +111,8 @@ class OpenChannel(object):
         self.channel_id = response.json().get('channel_id')
 
         logger.info(
-            'Successful open channel update: {0} ({1})'.format(
-                self.channel_id, self.address
-            )
+            'Successful open channel update: %s (%s)',
+            self.channel_id, self.address
         )
 
         return response

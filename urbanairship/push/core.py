@@ -190,6 +190,13 @@ class TemplatePush(object):
         :raises Unauthorized: Authentication failed.
 
         """
+
+        if not self.audience:
+            raise ValueError('Must set audience for template push.')
+
+        if not self.device_types:
+            raise ValueError('Must set device_types for template push.')
+
         body = json.dumps(self.payload)
         response = self._airship._request(
             method='POST',

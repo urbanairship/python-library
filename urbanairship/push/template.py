@@ -62,9 +62,6 @@ class Template(object):
         if not self.name:
             raise ValueError('Must set name before template creation.')
 
-        if not self.variables:
-            raise ValueError('Must set variables before template creation.')
-
         if not self.push:
             raise ValueError('Must set push before template creation.')
 
@@ -83,8 +80,7 @@ class Template(object):
         )
         self.template_id = response.json().get('template_id')
         logger.info(
-            'Successful template creation for template {0}'
-            .format(self.template_id)
+            'Successful template creation for template %s', self.template_id
         )
 
         return response
@@ -137,8 +133,7 @@ class Template(object):
             version=3
         )
         logger.info(
-            'Successful template update for template {0}'
-            .format(self.template_id)
+            'Successful template update for template %s', self.template_id
         )
 
         return response
@@ -163,8 +158,7 @@ class Template(object):
             version=3
         )
         logger.info(
-            'Successful template delete for template {0}'
-            .format(self.template_id)
+            'Successful template delete for template %s', self.template_id
         )
 
         return response
