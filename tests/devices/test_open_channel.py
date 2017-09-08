@@ -22,12 +22,12 @@ class TestOpenChannel(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            channel = ua.OpenChannel()
+            channel = ua.OpenChannel(airship)
             channel.address = address
             channel.open_platform = platform
             channel.opt_in = True
 
-            channel.create(airship)
+            channel.create()
 
             self.assertEqual(channel.channel_id, channel_id)
 
@@ -45,13 +45,13 @@ class TestOpenChannel(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            channel = ua.OpenChannel()
+            channel = ua.OpenChannel(airship)
             channel.address = address
             channel.open_platform = platform
             channel.opt_in = True
             channel.tags = ['a_tag']
 
-            channel.create(airship, set_tags=True)
+            channel.create(set_tags=True)
 
             self.assertEqual(channel.channel_id, channel_id)
 
@@ -59,46 +59,48 @@ class TestOpenChannel(unittest.TestCase):
         address = 'some_address'
 
         airship = ua.Airship('key', 'secret')
-        channel = ua.OpenChannel()
+        channel = ua.OpenChannel(airship)
         # Do not set platform
         channel.address = address
         channel.opt_in = True
 
-        self.assertRaises(ValueError, channel.create, airship)
+        self.assertRaises(ValueError, channel.create)
 
     def test_create_channel_requires_address(self):
         platform = 'a_platform'
 
         airship = ua.Airship('key', 'secret')
-        channel = ua.OpenChannel()
+        channel = ua.OpenChannel(airship)
         # Do not set address
         channel.open_platform = platform
         channel.opt_in = True
 
-        self.assertRaises(ValueError, channel.create, airship)
+        self.assertRaises(ValueError, channel.create)
 
     def test_create_channel_requires_opt_in(self):
         address = 'some_address'
         platform = 'a_platform'
 
         airship = ua.Airship('key', 'secret')
-        channel = ua.OpenChannel()
+        channel = ua.OpenChannel(airship)
         # Do not set opt in
         channel.address = address
         channel.open_platform = platform
 
-        self.assertRaises(ValueError, channel.create, airship)
+        self.assertRaises(ValueError, channel.create)
 
     def test_create_channel_requires_set_tag_if_tags(self):
         address = 'some_address'
         platform = 'a_platform'
 
         airship = ua.Airship('key', 'secret')
-        channel = ua.OpenChannel()
+        channel = ua.OpenChannel(airship)
         channel.address = address
         channel.open_platform = platform
         channel.opt_in = True
 
         channel.tags = ['some_tags', 'another_one']
 
-        self.assertRaises(ValueError, channel.create, airship)
+        self.assertRaises(ValueError, channel.create)
+
+    # TODO: add test for lookup

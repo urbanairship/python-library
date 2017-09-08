@@ -9,7 +9,7 @@
 - Added Android platform overrides for Android O
 - Added new properties to the ChannelInfo object
 - Fix to actually use ChannelInfo and DeviceInfo objects for listing devices,
-    including Python datetimes for date/time fields
+    including Python datetimes for date/time fields, other small usage changes
 - Fix to handle non-JSON responses gracefully
 - Fix Travis yml to remove Python 2.6 check (support removed in 2.0.0)
 - Various docs fixes and updates
@@ -42,7 +42,7 @@
 - Added missing module to the required dependencies.
 - Updated README information for version 8.
 
-____________________
+--------------------
 0.8.0
 --------------------
 - Added support for reports including:

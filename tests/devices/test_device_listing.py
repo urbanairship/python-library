@@ -168,3 +168,5 @@ class TestDeviceListing(unittest.TestCase):
                     '%Y-%m-%dT%H:%M:%S'
                 )
             )
+
+    # TODO add tests for DeviceTokenList and APIDList

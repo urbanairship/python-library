@@ -85,12 +85,14 @@ class AirshipFailure(Exception):
 @six.python_2_unicode_compatible
 class IteratorDataObj(object):
     @classmethod
-    def from_payload(cls, payload, device_key=None):
+    def from_payload(cls, payload, device_key=None, airship=None):
         obj = cls()
         if device_key:
             obj.device_type = device_key
         if device_key and payload[device_key]:
             obj.id = payload[device_key]
+        if airship:
+            obj.airship = airship
         for key in payload:
             try:
                 val = datetime.datetime.strptime(
@@ -133,13 +135,15 @@ class IteratorParent(six.Iterator):
         try:
             return self.instance_class.from_payload(
                 next(self._token_iter),
-                self.id_key
+                self.id_key,
+                self.airship
             )
         except StopIteration:
             if self._load_page():
                 return self.instance_class.from_payload(
                     next(self._token_iter),
-                    self.id_key
+                    self.id_key,
+                    self.airship
                 )
             else:
                 raise StopIteration

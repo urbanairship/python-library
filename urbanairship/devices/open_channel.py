@@ -18,7 +18,10 @@ class OpenChannel(object):
     last_registration = None
     tags = None
 
-    def create(self, airship, set_tags=None):
+    def __init__(self, airship):
+        self.airship = airship
+
+    def create(self, set_tags=None):
         """Create this OpenChannel object with the API."""
 
         if self.tags and set_tags is None:
@@ -51,7 +54,7 @@ class OpenChannel(object):
             channel_data['open']['identifiers'] = self.identifiers
 
         body = json.dumps({'channel': channel_data})
-        response = airship.request(
+        response = self.airship.request(
             method='POST',
             body=body,
             url=url,
@@ -67,7 +70,7 @@ class OpenChannel(object):
 
         return response
 
-    def update(self, airship, set_tags=None):
+    def update(self, set_tags=None):
         """Update this OpenChannel object."""
 
         if self.tags and set_tags is None:
@@ -101,7 +104,7 @@ class OpenChannel(object):
             channel_data['open']['identifiers'] = self.identifiers
 
         body = json.dumps({'channel': channel_data})
-        response = airship.request(
+        response = self.airship.request(
             method='POST',
             body=body,
             url=url,
@@ -118,9 +121,9 @@ class OpenChannel(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload):
+    def from_payload(cls, payload, airship):
         """Instantiate an OpenChannel from a payload."""
-        obj = cls()
+        obj = cls(airship)
         for key in payload:
             # Extract the open channel data
             if key == 'open':
@@ -134,17 +137,15 @@ class OpenChannel(object):
                         payload[key], '%Y-%m-%dT%H:%M:%S'
                     )
                 except:
-                    payload[key] = "UNKNOWN"
+                    payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
 
         return obj
 
-    @classmethod
-    def from_id(cls, airship, channel_id):
+    def lookup(self, channel_id):
         """Retrieves an open channel from the provided channel ID."""
-
         url = common.CHANNEL_URL + channel_id
-        response = airship._request(
+        response = self.airship._request(
             method='GET',
             body=None,
             url=url,
@@ -152,4 +153,4 @@ class OpenChannel(object):
         )
         payload = response.json().get('channel')
 
-        return cls.from_payload(payload)
+        return self.from_payload(payload, self.airship)

@@ -40,6 +40,9 @@ class Template(object):
     variables = []
     push = {}
 
+    def __init__(self, airship):
+        self.airship = airship
+
     @property
     def payload(self):
         data = {
@@ -51,7 +54,7 @@ class Template(object):
             data['description'] = self.description
         return data
 
-    def create(self, airship):
+    def create(self):
         """Create a notification template with the API.
 
         :raises AirshipFailure: Request failed.
@@ -71,7 +74,7 @@ class Template(object):
             )
 
         body = json.dumps(self.payload)
-        response = airship._request(
+        response = self.airship._request(
             method='POST',
             body=body,
             url=common.TEMPLATES_URL,
@@ -85,7 +88,7 @@ class Template(object):
 
         return response
 
-    def update(self, airship, template_id=None):
+    def update(self, template_id=None):
         """Update a template with the API.
 
         :raises AirshipFailure: Request failed.
@@ -125,7 +128,7 @@ class Template(object):
             self.template_id = template_id
 
         body = json.dumps(update_payload)
-        response = airship._request(
+        response = self.airship._request(
             method='POST',
             body=body,
             url=common.TEMPLATES_URL + self.template_id,
@@ -138,7 +141,7 @@ class Template(object):
 
         return response
 
-    def delete(self, airship, template_id=None):
+    def delete(self, template_id=None):
         """Delete a previously created template.
 
         :raises AirshipFailure: Request failed.
@@ -151,7 +154,7 @@ class Template(object):
         if template_id:
             self.template_id = template_id
 
-        response = airship._request(
+        response = self.airship._request(
             method='DELETE',
             body=None,
             url=common.TEMPLATES_URL + self.template_id,
@@ -164,9 +167,9 @@ class Template(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload, template_key):
+    def from_payload(cls, payload, template_key, airship):
         """Create based on results from a TemplateList iterator."""
-        obj = cls()
+        obj = cls(airship)
         obj.template_id = payload[template_key]
         for key in payload:
             if key in ('created_at', 'modified_at', 'last_used'):
@@ -179,15 +182,14 @@ class Template(object):
             setattr(obj, key, payload[key])
         return obj
 
-    @classmethod
-    def lookup(cls, airship, template_id):
+    def lookup(self, template_id):
         """Fetch metadata from a template ID"""
         start_url = common.TEMPLATES_URL
         data_attribute = 'template'
         id_key = 'id'
         params = {}
         url = start_url + template_id
-        response = airship._request(
+        response = self.airship._request(
             method='GET',
             body=None,
             url=url,
@@ -195,7 +197,7 @@ class Template(object):
             params=params
         )
         payload = response.json()
-        return cls.from_payload(payload[data_attribute], id_key)
+        return self.from_payload(payload[data_attribute], id_key, self.airship)
 
 
 class TemplateList(common.IteratorParent):

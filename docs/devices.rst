@@ -33,7 +33,7 @@ Device metadata is fetched for a specific channel by using
    import urbanairship as ua
    airship = ua.Airship(app_key, app_secret)
 
-   channel = ua.ChannelInfo.lookup(airship, device_channel)
+   channel = ua.ChannelInfo(airship).lookup(device_channel)
    print (channel.channel_id, channel.device_type, channel.tags,
           channel.push_address, channel.named_user_id, channel.opt_in)
 
@@ -46,7 +46,8 @@ Device Listing
 --------------
 
 Device lists are fetched by instantiating an iterator object for each
-type of device. The available iterators are :py:class:`DeviceTokenList` and :py:class:`APIDList`.
+type of device. The available iterators are :py:class:`DeviceTokenList` and
+:py:class:`APIDList`.
 
 .. code-block:: python
 
@@ -55,6 +56,9 @@ type of device. The available iterators are :py:class:`DeviceTokenList` and :py:
 
    for dt in ua.DeviceTokenList(airship):
       print (dt.device_token, dt.tags or [], dt.active)
+
+   for a in ua.APIDList(airship):
+      print (a.apid, a.tags or [], a.active)
 
 .. automodule:: urbanairship.devices.devicelist
    :members: DeviceTokenList, APIDList, DeviceInfo
@@ -71,11 +75,11 @@ Open Channels are registered by using :py:class:`OpenChannel`.
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   my_channel = ua.OpenChannel()
+   my_channel = ua.OpenChannel(airship)
    my_channel.address = 'my_email@example.com'
    my_channel.open_platform = 'email'
    my_channel.opt_in = True
-   my_channel.create(airship)
+   my_channel.create()
 
    print (my_channel.channel_id, my_channel.address)
 
@@ -87,11 +91,11 @@ Existing channels can be updated by using the update method on
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   my_channel = ua.OpenChannel.from_id(
-       airship, '4e517ffb-af1a-4383-b0a7-e76561053749'
+   my_channel = ua.OpenChannel(airship).lookup(
+       '4e517ffb-af1a-4383-b0a7-e76561053749'
    )
    my_channel.tags = ['a_new_tag']
-   my_channel.update(airship, set_tags=True)
+   my_channel.update(set_tags=True)
 
 .. automodule:: urbanairship.devices.open_channel
    :members: OpenChannel
@@ -110,8 +114,8 @@ timestamp. For more information, see: `the documentation on feedback
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
    since = datetime.datetime.utcnow() - datetime.timedelta(days=1)
-   tokens = ua.Feedback.device_token(airship, since)
-   apids = ua.Feedback.apid(airship, since)
+   tokens = ua.Feedback(airship).device_token(since)
+   apids = ua.Feedback(airship).apid(since)
 
 .. automodule:: urbanairship.devices.devicelist
    :members: Feedback

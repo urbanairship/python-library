@@ -317,8 +317,8 @@ Look up a previously created template:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   template = ua.Template.lookup(
-       airship, 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   template = ua.Template(airship).lookup(
+       'ef34a8d9-0ad7-491c-86b0-aea74da15161'
    )
    print (
        template.template_id, template.created_at, template.modified_at,
@@ -363,7 +363,7 @@ Create a new template:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   new_template = ua.Template()
+   new_template = ua.Template(airship)
    new_template.name = 'Welcome Message'
    new_template.description = 'Our welcome message'
    new_template.variables = [
@@ -371,7 +371,7 @@ Create a new template:
             'key': 'TITLE',
             'name': 'Title',
             'description': 'e.g. Mr., Ms., Dr., etc.',
-            'default_value': '
+            'default_value': ''
         },
         {
             'key': 'FIRST_NAME',
@@ -391,8 +391,8 @@ Create a new template:
            'alert': 'Hello {{TITLE}} {{FIRST_NAME}} {{LAST_NAME}}!'
        }
    }
-   print new_template.create(airship)
-   print new_template.template_id  # To get the template ID for future use
+   new_template.create()
+   print (new_template.template_id)  # To get the template ID for future use
 
 
 Template Update
@@ -408,13 +408,13 @@ that you want to change:
 
    template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
 
-   updated_template = ua.Template()
+   updated_template = ua.Template(airship)
    updated_template.push = {
        'notification': {
            'alert': 'Goodbye {{TITLE}} {{FIRST_NAME}} {{LAST_NAME}}!'
        }
    }
-   print updated_template.update(airship, template_id)
+   updated_template.update(template_id)
 
 
 You can also look up an existing template, put it in a Template object (where
@@ -428,13 +428,13 @@ to change:
 
    template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
 
-   updated_template = ua.Template.lookup(airship, template_id)
+   updated_template = ua.Template(airship).lookup(template_id)
    updated_template.push = {
        'notification': {
            'alert': 'Goodbye {{TITLE}} {{FIRST_NAME}} {{LAST_NAME}}!'
        }
    }
-   print updated_template.update(airship)
+   updated_template.update()
 
 
 Template Deletion
@@ -450,9 +450,9 @@ object:
 
    # Delete via template ID
    template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
-   a_template = ua.Template()
-   a_template.delete(airship, template_id)
+   a_template = ua.Template(airship)
+   a_template.delete(template_id)
 
    # OR via a template object you already have on hand
-   another_template.delete(airship)
+   another_template.delete()
 
