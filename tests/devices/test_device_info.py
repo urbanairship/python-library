@@ -45,8 +45,6 @@ class TestDeviceInfo(unittest.TestCase):
                 'f10cf38c-3fbd-47e8-a4aa-43cf91d80ba1'
             )
 
-    # TODO add tests for DeviceTokenList and APIDList
-
     def test_channel_lookup(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
