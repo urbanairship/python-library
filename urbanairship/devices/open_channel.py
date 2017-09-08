@@ -78,25 +78,29 @@ class OpenChannel(object):
                 'set_tags may not be None when tags present on OpenChannel.'
             )
 
-        if not self.address or not self.channel_id:
+        if not self.address and not self.channel_id:
             raise ValueError('Must set address or channel ID to update.')
 
         if not self.open_platform:
             raise ValueError('Must set open_platform.')
 
+        if not self.opt_in:
+            raise ValueError('Must set opt_in.')
+
+        if not self.address and self.opt_in == True:
+            raise ValueError('Address must be set for opted in channels.')
+
         url = common.OPEN_CHANNEL_URL
 
         channel_data = {
             'type': 'open',
-            'open': {'open_platform_name': self.open_platform}
+            'open': {'open_platform_name': self.open_platform},
+            'opt_in': self.opt_in
         }
-
         if self.channel_id:
             channel_data['channel_id'] = self.channel_id
         if self.address:
             channel_data['address'] = self.address
-        if self.opt_in is not None:
-            channel_data['opt_in'] = self.opt_in
         if self.tags:
             channel_data['tags'] = self.tags
             channel_data['set_tags'] = set_tags
