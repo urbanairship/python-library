@@ -87,7 +87,7 @@ class OpenChannel(object):
         if not self.opt_in:
             raise ValueError('Must set opt_in.')
 
-        if not self.address and self.opt_in == True:
+        if not self.address and self.opt_in is True:
             raise ValueError('Address must be set for opted in channels.')
 
         url = common.OPEN_CHANNEL_URL

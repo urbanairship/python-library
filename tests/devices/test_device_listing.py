@@ -264,8 +264,21 @@ class TestDeviceListing(unittest.TestCase):
             for apid in ua.APIDList(airship):
                 apid_responses.append(apid)
 
-            # TODO: More asserts go here
             self.assertEquals(apid_responses[0].apid, self.apid1)
             self.assertEquals(apid_responses[1].apid, self.apid2)
             self.assertEquals(apid_responses[0].active, False)
             self.assertEquals(apid_responses[1].active, True)
+            self.assertEquals(apid_responses[0].alias, None)
+            self.assertEquals(apid_responses[1].alias, 'alias1')
+            self.assertEquals(
+                apid_responses[0].created,
+                datetime.datetime.strptime(
+                        '2015-04-25 23:01:53', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertEquals(
+                apid_responses[1].created,
+                datetime.datetime.strptime(
+                        '2013-01-25 00:55:06', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertListEqual(apid_responses[0].tags, [])
+            self.assertListEqual(apid_responses[1].tags, ['tag1'])

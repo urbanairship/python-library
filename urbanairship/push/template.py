@@ -31,17 +31,46 @@ class Template(object):
 
     """
 
-    template_id = None
-    created_at = None
-    modified_at = None
-    last_used = None
-    name = None
-    description = None
-    variables = []
-    push = {}
-
-    def __init__(self, airship):
+    def __init__(
+        self, airship, name=None, description=None, variables=None, push=None
+    ):
         self.airship = airship
+        self._template_id = None
+        self._created_at = None
+        self._modified_at = None
+        self._last_used = None
+        if name is not None:
+            self.name = name
+        else:
+            self.name = None
+        if description is not None:
+            self.description = description
+        else:
+            self.description = None
+        if variables is not None:
+            self.variables = variables
+        else:
+            self.variables = []
+        if push is not None:
+            self.push = push
+        else:
+            self.push = {}
+
+    @property
+    def template_id(self):
+        return self._template_id
+
+    @property
+    def created_at(self):
+        return self._created_at
+
+    @property
+    def modified_at(self):
+        return self._modified_at
+
+    @property
+    def last_used(self):
+        return self._last_used
 
     @property
     def payload(self):
@@ -81,7 +110,7 @@ class Template(object):
             content_type='application/json',
             version=3
         )
-        self.template_id = response.json().get('template_id')
+        self._template_id = response.json().get('template_id')
         logger.info(
             'Successful template creation for template %s', self.template_id
         )
@@ -125,7 +154,7 @@ class Template(object):
         if not template_id and not self.template_id:
             raise ValueError('Cannot update template without ID.')
         if template_id:
-            self.template_id = template_id
+            self._template_id = template_id
 
         body = json.dumps(update_payload)
         response = self.airship._request(
@@ -152,7 +181,7 @@ class Template(object):
         if not template_id and not self.template_id:
             raise ValueError('Cannot delete template without ID.')
         if template_id:
-            self.template_id = template_id
+            self._template_id = template_id
 
         response = self.airship._request(
             method='DELETE',
@@ -167,10 +196,10 @@ class Template(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload, template_key, airship):
+    def from_payload(cls, payload, id_key, airship):
         """Create based on results from a TemplateList iterator."""
         obj = cls(airship)
-        obj.template_id = payload[template_key]
+        obj._template_id = payload[id_key]
         for key in payload:
             if key in ('created_at', 'modified_at', 'last_used'):
                 try:
@@ -179,7 +208,11 @@ class Template(object):
                     )
                 except:
                     payload[key] = 'UNKNOWN'
-            setattr(obj, key, payload[key])
+                setattr(obj, '_' + key, payload[key])
+            elif key == 'template_id':
+                obj._template_id = payload[key]
+            else:
+                setattr(obj, key, payload[key])
         return obj
 
     def lookup(self, template_id):

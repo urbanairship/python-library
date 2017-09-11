@@ -440,19 +440,16 @@ to change:
 Template Deletion
 -----------------
 
-You can delete a template either via its ID alone or from an existing template
-object:
-
 .. code-block:: python
 
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   # Delete via template ID
    template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
-   a_template = ua.Template(airship)
-   a_template.delete(template_id)
 
-   # OR via a template object you already have on hand
-   another_template.delete()
+   # Delete via template lookup
+   ua.Template(airship).lookup(template_id).delete()
+
+   # OR, if you want to delete a template without fetching it from the API
+   ua.Template(airship).delete(template_id)
 
