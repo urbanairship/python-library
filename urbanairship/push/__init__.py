@@ -1,4 +1,4 @@
-from .core import Push, ScheduledPush
+from .core import Push, ScheduledPush, TemplatePush
 
 from .audience import (
     ios_channel,
@@ -45,6 +45,12 @@ from .schedule import (
     local_scheduled_time,
 )
 
+from .template import (
+    merge_data,
+    Template,
+    TemplateList,
+)
+
 # Common selector for audience & device_types
 
 all_ = "all"
@@ -58,6 +64,9 @@ __all__ = [
     all_,
     Push,
     ScheduledPush,
+    TemplatePush,
+    Template,
+    TemplateList,
     ios_channel,
     android_channel,
     amazon_channel,

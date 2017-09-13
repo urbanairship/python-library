@@ -3,7 +3,7 @@ import logging
 import requests
 
 from . import common, __about__
-from .push import Push, ScheduledPush
+from .push import Push, ScheduledPush, TemplatePush
 
 
 logger = logging.getLogger('urbanairship')
@@ -73,3 +73,7 @@ class Airship(object):
     def create_scheduled_push(self):
         """Create a Scheduled Push notification."""
         return ScheduledPush(self)
+
+    def create_template_push(self):
+        """Create a Scheduled Push notification."""
+        return TemplatePush(self)

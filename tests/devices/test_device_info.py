@@ -78,7 +78,7 @@ class TestDeviceInfo(unittest.TestCase):
 
             airship = ua.Airship('key', 'secret')
             channel_id = '0492662a-1b52-4343-a1f9-c6b0c72931c0'
-            channel_lookup = ua.ChannelInfo.lookup(airship, channel_id)
+            channel_lookup = ua.ChannelInfo(airship).lookup(channel_id)
 
             date_created = (
                 datetime.datetime.strptime(
@@ -127,8 +127,7 @@ class TestDeviceInfo(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            feedback = ua.Feedback.device_token(
-                airship,
+            feedback = ua.Feedback(airship).device_token(
                 datetime.datetime(2014, 11, 22)
             )
             date = datetime.datetime.strptime('2014-12-16 20:21:42',
@@ -169,8 +168,7 @@ class TestDeviceInfo(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            feedback = ua.Feedback.apid(
-                airship,
+            feedback = ua.Feedback(airship).apid(
                 datetime.datetime(2014, 11, 22, 10, 10, 10)
             )
             date = datetime.datetime.strptime('2014-12-16 20:21:42',

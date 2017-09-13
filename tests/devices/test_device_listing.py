@@ -14,6 +14,10 @@ class TestDeviceListing(unittest.TestCase):
         self.push_address1 = '28A97947F08FF0E0026EF38D157E0B1777B8DDD33D3B16130679288CEED645AF'
         self.push_address2 = 'dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We'
         self.push_address3 = None
+        self.device_token1 = '0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB'
+        self.device_token2 = '07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13'
+        self.apid1 = '00000000-0000-0000-0000-000000000000'
+        self.apid2 = '11111111-1111-1111-1111-111111111111'
 
     def test_channel_listing(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -168,3 +172,113 @@ class TestDeviceListing(unittest.TestCase):
                     '%Y-%m-%dT%H:%M:%S'
                 )
             )
+
+    def test_device_token_listing(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "next_page": "https://go.urbanairship.com/api/device_tokens/?start=07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13&limit=2",
+                    "device_tokens_count": 87,
+                    "active_device_tokens_count": 37,
+                    "device_tokens": [
+                        {
+                            "tags": [],
+                            "alias": None,
+                            "active": False,
+                            "created": "2013-07-17 21:17:42",
+                            "device_token": "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB"
+                        },
+                        {
+                            "tags": ["tag1", "tag2"],
+                            "alias": "an_alias",
+                            "active": True,
+                            "created": "2016-02-05 22:55:54",
+                            "device_token": "07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13",
+                        }
+                    ]
+                }
+            ).encode('utf-8')
+
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+
+            dt_responses = []
+
+            for dt in ua.DeviceTokenList(airship):
+                dt_responses.append(dt)
+
+            self.assertEquals(dt_responses[0].device_token, self.device_token1)
+            self.assertEquals(dt_responses[1].device_token, self.device_token2)
+            self.assertEquals(dt_responses[0].alias, None)
+            self.assertEquals(dt_responses[1].alias, 'an_alias')
+            self.assertEquals(dt_responses[0].active, False)
+            self.assertEquals(dt_responses[1].active, True)
+            self.assertEquals(
+                dt_responses[0].created,
+                datetime.datetime.strptime(
+                        '2013-07-17 21:17:42', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertEquals(
+                dt_responses[1].created,
+                datetime.datetime.strptime(
+                        '2016-02-05 22:55:54', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertListEqual(dt_responses[0].tags, [])
+            self.assertListEqual(dt_responses[1].tags, ['tag1', 'tag2'])
+
+    def test_apid_listing(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "next_page": "https://go.urbanairship.com/api/apids/?start=11111111-1111-1111-1111-111111111111&limit=2000",
+                    "apids": [
+                        {
+                            "tags": [],
+                            "alias": None,
+                            "active": False,
+                            "created": "2015-04-25 23:01:53",
+                            "apid": "00000000-0000-0000-0000-000000000000",
+                        },
+                        {
+                            "tags": ["tag1"],
+                            "alias": "alias1",
+                            "active": True,
+                            "created": "2013-01-25 00:55:06",
+                            "apid": "11111111-1111-1111-1111-111111111111"
+                        }
+                    ]
+                }
+            ).encode('utf-8')
+
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+
+            apid_responses = []
+
+            for apid in ua.APIDList(airship):
+                apid_responses.append(apid)
+
+            self.assertEquals(apid_responses[0].apid, self.apid1)
+            self.assertEquals(apid_responses[1].apid, self.apid2)
+            self.assertEquals(apid_responses[0].active, False)
+            self.assertEquals(apid_responses[1].active, True)
+            self.assertEquals(apid_responses[0].alias, None)
+            self.assertEquals(apid_responses[1].alias, 'alias1')
+            self.assertEquals(
+                apid_responses[0].created,
+                datetime.datetime.strptime(
+                        '2015-04-25 23:01:53', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertEquals(
+                apid_responses[1].created,
+                datetime.datetime.strptime(
+                        '2013-01-25 00:55:06', '%Y-%m-%d %H:%M:%S')
+            )
+            self.assertListEqual(apid_responses[0].tags, [])
+            self.assertListEqual(apid_responses[1].tags, ['tag1'])

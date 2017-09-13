@@ -1,7 +1,6 @@
 --------------------
 3.0.0
 --------------------
-- Added template for pull requests
 - Added support for Open Channels
     * Create and update open channels
     * Push to open channels
@@ -10,9 +9,11 @@
 - Added new properties to the ChannelInfo object
 - Fix to actually use ChannelInfo and DeviceInfo objects for listing devices,
     including Python datetimes for date/time fields
+- Significant usage changes to channel/device listing, lookup, and feedback
 - Fix to handle non-JSON responses gracefully
 - Fix Travis yml to remove Python 2.6 check (support removed in 2.0.0)
 - Various docs fixes and updates
+- Added templates for pull requests and issues, contribution information
 - Now supporting and testing for Python 3.5 and 3.6 compatibility
 
 --------------------
@@ -42,7 +43,7 @@
 - Added missing module to the required dependencies.
 - Updated README information for version 8.
 
-____________________
+--------------------
 0.8.0
 --------------------
 - Added support for reports including:

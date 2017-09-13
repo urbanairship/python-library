@@ -5,7 +5,7 @@ Please include link to open issue if applicable.
 * If applicable
 
 ### Testing
-[ ] I wrote tests covering these changes
+- [ ] I wrote tests covering these changes
 
 * I've tested in virtual environments for python versions:
 

@@ -18,7 +18,6 @@ class Push(object):
         self.options = None
         self.message = None
         self.in_app = None
-        self.web_push = None
 
     @property
     def payload(self):
@@ -33,8 +32,6 @@ class Push(object):
             data['message'] = self.message
         if self.in_app is not None:
             data['in_app'] = self.in_app
-        if self.web_push is not None:
-            data['web_push'] = self.web_push
         return data
 
     def send(self):
@@ -161,6 +158,58 @@ class ScheduledPush(object):
         data = response.json()
         logger.info('Scheduled push update successful. schedule_urls: %s',
                     ', '.join(data.get('schedule_urls', [])))
+
+        return PushResponse(response)
+
+
+class TemplatePush(object):
+    """A personalized push notification. Set details and send."""
+
+    def __init__(self, airship):
+        self._airship = airship
+        self.audience = None
+        self.device_types = None
+        self.merge_data = None
+
+    @property
+    def payload(self):
+        data = {
+            'audience': self.audience,
+            'device_types': self.device_types,
+            'merge_data': self.merge_data
+        }
+
+        return data
+
+    def send(self):
+        """Send the personalized notification.
+
+        :returns: :py:class:`PushResponse` object with ``push_ids`` and
+            other response data.
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+
+        """
+
+        if not self.audience:
+            raise ValueError('Must set audience for template push.')
+
+        if not self.device_types:
+            raise ValueError('Must set device_types for template push.')
+
+        body = json.dumps(self.payload)
+        response = self._airship._request(
+            method='POST',
+            body=body,
+            url=common.TEMPLATES_URL + 'push',
+            content_type='application/json',
+            version=3
+        )
+
+        data = response.json()
+        logger.info('Push successful. push_ids: %s',
+                    ', '.join(data.get('push_ids', []))
+                    )
 
         return PushResponse(response)
 

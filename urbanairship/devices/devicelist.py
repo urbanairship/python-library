@@ -48,11 +48,16 @@ class ChannelInfo(object):
     open = None
     web = None
 
+    def __init__(self, airship):
+        self.airship = airship
+
     @classmethod
-    def from_payload(cls, payload, device_key):
+    def from_payload(cls, payload, device_key, airship):
         """Create based on results from a ChannelList iterator."""
-        obj = cls()
+        obj = cls(airship)
         obj.channel_id = payload[device_key]
+        if airship:
+            obj.airship = airship
         for key in payload:
             if key in ('created', 'last_registration'):
                 try:
@@ -60,19 +65,18 @@ class ChannelInfo(object):
                         payload[key], '%Y-%m-%dT%H:%M:%S'
                     )
                 except:
-                    payload[key] = "UNKNOWN"
+                    payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
         return obj
 
-    @classmethod
-    def lookup(cls, airship, channel_id):
+    def lookup(self, channel_id):
         """Fetch metadata from a channel ID"""
         start_url = common.CHANNEL_URL
         data_attribute = 'channel'
         id_key = 'channel_id'
         params = {}
         url = start_url + channel_id
-        response = airship._request(
+        response = self.airship._request(
             method='GET',
             body=None,
             url=url,
@@ -80,7 +84,7 @@ class ChannelInfo(object):
             params=params
         )
         payload = response.json()
-        return cls.from_payload(payload[data_attribute], id_key)
+        return self.from_payload(payload[data_attribute], id_key, self.airship)
 
 
 class DeviceInfo(object):
@@ -105,12 +109,15 @@ class DeviceInfo(object):
     tags = None
     alias = None
 
+    def __init__(self, airship):
+        self.airship = airship
+
     @classmethod
-    def from_payload(cls, payload, device_key):
+    def from_payload(cls, payload, device_key, airship):
         """Create based on results from a DeviceTokenList or APIDList iterator.
 
         """
-        obj = cls()
+        obj = cls(airship)
         obj.id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
@@ -120,7 +127,7 @@ class DeviceInfo(object):
                         payload[key], '%Y-%m-%d %H:%M:%S'
                     )
                 except:
-                    payload[key] = "UNKNOWN"
+                    payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
         return obj
 
@@ -171,18 +178,19 @@ class APIDList(DeviceTokenList):
 class Feedback(object):
     """Return device tokens or APIDs marked inactive since this timestamp."""
 
-    @classmethod
-    def device_token(cls, airship, since):
+    def __init__(self, airship):
+        self.airship = airship
+
+    def device_token(self, since):
         url = common.DT_FEEDBACK_URL
-        return cls._get_feedback(airship, since, url)
+        return self._get_feedback(since, url, self.airship)
 
-    @classmethod
-    def apid(cls, airship, since):
+    def apid(self, since):
         url = common.APID_FEEDBACK_URL
-        return cls._get_feedback(airship, since, url)
+        return self._get_feedback(since, url, self.airship)
 
     @classmethod
-    def _get_feedback(cls, airship, since, url):
+    def _get_feedback(cls, since, url, airship):
         response = airship._request(
             method='GET',
             body='',
@@ -198,5 +206,5 @@ class Feedback(object):
                     '%Y-%m-%d %H:%M:%S'
                 )
             except:
-                r['marked_inactive_on'] = "UNKNOWN"
+                r['marked_inactive_on'] = 'UNKNOWN'
         return data
