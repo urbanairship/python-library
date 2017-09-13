@@ -43,9 +43,9 @@ class TestTemplatePush(unittest.TestCase):
 class TestTemplate(unittest.TestCase):
     def test_template_lookup1(self):
         airship = mock.Mock()
-        airship._request.return_value = mock.MagicMock(
-            status_code=200,
-            response=json.dumps({
+        airship._request.return_value = mock.Mock(
+            json=mock.Mock(
+                return_value={
                     'ok': True,
                     'template': {
                         'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
