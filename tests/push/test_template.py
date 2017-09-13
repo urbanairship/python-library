@@ -41,13 +41,53 @@ class TestTemplatePush(unittest.TestCase):
 
 
 class TestTemplate(unittest.TestCase):
-    def test_template_lookup(self):
+    def test_template_lookup1(self):
+        airship = mock.Mock()
+        airship._request.return_value = mock.MagicMock(
+            status_code=200,
+            response=json.dumps({
+                    'ok': True,
+                    'template': {
+                        'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
+                        'created_at': '2017-08-30T23:04:54.014Z',
+                        'modified_at': None,
+                        'last_used': None,
+                        'name': 'Welcome Message',
+                        'description': '',
+                        'variables': [
+                            {
+                                'key': 'FIRST_NAME',
+                                'name': 'First Name',
+                                'description': 'Given name',
+                                'default_value': None
+                            }
+                        ],
+                        'push': {
+                            'notification': {
+                                'alert': 'Hello {{FIRST_NAME}}, this is your '
+                                         'welcome message!'
+                            }
+                        }
+                    }
+                }
+            )
+        )
+        template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+        ua.Template(airship).lookup(template_id)
+
+        airship._request.assert_called_with(
+            body=None, method='GET', params={},
+            url='https://go.urbanairship.com/api/templates/' + template_id,
+            version=3
+        )
+
+    def test_template_lookup2(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    "ok": True,
-                    "template": {
+                    'ok': True,
+                    'template': {
                         'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
                         'created_at': '2017-08-30T23:04:54.014Z',
                         'modified_at': '2017-08-31T00:02:41.493Z',

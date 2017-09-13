@@ -317,9 +317,8 @@ Look up a previously created template:
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
 
-   template = ua.Template(airship).lookup(
-       'ef34a8d9-0ad7-491c-86b0-aea74da15161'
-   )
+   template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
+   template = ua.Template(airship).lookup(template_id)
    print (
        template.template_id, template.created_at, template.modified_at,
        template.last_used, template.name, template.description,
@@ -328,6 +327,7 @@ Look up a previously created template:
 
 .. autoclass:: urbanairship.push.template.Template
    :members:
+   :exclude-members: from_payload
 
 
 Template Listing
@@ -351,6 +351,7 @@ List all previously created templates on an app:
 
 .. autoclass:: urbanairship.push.template.TemplateList
    :members:
+   :exclude-members: instance_class
 
 
 Template Creation

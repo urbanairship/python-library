@@ -21,6 +21,7 @@ using :py:class:`ChannelList`.
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelList, ChannelInfo
    :noindex:
+   :exclude-members: instance_class, from_payload
 
 Channel Lookup
 --------------
@@ -40,6 +41,7 @@ Device metadata is fetched for a specific channel by using
 .. automodule:: urbanairship.devices.devicelist
    :members: ChannelInfo
    :noindex:
+   :exclude-members: from_payload
 
 
 Device Listing
@@ -63,6 +65,7 @@ type of device. The available iterators are :py:class:`DeviceTokenList` and
 .. automodule:: urbanairship.devices.devicelist
    :members: DeviceTokenList, APIDList, DeviceInfo
    :noindex:
+   :exclude-members: instance_class, from_payload
 
 
 Open Channel Registration
@@ -113,7 +116,7 @@ timestamp. For more information, see: `the documentation on feedback
 
    import urbanairship as ua
    airship = ua.Airship(app_key, master_secret)
-   since = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+   since = datetime.datetime.utcnow() - datetime.timedelta(days=30)
    tokens = ua.Feedback(airship).device_token(since)
    apids = ua.Feedback(airship).apid(since)
 
