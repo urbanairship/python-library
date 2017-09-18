@@ -106,26 +106,67 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Hello',
-            open_platform={'email': {
+            alert='Hello closed channels',
+            open_platform={
+                'email': {
+                    'alert': 'Hello open channels',
                     'title': 'This is a title.',
-                    'extra': {'attribute': 'id'}
+                    'summary': 'A longer summary of some content',
+                    'media_attachment':
+                        'https://example.com/cat_standing_up.jpeg',
+                    'extra': {'attribute': 'id'},
+                    'interactive': {
+                        'type': 'ua_yes_no_foreground',
+                        'button_actions': {
+                            'yes': {
+                                'open': {
+                                    'content': 'https://www.urbanairship.com',
+                                    'type': 'url'
+                                }
+                            },
+                            'no': {
+                                'app_defined': {
+                                    'foo': 'bar'
+                                }
+                            }
+                        }
+                    }
                 }
             }
         )
         p.device_types = 'open::email'
-
-        self.assertEqual(
+        self.assertDictEqual(
             p.payload,
             {
                 'audience': 'all',
                 'device_types': 'open::email',
                 'notification': {
-                    'alert': 'Hello',
+                    'alert': 'Hello closed channels',
                     'open::email': {
+                        'alert': 'Hello open channels',
                         'title': 'This is a title.',
-                        'extra': {'attribute': 'id'}
-                    },
+                        'summary': 'A longer summary of some content',
+                        'media_attachment':
+                            'https://example.com/cat_standing_up.jpeg',
+                        'extra': {'attribute': 'id'},
+                        'interactive': {
+                            'type': 'ua_yes_no_foreground',
+                            'button_actions': {
+                                'yes': {
+                                    'open': {
+                                        'content':
+                                            'https://www.urbanairship.com',
+                                        'type': 'url'
+                                    }
+                                },
+                                'no': {
+                                    'app_defined': {
+                                        'foo': 'bar'
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         )

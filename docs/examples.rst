@@ -16,7 +16,7 @@ Simple broadcast to all devices
 
    push = airship.create_push()
    push.audience = ua.all_
-   push.notification = ua.notification(alert="Hello, world!")
+   push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.all_
    push.send()
 
@@ -28,21 +28,21 @@ Complex audience with platform specifics
 
    push = airship.create_push()
    push.audience = ua.and_(
-      ua.tag("breakingnews"),
+      ua.tag('breakingnews'),
       ua.or_(
-         ua.tag("sports"),
-         ua.tag("worldnews")
+         ua.tag('sports'),
+         ua.tag('worldnews')
       )
    )
    push.notification = ua.notification(
       ios=ua.ios(
-         alert="Kim Jong-Un wins U.S. Open",
-         badge="+1",
-         extra={"articleid": "123456"}
+         alert='Kim Jong-Un wins U.S. Open',
+         badge='+1',
+         extra={'articleid': '123456'}
       ),
       android=ua.android(
-         alert="Breaking Android News! Glorious Leader Kim Jong-Un wins U.S. Open!",
-         extra={"articleid": "http://m.example.com/123456"}
+         alert='Breaking Android News! Glorious Leader Kim Jong-Un wins U.S. Open!',
+         extra={'articleid': 'http://m.example.com/123456'}
       ),
       amazon=ua.amazon(
       alert='Breaking Amazon News!',
@@ -71,7 +71,7 @@ Single iOS push
    push = airship.create_push()
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
-       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
+       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter')
    )
    push.device_types = ua.device_types('ios')
    push.send()
@@ -85,10 +85,10 @@ Single iOS Rich Push with notification
    push = airship.create_push()
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
-       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter")
+       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter')
    )
    push.device_types = ua.device_types('ios')
-   push.message = ua.message("New follower", "<h1>OMG It's Kim Jong-Un</h1>")
+   push.message = ua.message('New follower', '<h1>OMG It's Kim Jong-Un</h1>')
    push.send()
 
 
@@ -100,7 +100,7 @@ Web Push to a device with full web payload
     push = airship.create_push()
     push.audience = ua.channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
     push.notification = ua.notification(
-        alert="We are in your browser now!"
+        alert='We are in your browser now!'
         web=ua.web(
             icon={
             'url': 'https://www.example.com/Sunshine_icon.png'
@@ -120,15 +120,25 @@ Open Channels send to a device with full open channel payload
 
     push = airship.create_push()
     push.audience = ua.open_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
-    email_overrides = ua.open_platform(
+    sms_overrides = ua.open_platform(
+        alert='We are in your texts now!',
         title='See my new homepage!',
-        extra={'link': 'urbanairship.com'}
+        summary='A longer summary of some content',
+        media_attachment='https://example.com/cat_standing_up.jpeg',
+        extra={'some_info': 'for sms only'},
+        interactive=ua.interactive(
+            type='ua_yes_no_foreground',
+            button_actions={
+                'yes': ua.actions(open_={
+                    'type':'url',
+                    'content':'https://www.urbanairship.com'
+                    }),
+                'no': ua.actions(app_defined={'foo': 'bar'})
+            }
         )
-    push.notification = ua.notification(
-        alert="We are in your email now!",
-        open_platform={'email': email_overrides}
-        )
-    push.device_types = ua.device_types('open::email')
+    )
+    push.notification = ua.notification(open_platform={'sms': sms_overrides})
+    push.device_types = ua.device_types('open::sms')
     push.send()
 
 
@@ -141,10 +151,10 @@ Message Center send with extra and without notification
    push.audience = ua.all_
    push.device_types = ua.all_
    push.message = ua.message(
-      title="New follower", 
-      body="<h1>OMG It's Kim Jong-Un</h1>", 
-      extra={"articleid": "http://m.example.com/123456"}
-   ) 
+      title='New follower',
+      body='<h1>OMG It's Kim Jong-Un</h1>',
+      extra={'articleid': 'http://m.example.com/123456'}
+   )
    push.send()
 
 
@@ -162,7 +172,7 @@ Scheduled iOS Push
    sched.push = airship.create_push()
    sched.push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    sched.push.notification = ua.notification(
-       ios=ua.ios(alert="Kim Jong-Un is following you on Twitter"))
+       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter'))
    sched.push.device_types = ua.device_types('ios')
 
    sched.send()
@@ -178,8 +188,8 @@ In-App Message to all devices
     push.device_types = ua.device_types('ios', 'android')
 
     push.in_app = ua.in_app(
-            alert = "Alert message",
-            display_type = "banner",
+            alert = 'Alert message',
+            display_type = 'banner',
             display={
                 'position': 'top',
                 'duration': '500'
@@ -187,9 +197,9 @@ In-App Message to all devices
             interactive = ua.interactive(
                 type = 'ua_yes_no_foreground',
                 button_actions={
-                    "yes": ua.actions(open_={
-                        "type":"url",
-                        "content":"https://www.urbanairship.com"
+                    'yes': ua.actions(open_={
+                        'type':'url',
+                        'content':'https://www.urbanairship.com'
                     })
                 }
             )

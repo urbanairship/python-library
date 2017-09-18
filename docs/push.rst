@@ -73,7 +73,8 @@ In-App Message
 The in-app message payload is an object assigned to the in_app attribute
 on a push object. Aside from the display and display_type attributes,
 which specify the appearance of the in-app message, the in_app object looks
-very similar to a push object.  In-app messages do not require push.notification to be set:
+very similar to a push object.  In-app messages do not require
+push.notification to be set:
 
 .. code-block:: python
 
