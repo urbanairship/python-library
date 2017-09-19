@@ -5,7 +5,9 @@
     * Create and update open channels
     * Push to open channels
     * Open channel platform overrides
+- Templates API support
 - Added Android platform overrides for Android O
+- Added new platform overrides for Web Notify
 - Added new properties to the ChannelInfo object
 - Fix to actually use ChannelInfo and DeviceInfo objects for listing devices,
     including Python datetimes for date/time fields
