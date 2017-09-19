@@ -11,8 +11,8 @@ app pages.
 Requirements
 ============
 
-As of version 2.0.0, Python 2.7, 3.3 or 3.4 is required.  Newer versions
-of Python may also work.
+As of version 2.0.0, Python 2.7, 3.3 or 3.4 is required. 3.5 and 3.6 are also
+officially supported from version 3.0.0 on.
 
 Functionality
 =============
@@ -26,7 +26,7 @@ A more detailed list of changes can be found in the CHANGELOG.
 Usage
 =====
 
-See the `full documentation
+See the `full documentation for this library
 <http://docs.urbanairship.com/reference/libraries/python>`_, as well as the
 `Urban Airship API Documentation
 <http://docs.urbanairship.com/api/>`_.
@@ -48,7 +48,7 @@ Broadcast to iOS and Android devices
     >>> push.audience = ua.all_
     >>> push.notification = ua.notification(
     ...     ios=ua.ios(alert='Hello iOS'),
-    ...     android=ua.android(alert='Hello Android'),
+    ...     android=ua.android(alert='Hello Android'))
     >>> push.device_types = ua.device_types('ios', 'android')
     >>> push.send()
 
@@ -61,8 +61,8 @@ Sending a rich app page to a single iOS device
     >>> push.notification = ua.notification(alert='Hello')
     >>> push.device_types = ua.device_types('ios')
     >>> push.message = ua.message(
-    ...     "Hello, Rich Push User",
-    ...     "<html><h1>Hello!</h1><p>Goodbye.</p></html>")
+    ...     'Hello, Rich Push User',
+    ...     '<html><h1>Hello!</h1><p>Goodbye.</p></html>')
     >>> push.send()
 
 Web Push to a tag
@@ -85,7 +85,8 @@ http://support.urbanairship.com/
 History
 =======
 
-* 2.0 Support for Web Notify and more iOS 10
+* 3.0 Support for Open Channels, several other significant changes
+* 2.0 Support for Web Notify and more iOS 10, stopped supporting Python 2.6
 * 1.0 Support for In-App and iOS 10
 * 0.8 Support for Reports APIs
 * 0.7 Support for Python 3, major refactoring
@@ -95,3 +96,5 @@ History
 * 0.3 Added deregister, device token list, other minor improvements
 * 0.2 Added tags, broadcast, feedback
 * 0.1 Initial release
+
+See the CHANGELOG file for more details.
