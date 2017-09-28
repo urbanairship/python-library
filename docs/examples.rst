@@ -103,10 +103,12 @@ Web Push to a device with full web payload
         alert='We are in your browser now!'
         web=ua.web(
             icon={
-            'url': 'https://www.example.com/Sunshine_icon.png'
+                'url': 'https://www.example.com/Sunshine_icon.png'
             },
-	        title='Hello Sunshine',
-	        extra={'article_id': '12345'},
+            title='Hello Sunshine',
+            extra={'article_id': '12345'},
+            time_to_live=12345,
+            require_interaction=False
         )
     )
     push.device_types = ua.device_types('web')
