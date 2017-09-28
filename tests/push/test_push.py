@@ -60,7 +60,7 @@ class TestPush(unittest.TestCase):
                 'icon': {'url': 'https://example.com/icon.png'},
                 'extra': {'attribute': 'id'},
                 'time_to_live': 12345,
-                'interaction_required': False
+                'require_interaction': False
             }
         )
         p.device_types = 'web'
@@ -77,7 +77,7 @@ class TestPush(unittest.TestCase):
                         'icon': {'url': 'https://example.com/icon.png'},
                         'extra': {'attribute': 'id'},
                         'time_to_live': 12345,
-                        'interaction_required': False
+                        'require_interaction': False
                     },
                 }
             }
