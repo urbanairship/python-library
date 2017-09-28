@@ -1,4 +1,9 @@
 --------------------
+3.0.1
+--------------------
+- Fixed Web Notify require_interaction field name
+
+--------------------
 3.0.0
 --------------------
 - Added support for Open Channels
