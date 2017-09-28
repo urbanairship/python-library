@@ -107,6 +107,8 @@ Web Push to a device with full web payload
             },
 	        title='Hello Sunshine',
 	        extra={'article_id': '12345'},
+            'time_to_live': 12345,
+            'require_interaction': False
         )
     )
     push.device_types = ua.device_types('web')
