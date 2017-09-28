@@ -348,7 +348,7 @@ def web(alert=None, extra=None, icon=None, title=None, interactive=None,
         time_to_live=None, require_interaction=None):
     """Web specific platform override payload.
 
-    All keyword arguements are optional
+    All keyword arguments are optional
 
     :keyword alert: An optional string alert text.
     :keyword extra: An optional set of key/value pairs to include in the push
