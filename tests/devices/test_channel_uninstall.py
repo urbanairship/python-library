@@ -25,3 +25,23 @@ class TestChannelUninstall(unittest.TestCase):
             cu_res = json.loads(cu.uninstall(chans).content)
 
             self.assertEqual(cu_res['ok'], True)
+
+class TestOpenChannelUninstall(unittest.TestCase):
+    def test_open_channel_uninstall(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({'ok': True})
+            response.status_code = 200
+            mock_request.return_value = response
+            airship = ua.Airship('key', 'secret')
+
+            cu = ua.OpenChannelUninstall(airship)
+
+            channel = {
+                'address': 'new_email@example.com',
+                'open_platform_name': 'email'
+            }
+
+            cu_res = json.loads(cu.uninstall(channel).content)
+
+            self.assertEqual(cu_res['ok'], True)

@@ -21,7 +21,8 @@ from .segment import (
 )
 
 from .channel_uninstall import (
-    ChannelUninstall
+    ChannelUninstall,
+    OpenChannelUninstall
 )
 
 from .open_channel import (
