@@ -32,6 +32,7 @@ from .payload import (
     message,
     device_types,
     options,
+    campaigns,
     actions,
     interactive,
     in_app,
