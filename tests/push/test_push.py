@@ -14,6 +14,9 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options(expiry=10080)
+        p.campaigns = ua.campaigns(
+            categories=['kittens', 'tacos', 'horse_racing']
+            )
         p.device_types = ua.all_
         p.message = ua.message(
             title='Title',
@@ -25,7 +28,6 @@ class TestPush(unittest.TestCase):
             icons={'list_icon': 'http://cdn.example.com/message.png'},
             options={'some_delivery_option': 'true'},
         )
-
         self.assertEqual(
             p.payload,
             {
@@ -34,6 +36,9 @@ class TestPush(unittest.TestCase):
                 'device_types': 'all',
                 'options': {
                     'expiry': 10080
+                },
+                'campaigns': {
+                    'categories': ['kittens', 'tacos', 'horse_racing']
                 },
                 'message': {
                     'title': 'Title',
@@ -682,3 +687,29 @@ class TestPush(unittest.TestCase):
             opt,
             {'expiry': '2015-04-01T12:00:00'}
         )
+
+    def test_campaigns_list(self):
+        cam = ua.campaigns(categories=['bugs', 'worms'])
+        self.assertEqual(
+            cam,
+            {'categories': ['bugs', 'worms']}
+        )
+
+        with self.assertRaises(ValueError):
+            ua.campaigns(categories=[])
+
+        with self.assertRaises(TypeError):
+            ua.campaigns({'categories': ['bugs', 'worms']})
+
+    def test_campaigns_str(self):
+        cam = ua.campaigns(categories='bugs')
+        self.assertEqual(
+            cam,
+            {'categories': ['bugs']}
+        )
+
+        with self.assertRaises(ValueError):
+            ua.campaigns(
+                categories='''a_long_string_so_long_its_longer_than_
+                                    sixty_four_characters_too_long'''
+            )
