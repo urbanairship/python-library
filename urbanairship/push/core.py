@@ -16,6 +16,7 @@ class Push(object):
         self.notification = None
         self.device_types = None
         self.options = None
+        self.campaigns = None
         self.message = None
         self.in_app = None
 
@@ -28,6 +29,8 @@ class Push(object):
         }
         if self.options is not None:
             data['options'] = self.options
+        if self.campaigns is not None:
+            data['campaigns'] = self.campaigns
         if self.message is not None:
             data['message'] = self.message
         if self.in_app is not None:

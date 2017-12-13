@@ -475,7 +475,8 @@ def wns_payload(alert=None, toast=None, tile=None, badge=None):
 
 
 def message(title, body, content_type=None, content_encoding=None,
-            extra=None, expiry=None, icons=None, options=None):
+            extra=None, expiry=None, icons=None, options=None,
+            campaigns=None):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -515,6 +516,10 @@ def message(title, body, content_type=None, content_encoding=None,
         if not isinstance(options, dict):
             raise TypeError('options must be a dictionary')
         payload['options'] = options
+    if campaigns is not None:
+        if not isinstance(campaigns, dict):
+            raise TypeError('campaigns must be a dictionary')
+        payload['campaigns'] = campaigns
 
     return payload
 
@@ -591,6 +596,33 @@ def options(expiry=None):
     if not (isinstance(expiry, (string_type, int))):
         raise ValueError('Expiry value must be an '
                          'integer or time set in UTC as a string')
+    return payload
+
+
+def campaigns(categories=None):
+    """Campaigns payload creation.
+
+    >>> campaigns(categories=['kittens', 'tacos', 'horse_racing'])
+    {'categories': ['kittens', 'tacos', 'horse_racing']}
+
+    """
+    payload = {}
+    if categories is not None:
+        if not isinstance(categories, collections.Sequence):
+            raise TypeError('categories must be a string or list of strings')
+        if isinstance(categories, list):
+            if not categories or len(categories) > 10:
+                raise ValueError('Categories list must '
+                                 'contain between 1 and 10 items')
+        if isinstance(categories, string_type):
+            categories = [categories]
+
+        for c in categories:
+            if not (isinstance(c, string_type)):
+                raise ValueError("Invalid category type '%s'" % c)
+            if not len(c) or len(c) > 64:
+                raise ValueError("Invalid category name '%s'" % c)
+        payload['categories'] = [c for c in categories]
     return payload
 
 
