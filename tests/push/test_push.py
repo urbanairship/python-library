@@ -14,9 +14,9 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(alert='Hello')
         p.options = ua.options(expiry=10080)
-        p.campaigns = ua.campaigns(categories=['kittens',
-                                               'tacos',
-                                               'horse_racing'])
+        p.campaigns = ua.campaigns(
+            categories=['kittens', 'tacos', 'horse_racing']
+            )
         p.device_types = ua.all_
         p.message = ua.message(
             title='Title',
@@ -709,5 +709,7 @@ class TestPush(unittest.TestCase):
         )
 
         with self.assertRaises(ValueError):
-            ua.campaigns(categories='''a_long_string_so_long_its_longer_than_
-                                    sixty_four_characters_too_long''')
+            ua.campaigns(
+                categories='''a_long_string_so_long_its_longer_than_
+                                    sixty_four_characters_too_long'''
+            )

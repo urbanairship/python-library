@@ -491,6 +491,8 @@ def message(title, body, content_type=None, content_encoding=None,
         pairs. Values must be URIs or URLs to the icon resources
     :keyword options: Optional JSON dictionary of key and value pairs
         specifying non-payload options
+    :keyword campaigns: Optional dictionary containing list of 1 to
+        10 'categories'
 
     """
     payload = {
@@ -609,11 +611,12 @@ def campaigns(categories=None):
     payload = {}
     if categories is not None:
         if not isinstance(categories, collections.Sequence):
-            raise TypeError('categories must be a string or list of strings')
+            raise TypeError('Each category must be a string')
         if isinstance(categories, list):
             if not categories or len(categories) > 10:
-                raise ValueError('Categories list must '
-                                 'contain between 1 and 10 items')
+                raise ValueError(
+                    'Categories list must contain between 1 and 10 items'
+                )
         if isinstance(categories, string_type):
             categories = [categories]
 
