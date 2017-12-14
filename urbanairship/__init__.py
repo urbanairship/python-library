@@ -64,7 +64,6 @@ from .devices import (
     Segment,
     SegmentList,
     ChannelUninstall,
-    OpenChannelUninstall,
     NamedUser,
     NamedUserList,
     StaticList,
