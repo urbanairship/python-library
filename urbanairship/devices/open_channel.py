@@ -169,7 +169,7 @@ class OpenChannel(object):
 
         channel_data = {
             "address": self.address,
-            "open_platform": self.open_platform
+            "open_platform_name": self.open_platform
         }
 
         body = json.dumps(channel_data)
@@ -181,7 +181,7 @@ class OpenChannel(object):
         )
 
         logger.info(
-            'Successfully uninstalled open channel %s' % channel_data['open_platform']
+            'Successfully uninstalled open channel %s' % channel_data['open_platform_name']
         )
 
         return response
