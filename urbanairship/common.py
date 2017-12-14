@@ -63,7 +63,7 @@ class AirshipFailure(Exception):
             error = payload['error']
             error_code = payload['error_code']
             details = payload['details']
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, KeyError):
             error = response.reason
             error_code = response.status_code
             details = response.content
