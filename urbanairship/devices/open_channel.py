@@ -158,3 +158,30 @@ class OpenChannel(object):
         payload = response.json().get('channel')
 
         return self.from_payload(payload, self.airship)
+
+    def uninstall(self):
+        """Mark this OpenChannel object uninstalled"""
+        url = common.OPEN_CHANNEL_URL + 'uninstall/'
+        if self.address is None or self.open_platform is None:
+            raise ValueError(
+                '"address" and "open_platform" are required attributes'
+            )
+
+        channel_data = {
+            "address": self.address,
+            "open_platform_name": self.open_platform
+        }
+
+        body = json.dumps(channel_data)
+        response = self.airship.request(
+            method='POST',
+            body=body,
+            url=url,
+            version=3
+        )
+
+        logger.info(
+            'Successfully uninstalled open channel %s' % channel_data['open_platform_name']
+        )
+
+        return response

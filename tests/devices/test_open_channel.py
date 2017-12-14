@@ -208,3 +208,19 @@ class TestOpenChannel(unittest.TestCase):
             channel_to_update.update(set_tags=True)
 
             self.assertEqual(channel_to_update.channel_id, channel_id)
+
+    def test_open_channel_uninstall(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({'ok': True})
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+            channel = ua.OpenChannel(airship)
+            channel.address = 'new_email@example.com'
+            channel.open_platform = 'email'
+
+            un_res = json.loads(channel.uninstall().content)
+
+            self.assertEqual(un_res['ok'], True)
