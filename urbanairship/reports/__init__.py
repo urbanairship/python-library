@@ -1,4 +1,4 @@
-from .response_statistics import (
+from .reports import (
     IndividualResponseStats,
     ResponseList,
     DevicesReport,
