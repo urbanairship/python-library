@@ -98,6 +98,15 @@ class ScheduledPush(object):
         sched.url = url
         return sched
 
+    @classmethod
+    def from_payload(cls, payload, id_key, airship):
+        """Create based on results from a ScheduledList iterator."""
+        obj = cls(airship)
+        obj._schedule_id = payload[id_key]
+        for key in payload:
+            setattr(obj, key, payload[key])
+        return obj
+
     @property
     def payload(self):
         data = {
