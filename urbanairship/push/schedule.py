@@ -4,7 +4,7 @@ from urbanairship.push import ScheduledPush
 
 class ScheduledList(common.IteratorParent):
     """
-    Iterator for listing all scheduled push for an engage project.
+    Iterator for listing all scheduled messages.
 
     :ivar limit: Number of entries to fetch in a paginated request.
     :returns Each ``next`` returns a :py:class:`ScheduledPush` object.
