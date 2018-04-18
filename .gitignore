@@ -9,3 +9,4 @@ urbanairship.egg-info/
 /build
 .tox/
 .vscode/
+test_data.csv

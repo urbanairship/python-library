@@ -4,6 +4,7 @@ from .common import AirshipFailure, Unauthorized
 from .push import (
     Push,
     ScheduledPush,
+    ScheduledList,
     TemplatePush,
     Template,
     TemplateList,
@@ -156,6 +157,7 @@ __all__ = [
     merge_data,
     Template,
     TemplateList,
+    ScheduledList,
 ]
 
 # Silence urllib3 INFO logging by default

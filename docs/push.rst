@@ -275,6 +275,26 @@ notification, you can update or cancel it before it's sent.
    schedule.cancel()
 
 
+Scheduled Message Listing
+-------------------------
+
+List all pending Scheduled and Scheduled to Device Local Time messages on a project:
+
+   .. code-block:: python
+
+   import urbanairship as ua
+   airship = ua.Airship(app_key, master_secret)
+
+   for schedule in ua.ScheduledList(airship):
+      print(
+         schedule.name, schedule.url, schedule.push_ids,
+         schedule.schedule, schedule.push
+      )
+
+.. autoclass:: urbanairship.push.schedule.ScheduledList
+   :members:
+
+
 Personalized Push with a Template
 ---------------------------------
 
