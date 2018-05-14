@@ -144,7 +144,7 @@ class TestAutomation(unittest.TestCase):
                 }
             }
 
-            test_response = automation.create(pipeline)
+            test_response = automation.create(pipeline.payload)
 
             self.assertEqual(
                 json.loads(test_response.content)['operation_id'],
@@ -312,7 +312,7 @@ class TestAutomation(unittest.TestCase):
             )
 
             automation = ua.Automation(airship)
-            test_response = automation.create([pipeline1, pipeline2])
+            test_response = automation.create([pipeline1.payload, pipeline2.payload])
 
             self.assertEqual(
                 json.loads(test_response.content)['pipeline_urls'],
@@ -454,7 +454,7 @@ class TestAutomation(unittest.TestCase):
                 }
             }
 
-            test_response = automation.validate(pipeline)
+            test_response = automation.validate(pipeline.payload)
 
             self.assertEqual(
                 json.loads(test_response.content)['ok'],
