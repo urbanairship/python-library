@@ -2,6 +2,7 @@ class Pipeline(object):
     """Pipeline object encapsulates the complete set of objects that define
     an Automation pipeline
     """
+
     def __init__(self,
                  enabled=None,
                  outcome=[],
@@ -35,7 +36,6 @@ class Pipeline(object):
         :keyword timing: [optional] a timing object defining times allowable
             for outcome delivery
         """
-
         self.enabled = enabled
         self.outcome = outcome
         self.name = name
@@ -48,6 +48,7 @@ class Pipeline(object):
 
     @property
     def payload(self):
+        """JSON serialized Pipeline object"""
         if not isinstance(self.enabled, bool):
             raise TypeError('enabled is required and must be a boolean value')
         if not self.outcome:
@@ -91,6 +92,11 @@ class Pipeline(object):
 
     @outcome.setter
     def outcome(self, outcome_object):
+        """Set outcome object
+
+        :keyword outcome_object: Single outcome object or list of outcome objects;
+        outcomes are push objects
+        """
         if outcome_object is None:
             self._outcomes = []
         elif isinstance(outcome_object, list):
@@ -112,7 +118,12 @@ class Pipeline(object):
             )
 
     def append_outcome_object(self, push_object):
-        if not isinstance(push_object, (dict)):
+        """Append outcome object to current Pipeline outcome
+
+        :keyword push_object: A push object that will be an outcome for this
+        Pipeline object
+        """
+        if not isinstance(push_object, dict):
             TypeError(
                 'outcome object requires a push object as a dictionary'
             )
@@ -124,6 +135,11 @@ class Pipeline(object):
         self._outcomes.append(to_append)
 
     def remove_outcome_object(self, push_object):
+        """Remove outcome push object from current outcome
+
+        :keyword push_object: A push object to remove from the outcome of this
+        Pipeline object
+        """
         self._outcomes.remove(push_object)
 
     @property
@@ -137,6 +153,10 @@ class Pipeline(object):
 
     @immediate_trigger.setter
     def immediate_trigger(self, event_identifiers):
+        """Set immediate trigger for Pipeline
+
+        :keyword event_identifiers: One or list of event identifiers
+        """
         if event_identifiers:
             if not isinstance(event_identifiers, (dict, list)):
                 TypeError(
@@ -153,9 +173,17 @@ class Pipeline(object):
             self._immediate_trigger = []
 
     def append_immediate_trigger_identifier(self, event_identifier):
+        """Append event identifier to immediate triggers for Pipeline
+
+        :keyword event_identifier: Even identifier object
+        """
         self._immediate_trigger.append(event_identifier)
 
     def remove_immediate_trigger_identifier(self, event_identifier):
+        """Remove event identifier to immediate triggers for Pipeline
+
+        :keyword event_identifier: Even identifier object
+        """
         self._immediate_trigger.remove(event_identifier)
 
     @property
@@ -169,6 +197,10 @@ class Pipeline(object):
 
     @cancellation_trigger.setter
     def cancellation_trigger(self, event_identifiers):
+        """Set Pipeline cancellation trigger
+
+        :keyword event_identifiers: One of list of event identifiers
+        """
         if event_identifiers:
             if not isinstance(event_identifiers, (str, dict, list)):
                 TypeError(
@@ -184,9 +216,17 @@ class Pipeline(object):
             self._cancellation_trigger = []
 
     def append_cancellation_trigger_identifier(self, event_identifier):
+        """Append event identifier to immediate triggers for Pipeline
+
+        :keyword event_identifier: Event identifier object
+        """
         self._cancellation_trigger.append(event_identifier)
 
     def remove_cancellation_trigger_identifier(self, event_identifier):
+        """Remove event identifier from immediate triggers for Pipeline
+
+        :keyword event_identifier: Event identifier object
+        """
         self._cancellation_trigger.remove(event_identifier)
 
     @property
@@ -195,6 +235,11 @@ class Pipeline(object):
 
     @historical_trigger.setter
     def historical_trigger(self, historical_trigger_object):
+        """Set historical trigger for Pipeline
+
+        :keyword historical_trigger_object: Historical trigger object for
+        triggering Pipeline outcome
+        """
         if historical_trigger_object:
             if historical_trigger_object['event'] != "open":
                 raise ValueError(
@@ -223,6 +268,10 @@ class Pipeline(object):
 
     @constraint.setter
     def constraint(self, constraint_objects):
+        """Set Pipline constraints
+
+        :keyword constraint_objects: One of list of constraint objects
+        """
         if constraint_objects:
             if not isinstance(constraint_objects, (dict, list)):
                 TypeError(
@@ -238,6 +287,11 @@ class Pipeline(object):
             self._constraints = []
 
     def append_constraint_object(self, constraint_object):
+        """Append constraint object to constraint for Pipeline
+
+        :keyword constraint_object: Constraint object to append to Pipeline
+        constraint
+        """
         if not isinstance(constraint_object, dict):
             TypeError('a single constraint object must be a dictionary')
 
@@ -257,6 +311,10 @@ class Pipeline(object):
 
     @condition.setter
     def condition(self, condition_sets):
+        """Set condition for Pipeline
+
+        :keyword condition_sets: One or list of condition sets
+        """
         if condition_sets:
             if not isinstance(condition_sets, (list, dict)):
                 raise TypeError(
@@ -277,6 +335,10 @@ class Pipeline(object):
             self._condition_sets = []
 
     def append_condition_set(self, condition_set):
+        """Append condition set to Pipeline condition
+
+        :keyword condition_set: One or list of condition sets
+        """
         if not isinstance(condition_set, dict):
             TypeError('a single condition set object must be a dictionary')
 
@@ -284,6 +346,10 @@ class Pipeline(object):
             self._condition_sets.append(condition_set)
 
     def remove_condition_set(self, condition_set):
+        """Remove condition set from Pipeline condition
+
+        :keyword condition_set: One or list of condition sets
+        """
         self._condition_sets.remove(condition_set)
 
     def _validate_condition_set(self, condition_sets):
@@ -313,6 +379,11 @@ class Pipeline(object):
 
     @timing.setter
     def timing(self, timing_object):
+        """Set timing object for available send times for Pipeline
+
+        :keyword timing_object: Single timing object defining allowable
+        delivery times for Pipeline
+        """
         if timing_object:
             if 'delay' in timing_object:
                 delay = timing_object['delay']
