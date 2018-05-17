@@ -57,7 +57,7 @@ class TestOpenChannel(unittest.TestCase):
             channel.opt_in = True
             channel.tags = ['a_tag']
 
-            channel.create(set_tags=True)
+            channel.create()
 
             self.assertEqual(channel.channel_id, channel_id)
 
@@ -92,20 +92,6 @@ class TestOpenChannel(unittest.TestCase):
         # Do not set opt in
         channel.address = address
         channel.open_platform = platform
-
-        self.assertRaises(ValueError, channel.create)
-
-    def test_create_channel_requires_set_tag_if_tags(self):
-        address = 'some_address'
-        platform = 'a_platform'
-
-        airship = ua.Airship('key', 'secret')
-        channel = ua.OpenChannel(airship)
-        channel.address = address
-        channel.open_platform = platform
-        channel.opt_in = True
-
-        channel.tags = ['some_tags', 'another_one']
 
         self.assertRaises(ValueError, channel.create)
 
@@ -205,7 +191,7 @@ class TestOpenChannel(unittest.TestCase):
             channel_to_update.tags = ['a_new_tag']
             channel_to_update.opt_in = True
             channel_to_update.address = 'example@example.com'
-            channel_to_update.update(set_tags=True)
+            channel_to_update.update()
 
             self.assertEqual(channel_to_update.channel_id, channel_id)
 

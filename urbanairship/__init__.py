@@ -67,6 +67,7 @@ from .devices import (
     DeleteTag,
     BatchTag,
     ChannelTags,
+    OpenChannelTags,
     Segment,
     SegmentList,
     ChannelUninstall,

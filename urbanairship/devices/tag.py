@@ -203,3 +203,65 @@ class ChannelTags(object):
             'application/json', version=3
         )
         return response.json()
+
+
+class OpenChannelTags(object):
+    """Modify the tags for an open channel"""
+
+    def __init__(self, airship):
+        self.url = common.OPEN_CHANNEL_URL + 'tags/'
+        self._airship = airship
+        self.audience = {}
+        self.add_group = {}
+        self.remove_group = {}
+        self.set_group = {}
+
+    def set_audience(self, address, open_platform):
+        self.audience = {
+            'address': address,
+            'open_platform_name': open_platform
+        }
+
+    def add(self, tags):
+        if not isinstance(tags, dict):
+            raise TypeError('"tags" must be a dictionary')
+        self.add_group = tags
+
+    def remove(self, tags):
+        if not isinstance(tags, dict):
+            raise TypeError('"tags" must be a dictionary')
+        self.remove_group = tags
+
+    def set(self, tags):
+        if not isinstance(tags, dict):
+            raise TypeError('"tags" must be a dictionary')
+        self.set_group = tags
+
+    def send(self):
+        payload = {}
+
+        if not self.audience:
+            raise ValueError('An audience is required to modify tags')
+        payload['audience'] = self.audience
+
+        if not self.add_group and not self.remove_group and not self.set_group:
+            raise ValueError('An add, remove, or set field was not set')
+
+        if self.set_group:
+            if self.add_group or self.remove_group:
+                raise ValueError('A "set" tag request cannot contain '
+                                 '"add" or "remove" fields')
+            payload['set'] = self.set_group
+
+        if self.add_group:
+            payload['add'] = self.add_group
+
+        if self.remove_group:
+            payload['remove'] = self.remove_group
+
+        body = json.dumps(payload)
+        response = self._airship._request(
+            'POST', body, self.url,
+            'application/json', version=3
+        )
+        return response.json()
