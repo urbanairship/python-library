@@ -49,6 +49,11 @@ from .push import (
     merge_data,
 )
 
+from .automation import (
+    Automation,
+    Pipeline
+)
+
 from .devices import (
     ChannelList,
     ChannelInfo,
@@ -158,6 +163,8 @@ __all__ = [
     Template,
     TemplateList,
     ScheduledList,
+    Automation,
+    Pipeline,
 ]
 
 # Silence urllib3 INFO logging by default
