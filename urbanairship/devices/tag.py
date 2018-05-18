@@ -222,20 +222,14 @@ class OpenChannelTags(object):
             'open_platform_name': open_platform
         }
 
-    def add(self, tags):
-        if not isinstance(tags, dict):
-            raise TypeError('"tags" must be a dictionary')
-        self.add_group = tags
+    def add(self, group_name, tags):
+        self.add_group[group_name] = tags
 
-    def remove(self, tags):
-        if not isinstance(tags, dict):
-            raise TypeError('"tags" must be a dictionary')
-        self.remove_group = tags
+    def remove(self, group_name, tags):
+        self.remove_group[group_name] = tags
 
-    def set(self, tags):
-        if not isinstance(tags, dict):
-            raise TypeError('"tags" must be a dictionary')
-        self.set_group = tags
+    def set(self, group_name, tags):
+        self.set_group[group_name] = tags
 
     def send(self):
         payload = {}

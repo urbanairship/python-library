@@ -469,38 +469,38 @@ class TestOpenChannelTags(unittest.TestCase):
 
     def test_add(self):
         self.open_channel_tags.set_audience('new_email@example.com', 'email')
-        self.open_channel_tags.add({'group1': ['tag1', 'tag2', 'tag3']})
+        self.open_channel_tags.add('group1', ['tag1', 'tag2', 'tag3'])
         result = self.open_channel_tags.send()
 
         self.assertEqual(result, [{'ok': True}])
 
     def test_remove(self):
         self.open_channel_tags.set_audience('new_email@example.com', 'email')
-        self.open_channel_tags.remove({'group1': ['tag1', 'tag2', 'tag3']})
+        self.open_channel_tags.remove('group1', ['tag1', 'tag2', 'tag3'])
         result = self.open_channel_tags.send()
 
         self.assertEqual(result, [{'ok': True}])
 
     def test_set(self):
         self.open_channel_tags.set_audience('new_email@example.com', 'email')
-        self.open_channel_tags.set({'group1': ['tag1', 'tag2', 'tag3']})
+        self.open_channel_tags.set('group1', ['tag1', 'tag2', 'tag3'])
         result = self.open_channel_tags.send()
 
         self.assertEqual(result, [{'ok': True}])
 
     def test_add_remove(self):
         self.open_channel_tags.set_audience('new_email@example.com', 'email')
-        self.open_channel_tags.add({'group1': ['tag1', 'tag2', 'tag3']})
-        self.open_channel_tags.remove({'group2': ['tag21', 'tag22', 'tag23']})
+        self.open_channel_tags.add('group1', ['tag1', 'tag2', 'tag3'])
+        self.open_channel_tags.remove('group2', ['tag21', 'tag22', 'tag23'])
         result = self.open_channel_tags.send()
 
         self.assertEqual(result, [{'ok': True}])
 
     def test_add_remove_set(self):
         self.open_channel_tags.set_audience('new_email@example.com', 'email')
-        self.open_channel_tags.add({'group1': ['tag1', 'tag2', 'tag3']})
-        self.open_channel_tags.remove({'group2': ['tag21', 'tag22', 'tag23']})
-        self.open_channel_tags.set({'group1': ['tag1', 'tag2', 'tag3']})
+        self.open_channel_tags.add('group1', ['tag1', 'tag2', 'tag3'])
+        self.open_channel_tags.remove('group2', ['tag21', 'tag22', 'tag23'])
+        self.open_channel_tags.set('group1', ['tag1', 'tag2', 'tag3'])
 
         with self.assertRaises(ValueError):
             self.open_channel_tags.send()
