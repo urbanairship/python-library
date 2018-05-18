@@ -2,6 +2,8 @@
 3.2.0
 --------------------
 - Renamed response_statistics.py to reports.py
+- Added Automation support
+- Updated Open Channel tag actions
 
 --------------------
 3.1.0

@@ -17,7 +17,13 @@ setup(
     url="http://urbanairship.com/",
     description="Python package for using the Urban Airship API",
     long_description=open('README.rst').read(),
-    packages=["urbanairship", "urbanairship.push", "urbanairship.devices", "urbanairship.reports"],
+    packages=[
+        "urbanairship",
+        "urbanairship.push",
+        "urbanairship.devices",
+        "urbanairship.reports",
+        "urbanairship.automation"
+    ],
     license='BSD License',
     classifiers=[
         'Development Status :: 4 - Beta',
