@@ -21,13 +21,8 @@ class OpenChannel(object):
     def __init__(self, airship):
         self.airship = airship
 
-    def create(self, set_tags=None):
+    def create(self):
         """Create this OpenChannel object with the API."""
-
-        if self.tags and set_tags is None:
-            raise ValueError(
-                'set_tags may not be None when tags present on OpenChannel.'
-            )
 
         if not self.address:
             raise ValueError('Must set address before creation.')
@@ -35,8 +30,11 @@ class OpenChannel(object):
         if not self.open_platform:
             raise ValueError('Must set open_platform before creation.')
 
-        if not self.opt_in:
+        if not isinstance(self.opt_in, bool):
             raise ValueError('Must set opt_in before creation.')
+
+        if self.tags and not isinstance(self.tags, list):
+            raise TypeError('"tags" must be a list')
 
         url = common.OPEN_CHANNEL_URL
 
@@ -49,7 +47,6 @@ class OpenChannel(object):
 
         if self.tags:
             channel_data['tags'] = self.tags
-            channel_data['set_tags'] = set_tags
         if self.identifiers:
             channel_data['open']['identifiers'] = self.identifiers
 
@@ -70,13 +67,8 @@ class OpenChannel(object):
 
         return response
 
-    def update(self, set_tags=None):
+    def update(self):
         """Update this OpenChannel object."""
-
-        if self.tags and set_tags is None:
-            raise ValueError(
-                'set_tags may not be None when tags present on OpenChannel.'
-            )
 
         if not self.address and not self.channel_id:
             raise ValueError('Must set address or channel ID to update.')
@@ -84,7 +76,7 @@ class OpenChannel(object):
         if not self.open_platform:
             raise ValueError('Must set open_platform.')
 
-        if not self.opt_in:
+        if not isinstance(self.opt_in, bool):
             raise ValueError('Must set opt_in.')
 
         if not self.address and self.opt_in is True:
@@ -103,7 +95,6 @@ class OpenChannel(object):
             channel_data['address'] = self.address
         if self.tags:
             channel_data['tags'] = self.tags
-            channel_data['set_tags'] = set_tags
         if self.identifiers:
             channel_data['open']['identifiers'] = self.identifiers
 
@@ -181,7 +172,8 @@ class OpenChannel(object):
         )
 
         logger.info(
-            'Successfully uninstalled open channel %s' % channel_data['open_platform_name']
+            'Successfully uninstalled open channel %s'
+            % channel_data['open_platform_name']
         )
 
         return response
