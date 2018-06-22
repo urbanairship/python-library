@@ -26,7 +26,7 @@ setup(
     ],
     license='BSD License',
     classifiers=[
-        'Development Status :: 5 - Production/Stable5',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
