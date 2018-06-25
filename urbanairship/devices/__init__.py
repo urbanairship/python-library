@@ -4,7 +4,6 @@ from .devicelist import (
     DeviceTokenList,
     APIDList,
     DeviceInfo,
-    Feedback,
 )
 
 from .tag import (
