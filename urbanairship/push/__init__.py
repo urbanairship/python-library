@@ -44,6 +44,7 @@ from .payload import (
 from .schedule import (
     scheduled_time,
     local_scheduled_time,
+    ScheduledList,
 )
 
 from .template import (
@@ -65,6 +66,7 @@ __all__ = [
     all_,
     Push,
     ScheduledPush,
+    ScheduledList,
     TemplatePush,
     Template,
     TemplateList,

@@ -1,8 +1,16 @@
 --------------------
 4.0.0
 --------------------
-- Added Automation APIs
+- Added Automation API support
+- Updated Open Channel tag actions
 - Removed Feedback API
+- Renamed response_statistics.py to reports.py
+
+--------------------
+3.1.0
+--------------------
+- Added support for Campaigns
+- Added support for uninstalling an Open Channel
 
 --------------------
 3.0.1

@@ -674,6 +674,125 @@ class TestPush(unittest.TestCase):
 
             sched.update()
 
+    def test_schedules_listing(self):
+        self.url1 = "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc"
+        self.url2 = "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c"
+
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "ok": True,
+                    "count": 2,
+                    "schedules": [
+                        {
+                            "url": "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc",
+                            "schedule": {
+                                "scheduled_time": "2018-10-09T18:43:34"
+                            },
+                            "name": "Test1 Schedule",
+                            "push": {
+                                "audience": "all",
+                                "device_types": "all",
+                                "notification": {
+                                    "alert": "Hello, python!"
+                                }
+                            },
+                            "push_ids": [
+                                "a4ed2e7b-de88-4fbc-9ccc-eb9de75b7c6e"
+                            ]
+                        },
+                        {
+                            "url": "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c",
+                            "schedule": {
+                                "local_scheduled_time": "2018-12-29T20:41:29"
+                            },
+                            "push": {
+                                "audience": {
+                                    "named_user": "python_library"
+                                },
+                                "device_types": [
+                                    "ios",
+                                    "android",
+                                    "amazon"
+                                ],
+                                "notification": {
+                                    "alert": "Hello Python Local Time"
+                                },
+                            },
+                            "push_ids": [
+                                "b13b40f3-7a2e-40c5-8df1-cb657878e983",
+                                "dc9213b3-19f0-49b4-91b3-080e26f96293",
+                                "3c13423d-5f2d-4fdc-8a34-c64bcd09d564",
+                                "9bd0f266-6e52-474d-92ca-4688a17ebba1",
+                                "d264dc5e-025d-4ed1-9cc9-ee694f1decf5",
+                                "f4888ef7-672f-414e-a3a1-2b0d085f0e87",
+                                "d7c977ec-be29-4b1f-89b0-13f734b9524a",
+                                "82e4966a-8b45-4500-92bb-9c329f284f29",
+                                "dd636364-4347-4fcc-bd8c-d5c3a60e94a0",
+                                "7bc81dac-98df-4c24-994c-4129c02d8ed2",
+                                "55da24c0-2a85-46d4-a8a8-689e1a1a05c1",
+                                "068a89c9-aa92-47bd-ac11-ce581b69e328",
+                                "ba91a074-28c5-4eaa-b45b-a76638e9425c",
+                                "2d1bfe48-f7b6-4c6c-a2c7-37e0b2d300cc",
+                                "410c76b8-e732-465d-bc53-04c89f82921a",
+                                "e319d847-a6da-4c9c-9179-1c3d73129cf2",
+                                "e4209428-9e50-4c86-a105-4dbb52b9060a",
+                                "c9fbd026-7c51-4835-9acb-1fc5a45286d4",
+                                "c8b914a7-6a29-4faa-a817-cf4ed2874ab8",
+                                "881ad454-ff25-481e-8f58-06f02082c856",
+                                "1b317ccd-25a6-481c-a200-e6cf67cf079f",
+                                "fec10a5a-1b8c-4e2e-bff5-26dd5edf3bce",
+                                "2a3ee2c0-490b-4f9b-92c0-bebaf45eba0a",
+                                "832dbaac-135f-490d-bd07-50e787c29d18",
+                                "f5bb80ab-6503-4d37-be93-eeff4f25db01",
+                                "a995e469-87cb-41a3-b919-42dda38344e9",
+                                "cda3e7a0-7e3a-40cf-b4bd-56e0c0f5784c",
+                                "b4c7272f-f14a-4f08-8f62-e69b567c83fb",
+                                "5899bb33-7a78-4793-9cbb-ca3714192ba2",
+                                "c6bbfb10-95a4-4cfa-a73c-ece3b48d429c",
+                                "582a224e-3f3f-4188-beab-17e963ecefbc",
+                                "d5cf17e9-dfd9-40f3-8934-71f53535fb7c",
+                                "86e9ec5c-207e-4a66-ab0b-cfeb4b141014",
+                                "f6673b76-d2f0-472e-ac54-01554d5d97b4",
+                                "e0c872c2-6adb-45d3-8f6d-2c3ba0a32257",
+                                "0df19a37-4297-465f-867c-d436889f5085",
+                                "f3d94825-331c-4562-b706-18d65fa914ab",
+                                "eed2ce1e-e221-4d0c-bfd1-f9dd253e20e4",
+                                "5e25be82-a68c-47a6-852b-911108214209",
+                                "4a91e9d9-10f6-4264-bc0c-a1096722d95f",
+                                "3c453695-7051-42e9-ab57-4912151c7e42",
+                                "2f390cf6-fcb1-4492-b47f-fb7b58c717a6"
+                            ]
+                        }
+                    ]
+                }
+            ).encode('utf-8')
+
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship('key', 'secret')
+
+            schedule_listing = []
+
+            for schedule in ua.ScheduledList(airship):
+                schedule_listing.append(schedule)
+
+            self.assertEquals(
+                schedule_listing[0].url, self.url1
+            )
+            self.assertEquals(
+                schedule_listing[1].url, self.url2
+            )
+
+            self.assertEquals(
+                len(schedule_listing[0].push_ids), 1
+            )
+            self.assertEquals(
+                len(schedule_listing[1].push_ids), 42
+            )
+
     def test_options_int_expiry(self):
         opt = ua.options(expiry=10080)
         self.assertEqual(

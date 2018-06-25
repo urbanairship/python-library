@@ -4,6 +4,7 @@ from .common import AirshipFailure, Unauthorized
 from .push import (
     Push,
     ScheduledPush,
+    ScheduledList,
     TemplatePush,
     Template,
     TemplateList,
@@ -48,6 +49,11 @@ from .push import (
     merge_data,
 )
 
+from .automation import (
+    Automation,
+    Pipeline
+)
+
 from .devices import (
     ChannelList,
     ChannelInfo,
@@ -61,6 +67,7 @@ from .devices import (
     DeleteTag,
     BatchTag,
     ChannelTags,
+    OpenChannelTags,
     Segment,
     SegmentList,
     ChannelUninstall,
@@ -156,6 +163,9 @@ __all__ = [
     merge_data,
     Template,
     TemplateList,
+    ScheduledList,
+    Automation,
+    Pipeline,
 ]
 
 # Silence urllib3 INFO logging by default
