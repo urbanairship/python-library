@@ -1,4 +1,10 @@
 --------------------
+4.0.0
+--------------------
+- Added Automation APIs
+- Removed Feedback API
+
+--------------------
 3.0.1
 --------------------
 - Fixed Web Notify require_interaction field name

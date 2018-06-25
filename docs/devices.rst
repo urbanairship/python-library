@@ -103,25 +103,3 @@ Existing channels can be updated by using the update method on
 .. automodule:: urbanairship.devices.open_channel
    :members: OpenChannel
    :noindex:
-
-
-Feedback
---------
-Feedback returns a list of dictionaries of device tokens/APIDs that the
-respective push provider has told us are uninstalled since the given
-timestamp. For more information, see: `the documentation on feedback
-<feedback>`_.
-
-.. code-block:: python
-
-   import urbanairship as ua
-   airship = ua.Airship(app_key, master_secret)
-   since = datetime.datetime.utcnow() - datetime.timedelta(days=30)
-   tokens = ua.Feedback(airship).device_token(since)
-   apids = ua.Feedback(airship).apid(since)
-
-.. automodule:: urbanairship.devices.devicelist
-   :members: Feedback
-   :noindex:
-
-.. _feedback: http://docs.urbanairship.com/api/ua.html#feedback
