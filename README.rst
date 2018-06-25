@@ -85,6 +85,7 @@ http://support.urbanairship.com/
 History
 =======
 
+* 4.0 Support for Automation, removed Feedback
 * 3.0 Support for Open Channels, several other significant changes
 * 2.0 Support for Web Notify and more iOS 10, stopped supporting Python 2.6
 * 1.0 Support for In-App and iOS 10

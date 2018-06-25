@@ -173,38 +173,3 @@ class APIDList(DeviceTokenList):
     data_attribute = 'apids'
     id_key = 'apid'
     instance_class = DeviceInfo
-
-
-class Feedback(object):
-    """Return device tokens or APIDs marked inactive since this timestamp."""
-
-    def __init__(self, airship):
-        self.airship = airship
-
-    def device_token(self, since):
-        url = common.DT_FEEDBACK_URL
-        return self._get_feedback(since, url, self.airship)
-
-    def apid(self, since):
-        url = common.APID_FEEDBACK_URL
-        return self._get_feedback(since, url, self.airship)
-
-    @classmethod
-    def _get_feedback(cls, since, url, airship):
-        response = airship._request(
-            method='GET',
-            body='',
-            url=url,
-            params={'since': since.isoformat()},
-            version=3
-        )
-        data = response.json()
-        for r in data:
-            try:
-                r['marked_inactive_on'] = datetime.datetime.strptime(
-                    r['marked_inactive_on'],
-                    '%Y-%m-%d %H:%M:%S'
-                )
-            except:
-                r['marked_inactive_on'] = 'UNKNOWN'
-        return data
