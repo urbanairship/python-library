@@ -134,11 +134,17 @@ class ScheduledPush(object):
             content_type='application/json',
             version=3
         )
-
         data = response.json()
-        logger.info('Scheduled push successful. schedule_urls: %s',
-                    ', '.join(data.get('schedule_urls', [])))
-        self.url = data.get('schedule_urls', [None])[0]
+
+        urls = data.get('schedule_urls', [])
+        if urls:
+            self.url = urls[0]
+            logger.info('Scheduled push successful. schedule_urls: %s',
+                        ', '.join(data.get('schedule_urls', [])))
+
+        else:
+            logger.info('Scheduled push resulted in zero messages scheduled.')
+
 
         return PushResponse(response)
 
@@ -243,7 +249,7 @@ class PushResponse(object):
     def __init__(self, response):
         data = response.json()
         self.push_ids = data.get('push_ids')
-        self.schedule_url = data.get('schedule_urls', [None])[0]
+        self.schedule_url = data.get('schedule_urls', [])
         self.operation_id = data.get('operation_id')
         self.ok = data.get('ok')
         self.payload = data
