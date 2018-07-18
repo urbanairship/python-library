@@ -1,4 +1,8 @@
 --------------------
+4.0.1
+--------------------
+- Added conditional test to core.py to fix scheduled url issue
+--------------------
 4.0.0
 --------------------
 - Added Automation API support
