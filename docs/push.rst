@@ -257,8 +257,8 @@ will be raised.
    :members:
 
 
-Push Time Schedule Optimization
--------------------------------
+Schedule Push Time Send Optimization
+------------------------------------
 
 Scheduled notifications build upon the Push object, and have two other
 components: the date for best time delivery and an optional name.
