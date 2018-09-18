@@ -19,3 +19,10 @@ class TestSchedule(unittest.TestCase):
             ua.local_scheduled_time(d),
             {'local_scheduled_time': '2015-01-01T12:56:00'}
         )
+
+    def test_best_time(self):
+        d = datetime.datetime(2018, 10, 8)
+        self.assertEqual(
+            ua.best_time(d),
+            {'best_time': {'send_date': '2018-10-08'}}
+        )
