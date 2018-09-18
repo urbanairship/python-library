@@ -39,7 +39,7 @@ def local_scheduled_time(timestamp):
     return {'local_scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
 
 
-def best_time_send_date(timestamp):
+def best_time(timestamp):
     """Specify a date to send the push at the best time per-device.
     Only YYYY_MM_DD are needed. Hour/minute/second information is discarded.
 
