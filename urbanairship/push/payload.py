@@ -71,14 +71,21 @@ def notification(alert=None, ios=None, android=None, amazon=None,
 def ios(alert=None, badge=None, sound=None, content_available=False,
         extra=None, expiry=None, interactive=None, category=None, title=None,
         mutable_content=None, subtitle=None, media_attachment=None,
-        priority=None, collapse_id=None):
+        priority=None, collapse_id=None, thread_id=None):
     """iOS/APNS specific platform override payload.
 
-    :keyword alert: iOS format alert, as either a string or dictionary.
+    :keyword alert: iOS format alert, as either a string or dictionary. If
+        a dictionary, the accepted keys must match those in
+        `Apple's Payload Key Reference
+        <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html>_.
+        Some options require iOS 11 or 12 on the device.
     :keyword badge: An integer badge value or an *autobadge* string.
-    :keyword sound: The name of a sound file to play. Must be a string.
-    :keyword content_available: If True, pass on the content_available command
-        for Newsstand iOS applications.
+    :keyword sound: If a string, the name of a sound file in the app bundle.
+        If a dict, the 'name' key specifies the name of the sound file. Some
+        options require iOS 12 or above on the device.
+    :keyword content_available: If true, the payload is delivered to your app
+        in the background. This flag is automatically set to true if there
+        is an In-App Message in the payload.
     :keyword extra: A set of key/value pairs to include in the push payload
         sent to the device.
     :keyword expiry: An integer or time set in UTC as a string
@@ -107,6 +114,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         the new message replaces the older message with the same collapse_id.
         Similar to the GCM collapse_key. The value of this key must not exceed
         64 bytes. iOS 10 or above.
+    :keyword thread_id: Optional, a string. A unique identifier used to group
+        notifications into separate threads in the Notification Center and on
+        the lock screen. Grouped notifications are available beginning
+        with iOS 12.
 
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'}) # doctest: +SKIP
@@ -125,6 +136,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
             raise ValueError('Invalid iOS autobadge value')
         payload['badge'] = badge
     if sound is not None:
+        if not (isinstance(sound, (string_type, dict))):
+            raise ValueError('iOS sound must a string or dictionary')
+        if isinstance(sound, dict) and not 'name' in sound:
+                raise ValueError('if iOS sound is a dict, name key must be used')
         payload['sound'] = sound
     if content_available:
         payload['content-available'] = 1
@@ -158,6 +173,10 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
         if not (isinstance(collapse_id, string_type)):
             raise ValueError('iOS collapse_id must be a string')
         payload['collapse_id'] = collapse_id
+    if thread_id is not None:
+        if not (isinstance(thread_id, string_type)):
+            raise ValueError('iOS therad_id must be a string')
+        payload['thread_id'] = thread_id
 
     return payload
 

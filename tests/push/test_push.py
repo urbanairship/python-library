@@ -357,12 +357,53 @@ class TestPush(unittest.TestCase):
             }
         )
 
-    def test_ios_alert_dict(self):
+    def test_standard_ios_opts(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Top level alert',
+            ios = ua.ios(
+                alert='iOS override alert',
+                sound='cat.caf',
+            )
+        )
+        p.device_types = ua.device_types('ios')
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': ['ios'],
+                'notification': {
+                    'alert': 'Top level alert',
+                    'ios': {
+                        'alert': 'iOS override alert',
+                        'sound': 'cat.caf'
+                    }
+                }
+            }
+        )
+
+    def test_ios_overrides(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
             ios=ua.ios(
-                alert={'foo': 'bar'}
+                alert={'title': 'this is',
+                       'body': 'backwards',
+                       'summary-arg': 'Matmos',
+                       'summary-arg-count': 1},
+                sound={'name': 'Amplified Synapse',
+                       'volume': 0.8,
+                       'critical': False},
+                thread_id='plastic minor',
+                priority=10,
+                badge=3,
+                extra={'office': 'furniture'},
+                mutable_content=False,
+                title='this is',
+                subtitle='backwards',
+                collapse_id='nugent sand'
             )
         )
         p.options = ua.options(10080)
@@ -381,8 +422,26 @@ class TestPush(unittest.TestCase):
                 'notification': {
                     'ios': {
                         'alert': {
-                            'foo': 'bar'
-                        }
+                            'title': 'this is',
+                            'body': 'backwards',
+                            'summary-arg': 'Matmos',
+                            'summary-arg-count': 1
+                        },
+                        'sound': {
+                            'name': 'Amplified Synapse',
+                            'volume': 0.8,
+                            'critical': False
+                        },
+                        'thread_id': 'plastic minor',
+                        'priority': 10,
+                        'badge': 3,
+                        'extra': {
+                            'office': 'furniture'
+                        },
+                        'mutable_content': False,
+                        'title': 'this is',
+                        'subtitle': 'backwards',
+                        'collapse_id': 'nugent sand'
                     }
                 },
                 'device_types': 'ios',
