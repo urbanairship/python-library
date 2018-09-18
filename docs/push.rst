@@ -257,6 +257,35 @@ will be raised.
    :members:
 
 
+Schedule Push Time Send Optimization
+------------------------------------
+
+Scheduled notifications build upon the Push object, and have two other
+components: the date for best time delivery and an optional name.
+
+This example schedules the above notification for delivery to the
+devices' best time.
+
+.. code-block:: python
+
+    import datetime
+
+    schedule = airship.create_scheduled_push()
+    schedule.push = push
+    schedule.name = 'optional name for later reference'
+    schedule.schedule = ua.best_time(
+       datetime.datetime(2018, 10, 2))
+    response = schedule.send()
+
+    print ('Created schedule. url:', response.schedule_url)
+
+If the schedule is unsuccessful, an :py:class:`AirshipFailure` exception
+will be raised.
+
+.. autoclass:: urbanairship.push.core.ScheduledPush
+   :members:
+
+
 Updating or Canceling a Schedule
 --------------------------------
 
