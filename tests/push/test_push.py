@@ -357,6 +357,33 @@ class TestPush(unittest.TestCase):
             }
         )
 
+    def test_standard_ios_opts(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='Top level alert',
+            ios = ua.ios(
+                alert='iOS override alert',
+                sound='cat.caf',
+            )
+        )
+        p.device_types = ua.device_types('ios')
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': ['ios'],
+                'notification': {
+                    'alert': 'Top level alert',
+                    'ios': {
+                        'alert': 'iOS override alert',
+                        'sound': 'cat.caf'
+                    }
+                }
+            }
+        )
+
     def test_ios_overrides(self):
         p = ua.Push(None)
         p.audience = ua.all_
