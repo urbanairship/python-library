@@ -2,6 +2,8 @@
 4.1.0
 --------------------
 - Added support for Push Time Send Optimization
+- Added support for iOS 12 overrides
+- Removes support for python 3.3.x
 
 --------------------
 4.0.1
