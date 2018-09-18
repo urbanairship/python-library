@@ -1,4 +1,9 @@
 --------------------
+4.1.0
+--------------------
+- Added support for Push Time Send Optimization as best_time
+
+--------------------
 4.0.1
 --------------------
 - Added conditional test to core.py to fix scheduled url issue
