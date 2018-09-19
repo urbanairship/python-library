@@ -357,6 +357,83 @@ class TestPush(unittest.TestCase):
             }
         )
 
+
+    def test_sms_push_to_sender(self):
+        p = ua.Push(None)
+        p.audience = ua.sms_sender('12345')
+        p.notification = ua.notification(
+            alert='sending sms to all with sender'
+        )
+        p.device_types = ua.device_types('sms')
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': {
+                    'sms_sender': '12345'
+                },
+                'device_types': ['sms'],
+                'notification': {
+                    'alert': 'sending sms to all with sender'
+                }
+            }
+        )
+
+
+    def test_sms_push_to_id(self):
+        p = ua.Push(None)
+        p.audience = ua.sms_id('01230984567', '12345')
+        p.notification = ua.notification(
+            alert='send sms to id with sender and msisdn'
+        )
+        p.device_types = ua.device_types('sms')
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': {
+                    'sms_id': {
+                        'sender': '12345',
+                        'msisdn': '01230984567'
+                    }
+                },
+                'device_types': ['sms'],
+                'notification': {
+                    'alert': 'send sms to id with sender and msisdn'
+                }
+            }
+        )
+
+
+    def test_sms_overrides(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='top level alert',
+            sms = ua.sms(
+                alert='sms override alert',
+                expiry='2018-04-01T12:00:00',
+            )
+        )
+        p.device_types = ua.device_types('sms')
+
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': ['sms'],
+                'notification': {
+                    'alert': 'top level alert',
+                    'sms': {
+                        'alert': 'sms override alert',
+                        'expiry': '2018-04-01T12:00:00'
+                    }
+                }
+            }
+        )
+
+
+
     def test_standard_ios_opts(self):
         p = ua.Push(None)
         p.audience = ua.all_

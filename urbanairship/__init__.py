@@ -33,6 +33,7 @@ from .push import (
     android,
     amazon,
     web,
+    sms,
     wns_payload,
     open_platform,
     message,
