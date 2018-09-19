@@ -1,10 +1,21 @@
 import re
+import sys
 
 DEVICE_TOKEN_FORMAT = re.compile(r'^[0-9a-fA-F]{64}$')
 UUID_FORMAT = re.compile(
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}'
     r'-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
+SMS_SENDER_FORMAT = re.compile(r'^[0-9]$')
 
+# Python coarse version differentiation
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+# Set version string type
+if PY3:
+    string_type = str
+elif PY2:
+    string_type = basestring
 
 # Value selectors; device IDs, aliases, tags, etc.
 
@@ -57,6 +68,20 @@ def open_channel(uuid):
     if not UUID_FORMAT.match(uuid):
         raise ValueError('Invalid Open Channel')
     return {'open_channel': uuid.lower().strip()}
+
+
+def sms_sender(sender):
+    if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
+        raise ValueError('sms_sender value must be a numeric string.')
+    return {'sms_sender': sender}
+
+
+def sms_id(msisdn, sender):
+    if not isinstance(msisdn, string_type):
+        raise ValueError('msisdn must be a string.')
+    if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
+        raise ValueError('sender value must be a numeric string.')
+    return {'sms_id': {'sender': sender, 'msisdn': msisdn}}
 
 
 def wns(uuid):

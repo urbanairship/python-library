@@ -60,11 +60,28 @@ class TestAudience(unittest.TestCase):
                 ua.segment,
                 'test',
                 {'segment': 'test'}
-            ),
+            )
         )
 
         for selector, value, result in selectors:
             self.assertEqual(selector(value), result)
+
+
+    def test_sms_selectors(self):
+        sms_id_selector = ua.sms_id('01230984567', '76543210')
+
+        self.assertEqual(
+            sms_id_selector,
+            {'sms_id': {'sender': '76543210', 'msisdn': '01230984567'}}
+        )
+
+        sms_sender_selector = ua.sms_sender('76543210')
+
+        self.assertEqual(
+            sms_sender_selector,
+            {'sms_sender': '76543210'}
+        )
+
 
     def test_invalid_device_selectors(self):
         selectors = (

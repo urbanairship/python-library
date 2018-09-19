@@ -14,6 +14,8 @@ from .push import (
     amazon_channel,
     channel,
     open_channel,
+    sms_id,
+    sms_sender,
     device_token,
     apid,
     wns,
