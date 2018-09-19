@@ -595,11 +595,19 @@ def device_types(*types):
     ValueError: Invalid device type 'symbian'
 
     """
+    valid_device_types = (
+        'ios',
+        'android',
+        'amazon',
+        'wns',
+        'web',
+        'sms'
+    )
     if len(types) == 1 and types[0] == 'all':
         return 'all'
     for t in types:
         is_open = isinstance(t, string_type) and t.startswith('open::')
-        if t not in ('ios', 'android', 'amazon', 'wns', 'web') and not is_open:
+        if t not in valid_device_types and not is_open:
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
 
