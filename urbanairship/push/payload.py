@@ -413,6 +413,31 @@ def web(alert=None, extra=None, icon=None, title=None, interactive=None,
     return payload
 
 
+def sms(alert=None, expiry=None):
+    """SMS platform specific override payload
+
+    All keyword arguments are optional
+
+    :keyword alert: An optional string. Overrides the alert provided at the
+        top level of the notification for SMS channels.
+        The maximum length of an SMS alert is 1600 characters.
+    :keyword expiry: Optional. Delivery expiration, as either absolute
+        UTC timestamp (string), or number of seconds from now (integer).
+
+
+    >>> sms(alert='sms override alert!', expiry='2018-04-01T12:00:00')
+    {'alert': 'sms override alert!', 'expiry': '2018-04-01T12:00:00'}
+
+    """
+    payload = {}
+    if alert is not None:
+        payload['alert'] = alert
+    if expiry is not None:
+        if not (isinstance(expiry, (string_type, int))):
+            raise ValueError('expiry value must be a string or integer')
+        payload['expiry'] = expiry
+    return payload
+
 def open_platform(alert=None, title=None, extra=None, summary=None,
                   media_attachment=None, interactive=None):
     """Open platform specific override payload.
