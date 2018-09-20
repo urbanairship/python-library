@@ -79,7 +79,7 @@ from .devices import (
     StaticList,
     StaticLists,
     LocationFinder,
-    SMS,
+    Sms,
 )
 
 from .reports import (
@@ -138,6 +138,7 @@ __all__ = [
     ChannelList,
     ChannelInfo,
     OpenChannel,
+    Sms,
     DeviceTokenList,
     APIDList,
     DeviceInfo,

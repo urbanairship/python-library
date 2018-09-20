@@ -23,7 +23,7 @@ class TestSMS(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            sms_obj = ua.SMS(airship, sender=sender, msisdn=msisdn)
+            sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
             test_response = sms_obj.register()
 
@@ -45,7 +45,7 @@ class TestSMS(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            sms_obj = ua.SMS(airship, sender=sender, msisdn=msisdn)
+            sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
             sms_obj.register(opted_in=opt_in_date)
 
@@ -64,7 +64,7 @@ class TestSMS(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            sms_obj = ua.SMS(airship, sender=sender, msisdn=msisdn)
+            sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
             r = sms_obj.opt_out()
 
@@ -84,7 +84,7 @@ class TestSMS(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            sms_obj = ua.SMS(airship, sender=sender, msisdn=msisdn)
+            sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
             r = sms_obj.uninstall()
 
@@ -127,7 +127,7 @@ class TestSMS(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship('key', 'secret')
-            sms_obj = ua.SMS(airship, sender=sender, msisdn=msisdn)
+            sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
             r = sms_obj.lookup()
 

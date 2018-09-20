@@ -43,5 +43,5 @@ from .locationfinder import (
 )
 
 from .sms import (
-    SMS
+    Sms
 )

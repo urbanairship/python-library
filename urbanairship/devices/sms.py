@@ -6,8 +6,8 @@ from urbanairship import common
 logger = logging.getLogger('urbanairship')
 
 
-class SMS(object):
-    """Register, opt-out and uninstall an SMS object"""
+class Sms(object):
+    """Register, opt-out and uninstall an Sms object"""
 
     def __init__(self, airship, sender=None, msisdn=None):
 
@@ -27,7 +27,7 @@ class SMS(object):
         }
 
     def register(self, opted_in=None):
-        """Register an SMS channel with the sender id and msisdn
+        """Register an Sms channel with the sender ID and MSISDN
 
         :param opted_in: Optional UTC IOS 8601 datetime string that represents the
             date and time when explicit permission was received from the
@@ -53,7 +53,7 @@ class SMS(object):
         if opted_in is not None:
             self.channel_id = response.json().get('channel_id')
             logger.info(
-                'Successfully registered SMS channel with channel_id %s' % (
+                'Successfully registered Sms channel with channel_id %s' % (
                     self.channel_id
                 )
             )
@@ -68,7 +68,7 @@ class SMS(object):
         return response
 
     def opt_out(self):
-        """mark an sms channel by sender and msisdn
+        """mark an sms channel by sender ID and MSISDN
 
         :return: the response object from the api
         """
@@ -83,7 +83,7 @@ class SMS(object):
         )
 
         logger.info(
-            'Opted out SMS channel with sender: %s and msisdn: %s' % (
+            'Opted out Sms channel with sender: %s and msisdn: %s' % (
                 self.sender, self.msisdn
             )
         )
@@ -106,7 +106,7 @@ class SMS(object):
         )
 
         logger.info(
-            'Uninstalled SMS channel with sender: %s and msisdn: %s' % (
+            'Uninstalled Sms channel with sender: %s and msisdn: %s' % (
                 self.sender, self.msisdn
             )
         )
@@ -114,7 +114,7 @@ class SMS(object):
         return response
 
     def lookup(self):
-        """lookup SMS channel information
+        """Look up Sms channel information
 
         :return: the response object from the api
         """
