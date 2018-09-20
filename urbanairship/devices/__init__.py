@@ -41,3 +41,7 @@ from .static_lists import (
 from .locationfinder import (
     LocationFinder
 )
+
+from .sms import (
+    SMS
+)

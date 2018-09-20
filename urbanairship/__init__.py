@@ -79,6 +79,7 @@ from .devices import (
     StaticList,
     StaticLists,
     LocationFinder,
+    SMS,
 )
 
 from .reports import (
