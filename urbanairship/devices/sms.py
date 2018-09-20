@@ -21,7 +21,7 @@ class SMS(object):
 
         self.sender = sender
         self.msisdn = msisdn
-        self.payload = {
+        self.common_payload = {
             'sender': sender,
             'msisdn': msisdn
         }
@@ -39,9 +39,9 @@ class SMS(object):
         url = common.SMS_URL
 
         if opted_in:
-            self.payload['opted_in'] = opted_in
+            self.common_payload['opted_in'] = opted_in
 
-        body = json.dumps(self.payload).encode('utf-8')
+        body = json.dumps(self.common_payload).encode('utf-8')
 
         response = self.airship.request(
             method='POST',
@@ -50,13 +50,20 @@ class SMS(object):
             version=3
         )
 
-        self.channel_id = response.json().get('channel_id')
-
-        logger.info(
-            'Successfully registered SMS channel with channel_id %s' % (
-                self.channel_id
+        if opted_in is not None:
+            self.channel_id = response.json().get('channel_id')
+            logger.info(
+                'Successfully registered SMS channel with channel_id %s' % (
+                    self.channel_id
+                )
             )
-        )
+        else:
+            self.channel_id = None
+            logger.info(
+                'Channel creation for msisdn %s pending user opt-in' % (
+                    self.msisdn
+                )
+            )
 
         return response
 
@@ -70,7 +77,7 @@ class SMS(object):
 
         response = self.airship.request(
             method='POST',
-            body=json.dumps(self.payload).encode('utf-8'),
+            body=json.dumps(self.common_payload).encode('utf-8'),
             url=url,
             version=3
         )
@@ -93,7 +100,7 @@ class SMS(object):
 
         response = self.airship.request(
             method='POST',
-            body=json.dumps(self.payload).encode('utf-8'),
+            body=json.dumps(self.common_payload).encode('utf-8'),
             url=url,
             version=3
         )
