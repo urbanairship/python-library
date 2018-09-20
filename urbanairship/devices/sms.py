@@ -1,4 +1,3 @@
-import datetime
 import json
 import logging
 
@@ -9,11 +8,6 @@ logger = logging.getLogger('urbanairship')
 
 class SMS(object):
     """Register, opt-out and uninstall an SMS object"""
-
-    channel_id = None
-    sender = None
-    msisdn = None
-    opted_in = None
 
     def __init__(self, airship, sender=None, msisdn=None):
 
@@ -31,7 +25,6 @@ class SMS(object):
             'sender': sender,
             'msisdn': msisdn
         }
-
 
     def register(self, opted_in=None):
         """Register an SMS channel with the sender id and msisdn
