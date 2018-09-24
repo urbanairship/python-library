@@ -14,11 +14,30 @@ class Sms(object):
     """Register, opt-out and uninstall an Sms object"""
 
     def __init__(self, airship, sender, msisdn):
-
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
         self.opted_in = False
+
+    @property
+    def sender(self):
+        return self._sender
+
+    @sender.setter
+    def sender(self, value):
+        if not VALID_SENDER.match(value):
+            raise ValueError('sender must be a numeric string')
+        self._sender = value
+
+    @property
+    def msisdn(self):
+        return self._msisdn
+
+    @msisdn.setter
+    def msisdn(self, value):
+        if not VALID_MSISDN.match(value):
+            raise ValueError('msisdn must be a numeric string')
+        self._msisdn = value
 
     @property
     def common_payload(self):
@@ -60,7 +79,6 @@ class Sms(object):
                 )
             )
         else:
-            self.channel_id = None
             logger.info(
                 'Channel creation for msisdn %s pending user opt-in' % (
                     self.msisdn
