@@ -79,7 +79,7 @@ def sms_sender(sender):
 
 def sms_id(msisdn, sender):
     if not (isinstance(msisdn, string_type) or SMS_MSISDN_FORMAT.match(msisdn)):
-        raise ValueError('msisdn must be a string.')
+        raise ValueError('msisdn value must be a numeric string.')
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
         raise ValueError('sender value must be a numeric string.')
     return {'sms_id': {'sender': sender, 'msisdn': msisdn}}
