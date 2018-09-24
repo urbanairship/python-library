@@ -40,6 +40,14 @@ class Sms(object):
         self._msisdn = value
 
     @property
+    def opted_in(self):
+        return self._opted_in
+
+    @opted_in.setter
+    def opted_in(self, value):
+        self._opted_in = value
+
+    @property
     def common_payload(self):
         return {
             'sender': self.sender,
