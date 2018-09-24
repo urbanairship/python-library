@@ -1,24 +1,21 @@
 import json
 import logging
+import re
 
 from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
 
+VALID_MSISDN = re.compile(r'[0-9]*$')
+VALID_SENDER = re.compile(r'[0-9]*$')
+
 
 class Sms(object):
     """Register, opt-out and uninstall an Sms object"""
 
-    def __init__(self, airship, sender=None, msisdn=None):
+    def __init__(self, airship, sender, msisdn):
 
         self.airship = airship
-
-        if sender is None:
-            raise ValueError('Must set sms sender id for creation')
-
-        if msisdn is None:
-            raise ValueError('Must set msisdn for creation')
-
         self.sender = sender
         self.msisdn = msisdn
         self.common_payload = {
@@ -26,10 +23,10 @@ class Sms(object):
             'msisdn': msisdn
         }
 
-    def register(self, opted_in=None):
+    def register(self, opted_in=False):
         """Register an Sms channel with the sender ID and MSISDN
 
-        :param opted_in: Optional UTC IOS 8601 datetime string that represents the
+        :param opted_in: Optional UTC ISO 8601 datetime string that represents the
             date and time when explicit permission was received from the
             user to receive messages.
 
@@ -68,7 +65,7 @@ class Sms(object):
         return response
 
     def opt_out(self):
-        """mark an sms channel by sender ID and MSISDN
+        """mark an sms channel at opted-out by sender ID and MSISDN
 
         :return: the response object from the api
         """
