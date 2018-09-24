@@ -10,7 +10,7 @@ import urbanairship as ua
 class TestSMS(unittest.TestCase):
     def test_sms_channel_reg(self):
         sender = '12345'
-        msisdn = '15038316387'
+        msisdn = '15035556789'
         channel_id = None
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -31,7 +31,7 @@ class TestSMS(unittest.TestCase):
 
     def test_sms_channel_reg_with_optin(self):
         sender = '12345'
-        msisdn = '15038316387'
+        msisdn = '15035556789'
         channel_id = '59968b83-4e21-4e4a-85ce-25bb59a93993'
         opt_in_date= '2018-02-13T11:58:59'
 
@@ -53,7 +53,7 @@ class TestSMS(unittest.TestCase):
 
     def test_sms_opt_out(self):
         sender = '12345'
-        msisdn = '15038316387'
+        msisdn = '15035556789'
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
@@ -73,7 +73,7 @@ class TestSMS(unittest.TestCase):
 
     def test_sms_uninstall(self):
         sender = '12345'
-        msisdn = '15038316387'
+        msisdn = '15035556789'
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
@@ -93,7 +93,7 @@ class TestSMS(unittest.TestCase):
 
     def test_sms_lookup(self):
         sender = '12345'
-        msisdn = '15038316387'
+        msisdn = '15035556789'
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
