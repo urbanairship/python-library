@@ -5,7 +5,8 @@ DEVICE_TOKEN_FORMAT = re.compile(r'^[0-9a-fA-F]{64}$')
 UUID_FORMAT = re.compile(
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}'
     r'-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
-SMS_SENDER_FORMAT = re.compile(r'^[0-9]$')
+SMS_SENDER_FORMAT = re.compile(r'^[0-9]*$')
+SMS_MSISDN_FORMAT = re.compile(r'^[0-9]*$')
 
 # Python coarse version differentiation
 PY2 = sys.version_info[0] == 2
@@ -77,7 +78,7 @@ def sms_sender(sender):
 
 
 def sms_id(msisdn, sender):
-    if not isinstance(msisdn, string_type):
+    if not (isinstance(msisdn, string_type) or SMS_MSISDN_FORMAT.match(msisdn)):
         raise ValueError('msisdn must be a string.')
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
         raise ValueError('sender value must be a numeric string.')
