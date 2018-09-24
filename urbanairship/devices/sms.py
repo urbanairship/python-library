@@ -18,9 +18,14 @@ class Sms(object):
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
-        self.common_payload = {
-            'sender': sender,
-            'msisdn': msisdn
+        self.opted_in = False
+
+    @property
+    def common_payload(self):
+        return {
+            'sender': self.sender,
+            'msisdn': self.msisdn,
+            'opted-in': self.opted_in
         }
 
     def register(self, opted_in=False):
