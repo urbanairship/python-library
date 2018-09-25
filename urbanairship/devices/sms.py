@@ -66,11 +66,12 @@ class Sms(object):
         """
 
         url = common.SMS_URL
+        reg_payload = self.common_payload
 
         if opted_in:
-            self.common_payload['opted_in'] = opted_in
+            reg_payload['opted_in'] = opted_in
 
-        body = json.dumps(self.common_payload).encode('utf-8')
+        body = json.dumps(reg_payload).encode('utf-8')
 
         response = self.airship.request(
             method='POST',
