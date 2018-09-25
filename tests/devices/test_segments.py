@@ -1,9 +1,12 @@
 import unittest
+import json
 import mock
 from mock import Mock
+
 import requests
+
 import urbanairship as ua
-import json
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestSegmentList(unittest.TestCase):
@@ -21,7 +24,7 @@ class TestSegmentList(unittest.TestCase):
             mock_request.return_value = response
 
             name_list = ['test2', 'test1']
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             seg_list = ua.SegmentList(airship)
 
             for a in seg_list:
@@ -65,7 +68,7 @@ class TestSegment(unittest.TestCase):
                                            id_response, update_response,
                                            del_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
         seg = ua.Segment()
         seg.display_name = name

@@ -92,8 +92,6 @@ class DeleteTag(object):
         self._airship = airship
         self.tag_name = tag_name
         self.url = common.TAGS_URL + tag_name
-        self._airship.secret = 'secret'
-        self._airship.key = 'key'
 
     def send_delete(self):
         response = self._airship._request('DELETE', None, self.url, version=3)

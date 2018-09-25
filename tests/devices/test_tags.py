@@ -1,13 +1,15 @@
 import unittest
 import mock
-import requests
 import json
-import urbanairship as ua
 
+import requests
+
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 class TestTagList(unittest.TestCase):
     def test_list_tag(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         test_list = ua.TagList(airship)
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -40,7 +42,7 @@ class TestTagList(unittest.TestCase):
 
 class TestTags(unittest.TestCase):
     def test_add_device(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         test_tag = ua.Tag(airship, 'high roller')
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -75,7 +77,7 @@ class TestTags(unittest.TestCase):
             )
 
     def test_remove_device(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         tag = ua.Tag(airship, 'high roller')
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -113,7 +115,7 @@ class TestTags(unittest.TestCase):
 
 class TestDeleteTag(unittest.TestCase):
     def test_delete_tag(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         test_delete = ua.DeleteTag(airship, 'high_roller')
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -129,7 +131,7 @@ class TestDeleteTag(unittest.TestCase):
 
 class TestBatchTag(unittest.TestCase):
     def test_add_ios_channel(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         batch = ua.BatchTag(airship)
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -170,7 +172,7 @@ class TestBatchTag(unittest.TestCase):
             )
 
     def test_add_android_channel(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         batch = ua.BatchTag(airship)
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -213,7 +215,7 @@ class TestBatchTag(unittest.TestCase):
             )
 
     def test_add_amazon_channel(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         batch = ua.BatchTag(airship)
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -251,7 +253,7 @@ class TestBatchTag(unittest.TestCase):
             ])
 
     def test_send_request(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         batch = ua.BatchTag(airship)
 
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -327,7 +329,7 @@ class TestBatchTag(unittest.TestCase):
 
 class TestChannelTags(unittest.TestCase):
     def setUp(self):
-        self.airship = ua.Airship('key', 'secret')
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.channel_tags = ua.ChannelTags(self.airship)
         self.mock_response = requests.Response()
         self.mock_response._content = json.dumps(
@@ -447,7 +449,7 @@ class TestChannelTags(unittest.TestCase):
 
 class TestOpenChannelTags(unittest.TestCase):
     def setUp(self):
-        self.airship = ua.Airship('key', 'secret')
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.open_channel_tags = ua.OpenChannelTags(self.airship)
         self.mock_response = requests.Response()
         self.mock_response._content = json.dumps(

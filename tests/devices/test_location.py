@@ -2,7 +2,9 @@ import json
 import unittest
 import mock
 import requests
+
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestLocationFinder(unittest.TestCase):
@@ -40,7 +42,7 @@ class TestLocationFinder(unittest.TestCase):
         }).encode('utf-8')
         ua.Airship._request = mock.Mock()
         ua.Airship._request.side_effect = [mock_response]
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.l = ua.LocationFinder(airship)
 
     def test_name_lookup(self):
@@ -144,7 +146,7 @@ class TestLocationFinder(unittest.TestCase):
             mock_response = requests.Response()
             mock_response._content = json.dumps(expected_resp).encode('utf-8')
             mock_request.return_value = mock_response
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             location = ua.LocationFinder(airship)
             actual_resp = location.date_ranges()
             self.assertEqual(actual_resp, expected_resp)

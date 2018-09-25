@@ -6,11 +6,12 @@ import uuid
 import requests
 
 import urbanairship as ua
+from tests import TEST_SECRET, TEST_KEY
 
 class test_error_response(unittest.TestCase):
     test_channel = str(uuid.uuid4())
-    common_airship = ua.Airship('key', 'secret')
-    common_push = common_airship.create_push()
+    airship = ua.Airship(TEST_KEY, TEST_SECRET)
+    common_push = airship.create_push()
     common_push.device_types = ua.device_types('ios', 'android', 'amazon')
     common_push.audience = ua.channel(test_channel)
     common_push.notification = ua.notification(alert='testing')

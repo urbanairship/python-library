@@ -1,16 +1,18 @@
 import unittest
 import json
 import mock
-import requests
 import csv
-import urbanairship as ua
-
 from datetime import datetime
+
+import requests
+
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestStaticList(unittest.TestCase):
     def setUp(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.name = 'ce-testlist'
         self.device = ua.StaticList(airship, self.name)
 
@@ -123,7 +125,7 @@ class TestStaticLists(unittest.TestCase):
         ua.Airship._request = mock.Mock()
         ua.Airship._request.side_effect = [mock_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         return_list = ua.devices.StaticLists(airship)
 
         responses = []
@@ -206,7 +208,7 @@ class TestStaticLists(unittest.TestCase):
         ua.Airship._request = mock.Mock()
         ua.Airship._request.side_effect = [mock_response, mock_next_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         return_list = ua.devices.StaticLists(airship)
 
         responses = []

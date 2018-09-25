@@ -5,6 +5,7 @@ import json
 import requests
 
 import urbanairship as ua
+from tests import  TEST_KEY, TEST_SECRET
 
 
 class TestAutomation(unittest.TestCase):
@@ -25,7 +26,7 @@ class TestAutomation(unittest.TestCase):
             response._status_code = 201
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             automation = ua.Automation(airship)
             pipeline = ua.Pipeline()
@@ -171,7 +172,7 @@ class TestAutomation(unittest.TestCase):
             response._status_code = 201
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             enabled = True
             outcome = [
@@ -335,7 +336,7 @@ class TestAutomation(unittest.TestCase):
             response._status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             automation = ua.Automation(airship)
             pipeline = ua.Pipeline()
