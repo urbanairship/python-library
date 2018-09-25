@@ -6,6 +6,8 @@
 - Added support for push to Sms
 - Added support for Sms channel registration, opt-out and uninstall
 - Added support for Sms channel lookup
+- Adds validation for key and secrets
+- Adds tests for error responses
 - Removes support for Python 3.3.x
 
 --------------------
