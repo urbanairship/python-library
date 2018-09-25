@@ -34,7 +34,7 @@ class Airship(object):
         return self._secret
 
     @secret.setter
-    def secret(self):
+    def secret(self, value):
         if not VALID_KEY.match(value):
             raise ValueError('secrets must be 22 characters')
         self._secret = value
