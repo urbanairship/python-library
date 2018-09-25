@@ -14,6 +14,8 @@ from .push import (
     amazon_channel,
     channel,
     open_channel,
+    sms_id,
+    sms_sender,
     device_token,
     apid,
     wns,
@@ -31,6 +33,7 @@ from .push import (
     android,
     amazon,
     web,
+    sms,
     wns_payload,
     open_platform,
     message,
@@ -76,6 +79,7 @@ from .devices import (
     StaticList,
     StaticLists,
     LocationFinder,
+    Sms,
 )
 
 from .reports import (
@@ -134,6 +138,7 @@ __all__ = [
     ChannelList,
     ChannelInfo,
     OpenChannel,
+    Sms,
     DeviceTokenList,
     APIDList,
     DeviceInfo,

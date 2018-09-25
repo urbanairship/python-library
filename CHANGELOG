@@ -3,6 +3,9 @@
 --------------------
 - Added support for Push Time Send Optimization
 - Added support for iOS 12 overrides
+- Added support for push to Sms
+- Added support for Sms channel registration, opt-out and uninstall
+- Added support for Sms channel lookup
 - Removes support for Python 3.3.x
 
 --------------------

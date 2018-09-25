@@ -23,6 +23,10 @@ NAMED_USER_TAG_URL = NAMED_USER_URL + 'tags/'
 NAMED_USER_DISASSOCIATE_URL = NAMED_USER_URL + 'disassociate/'
 NAMED_USER_ASSOCIATE_URL = NAMED_USER_URL + 'associate/'
 
+SMS_URL = CHANNEL_URL + 'sms'
+SMS_OPT_OUT_URL = SMS_URL + '/opt-out'
+SMS_UNINSTALL_URL = SMS_URL + '/uninstall'
+
 logger = logging.getLogger('urbanairship')
 
 
@@ -57,7 +61,7 @@ class AirshipFailure(Exception):
         Instantiate a ValidationFailure from a Response object
         :param response: response object used to create failure obj
         """
-        try:
+        try: # TODO user dict.get() here
             payload = response.json()
             error = payload['error']
             error_code = payload['error_code']
