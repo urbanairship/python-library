@@ -1,13 +1,14 @@
 import logging
+import re
 
 import requests
 
 from . import common, __about__
 from .push import Push, ScheduledPush, TemplatePush
 
-
 logger = logging.getLogger('urbanairship')
 
+VALID_KEY = re.compile(r'^[a-zA-Z]{22}$')
 
 class Airship(object):
 
@@ -17,6 +18,27 @@ class Airship(object):
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
+
+    @property
+    def key(self):
+        return self._key
+
+    @key.setter
+    def key(self, value):
+        if not VALID_KEY.match(value):
+            raise ValueError('keys must be 22 characters')
+        self._key = value
+
+    @property
+    def secret(self):
+        return self._secret
+
+    @secret.setter
+    def secret(self):
+        if not VALID_KEY.match(value):
+            raise ValueError('secrets must be 22 characters')
+        self._secret = value
+
 
     def request(self, method, body, url,
                 content_type=None, version=None, params=None):
