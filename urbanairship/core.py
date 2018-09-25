@@ -8,7 +8,7 @@ from .push import Push, ScheduledPush, TemplatePush
 
 logger = logging.getLogger('urbanairship')
 
-VALID_KEY = re.compile(r'^[a-zA-Z]{22}$')
+VALID_KEY = re.compile(r'^[\w-]{22}$')
 
 class Airship(object):
 
