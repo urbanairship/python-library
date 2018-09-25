@@ -52,7 +52,6 @@ class Sms(object):
         return {
             'sender': self.sender,
             'msisdn': self.msisdn,
-            'opted-in': self.opted_in
         }
 
     def register(self, opted_in=False):
@@ -79,7 +78,13 @@ class Sms(object):
             version=3
         )
 
-        if opted_in is not None:
+        if response.json().get('status') == 'pending':
+            logger.info(
+                'Channel creation for msisdn %s pending user opt-in' % (
+                    self.msisdn
+                )
+            )
+        elif response.json().get('channel_id'):
             self.channel_id = response.json().get('channel_id')
             logger.info(
                 'Successfully registered Sms channel with channel_id %s' % (
@@ -88,10 +93,9 @@ class Sms(object):
             )
         else:
             logger.info(
-                'Channel creation for msisdn %s pending user opt-in' % (
-                    self.msisdn
-                )
+                'Channel not yet created.'
             )
+
 
         return response
 
