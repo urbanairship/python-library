@@ -83,7 +83,9 @@ class Airship(object):
 
         if response.status_code == 401:
             raise common.Unauthorized
-        elif not (200 <= response.status_code < 300): # TODO broaden to include 4xx and 5xx, maybe handle with retry
+        elif response.status_code == 503: #
+            raise common.AirshipFailure.from_response(response)
+        elif not (200 <= response.status_code < 300):
             raise common.AirshipFailure.from_response(response)
 
         return response
