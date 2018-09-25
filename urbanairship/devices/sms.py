@@ -18,6 +18,7 @@ class Sms(object):
         self.sender = sender
         self.msisdn = msisdn
         self.opted_in = False
+        self.channel_id = None
 
     @property
     def sender(self):
@@ -84,7 +85,7 @@ class Sms(object):
                     self.msisdn
                 )
             )
-        elif response.json().get('channel_id'):
+        elif response.json().get('channel_id') is not None:
             self.channel_id = response.json().get('channel_id')
             logger.info(
                 'Successfully registered Sms channel with channel_id %s' % (
