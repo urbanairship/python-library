@@ -9,6 +9,7 @@
 - Adds validation for key and secrets
 - Adds tests for error responses
 - Removes support for Python 3.3.x
+- Removes previously deprecated the Tag, ListTag, BatchTag and DeleteTag objects
 
 --------------------
 4.0.1
