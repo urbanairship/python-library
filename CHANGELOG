@@ -7,6 +7,7 @@
 - Added support for Sms channel registration, opt-out and uninstall
 - Added support for Sms channel lookup
 - Removes support for Python 3.3.x
+- Removes previously deprecated the Tag, ListTag, BatchTag and DeleteTag objects
 
 --------------------
 4.0.1

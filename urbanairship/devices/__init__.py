@@ -7,10 +7,6 @@ from .devicelist import (
 )
 
 from .tag import (
-    TagList,
-    Tag,
-    DeleteTag,
-    BatchTag,
     ChannelTags,
     OpenChannelTags
 )
