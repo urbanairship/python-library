@@ -6,6 +6,7 @@ from mock import Mock
 import requests
 
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestNamedUser(unittest.TestCase):
@@ -34,7 +35,7 @@ class TestNamedUser(unittest.TestCase):
             associate_response, disassociate_response, lookup_response
         ]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
         nu = ua.NamedUser(airship, 'name1')
 
@@ -56,7 +57,7 @@ class TestNamedUser(unittest.TestCase):
         })
 
     def test_named_user_tag(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         nu = ua.NamedUser(airship, 'named_user_id')
 
         self.assertRaises(
@@ -84,7 +85,7 @@ class TestNamedUserList(unittest.TestCase):
             mock_request.return_value = response
 
             name_list = ['name3', 'name2', 'name1']
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             named_user_list = ua.NamedUserList(airship)
 
             for a in named_user_list:

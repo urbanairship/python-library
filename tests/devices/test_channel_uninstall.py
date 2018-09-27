@@ -2,8 +2,9 @@ import unittest
 import mock
 import json
 import requests
-import urbanairship as ua
 
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 class TestChannelUninstall(unittest.TestCase):
     def test_channel_uninstall(self):
@@ -11,7 +12,7 @@ class TestChannelUninstall(unittest.TestCase):
             response = requests.Response()
             response._content = json.dumps({'ok': True})
             mock_request.return_value = response
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             cu = ua.ChannelUninstall(airship)
 

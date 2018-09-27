@@ -61,11 +61,11 @@ class AirshipFailure(Exception):
         Instantiate a ValidationFailure from a Response object
         :param response: response object used to create failure obj
         """
-        try: # TODO user dict.get() here
+        try:
             payload = response.json()
-            error = payload['error']
-            error_code = payload['error_code']
-            details = payload['details']
+            error = payload.get('error')
+            error_code = payload.get('error_code')
+            details = payload.get('details')
         except (ValueError, TypeError, KeyError):
             error = response.reason
             error_code = response.status_code

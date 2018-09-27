@@ -5,6 +5,7 @@ import requests
 import unittest
 
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestTemplatePush(unittest.TestCase):
@@ -127,7 +128,7 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
             template_lookup = ua.Template(airship).lookup(template_id)
 
@@ -260,7 +261,7 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             template_responses = []
 
@@ -291,7 +292,7 @@ class TestTemplate(unittest.TestCase):
             self.assertEquals(template_responses[0].last_used, 'UNKNOWN')
 
     def test_template_creation_payload(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         t = ua.Template(airship)
         t.name = 'Welcome Message'
         t.description = 'A welcome message'
@@ -396,7 +397,7 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             template = ua.Template(airship)
             template.name = name
             template.description = description
@@ -408,7 +409,7 @@ class TestTemplate(unittest.TestCase):
             self.assertEqual(template.template_id, template_id)
 
     def test_create_template_requires_name(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template = ua.Template(airship)
         # Do not set name
         template.description = 'The cat says...'
@@ -424,7 +425,7 @@ class TestTemplate(unittest.TestCase):
         self.assertRaises(ValueError, template.create)
 
     def test_create_template_requires_push(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template = ua.Template(airship)
         # Do not set push
         template.name = 'Cat sound'
@@ -440,7 +441,7 @@ class TestTemplate(unittest.TestCase):
         self.assertRaises(ValueError, template.create)
 
     def test_create_template_no_message(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template = ua.Template(airship)
         template.name = 'Cat sound'
         template.description = 'The cat says...'
@@ -484,7 +485,7 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             template = ua.Template(airship)
             template.name = name
             template.description = description
@@ -495,7 +496,7 @@ class TestTemplate(unittest.TestCase):
             self.assertEqual(template.template_id, template_id)
 
     def test_update_template_no_message(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
         template = ua.Template(airship)
         # Set message center (not allowed)
@@ -511,7 +512,7 @@ class TestTemplate(unittest.TestCase):
         self.assertRaises(ValueError, template.update, template_id)
 
     def test_update_template_needs_something(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
         template = ua.Template(airship)
         # Don't set anything
@@ -532,7 +533,7 @@ class TestTemplate(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             template = ua.Template(airship)
             template.delete(template_id)
 

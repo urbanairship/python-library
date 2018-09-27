@@ -1,10 +1,12 @@
 import unittest
-import requests
 import json
-import urbanairship as ua
 from mock import Mock
 from datetime import datetime
 
+import requests
+
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 class TestResponseStats(unittest.TestCase):
     def test_response_stats(self):
@@ -20,7 +22,7 @@ class TestResponseStats(unittest.TestCase):
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [mock_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         statistics = ua.reports.IndividualResponseStats(airship).get('push_id')
 
         self.assertEqual(
@@ -77,7 +79,7 @@ class TestResponseList(unittest.TestCase):
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [mock_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         start_date = datetime(2015, 6, 29)
         end_date = datetime(2015, 6, 30)
         return_list = ua.reports.ResponseList(airship, start_date, end_date)
@@ -154,7 +156,7 @@ class TestResponseList(unittest.TestCase):
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [mock_response, mock_next_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         start_date = datetime(2015, 6, 29)
         end_date = datetime(2015, 6, 30)
         return_list = ua.reports.ResponseList(airship, start_date, end_date)
@@ -185,7 +187,7 @@ class TestResponseList(unittest.TestCase):
         self.assertEqual(push_responses[1].group_id, self.uuid2)
 
     def test_invalid_datetime(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
@@ -196,7 +198,7 @@ class TestResponseList(unittest.TestCase):
         )
 
     def test_empty_date(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
@@ -233,7 +235,7 @@ class TestDevicesReport(unittest.TestCase):
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [mock_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         push_date = datetime(2014, 10, 1)
         d = ua.reports.DevicesReport(airship)
         devices = d.get(push_date)
@@ -251,7 +253,7 @@ class TestDevicesReport(unittest.TestCase):
         self.assertEqual(devices['counts']['ios']['uninstalled'], 10)
 
     def test_invalid_datetime(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             ValueError,
@@ -260,7 +262,7 @@ class TestDevicesReport(unittest.TestCase):
         )
 
     def test_empty_date(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             TypeError,
@@ -298,7 +300,7 @@ class TestOptInList(unittest.TestCase):
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [mock_response]
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         start_date = datetime(2012, 12, 1)
         end_date = datetime(2012, 4, 1)
         precision = 'MONTHLY'
@@ -328,7 +330,7 @@ class TestOptInList(unittest.TestCase):
         self.assertEqual(instantiated_list[2].ios, 88)
 
     def test_invalid_datetime(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
@@ -340,7 +342,7 @@ class TestOptInList(unittest.TestCase):
         )
 
     def test_empty_date(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
@@ -352,7 +354,7 @@ class TestOptInList(unittest.TestCase):
         )
 
     def test_invalid_precision(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         start_date = datetime(2015, 7, 1)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
@@ -365,7 +367,7 @@ class TestOptInList(unittest.TestCase):
         )
 
     def test_empty_precision(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         start_date = datetime(2015, 7, 1)
         end_date = datetime(2015, 7, 2)
         self.assertRaises(

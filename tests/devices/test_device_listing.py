@@ -3,8 +3,9 @@ import unittest
 import mock
 import requests
 import datetime
-import urbanairship as ua
 
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 class TestDeviceListing(unittest.TestCase):
     def setUp(self):
@@ -132,7 +133,7 @@ class TestDeviceListing(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             channel_responses = []
 
@@ -203,7 +204,7 @@ class TestDeviceListing(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             dt_responses = []
 
@@ -257,7 +258,7 @@ class TestDeviceListing(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             apid_responses = []
 

@@ -5,11 +5,12 @@ import json
 import requests
 
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestChannelTags(unittest.TestCase):
     def setUp(self):
-        self.airship = ua.Airship('key', 'secret')
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.channel_tags = ua.ChannelTags(self.airship)
         self.mock_response = requests.Response()
         self.mock_response._content = json.dumps(
@@ -129,7 +130,7 @@ class TestChannelTags(unittest.TestCase):
 
 class TestOpenChannelTags(unittest.TestCase):
     def setUp(self):
-        self.airship = ua.Airship('key', 'secret')
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.open_channel_tags = ua.OpenChannelTags(self.airship)
         self.mock_response = requests.Response()
         self.mock_response._content = json.dumps(

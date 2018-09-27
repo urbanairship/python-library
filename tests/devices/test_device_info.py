@@ -3,8 +3,9 @@ import unittest
 import mock
 import requests
 import datetime
-import urbanairship as ua
 
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 class TestDeviceInfo(unittest.TestCase):
     def test_channel_list(self):
@@ -25,7 +26,7 @@ class TestDeviceInfo(unittest.TestCase):
             url = ('https://go.urbanairship.com/api/channels/'
                    '0492662a-1b52-4343-a1f9-c6b0c72931c0')
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel_list = ua.ChannelList(airship, url)
             channel_id_list = []
 
@@ -76,7 +77,7 @@ class TestDeviceInfo(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel_id = '0492662a-1b52-4343-a1f9-c6b0c72931c0'
             channel_lookup = ua.ChannelInfo(airship).lookup(channel_id)
 

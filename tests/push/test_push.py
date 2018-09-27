@@ -6,6 +6,7 @@ import mock
 import requests
 
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestPush(unittest.TestCase):
@@ -639,7 +640,7 @@ class TestPush(unittest.TestCase):
             response.status_code = 202
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             push = airship.create_push()
             push.audience = ua.all_
             push.notification = ua.notification(alert='Hello')
@@ -667,7 +668,7 @@ class TestPush(unittest.TestCase):
             response.status_code = 202
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush(airship)
             push = airship.create_push()
             push.audience = ua.all_
@@ -701,7 +702,7 @@ class TestPush(unittest.TestCase):
             response.status_code = 202
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush(airship)
             push = airship.create_push()
             push.audience = ua.all_
@@ -747,13 +748,13 @@ class TestPush(unittest.TestCase):
                 '0492662a-1b52-4343-a1f9-c6b0c72931c0'
             )
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush.from_url(airship, url)
 
             self.assertEqual(sched.push.device_types, 'all')
 
     def test_cancel(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         sched = ua.ScheduledPush(airship)
 
         # Fail w/o URL
@@ -773,7 +774,7 @@ class TestPush(unittest.TestCase):
             sched.cancel()
 
     def test_update_schedule(self):
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         sched = ua.ScheduledPush(airship)
         # Fail w/o URL
         self.assertRaises(ValueError, sched.update)
@@ -908,7 +909,7 @@ class TestPush(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
             schedule_listing = []
 

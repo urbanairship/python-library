@@ -6,6 +6,7 @@ import unittest
 import requests
 
 import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestOpenChannel(unittest.TestCase):
@@ -26,7 +27,7 @@ class TestOpenChannel(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel = ua.OpenChannel(airship)
             channel.address = address
             channel.open_platform = platform
@@ -50,7 +51,7 @@ class TestOpenChannel(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel = ua.OpenChannel(airship)
             channel.address = address
             channel.open_platform = platform
@@ -64,7 +65,7 @@ class TestOpenChannel(unittest.TestCase):
     def test_create_channel_requires_platform(self):
         address = 'some_address'
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         channel = ua.OpenChannel(airship)
         # Do not set platform
         channel.address = address
@@ -75,7 +76,7 @@ class TestOpenChannel(unittest.TestCase):
     def test_create_channel_requires_address(self):
         platform = 'a_platform'
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         channel = ua.OpenChannel(airship)
         # Do not set address
         channel.open_platform = platform
@@ -87,7 +88,7 @@ class TestOpenChannel(unittest.TestCase):
         address = 'some_address'
         platform = 'a_platform'
 
-        airship = ua.Airship('key', 'secret')
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         channel = ua.OpenChannel(airship)
         # Do not set opt in
         channel.address = address
@@ -133,7 +134,7 @@ class TestOpenChannel(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel_id = 'b8f9b663-0a3b-cf45-587a-be880946e881'
             open_channel_lookup = ua.OpenChannel(airship).lookup(channel_id)
 
@@ -184,7 +185,7 @@ class TestOpenChannel(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel_to_update = ua.OpenChannel(airship)
             channel_to_update.channel_id = channel_id
             channel_to_update.open_platform = 'email'
@@ -202,7 +203,7 @@ class TestOpenChannel(unittest.TestCase):
             response.status_code = 200
             mock_request.return_value = response
 
-            airship = ua.Airship('key', 'secret')
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
             channel = ua.OpenChannel(airship)
             channel.address = 'new_email@example.com'
             channel.open_platform = 'email'
