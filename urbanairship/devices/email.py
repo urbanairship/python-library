@@ -6,7 +6,7 @@ from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
 
-VALID_EMAIL = re.compile(r'*')
+VALID_EMAIL = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 VALID_OPT_IN_LEVELS = ('commercial', 'transactional', 'none')
 
 
@@ -129,6 +129,7 @@ class Email(object):
         logger.info('Uninstalled email address: %s' % self.address)
 
         return response
+
 
 class EmailTags(object):
     """Add, remove or set tags for a list of email addresses"""
