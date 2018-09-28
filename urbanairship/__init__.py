@@ -76,6 +76,8 @@ from .devices import (
     StaticLists,
     LocationFinder,
     Sms,
+    Email,
+    EmailTags,
 )
 
 from .reports import (
@@ -162,6 +164,8 @@ __all__ = [
     ScheduledList,
     Automation,
     Pipeline,
+    Email,
+    EmailTags,
 ]
 
 # Silence urllib3 INFO logging by default
