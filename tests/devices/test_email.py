@@ -1,0 +1,99 @@
+import json
+import mock
+import unittest
+import uuid
+
+import requests
+
+import urbanairship as ua
+from tests import TEST_KEY, TEST_SECRET
+
+
+class TestEmail(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.address = 'test_email@testing.xzy'
+        self.opt_in_level = 'transactional'
+        self.locale_country = 'US'
+        self.locale_language = 'en'
+        self.timezone = 'America/Los_Angeles'
+        self.channel_id = str(uuid.uuid4())
+
+    def test_email_reg(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True,
+                'channel_id': self.channel_id
+            })
+            response.status_code = 201
+            mock_request.return_value = response
+
+            email_obj = ua.Email(airship=self.airship,
+                                 address=self.address,
+                                 opt_in_level=self.opt_in_level)
+
+            r = email_obj.register()
+
+            self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(201, r.status_code)
+
+    def test_email_update(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True,
+                'channel_id': self.channel_id
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_obj = ua.Email(airship=self.airship,
+                                 address=self.address,
+                                 opt_in_level=self.opt_in_level)
+
+            r = email_obj.register()
+
+            self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(200, r.status_code)
+
+    def test_email_reg_w_opts(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True,
+                'channel_id': self.channel_id
+            })
+            response.status_code = 201
+            mock_request.return_value = response
+
+            email_obj = ua.Email(airship=self.airship,
+                                 address=self.address,
+                                 opt_in_level=self.opt_in_level,
+                                 locale_country=self.locale_country,
+                                 locale_language=self.locale_language,
+                                 timezone=self.timezone)
+
+            r = email_obj.register()
+
+            self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(201, r.status_code)
+
+    def test_email_uninstall(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True,
+                'channel_id': self.channel_id
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_obj = ua.Email(airship=self.airship,
+                                 address=self.address,
+                                 opt_in_level='none')
+
+            r = email_obj.register()
+
+            self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(200, r.status_code)
