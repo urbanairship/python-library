@@ -25,7 +25,7 @@ class TestEmail(unittest.TestCase):
             response._content = json.dumps({
                 'ok': True,
                 'channel_id': self.channel_id
-            })
+            }).encode('utf-8')
             response.status_code = 201
             mock_request.return_value = response
 
@@ -44,7 +44,7 @@ class TestEmail(unittest.TestCase):
             response._content = json.dumps({
                 'ok': True,
                 'channel_id': self.channel_id
-            })
+            }).encode('utf-8')
             response.status_code = 200
             mock_request.return_value = response
 
@@ -63,7 +63,7 @@ class TestEmail(unittest.TestCase):
             response._content = json.dumps({
                 'ok': True,
                 'channel_id': self.channel_id
-            })
+            }).encode('utf-8')
             response.status_code = 201
             mock_request.return_value = response
 
@@ -85,7 +85,7 @@ class TestEmail(unittest.TestCase):
             response._content = json.dumps({
                 'ok': True,
                 'channel_id': self.channel_id
-            })
+            }).encode('utf-8')
             response.status_code = 200
             mock_request.return_value = response
 
