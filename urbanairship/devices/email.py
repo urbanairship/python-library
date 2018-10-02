@@ -133,14 +133,67 @@ class Email(object):
 
 class EmailTags(object):
     """Add, remove or set tags for a list of email addresses"""
-    def __init__(self):
-        pass
+    def __init__(self, airship, address):
+        self.airship = airship
+        self.url = common.EMAIL_TAGS_URL
+        self.address = address
+        self.add_group = {}
+        self.remove_group = {}
+        self.set_group = {}
+        self._payload = {}
 
-    def add(self):
-        pass
+    @property
+    def address(self):
+        return self._address
 
-    def remove(self):
-        pass
+    @address.setter
+    def address(self, value):
+        if not VALID_EMAIL.match(value):
+            raise ValueError('addresses must be and email address')
+        self._address = value
 
-    def set(self):
-        pass
+    @property
+    def tags(self):
+        return self._tags
+
+    @tags.setter
+    def tags(self, value):
+        if not isinstance(value, list):
+            raise ValueError('tags must be input as a list')
+        self._tags = value
+
+    def add(self, group, tags):
+        self.add_group[group] = tags
+
+    def remove(self, group, tags):
+        self.remove_group[group] = tags
+
+    def set(self, group, tags):
+        self.set_group[group] = tags
+
+    def send(self):
+        if not self.add_group and not self.remove_group and not self.set_group:
+            raise ValueError('at least one add, remove or set group must exist')
+        self._payload['audience'] = {'email_address': self.address}
+
+        if self.set_group:
+            if self.add_group or self.remove_group:
+                raise ValueError('set cannot be used with remove or add groups')
+            self._payload['set'] = self.set_group
+
+        if self.add_group:
+            self._payload['add'] = self.add_group
+
+        if self.remove_group:
+            self._payload['remove'] = self.remove_group
+
+        body = json.dumps(self._payload).encode('utf-8')
+
+        response = self.airship.request(
+            method='POST',
+            body=body,
+            url=self.url,
+            version=3
+        )
+
+        return response

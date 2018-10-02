@@ -97,3 +97,76 @@ class TestEmail(unittest.TestCase):
 
             self.assertEqual(self.channel_id, email_obj.channel_id)
             self.assertEqual(200, r.status_code)
+
+
+class TestEmailTags(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.address = 'someone@xyz.fx'
+        self.test_tags = ['one', 'two', 'three']
+        self.test_group = 'test_group'
+
+    def testTagAdd(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_tags = ua.EmailTags(airship=self.airship,
+                                      address=self.address)
+            email_tags.add(group=self.test_group, tags=self.test_tags)
+            response = email_tags.send()
+
+            self.assertEqual(200, response.status_code)
+
+    def testTagRemove(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_tags = ua.EmailTags(airship=self.airship,
+                                      address=self.address)
+            email_tags.remove(group=self.test_group, tags=self.test_tags)
+            response = email_tags.send()
+
+            self.assertEqual(200, response.status_code)
+
+    def testTagSet(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_tags = ua.EmailTags(airship=self.airship,
+                                      address=self.address)
+            email_tags.remove(group=self.test_group, tags=self.test_tags)
+            response = email_tags.send()
+
+            self.assertEqual(200, response.status_code)
+
+    def testSetWithAddAndRemove(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True
+            })
+            response.status_code = 200
+            mock_request.return_value = response
+
+            email_tags = ua.EmailTags(airship=self.airship,
+                                      address=self.address)
+            email_tags.set(group=self.test_group, tags=self.test_tags)
+            email_tags.remove(group=self.test_group, tags=self.test_tags)
+
+            with self.assertRaises(ValueError):
+                email_tags.send()
