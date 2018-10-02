@@ -380,7 +380,6 @@ class TestPush(unittest.TestCase):
             }
         )
 
-
     def test_sms_push_to_id(self):
         p = ua.Push(None)
         p.audience = ua.sms_id('01230984567', '12345')
@@ -404,7 +403,6 @@ class TestPush(unittest.TestCase):
                 }
             }
         )
-
 
     def test_sms_overrides(self):
         p = ua.Push(None)
@@ -433,7 +431,90 @@ class TestPush(unittest.TestCase):
             }
         )
 
+    def test_email_overrides(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            email=ua.email(
+                message_type='transactional',
+                plaintext_body='hello',
+                reply_to='tegan@sara.xyz',
+                sender_address='the@con.abc',
+                sender_name='test_name',
+                subject='hi',
+                html_body='<html>so rich!</html>'
+            )
+        )
+        p.device_types = ua.device_types('email')
 
+        self.assertEqual(
+            p.payload,
+            {
+                'audience': 'all',
+                'device_types': ['email'],
+                'notification': {
+                    'email': {
+                        'message_type': 'transactional',
+                        'plaintext_body': 'hello',
+                        'reply_to': 'tegan@sara.xyz',
+                        'sender_address': 'the@con.abc',
+                        'sender_name': 'test_name',
+                        'subject': 'hi',
+                        'html_body': '<html>so rich!</html>'
+                    }
+                }
+            }
+        )
+
+
+    def test_email_missing_device_type(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            email=ua.email(
+                message_type='transactional',
+                plaintext_body='hello',
+                reply_to='tegan@sara.xyz',
+                sender_address='the@con.abc',
+                sender_name='test_name',
+                subject='hi',
+                html_body='<html>so rich!</html>'
+            )
+        )
+        p.device_types = ua.device_types('ios')
+
+        with self.assertRaises(ValueError):
+            p.send()
+
+    def test_email_with_device_type_all(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            email=ua.email(
+                message_type='transactional',
+                plaintext_body='hello',
+                reply_to='tegan@sara.xyz',
+                sender_address='the@con.abc',
+                sender_name='test_name',
+                subject='hi',
+                html_body='<html>so rich!</html>'
+            )
+        )
+        p.device_types = ua.all_
+
+        with self.assertRaises(ValueError):
+            p.send()
+
+    def test_email_missing_override(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert='no email to be found!'
+        )
+        p.device_types = ua.device_types('email')
+
+        with self.assertRaises(ValueError):
+            p.send()
 
     def test_standard_ios_opts(self):
         p = ua.Push(None)
