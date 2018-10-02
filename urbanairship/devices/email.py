@@ -132,7 +132,10 @@ class Email(object):
 
 
 class EmailTags(object):
-    """Add, remove or set tags for a list of email addresses"""
+    """Add, remove or set tags for a list of email addresses
+
+    :param address: an email address to mutate tags for
+    """
     def __init__(self, airship, address):
         self.airship = airship
         self.url = common.EMAIL_TAGS_URL
@@ -163,15 +166,35 @@ class EmailTags(object):
         self._tags = value
 
     def add(self, group, tags):
+        """
+        add tags to a given tag group
+        :param group: the tag group to add to
+        :param tags: a list of tags to add
+        """
         self.add_group[group] = tags
 
     def remove(self, group, tags):
+        """
+        remove tags from a given tag group
+        :param group: the tag group to remove tags from
+        :param tags: a list of tags to remove
+        """
         self.remove_group[group] = tags
 
     def set(self, group, tags):
+        """
+        replace all tags on the given tag group with these tags
+        :param group: the tag group to set tags on
+        :param tags: a list of tags to set
+        """
         self.set_group[group] = tags
 
     def send(self):
+        """
+        commit add, remove and set operations. set cannot be used with
+        add and remove.
+        :return: the response object from the api
+        """
         if not self.add_group and not self.remove_group and not self.set_group:
             raise ValueError('at least one add, remove or set group must exist')
         self._payload['audience'] = {'email_address': self.address}
