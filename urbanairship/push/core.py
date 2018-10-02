@@ -44,8 +44,23 @@ class Push(object):
             other response data.
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
-
+        :raises ValueError: Required keys missing or incorrect values included.
         """
+        if 'email' in self.payload['notification']:
+            if self.payload['device_types'] == 'all':
+                raise ValueError(
+                    'device_types cannot be all when including an email override'
+                )
+            if 'email' not in self.payload['device_types']:
+                raise ValueError(
+                    'email must be in device_types when email override is included'
+                )
+        if 'email' in self.payload['device_types'] \
+                and 'email' not in self.payload['notification']:
+            raise ValueError(
+                'email override must be included when email is in device_types'
+            )
+
         body = json.dumps(self.payload)
         response = self._airship._request(
             method='POST',
