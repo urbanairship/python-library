@@ -53,7 +53,7 @@ class Push(object):
                 )
             if 'email' not in self.payload['device_types']:
                 raise ValueError(
-                    'email must be in device_types when email override is included'
+                    'email must be in device_types if email override is included'
                 )
         if 'email' in self.payload['device_types'] \
                 and 'email' not in self.payload['notification']:
