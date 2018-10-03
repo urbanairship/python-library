@@ -31,7 +31,7 @@ class Email(object):
         self.locale_country = locale_country
         self.locale_language = locale_language
         self.timezone = timezone
-        self.email_type = 'email'  # only acceptable value at this time
+        self._email_type = 'email'  # only acceptable value at this time
         self.channel_id = None
 
     @property
@@ -65,7 +65,7 @@ class Email(object):
         url = common.EMAIL_URL
         reg_payload = {
             'channel': {
-                'type': self.email_type,
+                'type': self._email_type,
                 'email_opt_in_level': self.opt_in_level,
                 'address': self.address,
             }
