@@ -85,6 +85,7 @@ http://support.urbanairship.com/
 History
 =======
 
+* 5.0 Support for Sms and Email push. See changelog for other updates.
 * 4.0 Support for Automation, removed Feedback
 * 3.0 Support for Open Channels, several other significant changes
 * 2.0 Support for Web Notify and more iOS 10, stopped supporting Python 2.6
