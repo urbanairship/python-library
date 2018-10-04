@@ -27,6 +27,10 @@ SMS_URL = CHANNEL_URL + 'sms'
 SMS_OPT_OUT_URL = SMS_URL + '/opt-out'
 SMS_UNINSTALL_URL = SMS_URL + '/uninstall'
 
+EMAIL_URL = CHANNEL_URL + 'email'
+EMAIL_TAGS_URL = EMAIL_URL + '/tags'
+EMAIL_UNINSTALL_URL = EMAIL_URL + '/uninstall'
+
 logger = logging.getLogger('urbanairship')
 
 

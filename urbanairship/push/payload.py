@@ -23,7 +23,7 @@ VALID_ICON_COLOR = re.compile(r'^#[0-9a-f]{6}$')
 
 def notification(alert=None, ios=None, android=None, amazon=None,
                  web=None, wns=None, actions=None, interactive=None,
-                 in_app=None, open_platform=None, sms=None):
+                 in_app=None, open_platform=None, sms=None, email=None):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -59,6 +59,8 @@ def notification(alert=None, ios=None, android=None, amazon=None,
         payload['wns'] = wns
     if sms is not None:
         payload['sms'] = sms
+    if email is not None:
+        payload['email'] = email
     if interactive is not None:
         payload['interactive'] = interactive
     if in_app is not None:
@@ -441,6 +443,43 @@ def sms(alert=None, expiry=None):
         payload['expiry'] = expiry
     return payload
 
+
+def email(message_type, plaintext_body, reply_to, sender_address,
+          sender_name, subject, html_body=None):
+    """
+    Required platform override when email in ua.device_types.
+    Specifies content of the email being sent. All other notification
+    fields are not used in the email if included.
+
+    See https://docs.urbanairship.com/api/ua/#schemas%2femailoverrideobject
+        for additional caveats.
+
+    :param message_type: Required. One of transactional or commercial.
+    :param plaintext_body: Required. The plain text body of the email.
+    :param reply_to: Required. The reply-to address.
+    :param sender_address: Required. The email address of the sender.
+        The domain of the email must be enabled in the email
+        provider at the delivery tier.
+    :param sender_name: Required. The common name of the email sender.
+    :param subject: Required. The subject line of the email.
+    :param html_body: Optional. The HTML content of the email.
+    """
+    payload = {}
+    if message_type not in ('transactional', 'commercial'):
+        raise ValueError('message_type must be either transactional '
+                         'or commercial')
+    payload['message_type'] = message_type
+    payload['plaintext_body'] = plaintext_body
+    payload['reply_to'] = reply_to
+    payload['sender_address'] = sender_address
+    payload['sender_name'] = sender_name
+    payload['subject'] = subject
+    if html_body is not None:
+        payload['html_body'] = html_body
+    return payload
+
+
+
 def open_platform(alert=None, title=None, extra=None, summary=None,
                   media_attachment=None, interactive=None):
     """Open platform specific override payload.
@@ -629,7 +668,8 @@ def device_types(*types):
         'amazon',
         'wns',
         'web',
-        'sms'
+        'sms',
+        'email'
     )
     if len(types) == 1 and types[0] == 'all':
         return 'all'

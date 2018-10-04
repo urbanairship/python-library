@@ -34,6 +34,7 @@ from .push import (
     amazon,
     web,
     sms,
+    email,
     wns_payload,
     open_platform,
     message,
@@ -76,6 +77,8 @@ from .devices import (
     StaticLists,
     LocationFinder,
     Sms,
+    Email,
+    EmailTags,
 )
 
 from .reports import (
@@ -109,6 +112,8 @@ __all__ = [
     tag,
     alias,
     segment,
+    sms_id,
+    sms_sender,
     and_,
     or_,
     not_,
@@ -162,6 +167,8 @@ __all__ = [
     ScheduledList,
     Automation,
     Pipeline,
+    Email,
+    EmailTags,
 ]
 
 # Silence urllib3 INFO logging by default

@@ -31,6 +31,7 @@ from .payload import (
     wns_payload,
     web,
     sms,
+    email,
     open_platform,
     message,
     device_types,

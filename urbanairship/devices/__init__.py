@@ -41,3 +41,8 @@ from .locationfinder import (
 from .sms import (
     Sms
 )
+
+from .email import (
+    Email,
+    EmailTags
+)

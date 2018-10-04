@@ -90,6 +90,7 @@ Contents:
    named_user.rst
    static_lists.rst
    sms.rst
+   email.rst
    location.rst
    exceptions.rst
    examples.rst

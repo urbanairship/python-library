@@ -6,10 +6,13 @@
 - Added support for push to Sms
 - Added support for Sms channel registration, opt-out and uninstall
 - Added support for Sms channel lookup
-- Adds validation for key and secrets
-- Adds tests for error responses
-- Removes support for Python 3.3.x
-- Removes previously deprecated the Tag, ListTag, BatchTag and DeleteTag objects
+- Added support for email channel registration
+- Added support for email channel uninstall
+- Added support for email channel tag add, remove and set
+- Added validation for key and secrets
+- Added tests for error responses
+- Removed support for Python 3.3.x
+- Removed previously deprecated the Tag, ListTag, BatchTag and DeleteTag objects
 
 --------------------
 4.0.1
