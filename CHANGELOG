@@ -1,4 +1,14 @@
 --------------------
+5.0.1
+--------------------
+- NOTE: This is in support of a breaking change to the email registration API.
+    Version 5.0.0 will not be able to register email channel ids.
+    Please upgrade.
+- Added new commercial and transactional opt-in and opt-out date fields for
+    registration.
+- Removed opt_in_level field for email registration.
+
+--------------------
 5.0.0
 --------------------
 - Added support for Push Time Send Optimization
