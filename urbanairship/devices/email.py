@@ -68,7 +68,7 @@ class Email(object):
 
     @commercial_opted_in.setter
     def commercial_opted_in(self, value):
-        if value and not VALID_ISO_8601.match(value):
+        if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._commercial_opted_in = value
 
@@ -78,7 +78,7 @@ class Email(object):
 
     @commercial_opted_out.setter
     def commercial_opted_out(self, value):
-        if value and not VALID_ISO_8601.match(value):
+        if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._commercial_opted_out = value
 
@@ -88,7 +88,7 @@ class Email(object):
 
     @transactional_opted_in.setter
     def transactional_opted_in(self, value):
-        if value and not VALID_ISO_8601.match(value):
+        if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._transactional_opted_in = value
 
@@ -98,7 +98,7 @@ class Email(object):
 
     @transactional_opted_out.setter
     def transactional_opted_out(self, value):
-        if value and not VALID_ISO_8601.match(value):
+        if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._transactional_opted_out = value
 
