@@ -42,10 +42,10 @@ class Email(object):
                  locale_language=None, timezone=None):
         self.airship = airship
         self.address = address
-        self.commerical_opted_in = commercial_opted_in,
-        self.commerical_opted_out = commercial_opted_out,
-        self.transactional_opted_in = transactional_opted_in,
-        self.transactional_opted_out = transactional_opted_out,
+        self.commercial_opted_in = commercial_opted_in
+        self.commercial_opted_out = commercial_opted_out
+        self.transactional_opted_in = transactional_opted_in
+        self.transactional_opted_out = transactional_opted_out
         self.locale_country = locale_country
         self.locale_language = locale_language
         self.timezone = timezone
@@ -58,7 +58,7 @@ class Email(object):
 
     @address.setter
     def address(self, value):
-        if not VALID_EMAIL.match(value):
+        if not VALID_EMAIL.match(value) and value is not None:
             raise ValueError('Invalid email address')
         self._address = value
 
@@ -68,7 +68,7 @@ class Email(object):
 
     @commercial_opted_in.setter
     def commercial_opted_in(self, value):
-        if not VALID_ISO_8601.match(value):
+        if value and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._commercial_opted_in = value
 
@@ -78,7 +78,7 @@ class Email(object):
 
     @commercial_opted_out.setter
     def commercial_opted_out(self, value):
-        if not VALID_ISO_8601.match(value):
+        if value and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._commercial_opted_out = value
 
@@ -88,7 +88,7 @@ class Email(object):
 
     @transactional_opted_in.setter
     def transactional_opted_in(self, value):
-        if not VALID_ISO_8601.match(value):
+        if value and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._transactional_opted_in = value
 
@@ -98,7 +98,7 @@ class Email(object):
 
     @transactional_opted_out.setter
     def transactional_opted_out(self, value):
-        if not VALID_ISO_8601.match(value):
+        if value and not VALID_ISO_8601.match(value):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._transactional_opted_out = value
 
@@ -120,18 +120,19 @@ class Email(object):
             }
         }
 
-        if self.commercial_opted_in is not None:
+        if self.commercial_opted_in:
             reg_payload['channel']['commercial_opted_in'] = \
                 self.commercial_opted_in
-        if self.commercial_opted_out is not None:
+        if self.commercial_opted_out:
             reg_payload['channel']['commercial_opted_out'] = \
                 self.commercial_opted_out
-        if self.transactional_opted_in is not None:
+        if self.transactional_opted_in:
             reg_payload['channel']['transactional_opted_in'] = \
-            self.transactional_opted_in
-        if self.transactional_opted_out is not None:
+                self.transactional_opted_in
+        if self.transactional_opted_out:
             reg_payload['channel']['transactional_opted_out'] = \
-            self.transactional_opted_out
+                self.transactional_opted_out
+
         if self.locale_language is not None:
             reg_payload['channel']['locale_language'] = self.locale_language
         if self.locale_country is not None:
