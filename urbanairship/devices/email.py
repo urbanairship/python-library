@@ -2,7 +2,7 @@ import json
 import logging
 import re
 
-from urbanairship.common import EMAIL_URL, EMAIL_UNINSTALL_URL, EMAIL_TAGS_URL
+from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
 
@@ -112,7 +112,7 @@ class Email(object):
 
         :return: The response object from the API.
         """
-        url = EMAIL_URL
+        url = common.EMAIL_URL
         reg_payload = {
             'channel': {
                 'type': self._email_type,
@@ -176,7 +176,7 @@ class Email(object):
 
         :return: The response object from the API"""
 
-        url = EMAIL_UNINSTALL_URL
+        url = common.EMAIL_UNINSTALL_URL
         uninstall_payload = {'email_address': self.address}
 
         body = json.dumps(uninstall_payload).encode('utf-8')
@@ -200,7 +200,7 @@ class EmailTags(object):
     """
     def __init__(self, airship, address):
         self.airship = airship
-        self.url = EMAIL_TAGS_URL
+        self.url = common.EMAIL_TAGS_URL
         self.address = address
         self.add_group = {}
         self.remove_group = {}
