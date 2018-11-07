@@ -13,7 +13,6 @@ class TestEmail(unittest.TestCase):
     def setUp(self):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.address = 'test_email@testing.xzy'
-        self.opt_in_level = 'transactional'
         self.locale_country = 'US'
         self.locale_language = 'en'
         self.timezone = 'America/Los_Angeles'
@@ -30,8 +29,30 @@ class TestEmail(unittest.TestCase):
             mock_request.return_value = response
 
             email_obj = ua.Email(airship=self.airship,
+                                 address=self.address)
+
+            r = email_obj.register()
+
+            self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(201, r.status_code)
+
+    def test_email_w_opt_dates(self):
+        test_date = '2018-11-06T12:00:00Z'
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({
+                'ok': True,
+                'channel_id': self.channel_id
+            }).encode('utf-8')
+            response.status_code = 201
+            mock_request.return_value = response
+
+            email_obj = ua.Email(airship=self.airship,
                                  address=self.address,
-                                 opt_in_level=self.opt_in_level)
+                                 commercial_opted_in=test_date,
+                                 commercial_opted_out=test_date,
+                                 transactional_opted_in=test_date,
+                                 transactional_opted_out=test_date)
 
             r = email_obj.register()
 
@@ -49,8 +70,7 @@ class TestEmail(unittest.TestCase):
             mock_request.return_value = response
 
             email_obj = ua.Email(airship=self.airship,
-                                 address=self.address,
-                                 opt_in_level=self.opt_in_level)
+                                 address=self.address)
 
             r = email_obj.register()
 
@@ -69,7 +89,6 @@ class TestEmail(unittest.TestCase):
 
             email_obj = ua.Email(airship=self.airship,
                                  address=self.address,
-                                 opt_in_level=self.opt_in_level,
                                  locale_country=self.locale_country,
                                  locale_language=self.locale_language,
                                  timezone=self.timezone)
@@ -90,8 +109,7 @@ class TestEmail(unittest.TestCase):
             mock_request.return_value = response
 
             email_obj = ua.Email(airship=self.airship,
-                                 address=self.address,
-                                 opt_in_level='none')
+                                 address=self.address)
 
             r = email_obj.register()
 

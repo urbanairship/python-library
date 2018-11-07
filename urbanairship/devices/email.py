@@ -7,15 +7,28 @@ from urbanairship import common
 logger = logging.getLogger('urbanairship')
 
 VALID_EMAIL = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
-VALID_OPT_IN_LEVELS = ('commercial', 'transactional', 'none')
+VALID_ISO_8601 = re.compile(r'^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$')
 
 
 class Email(object):
-    """Register and uninstall an Email object
+    """Register and uninstall an Email object.
+
+    Please see the email documentation for important information about
+    opt-in times and email types.
+    https://docs.urbanairship.com/api/ua/#operation/api/channels/email
 
     :param address: Required. The email address the object represents.
-    :param opt_in_level: Required. The opt-in level for the email
-        address. Must be one of: commercial, transactional, none.
+    :param commercial_opted_in: Optional. A string in ISO 8601 format that
+        represents the time explicit permission was received from the user
+        to accept commercial emails.
+    :param commercial_opted_out: Optional. A string in ISO 8601 format that
+        represents the time a user opted out of commercial emails.
+    :param transactional_opted_in: Optional. A string in ISO 8601 format
+        that represents the time a user explicitly opted in to transactional
+        emails.
+    :param transactional_opted_out: Optional. A string in ISO 8601 formation
+        that represents the time a user explicitly opted out of transactional
+        emails.
     :param locale_country: Optional. The device property tag related
         to locale country setting.
     :param locale_language: Optional. The device property tag related
@@ -23,11 +36,16 @@ class Email(object):
     :param timezone: Optional. The deice property tag related to
         timezone setting."""
 
-    def __init__(self, airship, address, opt_in_level, locale_country=None,
+    def __init__(self, airship, address, commercial_opted_in=None,
+                 commercial_opted_out=None, transactional_opted_in=None,
+                 transactional_opted_out=None, locale_country=None,
                  locale_language=None, timezone=None):
         self.airship = airship
         self.address = address
-        self.opt_in_level = opt_in_level
+        self.commercial_opted_in = commercial_opted_in
+        self.commercial_opted_out = commercial_opted_out
+        self.transactional_opted_in = transactional_opted_in
+        self.transactional_opted_out = transactional_opted_out
         self.locale_country = locale_country
         self.locale_language = locale_language
         self.timezone = timezone
@@ -40,19 +58,51 @@ class Email(object):
 
     @address.setter
     def address(self, value):
-        if not VALID_EMAIL.match(value):
+        if not VALID_EMAIL.match(value) and value is not None:
             raise ValueError('Invalid email address')
         self._address = value
 
     @property
-    def opt_in_level(self):
-        return self._opt_in_level
+    def commercial_opted_in(self):
+        return self._commercial_opted_in
 
-    @opt_in_level.setter
-    def opt_in_level(self, value):
-        if value not in VALID_OPT_IN_LEVELS:
-            raise ValueError('Email opt_in_level not valid')
-        self._opt_in_level = value
+    @commercial_opted_in.setter
+    def commercial_opted_in(self, value):
+        if value is not None and not VALID_ISO_8601.match(value):
+            raise ValueError('Must use ISO 8601 timestamp format')
+        self._commercial_opted_in = value
+
+    @property
+    def commercial_opted_out(self):
+        return self._commercial_opted_out
+
+    @commercial_opted_out.setter
+    def commercial_opted_out(self, value):
+        if value is not None and not VALID_ISO_8601.match(value):
+            raise ValueError('Must use ISO 8601 timestamp format')
+        self._commercial_opted_out = value
+
+    @property
+    def transactional_opted_in(self):
+        return self._transactional_opted_in
+
+    @transactional_opted_in.setter
+    def transactional_opted_in(self, value):
+        if value is not None and not VALID_ISO_8601.match(value):
+            raise ValueError('Must use ISO 8601 timestamp format')
+        self._transactional_opted_in = value
+
+    @property
+    def transactional_opted_out(self):
+        return self._transactional_opted_out
+
+    @transactional_opted_out.setter
+    def transactional_opted_out(self, value):
+        if value is not None and not VALID_ISO_8601.match(value):
+            raise ValueError('Must use ISO 8601 timestamp format')
+        self._transactional_opted_out = value
+
+
 
     def register(self):
         """Create a new email channel or unsubscribe an existing email
@@ -66,10 +116,22 @@ class Email(object):
         reg_payload = {
             'channel': {
                 'type': self._email_type,
-                'email_opt_in_level': self.opt_in_level,
                 'address': self.address,
             }
         }
+
+        if self.commercial_opted_in:
+            reg_payload['channel']['commercial_opted_in'] = \
+                self.commercial_opted_in
+        if self.commercial_opted_out:
+            reg_payload['channel']['commercial_opted_out'] = \
+                self.commercial_opted_out
+        if self.transactional_opted_in:
+            reg_payload['channel']['transactional_opted_in'] = \
+                self.transactional_opted_in
+        if self.transactional_opted_out:
+            reg_payload['channel']['transactional_opted_out'] = \
+                self.transactional_opted_out
 
         if self.locale_language is not None:
             reg_payload['channel']['locale_language'] = self.locale_language
