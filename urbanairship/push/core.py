@@ -124,12 +124,18 @@ class ScheduledPush(object):
 
     @property
     def payload(self):
-        data = {
-            'schedule': self.schedule,
-            'push': self.push.payload,
-        }
+        if hasattr(self.push, 'merge_data'): # check if template
+            data = self.push.payload
+            data['schedule'] = self.schedule
+        else:
+            data = {
+                'schedule': self.schedule,
+                'push': self.push.payload,
+            }
+
         if self.name is not None:
             data['name'] = self.name
+
         return data
 
     def send(self):
@@ -142,10 +148,16 @@ class ScheduledPush(object):
 
         """
         body = json.dumps(self.payload)
+
+        if hasattr(self.push, 'merge_data'):
+            url = common.SCHEDULE_TEMPLATE_URL
+        else:
+            url = common.SCHEDULES_URL
+
         response = self._airship._request(
             method='POST',
             body=body,
-            url=common.SCHEDULES_URL,
+            url=url,
             content_type='application/json',
             version=3
         )

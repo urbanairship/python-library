@@ -1,4 +1,9 @@
 --------------------
+5.1.0
+--------------------
+- Added support for a scheduled push to a personalization template
+
+--------------------
 5.0.1
 --------------------
 - NOTE: This is in support of a breaking change to the email registration API.

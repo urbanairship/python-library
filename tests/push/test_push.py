@@ -358,7 +358,6 @@ class TestPush(unittest.TestCase):
             }
         )
 
-
     def test_sms_push_to_sender(self):
         p = ua.Push(None)
         p.audience = ua.sms_sender('12345')
@@ -465,7 +464,6 @@ class TestPush(unittest.TestCase):
                 }
             }
         )
-
 
     def test_email_missing_device_type(self):
         p = ua.Push(None)
@@ -766,6 +764,40 @@ class TestPush(unittest.TestCase):
                     '0492662a-1b52-4343-a1f9-c6b0c72931c0'
                 )
             )
+
+    def test_scheduled_template(self):
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    'schedule_urls': [
+                        'https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3'
+                    ]
+                }
+            ).encode('utf-8')
+            response.status_code = 202
+            mock_request.return_value = response
+
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
+            sched = ua.ScheduledPush(airship)
+            sched.schedule = ua.scheduled_time(datetime.datetime.now())
+
+            template_push = airship.create_template_push()
+            template_push.audience = ua.ios_channel('780ba0c5-45be-4f29-befa-39135cb05b59')
+            template_push.device_types = ua.device_types('ios')
+            template_push.merge_data = ua.merge_data(
+                template_id='780ba0c5-45be-4f29-befa-39135cb05b59',
+                substitutions={'key':'value'}
+            )
+
+            sched.push = template_push
+            sched.send()
+
+            self.assertEqual(
+                sched.url,
+                'https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3'
+            )
+
 
     def test_local_schedule_success(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:

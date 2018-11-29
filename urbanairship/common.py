@@ -16,6 +16,7 @@ REPORTS_URL = BASE_URL + '/reports/'
 LISTS_URL = BASE_URL + '/lists/'
 LOCATION_URL = BASE_URL + '/location/'
 TEMPLATES_URL = BASE_URL + '/templates/'
+SCHEDULE_TEMPLATE_URL = TEMPLATES_URL + 'schedules/'
 PIPELINES_URL = BASE_URL + '/pipelines/'
 
 NAMED_USER_URL = BASE_URL + '/named_users/'
