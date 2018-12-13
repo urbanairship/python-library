@@ -125,7 +125,9 @@ class TestAutomation(unittest.TestCase):
                 }
             ]
             pipeline.timing = {
-                "delay": 15,
+                "delay": {
+                    "seconds": 15
+                },
                 "schedule": {
                     "type": "local",
                     "miss_behavior": "cancel",
@@ -268,7 +270,9 @@ class TestAutomation(unittest.TestCase):
                 }
             ]
             timing = {
-                "delay": 15,
+                "delay": {
+                    "seconds": 15
+                },
                 "schedule": {
                     "type": "local",
                     "miss_behavior": "cancel",
@@ -435,7 +439,9 @@ class TestAutomation(unittest.TestCase):
                 }
             ]
             pipeline.timing = {
-                "delay": 15,
+                "delay": {
+                    "seconds": 15
+                },
                 "schedule": {
                     "type": "local",
                     "miss_behavior": "cancel",

@@ -386,7 +386,7 @@ class Pipeline(object):
         """
         if timing_object:
             if 'delay' in timing_object:
-                delay = timing_object['delay']
+                delay = timing_object['delay']['seconds']
 
                 if not (isinstance(delay, int) and delay > 0):
                     raise ValueError('delay must be an integer greater than 0')
