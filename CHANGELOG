@@ -1,4 +1,9 @@
 --------------------
+5.1.1
+--------------------
+- Updated Pipeline's timing object for delay to handle seconds
+
+--------------------
 5.1.0
 --------------------
 - Added support for a scheduled push to a personalization template
