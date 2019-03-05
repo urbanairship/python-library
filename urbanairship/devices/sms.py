@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from datetime import datetime
 
 from urbanairship import common
 
@@ -46,6 +47,17 @@ class Sms(object):
             'sender': self.sender,
             'msisdn': self.msisdn,
         }
+
+    @property
+    def create_and_send_audience(self):
+        audience = self.common_payload
+        if self.opted_in:
+            audience['opted_in'] = self.opted_in
+        else:
+            audience['opted_in'] = datetime.utcnow().strftime(
+                '%Y-%m-%dT%H:%M:%S'
+            )
+        return audience
 
     def register(self, opted_in=False):
         """Register an Sms channel with the sender ID and MSISDN
