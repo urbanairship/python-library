@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 
 from urbanairship import common
 
@@ -14,7 +15,7 @@ class Push(object):
         self._airship = airship
         self.audience = None
         self.notification = None
-        self.device_types = None
+        self._device_types = None
         self.options = None
         self.campaigns = None
         self.message = None
@@ -36,6 +37,19 @@ class Push(object):
         if self.in_app is not None:
             data['in_app'] = self.in_app
         return data
+
+    @property
+    def device_types(self):
+        return self._device_types
+
+    @device_types.setter
+    def device_types(self, types):
+        if types == 'all' or (len(types) == 1 and types[0] == 'all'):
+            warnings.warn(
+                "The device type 'all' has been deprecated.",
+                DeprecationWarning
+            )
+        self._device_types = types
 
     def send(self):
         """Send the notification.
