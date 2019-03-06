@@ -275,18 +275,21 @@ class CreateAndSendPush(object):
         return self._device_types
 
     @device_types.setter
-    def device_types(self, value):
+    def device_types(self, values):
         accepted_device_types = ('sms', 'email', 'open::')
 
-        if len(value) != 1:
+        if len(values) != 1:
             raise ValueError('only a single device_type may be used.')
         
-        if value[:6] not in accepted_device_types:
-            raise ValueError(
-                'device_types must be one of' % str(accepted_device_types)
-                )
+        for value in values:
+            if value[:6] not in accepted_device_types:
+                raise ValueError(
+                    'device_types must be one of %s' % str(
+                        accepted_device_types
+                        )
+                    )
         
-        self._device_types = value
+        self._device_types = values
 
     @property
     def audience(self):
@@ -315,7 +318,7 @@ class CreateAndSendPush(object):
         addresses = []
         
         for sms in self.channels:
-            if sms.__name__.__class__ != 'Sms':
+            if not getattr(sms, 'msisdn', None):
                 raise TypeError(
                     'Can only use Sms objects when device_types is sms'
                     )
