@@ -8,6 +8,7 @@ from .push import (
     TemplatePush,
     Template,
     TemplateList,
+    CreateAndSendPush,
     all_,
     ios_channel,
     android_channel,
@@ -169,6 +170,7 @@ __all__ = [
     Pipeline,
     Email,
     EmailTags,
+    CreateAndSendPush
 ]
 
 # Silence urllib3 INFO logging by default
