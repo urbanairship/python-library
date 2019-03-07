@@ -40,7 +40,7 @@ class TestCreateAndSend(unittest.TestCase):
         cas.notification = ua.notification(alert='test sms')
 
         with self.assertRaises(TypeError):
-            payload = cas.payload
+            cas.payload
 
     def test_multiple_device_types(self):
         cas = ua.CreateAndSendPush(
@@ -67,13 +67,13 @@ class TestCreateAndSend(unittest.TestCase):
         cas.notification = ua.notification(alert='test sms')
 
         with self.assertRaises(ValueError):
-            payload = cas.payload
+            cas.payload
 
     def test_large_list(self):
         big_list = [x for x in range(1001)]
 
         with self.assertRaises(ValueError):
-            cas = ua.CreateAndSendPush(
+            ua.CreateAndSendPush(
                 airship=self.airship,
                 channels=big_list
             )
@@ -82,7 +82,7 @@ class TestCreateAndSend(unittest.TestCase):
         fail_tuple = (x for x in range(5))
 
         with self.assertRaises(TypeError):
-            cas = ua.CreateAndSendPush(
+            ua.CreateAndSendPush(
                 airship=self.airship,
                 channels=fail_tuple
             )
