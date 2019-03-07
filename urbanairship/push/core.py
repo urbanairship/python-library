@@ -293,8 +293,8 @@ class CreateAndSendPush(object):
         for value in values:
             if value[:6] not in accepted_device_types:
                 raise ValueError(
-                    'device_types must be one of %s' % str(
-                        accepted_device_types
+                    'device_types must be one of {}'.format(
+                        str(accepted_device_types)
                         )
                     )
         
@@ -372,7 +372,6 @@ class CreateAndSendPush(object):
             version=3
         )
 
-        data = response.json()
         logger.info('Create and Send successful')
 
         return PushResponse(response)
