@@ -12,7 +12,19 @@ VALID_SENDER = re.compile(r'[0-9]*$')
 
 
 class Sms(object):
-    """Register, opt-out and uninstall an Sms object"""
+    """
+    Create, register, opt-out and uninstall an Sms object.
+
+    :param airship: Required. An urbanairship.Airship object instantiated with 
+        master authentication.
+    :param sender: Required. The a number that recipients will recieve SMS 
+        notifications from. This must match your Urban Airship configuration.
+    :param msisdn: Required. The mobile phone number you want to register as 
+        an SMS channel (or send a request to opt-in).
+    :param opted_in: The UTC datetime in ISO 8601 format that represents the 
+        date and time when explicit permission was received from the user to 
+        receive messages. This is required for use with CreateAndSend.
+    """
 
     def __init__(self, airship, sender, msisdn, opted_in=False):
         self.airship = airship

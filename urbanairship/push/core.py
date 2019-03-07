@@ -261,7 +261,16 @@ class TemplatePush(object):
 
 class CreateAndSendPush(object):
     """
-    docstring plz
+    Creates and sends to email, sms or open channels. Channel ids are created
+    but not returned by this request. Use lookup/listing endpoints to find
+    channel_id values. Opt-in date attributes are required on Sms and Email
+    objects passed in.
+
+    :param airship: Required. An urbanairship.Airship object instantiated with 
+        master authentication.
+    :param channels: Required. A list of Sms, Email or OpenChannel objects.
+        channels may only be of one type and must match the single value for
+        CreateAndSend.device_types.
     """
 
     def __init__(self, airship, channels=[]):
@@ -333,6 +342,14 @@ class CreateAndSendPush(object):
         return None
 
     def send(self):
+        """Send the notification.
+
+        :returns: :py:class:`PushResponse` object with ``push_ids`` and
+            other response data.
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+        :raises ValueError: Required keys missing or incorrect values included.
+        """
         body = json.dumps(self.payload)
         response = self._airship._request(
             method='POST',
