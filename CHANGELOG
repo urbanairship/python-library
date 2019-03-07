@@ -1,4 +1,9 @@
 --------------------
+5.2.1
+--------------------
+- Deprecation of device type 'all'. This type will be removed in version 6.0.0
+
+--------------------
 5.1.1
 --------------------
 - Updated Pipeline's timing object for delay to handle seconds
