@@ -310,6 +310,19 @@ class CreateAndSendPush(object):
             return self._open_channel_audience()
 
     @property
+    def channels(self):
+        return self._channels
+
+    @channels.setter
+    def channels(self, value):
+        if type(value) is not list:
+            raise TypeError('channels must be a list')
+        if len(value) > 1000:
+            raise ValueError('channels list must have 1000 or fewer items')
+
+        self._channels = value
+
+    @property
     def payload(self):
         data = {
             'audience': self.audience,

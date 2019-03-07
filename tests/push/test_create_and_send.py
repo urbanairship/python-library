@@ -69,6 +69,24 @@ class TestCreateAndSend(unittest.TestCase):
         with self.assertRaises(ValueError):
             payload = cas.payload
 
+    def test_large_list(self):
+        big_list = [x for x in range(1001)]
+
+        with self.assertRaises(ValueError):
+            cas = ua.CreateAndSendPush(
+                airship=self.airship,
+                channels=big_list
+            )
+
+    def test_non_list_channels(self):
+        fail_tuple = (x for x in range(5))
+
+        with self.assertRaises(TypeError):
+            cas = ua.CreateAndSendPush(
+                airship=self.airship,
+                channels=fail_tuple
+            )
+
     def test_sms_send(self):
         cas = ua.CreateAndSendPush(
             airship=self.airship,
