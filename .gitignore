@@ -10,8 +10,6 @@ urbanairship.egg-info/
 .tox/
 .vscode/
 test_data.csv
-.pytest_cache/v/cache/stepwise
-.pytest_cache/v/cache/lastfailed
+.pytest_cache/
 nosetests.xml
 .noseids
-.pytest_cache/v/cache/nodeids
