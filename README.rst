@@ -92,7 +92,7 @@ History
 * 1.0 Support for In-App and iOS 10
 * 0.8 Support for Reports APIs
 * 0.7 Support for Python 3, major refactoring
-* 0.6 Major refactoring, support for push api v3
+* 0.6 Major refactoring, support for push api v3p
 * 0.5 Added Android, Rich Push, and scheduled notifications
 * 0.4 Added batch push
 * 0.3 Added deregister, device token list, other minor improvements

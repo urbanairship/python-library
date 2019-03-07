@@ -36,7 +36,7 @@ Automations are defined by one or more Pipeline objects
            "outcome": {
               "push": {
                  "audience": "triggered",
-                 "device_types": "all",
+                 "device_types": ["ios", "android"],
                  "notification": {
                     "alert": "Like sinks? You'll love this deal!"
                  }
@@ -80,7 +80,7 @@ https://docs.urbanairship.com/api/ua/#post-api-pipelines-validate
            "outcome": {
               "push": {
                  "audience": "triggered",
-                 "device_types": "all",
+                 "device_types": ["ios", "android"],
                  "notification": {
                     "alert": "Like sinks? You'll love this deal!"
                  }
@@ -127,7 +127,7 @@ https://docs.urbanairship.com/api/ua/#put-api-pipelines-id
            "outcome": {
               "push": {
                  "audience": "triggered",
-                 "device_types": "all",
+                 "device_types": ["ios", "android"],
                  "notification": {
                     "alert": "Bathroom sink issues? You'll love this deal!"
                  }

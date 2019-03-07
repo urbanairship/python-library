@@ -17,7 +17,7 @@ Simple broadcast to all devices
    push = airship.create_push()
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
-   push.device_types = ua.all_
+   push.device_types = ua.device_types('android')
    push.send()
 
 
@@ -151,10 +151,10 @@ Message Center send with extra and without notification
 
    push = airship.create_push()
    push.audience = ua.all_
-   push.device_types = ua.all_
+   push.device_types = ua.device_types('ios', 'android')
    push.message = ua.message(
       title='New follower',
-      body='<h1>OMG It's Kim Jong-Un</h1>',
+      body='<h1>OMG It\'s Kim Jong-Un</h1>',
       extra={'articleid': 'http://m.example.com/123456'}
    )
    push.send()
@@ -169,7 +169,7 @@ Scheduled iOS Push
 
    sched = airship.create_scheduled_push()
    sched.schedule = ua.scheduled_time(
-      datetime.datetime(2013, 10, 10, 2, 45))
+      datetime.datetime(2022, 10, 10, 2, 45))
 
    sched.push = airship.create_push()
    sched.push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
