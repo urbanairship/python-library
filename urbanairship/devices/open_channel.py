@@ -25,16 +25,6 @@ class OpenChannel(object):
         self.airship = airship
 
     @property
-    def address(self):
-        return self._address
-
-    @address.setter
-    def address(self, value):
-        if not VALID_UUID.match(value):
-            raise ValueError('open channel address must be valid UUID')
-        self._address = value
-
-    @property
     def create_and_send_audience(self):
         if not self.address:
             raise ValueError('open channel address must be set')
