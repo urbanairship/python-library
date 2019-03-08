@@ -1,10 +1,13 @@
 import datetime
 import json
 import logging
+import re
 
 from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
+
+VALID_UUID = re.compile(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\Z')
 
 
 class OpenChannel(object):
@@ -20,6 +23,23 @@ class OpenChannel(object):
 
     def __init__(self, airship):
         self.airship = airship
+
+    @property
+    def address(self):
+        return self._address
+
+    @address.setter
+    def address(self, value):
+        if not VALID_UUID.match(value):
+            raise ValueError('open channel address must be valid UUID')
+        self._address = value
+
+    @property
+    def create_and_send_audience(self):
+        if not self.address:
+            raise ValueError('open channel address must be set')
+
+        return {'ua_address': self.address}
 
     def create(self):
         """Create this OpenChannel object with the API."""
