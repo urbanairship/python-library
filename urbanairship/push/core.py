@@ -334,7 +334,16 @@ class CreateAndSendPush(object):
         return data
 
     def _email_audience(self):
-        return None
+        addresses = []
+        for email in self.channels:
+            if not getattr(email, 'address', None):
+                raise TypeError(
+                    'Can only use email channels when device_types is email'
+                )
+            addresses.append(email.create_and_send_audience)
+        audience = {'create_and_send': addresses}
+
+        return audience
 
     def _sms_audience(self):
         addresses = []
