@@ -43,6 +43,13 @@ class TestCreateAndSend(unittest.TestCase):
             open_channel_obj.address = address
             open_channel_obj.open_platform = 'open::foo'
             self.test_open_channel_objs.append(open_channel_obj)
+        for email in self.test_email_addresses:
+            email_obj = ua.Email(
+                airship=self.airship,
+                address=email,
+                commercial_opted_in=self.test_optin_datestring
+            )
+            self.test_email_objs.append(email_obj)
 
     def test_mixed_platforms(self):
         email_channel = ua.Email(
@@ -183,6 +190,61 @@ class TestCreateAndSend(unittest.TestCase):
                 },
                 'campaigns': {
                     'categories': ['foo', 'bar', 'baz']
+                }
+            }
+        )
+
+    def test_email_send(self):
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_email_objs
+        )
+        cas.notification = ua.notification( 
+            email=ua.email(
+                message_type='commercial',
+                plaintext_body='this is an email',
+                reply_to='foo@urbanairship.com',
+                sender_address='bar@urbanairship.com',
+                sender_name='test sender',
+                subject='this is an email'
+            )
+        )
+        cas.device_types = ua.device_types('email')
+        cas.campaigns = ua.campaigns(
+            categories=['email', 'fun']
+        )
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_address': 'foo@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        },
+                        {
+                            'ua_address':'bar@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        },
+                        {
+                            'ua_address': 'baz@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        }
+                    ]
+                },
+                'device_types': ['email'],
+                'notification': {
+                    'email': {
+                        'subject': 'this is an email',
+                        'plaintext_body': 'this is an email',
+                        'message_type': 'commercial',
+                        'sender_name': 'test sender',
+                        'sender_address': 'bar@urbanairship.com',
+                        'reply_to': 'foo@urbanairship.com'
+                    }
+                },
+                'campaigns': {
+                    'categories': ['email', 'fun']
                 }
             }
         )
