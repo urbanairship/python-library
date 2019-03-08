@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from datetime import datetime
 
 from urbanairship import common
 
@@ -11,13 +12,25 @@ VALID_SENDER = re.compile(r'[0-9]*$')
 
 
 class Sms(object):
-    """Register, opt-out and uninstall an Sms object"""
+    """
+    Create, register, opt-out and uninstall an Sms object.
 
-    def __init__(self, airship, sender, msisdn):
+    :param airship: Required. An urbanairship.Airship object instantiated with 
+        master authentication.
+    :param sender: Required. The a number that recipients will recieve SMS 
+        notifications from. This must match your Urban Airship configuration.
+    :param msisdn: Required. The mobile phone number you want to register as 
+        an SMS channel (or send a request to opt-in).
+    :param opted_in: The UTC datetime in ISO 8601 format that represents the 
+        date and time when explicit permission was received from the user to 
+        receive messages. This is required for use with CreateAndSend.
+    """
+
+    def __init__(self, airship, sender, msisdn, opted_in=False):
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
-        self.opted_in = False
+        self.opted_in = opted_in
         self.channel_id = None
 
     @property
@@ -46,6 +59,20 @@ class Sms(object):
             'sender': self.sender,
             'msisdn': self.msisdn,
         }
+
+    @property
+    def create_and_send_audience(self):
+        audience = {
+            'ua_sender': self.sender,
+            'ua_msisdn': self.msisdn,
+        }
+        if self.opted_in:
+            audience['ua_opted_in'] = self.opted_in
+        else:
+            raise ValueError(
+                'sms objects for create and send must include opt-in datestamps'
+                )
+        return audience
 
     def register(self, opted_in=False):
         """Register an Sms channel with the sender ID and MSISDN

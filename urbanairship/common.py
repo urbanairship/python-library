@@ -32,6 +32,9 @@ EMAIL_URL = CHANNEL_URL + 'email'
 EMAIL_TAGS_URL = EMAIL_URL + '/tags'
 EMAIL_UNINSTALL_URL = EMAIL_URL + '/uninstall'
 
+CREATE_AND_SEND_URL = BASE_URL + '/create-and-send'
+SCHEDULE_CREATE_AND_SEND_URL = SCHEDULES_URL + 'create-and-send'
+
 logger = logging.getLogger('urbanairship')
 
 

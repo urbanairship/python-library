@@ -479,7 +479,6 @@ def email(message_type, plaintext_body, reply_to, sender_address,
     return payload
 
 
-
 def open_platform(alert=None, title=None, extra=None, summary=None,
                   media_attachment=None, interactive=None):
     """Open platform specific override payload.

@@ -10,3 +10,6 @@ urbanairship.egg-info/
 .tox/
 .vscode/
 test_data.csv
+.pytest_cache/
+nosetests.xml
+.noseids

@@ -259,6 +259,124 @@ class TemplatePush(object):
         return PushResponse(response)
 
 
+class CreateAndSendPush(object):
+    """
+    Creates and sends to email, sms or open channels. Channel ids are created
+    but not returned by this request. Use lookup/listing endpoints to find
+    channel_id values. Opt-in date attributes are required on Sms and Email
+    objects passed in.
+
+    :param airship: Required. An urbanairship.Airship object instantiated with 
+        master authentication.
+    :param channels: Required. A list of Sms, Email or OpenChannel objects.
+        channels may only be of one type and must match the single value for
+        CreateAndSend.device_types.
+    """
+
+    def __init__(self, airship, channels=[]):
+        self._airship = airship
+        self.channels = channels
+        self.notification = None
+        self.campaigns = None
+
+    @property
+    def device_types(self):
+        return self._device_types
+
+    @device_types.setter
+    def device_types(self, values):
+        accepted_device_types = ('sms', 'email', 'open::')
+
+        if len(values) != 1:
+            raise ValueError('only a single device_type may be used.')
+        
+        for value in values:
+            if value[:6] not in accepted_device_types:
+                raise ValueError(
+                    'device_types must be one of {}'.format(
+                        str(accepted_device_types)
+                        )
+                    )
+        
+        self._device_types = values
+
+    @property
+    def audience(self):
+        if 'email' in self.device_types:
+            return self._email_audience()
+        elif 'sms' in self.device_types:
+            return self._sms_audience()
+        else:
+            return self._open_channel_audience()
+
+    @property
+    def channels(self):
+        return self._channels
+
+    @channels.setter
+    def channels(self, value):
+        if type(value) is not list:
+            raise TypeError('channels must be a list')
+        if len(value) > 1000:
+            raise ValueError('channels list must have 1000 or fewer items')
+
+        self._channels = value
+
+    @property
+    def payload(self):
+        data = {
+            'audience': self.audience,
+            'notification': self.notification,
+            'device_types': self.device_types
+        }
+        if self.campaigns is not None:
+            data['campaigns'] = self.campaigns
+        return data
+
+    def _email_audience(self):
+        return None
+
+    def _sms_audience(self):
+        addresses = []
+        
+        for sms in self.channels:
+            if not getattr(sms, 'msisdn', None):
+                raise TypeError(
+                    'Can only use Sms objects when device_types is sms'
+                    )
+            
+            addresses.append(sms.create_and_send_audience)
+        
+        audience = {'create_and_send': addresses}
+
+        return audience
+
+    def _open_channel_audience(self):
+        return None
+
+    def send(self):
+        """Send the notification.
+
+        :returns: :py:class:`PushResponse` object with ``push_ids`` and
+            other response data.
+        :raises AirshipFailure: Request failed.
+        :raises Unauthorized: Authentication failed.
+        :raises ValueError: Required keys missing or incorrect values included.
+        """
+        body = json.dumps(self.payload)
+        response = self._airship._request(
+            method='POST',
+            body=body,
+            url=common.CREATE_AND_SEND_URL,
+            content_type='application/json',
+            version=3
+        )
+
+        logger.info('Create and Send successful')
+
+        return PushResponse(response)
+
+
 class PushResponse(object):
     """Response to a successful push notification send or schedule.
 
