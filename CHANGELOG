@@ -1,7 +1,8 @@
 --------------------
 5.2.0
 --------------------
-- Added Create and Send support for SMS.
+- Added Create and Send support for SMS, Email and Open Channels
+- Added support for scheduled Create and Send 
 
 --------------------
 5.1.1
