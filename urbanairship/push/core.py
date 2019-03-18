@@ -334,25 +334,40 @@ class CreateAndSendPush(object):
         return data
 
     def _email_audience(self):
-        return None
+        addresses = []
+        for email in self.channels:
+            if not getattr(email, 'address', None):
+                raise TypeError(
+                    'Can only use email channels when device_types is email'
+                )
+            addresses.append(email.create_and_send_audience)
+        audience = {'create_and_send': addresses}
+
+        return audience
 
     def _sms_audience(self):
         addresses = []
-        
         for sms in self.channels:
             if not getattr(sms, 'msisdn', None):
                 raise TypeError(
                     'Can only use Sms objects when device_types is sms'
                     )
-            
             addresses.append(sms.create_and_send_audience)
-        
         audience = {'create_and_send': addresses}
 
         return audience
 
     def _open_channel_audience(self):
-        return None
+        addresses = []
+        for open_channel in self.channels:
+            if not getattr(open_channel, 'open_platform', None):
+                raise TypeError(
+                    'Can only use OpenChannel objects when device_types is open::'
+                )
+            addresses.append(open_channel.create_and_send_audience)
+        audience = {'create_and_send': addresses}
+
+        return audience
 
     def send(self):
         """Send the notification.

@@ -14,8 +14,21 @@ class TestCreateAndSend(unittest.TestCase):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.test_sms_sender = '12345'
         self.test_sms_msisdns = ['15035556789', '15035556788', '15035556787']
+        self.test_open_channel_addresses = [
+            'bfecbb67-5352-4582-a95d-24e4760a3907',
+            'bfecbb67-5352-4582-a95d-24e4760a3908',
+            'bfecbb67-5352-4582-a95d-24e4760a3909'
+        ]
+        self.test_email_addresses = [
+            'foo@urbanairship.com',
+            'bar@urbanairship.com',
+            'baz@urbanairship.com'
+        ]
         self.test_optin_datestring = '2018-02-13T11:58:59'
         self.test_sms_objs = []
+        self.test_open_channel_objs = []
+        self. test_email_objs  = []
+
         for msisdn in self.test_sms_msisdns:
             sms_obj = ua.Sms(
                 airship=self.airship, 
@@ -23,6 +36,20 @@ class TestCreateAndSend(unittest.TestCase):
                 opted_in=self.test_optin_datestring,
                 msisdn=msisdn)
             self.test_sms_objs.append(sms_obj)
+        for address in self.test_open_channel_addresses:
+            open_channel_obj = ua.OpenChannel(
+                airship=self.airship
+            )
+            open_channel_obj.address = address
+            open_channel_obj.open_platform = 'open::foo'
+            self.test_open_channel_objs.append(open_channel_obj)
+        for email in self.test_email_addresses:
+            email_obj = ua.Email(
+                airship=self.airship,
+                address=email,
+                commercial_opted_in=self.test_optin_datestring
+            )
+            self.test_email_objs.append(email_obj)
 
     def test_mixed_platforms(self):
         email_channel = ua.Email(
@@ -125,6 +152,99 @@ class TestCreateAndSend(unittest.TestCase):
                 'device_types': ['sms'],
                 'campaigns': {
                     'categories': ['sms', 'offers']
+                }
+            }
+        )
+
+    def test_open_channel_send(self):
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_open_channel_objs,
+        )
+        cas.notification = ua.notification(
+            alert='test open channel'
+        )
+        cas.device_types = ua.device_types('open::foo')
+        cas.campaigns = ua.campaigns(
+            categories=['foo', 'bar', 'baz']
+        )
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3907'
+                        },
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3908'
+                        },
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3909'
+                        }
+                    ]
+                },
+                'device_types': ['open::foo'],
+                'notification': {
+                    'alert': 'test open channel'
+                },
+                'campaigns': {
+                    'categories': ['foo', 'bar', 'baz']
+                }
+            }
+        )
+
+    def test_email_send(self):
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_email_objs
+        )
+        cas.notification = ua.notification( 
+            email=ua.email(
+                message_type='commercial',
+                plaintext_body='this is an email',
+                reply_to='foo@urbanairship.com',
+                sender_address='bar@urbanairship.com',
+                sender_name='test sender',
+                subject='this is an email'
+            )
+        )
+        cas.device_types = ua.device_types('email')
+        cas.campaigns = ua.campaigns(
+            categories=['email', 'fun']
+        )
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_address': 'foo@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        },
+                        {
+                            'ua_address':'bar@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        },
+                        {
+                            'ua_address': 'baz@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59'
+                        }
+                    ]
+                },
+                'device_types': ['email'],
+                'notification': {
+                    'email': {
+                        'subject': 'this is an email',
+                        'plaintext_body': 'this is an email',
+                        'message_type': 'commercial',
+                        'sender_name': 'test sender',
+                        'sender_address': 'bar@urbanairship.com',
+                        'reply_to': 'foo@urbanairship.com'
+                    }
+                },
+                'campaigns': {
+                    'categories': ['email', 'fun']
                 }
             }
         )
