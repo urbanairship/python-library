@@ -248,3 +248,57 @@ class TestCreateAndSend(unittest.TestCase):
                 }
             }
         )
+
+    def test_scheduled_send(self):
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_sms_objs
+        )
+        cas.notification = ua.notification(
+            alert='test sms'
+        )
+        cas.device_types = ua.device_types('sms')
+        cas.campaigns = ua.campaigns(
+            categories=['sms', 'offers']
+        )
+        schedule = ua.ScheduledPush(airship=self.airship)
+        schedule.name = 'test schedule name'
+        schedule.push = cas
+        schedule.schedule = ua.scheduled_time(datetime.datetime(
+            2025, 10, 8, 12, 15
+        ))
+        self.assertEqual(
+            schedule.payload,
+            {
+                'schedule': {
+                    'scheduled_time': '2025-10-08T12:15:00'
+                },
+                'name': 'test schedule name',
+                'push': {
+                    'audience': {
+                            'create_and_send': [
+                            {
+                                'ua_msisdn': '15035556789',
+                                'ua_sender': '12345',
+                                'ua_opted_in': '2018-02-13T11:58:59'
+                            },
+                            {
+                                'ua_msisdn': '15035556788',
+                                'ua_sender': '12345',
+                                'ua_opted_in': '2018-02-13T11:58:59'
+                            },
+                            {
+                                'ua_msisdn': '15035556787',
+                                'ua_sender': '12345',
+                                'ua_opted_in': '2018-02-13T11:58:59'
+                            },
+                        ]
+                    },
+                    'notification': {'alert': 'test sms'},
+                    'device_types': ['sms'],
+                    'campaigns': {
+                        'categories': ['sms', 'offers']
+                    }
+                }
+            }
+        )
