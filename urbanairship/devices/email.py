@@ -102,6 +102,17 @@ class Email(object):
             raise ValueError('Must use ISO 8601 timestamp format')
         self._transactional_opted_out = value
 
+    @property
+    def create_and_send_audience(self):
+        audience = {
+            'ua_address': self.address,
+        }
+        if self.commercial_opted_in:
+            audience['ua_commercial_opted_in'] = self.commercial_opted_in
+        if self.transactional_opted_in:
+            audience['ua_transactional_opted_in'] = self.transactional_opted_in
+        
+        return audience
 
 
     def register(self):
