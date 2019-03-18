@@ -4,8 +4,6 @@ import sys
 import collections
 import warnings
 
-#from . import all_ as all
-
 # Python coarse version differentiation
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
