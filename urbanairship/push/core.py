@@ -130,7 +130,7 @@ class ScheduledPush(object):
         elif isinstance(self.push, CreateAndSendPush): # create cas payload
             if 'scheduled_time' not in self.schedule:
                 raise ValueError(
-                    'only schdeduled_time supported with create and send schedules'
+                    'only schedduled_time supported with create and send schedules'
                 )
             data = {
                 'schedule': self.schedule,
