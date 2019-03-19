@@ -160,7 +160,7 @@ class ScheduledPush(object):
 
         if hasattr(self.push, 'merge_data'):
             url = common.SCHEDULE_TEMPLATE_URL
-        if isinstance(self.push, CreateAndSendPush):
+        elif isinstance(self.push, CreateAndSendPush):
             url = common.SCHEDULE_CREATE_AND_SEND_URL
         else:
             url = common.SCHEDULES_URL
