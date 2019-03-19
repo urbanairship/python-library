@@ -124,9 +124,18 @@ class ScheduledPush(object):
 
     @property
     def payload(self):
-        if hasattr(self.push, 'merge_data'): # check if template
+        if hasattr(self.push, 'merge_data'): # create template payload
             data = self.push.payload
             data['schedule'] = self.schedule
+        elif isinstance(self.push, CreateAndSendPush): # create cas payload
+            if 'scheduled_time' not in self.schedule:
+                raise ValueError(
+                    'only scheduled_time supported with create and send schedules'
+                )
+            data = {
+                'schedule': self.schedule,
+                'push': self.push.payload
+            }
         else:
             data = {
                 'schedule': self.schedule,
@@ -151,6 +160,8 @@ class ScheduledPush(object):
 
         if hasattr(self.push, 'merge_data'):
             url = common.SCHEDULE_TEMPLATE_URL
+        elif isinstance(self.push, CreateAndSendPush):
+            url = common.SCHEDULE_CREATE_AND_SEND_URL
         else:
             url = common.SCHEDULES_URL
 
