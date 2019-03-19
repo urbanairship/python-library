@@ -13,3 +13,4 @@ test_data.csv
 .pytest_cache/
 nosetests.xml
 .noseids
+/mypython

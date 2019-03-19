@@ -11,7 +11,7 @@ push notification, you:
 #. Deliver the notification.
 
 This example performs a broadcast with the same alert to all recipients
-and device types:
+to a specific device type which can be list of types:
 
 .. code-block:: python
 
@@ -21,7 +21,7 @@ and device types:
    push = airship.create_push()
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
-   push.device_types = ua.all_
+   push.device_types = ua.device_types('android', 'ios')
    push.send()
 
 
@@ -65,6 +65,23 @@ You can override the payload with platform-specific values as well.
 
 .. automodule:: urbanairship.push.payload
    :members: notification, ios, android, wns_payload, open_platform, sms, email
+
+
+Device Types
+------------
+
+In addition to specifying the audience, you must specify the device types
+you wish to target with one or more strings:
+
+.. code-block:: python
+
+   push.device_types = ua.device_types('ios')
+
+.. code-block:: python
+
+   push.device_types = ua.device_types('android', 'ios', 'web')
+
+.. autofunction:: urbanairship.push.payload.device_types
 
 
 In-App Message
@@ -161,25 +178,6 @@ Button actions can also be mapped to *actions* objects as shown below:
 .. automodule:: urbanairship.push.payload
    :members: notification, interactive
    :noindex:
-
-
-Device Types
-------------
-
-In addition to specifying the audience, you must specify the device
-types you wish to target, either with a list of strings:
-
-.. code-block:: python
-
-   push.device_types = ua.device_types('ios', 'android', 'web')
-
-or with the ``all_`` shortcut.
-
-.. code-block:: python
-
-   push.device_types = ua.all_
-
-.. autofunction:: urbanairship.push.payload.device_types
 
 
 Delivery
@@ -503,4 +501,3 @@ Template Deletion
 
    # OR, if you want to delete a template without fetching it from the API
    ua.Template(airship).delete(template_id)
-

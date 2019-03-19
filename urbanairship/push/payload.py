@@ -2,6 +2,8 @@
 import re
 import sys
 import collections
+import warnings
+
 # Python coarse version differentiation
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -670,8 +672,13 @@ def device_types(*types):
         'sms',
         'email'
     )
-    if len(types) == 1 and types[0] == 'all':
+    if types == 'all' or (len(types) == 1 and types[0] == 'all'):
+        warnings.warn(
+            "The device type 'all' has been deprecated.",
+            DeprecationWarning
+        )
         return 'all'
+
     for t in types:
         is_open = isinstance(t, string_type) and t.startswith('open::')
         if t not in valid_device_types and not is_open:
