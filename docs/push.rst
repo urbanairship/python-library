@@ -70,16 +70,16 @@ You can override the payload with platform-specific values as well.
 Device Types
 ------------
 
-In addition to specifying the audience, you must specify the device
-types you wish to target, either with a list of strings:
+In addition to specifying the audience, you must specify the device types
+you wish to target with one or more strings:
 
 .. code-block:: python
 
-   push.device_types = ua.device_types('ios', 'android', 'web')
+   push.device_types = ua.device_types('ios')
 
 .. code-block:: python
 
-   push.device_types = ua.device_types('android', 'ios')
+   push.device_types = ua.device_types('android', 'ios', 'web')
 
 .. autofunction:: urbanairship.push.payload.device_types
 
@@ -501,4 +501,3 @@ Template Deletion
 
    # OR, if you want to delete a template without fetching it from the API
    ua.Template(airship).delete(template_id)
-
