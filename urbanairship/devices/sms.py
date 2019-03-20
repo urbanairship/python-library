@@ -41,7 +41,7 @@ class Sms(object):
     def template_fields(self, value):
         if not isinstance(value, (dict, type(None))):
             raise TypeError('template_fields must be a dict')
-        
+
         self._template_fields = value
 
     @property
