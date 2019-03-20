@@ -111,9 +111,8 @@ class Email(object):
             audience['ua_commercial_opted_in'] = self.commercial_opted_in
         if self.transactional_opted_in:
             audience['ua_transactional_opted_in'] = self.transactional_opted_in
-        
-        return audience
 
+        return audience
 
     def register(self):
         """Create a new email channel or unsubscribe an existing email

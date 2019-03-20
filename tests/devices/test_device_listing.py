@@ -7,6 +7,7 @@ import datetime
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
+
 class TestDeviceListing(unittest.TestCase):
     def setUp(self):
         self.channel1 = '2ce7bb20-03a1-417d-bef5-61306e3755d7'

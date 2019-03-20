@@ -408,7 +408,7 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert='top level alert',
-            sms = ua.sms(
+            sms=ua.sms(
                 alert='sms override alert',
                 expiry='2018-04-01T12:00:00',
             )
@@ -519,7 +519,7 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert='Top level alert',
-            ios = ua.ios(
+            ios=ua.ios(
                 alert='iOS override alert',
                 sound='cat.caf',
             )
@@ -787,7 +787,7 @@ class TestPush(unittest.TestCase):
             template_push.device_types = ua.device_types('ios')
             template_push.merge_data = ua.merge_data(
                 template_id='780ba0c5-45be-4f29-befa-39135cb05b59',
-                substitutions={'key':'value'}
+                substitutions={'key': 'value'}
             )
 
             sched.push = template_push
@@ -797,7 +797,6 @@ class TestPush(unittest.TestCase):
                 sched.url,
                 'https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3'
             )
-
 
     def test_local_schedule_success(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:

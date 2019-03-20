@@ -5,7 +5,7 @@ import json
 import requests
 
 import urbanairship as ua
-from tests import  TEST_KEY, TEST_SECRET
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestAutomation(unittest.TestCase):

@@ -145,8 +145,8 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     if sound is not None:
         if not (isinstance(sound, (string_type, dict))):
             raise ValueError('iOS sound must a string or dictionary')
-        if isinstance(sound, dict) and not 'name' in sound:
-                raise ValueError('if iOS sound is a dict, name key must be used')
+        if isinstance(sound, dict) and 'name' not in sound:
+            raise ValueError('if iOS sound is a dict, name key must be used')
         payload['sound'] = sound
     if content_available:
         payload['content-available'] = 1

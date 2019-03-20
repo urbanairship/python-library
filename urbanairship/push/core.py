@@ -138,10 +138,10 @@ class ScheduledPush(object):
 
     @property
     def payload(self):
-        if hasattr(self.push, 'merge_data'): # create template payload
+        if hasattr(self.push, 'merge_data'):  # create template payload
             data = self.push.payload
             data['schedule'] = self.schedule
-        elif isinstance(self.push, CreateAndSendPush): # create cas payload
+        elif isinstance(self.push, CreateAndSendPush):  # create cas payload
             if 'scheduled_time' not in self.schedule:
                 raise ValueError(
                     'only scheduled_time supported with create and send schedules'
@@ -196,7 +196,6 @@ class ScheduledPush(object):
 
         else:
             logger.info('Scheduled push resulted in zero messages scheduled.')
-
 
         return PushResponse(response)
 
@@ -291,7 +290,7 @@ class CreateAndSendPush(object):
     channel_id values. Opt-in date attributes are required on Sms and Email
     objects passed in.
 
-    :param airship: Required. An urbanairship.Airship object instantiated with 
+    :param airship: Required. An urbanairship.Airship object instantiated with
         master authentication.
     :param channels: Required. A list of Sms, Email or OpenChannel objects.
         channels may only be of one type and must match the single value for
@@ -314,7 +313,7 @@ class CreateAndSendPush(object):
 
         if len(values) != 1:
             raise ValueError('only a single device_type may be used.')
-        
+
         for value in values:
             if value[:6] not in accepted_device_types:
                 raise ValueError(
@@ -322,7 +321,7 @@ class CreateAndSendPush(object):
                         str(accepted_device_types)
                         )
                     )
-        
+
         self._device_types = values
 
     @property

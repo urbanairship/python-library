@@ -6,6 +6,7 @@ import requests
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
+
 class TestChannelUninstall(unittest.TestCase):
     def test_channel_uninstall(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
