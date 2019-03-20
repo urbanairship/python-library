@@ -260,9 +260,9 @@ class TestCreateAndSend(unittest.TestCase):
         schedule = ua.ScheduledPush(airship=self.airship)
         schedule.name = 'test schedule name'
         schedule.push = cas
-        schedule.schedule = ua.scheduled_time(datetime.datetime(
-            2025, 10, 8, 12, 15
-        ))
+        schedule.schedule = ua.scheduled_time(
+            datetime.datetime(2025, 10, 8, 12, 15)
+            )
         self.assertEqual(
             schedule.payload,
             {
