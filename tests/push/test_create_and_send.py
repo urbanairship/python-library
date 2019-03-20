@@ -1,9 +1,5 @@
 import datetime
-import json
 import unittest
-
-import mock
-import requests
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
@@ -27,12 +23,12 @@ class TestCreateAndSend(unittest.TestCase):
         self.test_optin_datestring = '2018-02-13T11:58:59'
         self.test_sms_objs = []
         self.test_open_channel_objs = []
-        self. test_email_objs  = []
+        self. test_email_objs = []
 
         for msisdn in self.test_sms_msisdns:
             sms_obj = ua.Sms(
-                airship=self.airship, 
-                sender=self.test_sms_sender, 
+                airship=self.airship,
+                sender=self.test_sms_sender,
                 opted_in=self.test_optin_datestring,
                 msisdn=msisdn)
             self.test_sms_objs.append(sms_obj)
@@ -58,7 +54,7 @@ class TestCreateAndSend(unittest.TestCase):
             commercial_opted_in=self.test_optin_datestring)
         mixed_channels = self.test_sms_objs
         mixed_channels.append(email_channel)
-        
+
         cas = ua.CreateAndSendPush(
             self.airship,
             channels=mixed_channels
@@ -85,7 +81,7 @@ class TestCreateAndSend(unittest.TestCase):
         )
         channels = self.test_sms_objs
         channels.append(no_opt_in_sms)
-        
+
         cas = ua.CreateAndSendPush(
             self.airship,
             channels=channels
@@ -130,7 +126,7 @@ class TestCreateAndSend(unittest.TestCase):
             cas.payload,
             {
                 'audience': {
-                        'create_and_send': [
+                    'create_and_send': [
                         {
                             'ua_msisdn': '15035556789',
                             'ua_sender': '12345',
@@ -199,7 +195,7 @@ class TestCreateAndSend(unittest.TestCase):
             airship=self.airship,
             channels=self.test_email_objs
         )
-        cas.notification = ua.notification( 
+        cas.notification = ua.notification(
             email=ua.email(
                 message_type='commercial',
                 plaintext_body='this is an email',
@@ -223,7 +219,7 @@ class TestCreateAndSend(unittest.TestCase):
                             'ua_commercial_opted_in': '2018-02-13T11:58:59'
                         },
                         {
-                            'ua_address':'bar@urbanairship.com',
+                            'ua_address': 'bar@urbanairship.com',
                             'ua_commercial_opted_in': '2018-02-13T11:58:59'
                         },
                         {
@@ -276,7 +272,7 @@ class TestCreateAndSend(unittest.TestCase):
                 'name': 'test schedule name',
                 'push': {
                     'audience': {
-                            'create_and_send': [
+                        'create_and_send': [
                             {
                                 'ua_msisdn': '15035556789',
                                 'ua_sender': '12345',
@@ -302,4 +298,3 @@ class TestCreateAndSend(unittest.TestCase):
                 }
             }
         )
-

@@ -43,31 +43,31 @@ class TestLocationFinder(unittest.TestCase):
         ua.Airship._request = mock.Mock()
         ua.Airship._request.side_effect = [mock_response]
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
-        self.l = ua.LocationFinder(airship)
+        self.loc_finder = ua.LocationFinder(airship)
 
     def test_name_lookup(self):
-        info = self.l.name_lookup('name')
+        info = self.loc_finder.name_lookup('name')
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_name_lookup_with_type(self):
-        info = self.l.name_lookup('name', 'type')
+        info = self.loc_finder.name_lookup('name', 'type')
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_coordinates_lookup(self):
-        info = self.l.coordinates_lookup(123, 123)
+        info = self.loc_finder.coordinates_lookup(123, 123)
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_coordinates_lookup_with_type(self):
-        info = self.l.coordinates_lookup(123, 123, 'type')
+        info = self.loc_finder.coordinates_lookup(123, 123, 'type')
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
@@ -76,20 +76,20 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_coordinates(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.l,
+            callableObj=self.loc_finder,
             latitude='123',
             longitude=123
         )
 
     def test_bounding_box_lookup(self):
-        info = self.l.bounding_box_lookup(123, 123, 123, 123)
+        info = self.loc_finder.bounding_box_lookup(123, 123, 123, 123)
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_bounding_box_lookup_with_type(self):
-        info = self.l.bounding_box_lookup(123, 123, 123, 123, 'type')
+        info = self.loc_finder.bounding_box_lookup(123, 123, 123, 123, 'type')
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
@@ -98,7 +98,7 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_bounding_box(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.l.bounding_box_lookup,
+            callableObj=self.loc_finder.bounding_box_lookup,
             lat1='123',
             long1=123,
             lat2=123,
@@ -106,21 +106,21 @@ class TestLocationFinder(unittest.TestCase):
         )
 
     def test_alias_lookup(self):
-        info = self.l.alias_lookup('alias=alias')
+        info = self.loc_finder.alias_lookup('alias=alias')
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_alias_list_lookup(self):
-        info = self.l.alias_lookup(['alias=alias1', 'alias=alias2'])
+        info = self.loc_finder.alias_lookup(['alias=alias1', 'alias=alias2'])
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
         )
 
     def test_polygon_lookup(self):
-        info = self.l.polygon_lookup('id', 1)
+        info = self.loc_finder.polygon_lookup('id', 1)
         self.assertEqual(
             info['features'][0]['bounds'],
             [self.lat1, self.long1, self.lat2, self.long2]
@@ -129,7 +129,7 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_zoom(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.l.polygon_lookup,
+            callableObj=self.loc_finder.polygon_lookup,
             polygon_id='id',
             zoom='1'
         )

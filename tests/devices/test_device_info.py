@@ -7,6 +7,7 @@ import datetime
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
+
 class TestDeviceInfo(unittest.TestCase):
     def test_channel_list(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
