@@ -158,7 +158,7 @@ class OpenChannel(object):
                     payload[key] = datetime.datetime.strptime(
                         payload[key], '%Y-%m-%dT%H:%M:%S'
                     )
-                except:
+                except (KeyError, ValueError):
                     payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
 
