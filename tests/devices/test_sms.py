@@ -26,7 +26,7 @@ class TestSMS(unittest.TestCase):
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sms_obj = ua.Sms(airship, sender=sender, msisdn=msisdn)
 
-            test_response = sms_obj.register()
+            sms_obj.register()
 
             self.assertEqual(channel_id, sms_obj.channel_id)
 
