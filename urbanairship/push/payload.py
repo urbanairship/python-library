@@ -566,7 +566,7 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
             payload['media_attachment'] = media_attachment
         if interactive is not None:
             payload['interactive'] = interactive
-    
+
     return payload
 
 

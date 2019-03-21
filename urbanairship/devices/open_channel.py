@@ -40,12 +40,12 @@ class OpenChannel(object):
     def create_and_send_audience(self):
         if not self.address:
             raise ValueError('open channel address must be set')
-        
+
         audience = {'ua_address': self.address}
 
         if self.template_fields:
             audience.update(self.template_fields)
-        
+
         return audience
 
     def create(self):
