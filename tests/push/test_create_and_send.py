@@ -298,3 +298,20 @@ class TestCreateAndSend(unittest.TestCase):
                 }
             }
         )
+
+
+class TestCreateAndSendInlineTemplate(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_sms_inline_template(self):
+        pass
+
+    def test_open_inline_template(self):
+        pass
+
+    def test_email_open_inline_template(self):
+        pass
+
+    def test_template_fields_not_dict(self):
+        pass
