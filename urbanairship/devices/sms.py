@@ -77,6 +77,10 @@ class Sms(object):
             'ua_sender': self.sender,
             'ua_msisdn': self.msisdn,
         }
+
+        if self.template_fields:
+            audience.update(self.template_fields)
+
         if self.opted_in:
             audience['ua_opted_in'] = self.opted_in
         else:
