@@ -23,6 +23,8 @@ class Sms(object):
     :param opted_in: The UTC datetime in ISO 8601 format that represents the
         date and time when explicit permission was received from the user to
         receive messages. This is required for use with CreateAndSend.
+    :param template_fields: For use with CreateAndSend with inline templates.
+        A dict of template field names and their substitution values.
     """
 
     def __init__(self, airship, sender, msisdn, opted_in=False, template_fields=None):

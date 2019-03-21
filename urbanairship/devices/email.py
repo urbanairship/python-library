@@ -34,12 +34,15 @@ class Email(object):
     :param locale_language: Optional. The device property tag related
         to locale language setting.
     :param timezone: Optional. The deice property tag related to
-        timezone setting."""
+        timezone setting.
+    :param template_fields: For use with CreateAndSend with inline templates.
+        A dict of template field names and their substitution values.
+    """
 
     def __init__(self, airship, address, commercial_opted_in=None,
                  commercial_opted_out=None, transactional_opted_in=None,
                  transactional_opted_out=None, locale_country=None,
-                 locale_language=None, timezone=None):
+                 locale_language=None, timezone=None, template_fields=None):
         self.airship = airship
         self.address = address
         self.commercial_opted_in = commercial_opted_in
@@ -49,8 +52,20 @@ class Email(object):
         self.locale_country = locale_country
         self.locale_language = locale_language
         self.timezone = timezone
+        self.template_fields = template_fields
         self._email_type = 'email'  # only acceptable value at this time
         self.channel_id = None
+
+    @property
+    def template_fields(self):
+        return self._template_fields
+
+    @template_fields.setter
+    def template_fields(self, value):
+        if not isinstance(value, (dict, type(None))):
+            raise TypeError('template_fields must be a dict')
+
+        self._template_fields = value
 
     @property
     def address(self):
@@ -111,6 +126,8 @@ class Email(object):
             audience['ua_commercial_opted_in'] = self.commercial_opted_in
         if self.transactional_opted_in:
             audience['ua_transactional_opted_in'] = self.transactional_opted_in
+        if self.template_fields:
+            audience.update(self.template_fields)
 
         return audience
 

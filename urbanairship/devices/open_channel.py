@@ -21,15 +21,32 @@ class OpenChannel(object):
     last_registration = None
     tags = None
 
-    def __init__(self, airship):
+    def __init__(self, airship, template_fields=None):
         self.airship = airship
+        self.template_fields = None
+
+    @property
+    def template_fields(self):
+        return self._template_fields
+
+    @template_fields.setter
+    def template_fields(self, value):
+        if not isinstance(value, (dict, type(None))):
+            raise TypeError('template_fields must be a dict')
+
+        self._template_fields = value
 
     @property
     def create_and_send_audience(self):
         if not self.address:
             raise ValueError('open channel address must be set')
+        
+        audience = {'ua_address': self.address}
 
-        return {'ua_address': self.address}
+        if self.template_fields:
+            audience.update(self.template_fields)
+        
+        return audience
 
     def create(self):
         """Create this OpenChannel object with the API."""
