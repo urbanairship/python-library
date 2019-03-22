@@ -20,21 +20,10 @@ class OpenChannel(object):
     created = None
     last_registration = None
     tags = None
+    template_fields = None
 
-    def __init__(self, airship, template_fields=None):
+    def __init__(self, airship):
         self.airship = airship
-        self.template_fields = None
-
-    @property
-    def template_fields(self):
-        return self._template_fields
-
-    @template_fields.setter
-    def template_fields(self, value):
-        if not isinstance(value, (dict, type(None))):
-            raise TypeError('template_fields must be a dict')
-
-        self._template_fields = value
 
     @property
     def create_and_send_audience(self):
