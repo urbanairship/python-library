@@ -552,7 +552,7 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
     payload = {}
 
     if template_alert is not None:
-        payload = {'template': {'fields': {'alert': alert}}}
+        payload = {'template': {'fields': {'alert': template_alert}}}
     else:
         if alert is not None:
             payload['alert'] = alert
