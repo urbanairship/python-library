@@ -302,16 +302,233 @@ class TestCreateAndSend(unittest.TestCase):
 
 class TestCreateAndSendInlineTemplate(unittest.TestCase):
     def setUp(self):
-        pass
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.test_sms_sender = '12345'
+        self.test_sms_msisdns = ['15035556789', '15035556788', '15035556787']
+        self.test_open_channel_addresses = [
+            'bfecbb67-5352-4582-a95d-24e4760a3907',
+            'bfecbb67-5352-4582-a95d-24e4760a3908',
+            'bfecbb67-5352-4582-a95d-24e4760a3909'
+        ]
+        self.test_email_addresses = [
+            'foo@urbanairship.com',
+            'bar@urbanairship.com',
+            'baz@urbanairship.com'
+        ]
+        self.test_optin_datestring = '2018-02-13T11:58:59'
+        self.template_fields = {
+            'name': 'bruce',
+            'event': 'zoom meeting'
+        }
+        self.test_sms_objs = []
+        self.test_open_channel_objs = []
+        self.test_email_objs = []
+        self.template_alert = '{{name}} you are late for your {{event}}'
+
+        for msisdn in self.test_sms_msisdns:
+            sms_obj = ua.Sms(
+                airship=self.airship,
+                sender=self.test_sms_sender,
+                opted_in=self.test_optin_datestring,
+                msisdn=msisdn,
+                template_fields=self.template_fields)
+            self.test_sms_objs.append(sms_obj)
+        for address in self.test_open_channel_addresses:
+            open_channel_obj = ua.OpenChannel(
+                airship=self.airship,
+            )
+            open_channel_obj.address = address
+            open_channel_obj.open_platform = 'open::foo'
+            open_channel_obj.template_fields = self.template_fields
+            self.test_open_channel_objs.append(open_channel_obj)
+        for email in self.test_email_addresses:
+            email_obj = ua.Email(
+                airship=self.airship,
+                address=email,
+                commercial_opted_in=self.test_optin_datestring,
+                template_fields=self.template_fields
+            )
+            self.test_email_objs.append(email_obj)
 
     def test_sms_inline_template(self):
-        pass
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_sms_objs
+        )
+        cas.notification = ua.notification(sms=ua.sms(
+            template_alert=self.template_alert
+        ))
+        cas.device_types = ua.device_types('sms')
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_msisdn': '15035556789',
+                            'ua_sender': '12345',
+                            'ua_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_msisdn': '15035556788',
+                            'ua_sender': '12345',
+                            'ua_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_msisdn': '15035556787',
+                            'ua_sender': '12345',
+                            'ua_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                    ]
+                },
+                'notification': {
+                    'sms': {
+                        'template': {
+                            'fields': {
+                                'alert': '{{name}} you are late for your {{event}}'
+                            }
+                        }
+                    }
+                },
+                'device_types': ['sms']
+            }
+        )
 
     def test_open_inline_template(self):
-        pass
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_open_channel_objs
+        )
+        cas.notification = ua.notification(open_platform={'foo': ua.open_platform(
+            template_alert=self.template_alert
+        )})
+        cas.device_types = ua.device_types('open::foo')
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3907',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3908',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_address': 'bfecbb67-5352-4582-a95d-24e4760a3909',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        }
+                    ]
+                },
+                'notification': {
+                    'open::foo': {
+                        'template': {
+                            'fields': {
+                                'alert': '{{name}} you are late for your {{event}}'
+                            }
+                        }
+                    }
+                },
+                'device_types': ['open::foo']
+            }
+        )
 
     def test_email_open_inline_template(self):
-        pass
+        cas = ua.CreateAndSendPush(
+            airship=self.airship,
+            channels=self.test_email_objs
+        )
+        cas.device_types = ua.device_types('email')
+        cas.notification = ua.notification(
+            email=ua.email(
+                message_type='commercial',
+                plaintext_body='{{name}} you are late for {{event}}',
+                reply_to='foo@urbanairship.com',
+                sender_address='bar@urbanairship.com',
+                sender_name='test sender',
+                subject='this is an email',
+                variable_defaults=[
+                    {
+                        'key': 'name',
+                        'default_value': 'hello'
+                    },
+                    {
+                        'key': 'event',
+                        'default_value': 'event'
+                    }
+                ]
+            )
+        )
+        self.assertEqual(
+            cas.payload,
+            {
+                'audience': {
+                    'create_and_send': [
+                        {
+                            'ua_address': 'foo@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_address': 'bar@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        },
+                        {
+                            'ua_address': 'baz@urbanairship.com',
+                            'ua_commercial_opted_in': '2018-02-13T11:58:59',
+                            'name': 'bruce',
+                            'event': 'zoom meeting'
+                        }
+                    ]
+                },
+                'device_types': ['email'],
+                'notification': {
+                    'email': {
+                        'message_type': 'commercial',
+                        'sender_name': 'test sender',
+                        'sender_address': 'bar@urbanairship.com',
+                        'reply_to': 'foo@urbanairship.com',
+                        'template': {
+                            'variable_defaults': [
+                                {
+                                    'key': 'name',
+                                    'default_value': 'hello'
+                                },
+                                {
+                                    'key': 'event',
+                                    'default_value': 'event'
+                                }
+                            ],
+                            'fields': {
+                                'subject': 'this is an email',
+                                'plaintext_body': '{{name}} you are late for {{event}}'
+                            }
+                        }
+                    }
+                }
+            }
+        )
 
     def test_template_fields_not_dict(self):
-        pass
+        with self.assertRaises(TypeError):
+            ua.Sms(
+                airship=self.airship,
+                sender=self.test_sms_sender,
+                opted_in=self.test_optin_datestring,
+                msisdn='15035551234',
+                template_fields='bad_idea_okay'
+                )
