@@ -11,7 +11,6 @@ Please include link to open issue if applicable.
 * I've tested in virtual environments for python versions:
 
 - [ ] 2.7
-- [ ] 3.4
 - [ ] 3.5
 - [ ] 3.6
 - [ ] 3.7
