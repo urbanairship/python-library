@@ -439,8 +439,10 @@ def sms(alert=None, expiry=None, template_alert=None):
     {'alert': 'sms override alert!', 'expiry': '2018-04-01T12:00:00'}
     """
     payload = {}
-    if not bool(alert) ^ bool(template_alert):
-        raise ValueError('Only one of alert and template_alert can be used.')
+    if not alert and not template_alert:
+        raise ValueError('One of alert and template_alert must be set.')
+    elif alert and template_alert:
+        raise ValueError('alert and template_alert cannot both be used.')
 
     if alert is not None:
         payload = {'alert': alert}
