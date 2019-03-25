@@ -486,19 +486,21 @@ def email(message_type, plaintext_body, reply_to, sender_address,
     payload['sender_address'] = sender_address
     payload['sender_name'] = sender_name
 
+    alert_payload = {
+        'subject': subject,
+        'plaintext_body': plaintext_body
+    }
+    if html_body is not None:
+        alert_payload['html_body'] = html_body
+
     if variable_defaults is not None:
         payload['template'] = {
             'variable_defaults': variable_defaults,
-            'fields': {
-                'subject': subject,
-                'plaintext_body': plaintext_body
-            }
+            'fields': alert_payload
         }
     else:
-        payload['subject'] = subject
-        payload['plaintext_body'] = plaintext_body
-        if html_body is not None:
-            payload['html_body'] = html_body
+        payload.update(alert_payload)
+
     return payload
 
 
