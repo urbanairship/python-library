@@ -446,6 +446,7 @@ def sms(alert=None, expiry=None, template_alert=None):
         payload = {'alert': alert}
     elif template_alert is not None:
         payload = {'template': {'fields': {'alert': template_alert}}}
+    
     if expiry is not None:
         if not (isinstance(expiry, (string_type, int))):
             raise ValueError('expiry value must be a string or integer')
@@ -552,22 +553,25 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
 
     """
     payload = {}
+    if extra is not None:
+        payload['extra'] = extra
+    if interactive is not None:
+        payload['interactive'] = interactive
+
+    alert_payload = {}
+    if title is not None:
+        alert_payload['title'] = title
+    if summary is not None:
+        alert_payload['summary'] = summary
+    if media_attachment is not None:
+        alert_payload['media_attachment'] = media_attachment
 
     if template_alert is not None:
-        payload = {'template': {'fields': {'alert': template_alert}}}
+        alert_payload['alert'] = template_alert
+        payload = {'template': {'fields': alert_payload}}
     else:
-        if alert is not None:
-            payload['alert'] = alert
-        if title is not None:
-            payload['title'] = title
-        if extra is not None:
-            payload['extra'] = extra
-        if summary is not None:
-            payload['summary'] = summary
-        if media_attachment is not None:
-            payload['media_attachment'] = media_attachment
-        if interactive is not None:
-            payload['interactive'] = interactive
+        alert_payload['alert'] = alert
+        payload.update(alert_payload)
 
     return payload
 
