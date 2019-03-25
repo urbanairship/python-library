@@ -20,6 +20,7 @@ class OpenChannel(object):
     created = None
     last_registration = None
     tags = None
+    template_fields = None
 
     def __init__(self, airship):
         self.airship = airship
@@ -29,7 +30,12 @@ class OpenChannel(object):
         if not self.address:
             raise ValueError('open channel address must be set')
 
-        return {'ua_address': self.address}
+        audience = {'ua_address': self.address}
+
+        if self.template_fields:
+            audience.update(self.template_fields)
+
+        return audience
 
     def create(self):
         """Create this OpenChannel object with the API."""
@@ -141,7 +147,7 @@ class OpenChannel(object):
                     payload[key] = datetime.datetime.strptime(
                         payload[key], '%Y-%m-%dT%H:%M:%S'
                     )
-                except:
+                except (KeyError, ValueError):
                     payload[key] = 'UNKNOWN'
             setattr(obj, key, payload[key])
 

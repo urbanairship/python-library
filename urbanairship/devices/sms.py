@@ -23,14 +23,28 @@ class Sms(object):
     :param opted_in: The UTC datetime in ISO 8601 format that represents the
         date and time when explicit permission was received from the user to
         receive messages. This is required for use with CreateAndSend.
+    :param template_fields: For use with CreateAndSend with inline templates.
+        A dict of template field names and their substitution values.
     """
 
-    def __init__(self, airship, sender, msisdn, opted_in=False):
+    def __init__(self, airship, sender, msisdn, opted_in=False, template_fields=None):
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
         self.opted_in = opted_in
+        self.template_fields = template_fields
         self.channel_id = None
+
+    @property
+    def template_fields(self):
+        return self._template_fields
+
+    @template_fields.setter
+    def template_fields(self, value):
+        if not isinstance(value, (dict, type(None))):
+            raise TypeError('template_fields must be a dict')
+
+        self._template_fields = value
 
     @property
     def sender(self):
@@ -65,6 +79,10 @@ class Sms(object):
             'ua_sender': self.sender,
             'ua_msisdn': self.msisdn,
         }
+
+        if self.template_fields:
+            audience.update(self.template_fields)
+
         if self.opted_in:
             audience['ua_opted_in'] = self.opted_in
         else:

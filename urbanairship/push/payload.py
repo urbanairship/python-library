@@ -420,25 +420,35 @@ def web(alert=None, extra=None, icon=None, title=None, interactive=None,
     return payload
 
 
-def sms(alert=None, expiry=None):
+def sms(alert=None, expiry=None, template_alert=None):
     """Sms platform specific override payload
 
-    All keyword arguments are optional
+    One of alert or template_alert must be used.
 
     :keyword alert: An optional string. Overrides the alert provided at the
         top level of the notification for Sms channels.
         The maximum length of an Sms alert is 1600 characters.
+    :keyword template_alert: for use with CreateAndSendPush. Substitutions must be added
+        to the Sms objects passed to CreateAndSendPush that match the bracketed
+        fields in this alert string.
     :keyword expiry: Optional. Delivery expiration, as either absolute
         UTC timestamp (string), or number of seconds from now (integer).
 
 
     >>> sms(alert='sms override alert!', expiry='2018-04-01T12:00:00') # doctest: +SKIP
     {'alert': 'sms override alert!', 'expiry': '2018-04-01T12:00:00'}
-
     """
     payload = {}
+    if not alert and not template_alert:
+        raise ValueError('One of alert and template_alert must be set.')
+    elif alert and template_alert:
+        raise ValueError('alert and template_alert cannot both be used.')
+
     if alert is not None:
-        payload['alert'] = alert
+        payload = {'alert': alert}
+    elif template_alert is not None:
+        payload = {'template': {'fields': {'alert': template_alert}}}
+    
     if expiry is not None:
         if not (isinstance(expiry, (string_type, int))):
             raise ValueError('expiry value must be a string or integer')
@@ -447,7 +457,7 @@ def sms(alert=None, expiry=None):
 
 
 def email(message_type, plaintext_body, reply_to, sender_address,
-          sender_name, subject, html_body=None):
+          sender_name, subject, html_body=None, variable_defaults=None):
     """
     Required platform override when email in ua.device_types.
     Specifies content of the email being sent. All other notification
@@ -457,32 +467,48 @@ def email(message_type, plaintext_body, reply_to, sender_address,
         for additional caveats.
 
     :param message_type: Required. One of transactional or commercial.
-    :param plaintext_body: Required. The plain text body of the email.
+    :param plaintext_body: Required. The plain text body of the email. May include
+        variable substitution fields for use with create and send inline templates.
     :param reply_to: Required. The reply-to address.
     :param sender_address: Required. The email address of the sender.
         The domain of the email must be enabled in the email
         provider at the delivery tier.
     :param sender_name: Required. The common name of the email sender.
-    :param subject: Required. The subject line of the email.
+    :param subject: Required. The subject line of the email. May include variable
+        substitution fields for use with create and send inline templates.
     :param html_body: Optional. The HTML content of the email.
+    :param variable_details: Required for CreateAndSendPush with inline templates.
+        a list of dicts of default values for inline template variables.
     """
-    payload = {}
     if message_type not in ('transactional', 'commercial'):
-        raise ValueError('message_type must be either transactional '
-                         'or commercial')
+        raise ValueError('message_type must be either transactional or commercial')
+
+    payload = {}
     payload['message_type'] = message_type
-    payload['plaintext_body'] = plaintext_body
     payload['reply_to'] = reply_to
     payload['sender_address'] = sender_address
     payload['sender_name'] = sender_name
-    payload['subject'] = subject
+
+    alert_payload = {
+        'subject': subject,
+        'plaintext_body': plaintext_body
+    }
     if html_body is not None:
-        payload['html_body'] = html_body
+        alert_payload['html_body'] = html_body
+
+    if variable_defaults is not None:
+        payload['template'] = {
+            'variable_defaults': variable_defaults,
+            'fields': alert_payload
+        }
+    else:
+        payload.update(alert_payload)
+
     return payload
 
 
 def open_platform(alert=None, title=None, extra=None, summary=None,
-                  media_attachment=None, interactive=None):
+                  media_attachment=None, interactive=None, template_alert=None):
     """Open platform specific override payload.
 
     All keyword arguments are optional.
@@ -498,6 +524,9 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
         :py:func:`interactive`. Included button actions must be of type
         ``add_tag``, ``remove tag``, ``app_defined``, or ``open`` with subtype
         ``url``.
+    :keyword template_alert: For use with CreateAndSendPush. A string with
+        inline template substitution fields. The name of these must match
+        subsititutions on the OpenChannel objects used with CreateAndSendPush.
 
     >>> sms_overrides = open_platform(
     ...    alert='Hello!',
@@ -526,18 +555,26 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
 
     """
     payload = {}
-    if alert is not None:
-        payload['alert'] = alert
-    if title is not None:
-        payload['title'] = title
     if extra is not None:
         payload['extra'] = extra
-    if summary is not None:
-        payload['summary'] = summary
-    if media_attachment is not None:
-        payload['media_attachment'] = media_attachment
     if interactive is not None:
         payload['interactive'] = interactive
+
+    alert_payload = {}
+    if title is not None:
+        alert_payload['title'] = title
+    if summary is not None:
+        alert_payload['summary'] = summary
+    if media_attachment is not None:
+        alert_payload['media_attachment'] = media_attachment
+
+    if template_alert is not None:
+        alert_payload['alert'] = template_alert
+        payload = {'template': {'fields': alert_payload}}
+    else:
+        alert_payload['alert'] = alert
+        payload.update(alert_payload)
+
     return payload
 
 

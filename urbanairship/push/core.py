@@ -3,6 +3,7 @@ import logging
 import warnings
 
 from urbanairship import common
+from urbanairship import devices
 
 
 logger = logging.getLogger('urbanairship')
@@ -360,7 +361,7 @@ class CreateAndSendPush(object):
     def _email_audience(self):
         addresses = []
         for email in self.channels:
-            if not getattr(email, 'address', None):
+            if not isinstance(email, devices.Email):
                 raise TypeError(
                     'Can only use email channels when device_types is email'
                 )
@@ -372,7 +373,7 @@ class CreateAndSendPush(object):
     def _sms_audience(self):
         addresses = []
         for sms in self.channels:
-            if not getattr(sms, 'msisdn', None):
+            if not isinstance(sms, devices.Sms):
                 raise TypeError(
                     'Can only use Sms objects when device_types is sms'
                     )
@@ -384,7 +385,7 @@ class CreateAndSendPush(object):
     def _open_channel_audience(self):
         addresses = []
         for open_channel in self.channels:
-            if not getattr(open_channel, 'open_platform', None):
+            if not isinstance(open_channel, devices.OpenChannel):
                 raise TypeError(
                     'Can only use OpenChannel objects when device_types is open::'
                 )

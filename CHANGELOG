@@ -1,11 +1,12 @@
-5.2.1
 --------------------
-- Deprecation of device type 'all'. This type will be removed in version 6.0.0
-
 5.2.0
 --------------------
 - Added Create and Send support for SMS, Email and Open Channels
 - Added support for scheduled Create and Send 
+- Added support for Create and Send to inline templates
+- Deprecated device type 'all'. This type will be removed in version 6.0.0
+- Removed support for python 3.4.x
+- Added support for python 3.7.x
 
 --------------------
 5.1.1
