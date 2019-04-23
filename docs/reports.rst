@@ -7,7 +7,7 @@ Individual Push Response Stats
 
 Returns detailed report information about a specific notification send.
 Use the push_id, which is the identifier returned by the API that represents a
-specific push message delivery.
+specific message delivery.
 
 For more information,
 see `the documentation on Individual Push Response Stats
