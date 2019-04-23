@@ -1,5 +1,8 @@
 Email
 =====
+Register email channels, set opt-in status, and manipulate tags on email channels.
+Email channels have unique properties for opt-in, tags and uninstall.
+For more information, please see the API documentation: https://docs.airship.com/api/ua/#tag/email
 
 Email Channel Registration
 --------------------------

@@ -1,12 +1,17 @@
 Named User
 ==========
+A Named User is a proprietary identifier that maps customer-chosen IDs, e.g., CRM data, to Channels. 
+It is useful to think of a Named User as an individual consumer who might have more than one mobile device 
+registered with your Airship project.
+Please see the documentation here:
+https://docs.airship.com/api/ua/#tag/named-users
 
 Named User Listing
 ------------------
 Named User lists are fetched by instantiating an iterator object
 using :py:class:`NamedUserList`.
 For more information, see:
-http://docs.urbanairship.com/api/ua.html#listing
+https://docs.airship.com/api/ua/#operation/api/named_users/get
 
 .. code-block:: python
 
@@ -24,7 +29,7 @@ http://docs.urbanairship.com/api/ua.html#listing
 Association
 -----------
 Associate a channel with a named user ID. For more information, see:
-http://docs.urbanairship.com/api/ua.html#association
+https://docs.airship.com/api/ua/#operation/api/named_users/associate/post
 
 .. code-block:: python
 
@@ -40,12 +45,19 @@ http://docs.urbanairship.com/api/ua.html#association
 
 .. note::
     You may only associate up to 20 channels to a Named User.
+    If a channel has an assigned named user and you make an additional call to 
+    associate that same channel with a new named user, the original named user 
+    association will be removed and the new named user and associated data will 
+    take its place. Additionally, all tags associated to the original named user 
+    cannot be used to address this channel unless they are also associated with 
+    the new named user.
+
 
 Disassociation
 --------------
 Remove a channel from the list of associated channels for a named user.
 For more information, see:
-http://docs.urbanairship.com/api/ua.html#disassociation
+https://docs.airship.com/api/ua/#operation/api/named_users/disassociate/post
 
 .. code-block:: python
 
@@ -62,7 +74,7 @@ http://docs.urbanairship.com/api/ua.html#disassociation
 Lookup
 ------
 Look up a single named user.
-For more information, see: http://docs.urbanairship.com/api/ua.html#lookup
+For more information, see: https://docs.airship.com/api/ua/#operation/api/named_users/get
 
 .. code-block:: python
 
@@ -78,8 +90,9 @@ For more information, see: http://docs.urbanairship.com/api/ua.html#lookup
 
 Tags
 ----
-Add, remove, or set tags on a named user. For more information,
-see: http://docs.urbanairship.com/api/ua.html#tags-named-users
+Add, remove, or set tags on a named user. For more information and notes about 
+proper use of Named User Tags as well as some caveats see: 
+https://docs.airship.com/api/ua/#operation/api/named_users/tags/post
 
 .. code-block:: python
 

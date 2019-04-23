@@ -2,14 +2,14 @@ Automation
 ==========
 
 With the automation pipelines endpoint you can easily manage automations for
-an app. Automations define the push behavior to be triggered on user-defined
+a project. Pipelines define the behavior to be triggered on user-defined
 events. For more information, see `the documentation on Automations
-<https://docs.urbanairship.com/api/ua/#automation-api>`__
+<https://docs.airship.com/api/ua/#tag/automation>`__
 
 Creating an Automation
 ----------------------
-Create an automation for this application. For more information, see:
-https://docs.urbanairship.com/api/ua/#pipelines-api
+Create an automation for a project. For more information, see:
+https://docs.airship.com/api/ua/#operation/api/pipelines/post
 Automations are defined by one or more Pipeline objects
 
 .. code-block:: python
@@ -54,7 +54,7 @@ Validating an Automation
 ------------------------
 Validate an automation payload prior to making requests to create update.
 For more information, see:
-https://docs.urbanairship.com/api/ua/#post-api-pipelines-validate
+https://docs.airship.com/api/ua/#operation/api/pipelines/validate/post
 
 .. code-block:: python
 
@@ -101,7 +101,7 @@ https://docs.urbanairship.com/api/ua/#post-api-pipelines-validate
 Updating an Automation
 ----------------------
 Update an automation with a full automation object. For more information, see:
-https://docs.urbanairship.com/api/ua/#put-api-pipelines-id
+https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/put
 
 .. code-block:: python
 
@@ -144,7 +144,7 @@ https://docs.urbanairship.com/api/ua/#put-api-pipelines-id
 Lookup an Automation
 --------------------
 Lookup an existing automation for this app. For more information, see:
-https://docs.urbanairship.com/api/ua/#get-api-pipelines-id
+https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/get
 
 .. code-block:: python
 
@@ -160,7 +160,7 @@ https://docs.urbanairship.com/api/ua/#get-api-pipelines-id
 Deleting an Automation
 ----------------------
 Delete an existing automation for this app. For more information, see:
-https://docs.urbanairship.com/api/ua/#delete-api-pipelines-id
+https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/delete
 
 .. code-block:: python
 
@@ -176,7 +176,7 @@ https://docs.urbanairship.com/api/ua/#delete-api-pipelines-id
 Automation Listing
 ------------------
 List existing automations for this app. For more information, see:
-https://docs.urbanairship.com/api/ua/#get-api-pipelines
+https://docs.airship.com/api/ua/#operation/api/pipelines/get
 
 .. code-block:: python
 
@@ -192,7 +192,7 @@ https://docs.urbanairship.com/api/ua/#get-api-pipelines
 Deleted Automation Listing
 --------------------------
 List deleted automations for this app. For more information, see:
-https://docs.urbanairship.com/api/ua/#get-api-pipelines
+https://docs.airship.com/api/ua/#operation/api/pipelines/deleted/get
 
 .. code-block:: python
 

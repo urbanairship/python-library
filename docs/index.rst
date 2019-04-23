@@ -1,9 +1,9 @@
-Urban Airship Python Library
+Airship Python Library
 ============================
 
-``urbanairship`` is a Python library for using the `Urban Airship
-<http://urbanairship.com/>`_ web service API for push notifications and
-rich app pages.
+``urbanairship`` is a Python library for using the `Airship
+<http://urbanairship.com/>`_ web service in support of our messaging product 
+lines and related features.
 
 Installation
 ------------
@@ -33,7 +33,7 @@ Note that channels are preferred over `device_token` and `apid`. See:
    push.device_types = ua.device_types('ios')
    push.send()
 
-The library uses `requests`_ for communication with the UA API,
+The library uses `requests`_ for communication with the Airship API,
 providing connection pooling and strict SSL checking. The ``Airship``
 object is threadsafe, and can be instantiated once and reused in
 multiple threads.
@@ -50,7 +50,7 @@ configured otherwise, your application can set it up like so:
    import logging
    logging.basicConfig()
 
-If you're having trouble with the UA API, you can turn on verbose debug
+If you're having trouble with the Airship API, you can turn on verbose debug
 logging.
 
 .. code-block:: python
@@ -104,7 +104,7 @@ Indices and tables
 * :ref:`search`
 
 
-.. _channels: http://docs.urbanairship.com/topic-guides/channels.html
+.. _channels: https://docs.airship.com/api/ua/#tag/channels
 .. _requests: http://python-requests.org
 .. _github: https://github.com/urbanairship/python-library
 .. _nose: https://nose.readthedocs.org/en/latest/

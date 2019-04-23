@@ -1,12 +1,14 @@
 Segments
 ========
+Segments are portions of your audience that have arbitrary metadata (e.g. tags, location data, etc) attached.
 
 Segment Listing
 ---------------
 Segment lists are fetched by instantiating an iterator object 
 using :py:class:`SegmentList`. 
+
 For more information, see:
-http://docs.urbanairship.com/api/ua.html#segments-information
+https://docs.airship.com/api/ua/#operation/api/segments/get
 
 .. code-block:: python
 
@@ -21,10 +23,10 @@ http://docs.urbanairship.com/api/ua.html#segments-information
     :noindex:
 
 
-Creating a Segment 
+Create a Segment 
 ------------------
-Create a segment for this application. For more information, see:
-http://docs.urbanairship.com/api/ua.html#segment-creation
+Create a segment for this project. For more information, see:
+https://docs.airship.com/api/ua/#operation/api/segments/post
 
 .. code-block:: python
 
@@ -43,10 +45,10 @@ http://docs.urbanairship.com/api/ua.html#segment-creation
     A segment's id is automatically set upon calling *segment.create(airship)*
     and can be accessed using *segment.id*
 
-Modifying a Segment
+Update a Segment
 -------------------
 Change the display name and criteria for a segment. For more information, see:
-http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
+https://docs.airship.com/api/ua/#operation/api/segments/segment_id/put
 
 .. code-block:: python
 
@@ -64,11 +66,11 @@ http://docs.urbanairship.com/api/ua.html#put--api-segments-(segment_id)
     :noindex:
 
 
-Deleting a Segment
+Delete a Segment
 ------------------
 A segment can be deleted by calling the delete function on the segment.
 For more information, see:
-http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
+https://docs.airship.com/api/ua/#operation/api/segments/segment_id/delete
 
 .. code-block:: python
 
@@ -86,7 +88,7 @@ http://docs.urbanairship.com/api/ua.html#delete--api-segments-(segment_id)
 Segment Lookup 
 --------------
 Fetch a particular segment's display name and criteria.
-http://docs.urbanairship.com/api/ua.html#get--api-segments-(segment_id)
+https://docs.airship.com/api/ua/#operation/api/segments/segment_id/get
 
 .. code-block:: python
 

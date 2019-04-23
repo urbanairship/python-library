@@ -1,9 +1,8 @@
-Defining and Sending Push Notifications
+Defining and Sending Notifications
 =======================================
 
-The Urban Airship Python Library strives to match the standard Urban
-Airship JSON format for specifying push notifications. When creating a
-push notification, you:
+The Airship Python Library strives to match the standard Airship API v3 JSON format 
+for specifying notifications. When creating a notification, you:
 
 #. Select the audience
 #. Define the notification payload
@@ -29,15 +28,13 @@ Audience Selectors
 ------------------
 
 An audience should specify one or more devices. An audience can be a
-device, such as a ``channel``, ``device_token`` or ``apid``; a tag,
-alias, or segment; a location; or a combination. Audience selectors are
+device, such as a ``channel``, a tag,
+alias, segment, location or a combination. Audience selectors are
 combined with ``and_``, ``or_``, and ``not_``.
 
 .. py:data:: urbanairship.push.all_
 
    Select all, to do a broadcast.
-
-   Used in both ``audience`` and ``device_types``.
 
    .. code-block:: python
 
@@ -81,6 +78,9 @@ you wish to target with one or more strings:
 
    push.device_types = ua.device_types('android', 'ios', 'web')
 
+Use of ``ua.all_`` was deprecated in version 5.0 and will be removed in version 6.0. 
+Please update to specify only the device_types needed in a given send.
+
 .. autofunction:: urbanairship.push.payload.device_types
 
 
@@ -90,8 +90,14 @@ In-App Message
 The in-app message payload is an object assigned to the in_app attribute
 on a push object. Aside from the display and display_type attributes,
 which specify the appearance of the in-app message, the in_app object looks
-very similar to a push object.  In-app messages do not require
-push.notification to be set:
+very similar to a push object.
+
+Note this is different from the Airship In-App Automation feature.
+
+Please see the documentation here:
+https://docs.airship.com/api/ua/#schemas/inappobject
+
+In-app messages do not require push.notification to be set:
 
 .. code-block:: python
 
@@ -114,7 +120,7 @@ Actions
 Urban Airship Actions provides a convenient way to automatically
 perform tasks by name in response to push notifications,
 Rich App Page interactions and JavaScript. More information at
-http://docs.urbanairship.com/api/ua.html#actions, example:
+https://docs.airship.com/api/ua/#schemas/actionsobject example:
 
 .. code-block:: python
 
@@ -143,9 +149,9 @@ Interactive Notifications
 -------------------------
 
 The interactive notification payload determines the ways you can interact
-with a notification. It contains two attributes: ``type`` (mandatory) and
+with a notification. It contains two attributes: ``type`` (required) and
 ``button_actions`` (optional). More information at
-http://docs.urbanairship.com/api/ua.html#interactive-notifications
+https://docs.airship.com/api/ua/#schemas/interactiveobject
 Example:
 
 .. code-block:: python
@@ -203,6 +209,10 @@ Scheduled Delivery
 Scheduled notifications build upon the Push object, and have two other
 components: the scheduled time(s) and an optional name.
 
+More information about schedules can be found here:
+https://docs.airship.com/api/ua/#tag/schedules
+https://docs.airship.com/api/ua/#schemas%2fscheduleobject
+
 This example schedules the above notification for delivery in one
 minute.
 
@@ -255,8 +265,8 @@ will be raised.
    :members:
 
 
-Schedule Push Time Send Optimization
-------------------------------------
+Schedule Best Time to Send
+--------------------------
 
 Scheduled notifications build upon the Push object, and have two other
 components: the date for best time delivery and an optional name.
@@ -305,7 +315,7 @@ notification, you can update or cancel it before it's sent.
 Scheduled Message Listing
 -------------------------
 
-List all pending Scheduled and Scheduled to Device Local Time messages on a project:
+List all pending Scheduled messages on a project, icluding those to Device Local Time and Best Time to Send:
 
    .. code-block:: python
 
@@ -325,7 +335,7 @@ List all pending Scheduled and Scheduled to Device Local Time messages on a proj
 Personalized Push with a Template
 ---------------------------------
 
-If you want to use an existing template to send a push, follow this example:
+If you want to use an existing personalization template to send a push, follow this example:
 
 .. code-block:: python
 
@@ -346,7 +356,7 @@ If you want to use an existing template to send a push, follow this example:
    push.send()
 
 
-Notice that you do not include a notification, as that is already defined by
+Note that you do not include a notification, as that is already defined by
 the template. Instead, you include merge data, which is made up of the template
 ID and the field substitutions. The example above sends to a particular iOS
 channel.
@@ -486,7 +496,7 @@ to change:
    updated_template.update()
 
 
-Template Deletion
+Template Delete
 -----------------
 
 .. code-block:: python

@@ -3,7 +3,7 @@ Tags
 
 This reference covers tag operations on channels.
 
-For more information, see: https://docs.urbanairship.com/api/ua/#api-tags.
+For more information, see: https://docs.airship.com/api/ua/#tag/tags.
 
 
 ChannelTags
@@ -48,7 +48,7 @@ missing Tag Groups are specified, a warning will be included in the response.
 
 Legacy Tags
 -----------
-The following commands have been deprecated.
+The following commands have been deprecated and will be removed in a future release.
 
 Tag Listing
 ^^^^^^^^^^^
@@ -90,8 +90,7 @@ Add one or more channels to a particular tag. For more information, see
 
 Removing Devices from a Tag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Remove one or more channels from a particular tag. For more information,
-see: `documentation on adding and removing devices from a tag <adding>`_.
+Remove one or more channels from a particular tag. 
 
 .. code-block:: python
 
@@ -110,9 +109,7 @@ see: `documentation on adding and removing devices from a tag <adding>`_.
 
 Deleting a Tag
 ^^^^^^^^^^^^^^
-A tag can be removed from our system by issuing a delete. This will
-remove the master record of the tag. For more information, see:
-`documentation on deleting a tag <deleting>`_.
+A tag can be removed from our system by issuing a delete.
 
 Note:
     Delete will remove the tag from all devices with the exception of
@@ -133,8 +130,7 @@ Note:
 
 Batch Modification of Tags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modify the tags for a number of device channels. For more information,
-see: `documentation on batch modification of tags <batch>`_.
+Modify the tags for a number of device channels.
 
 Note:
     You must include an object containing an ios_channel,
@@ -159,7 +155,5 @@ Note:
    :noindex:
 
 
-.. _adding: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
-.. _removing: http://docs.urbanairship.com/api/ua.html#adding-and-removing-devices-from-a-tag
-.. _deleting: https://docs.urbanairship.com/api/ua/#api-tags
-.. _batch: http://docs.urbanairship.com/api/ua.html#batch-modification-of-tags
+.. _adding: https://docs.airship.com/api/ua/#operation/api/channels/tags/post
+
