@@ -2,8 +2,8 @@ Automation
 ==========
 
 With the automation pipelines endpoint you can easily manage automations for
-a project. Pipelines define the behavior to be triggered on user-defined
-events. For more information, see `the documentation on Automations
+an Airship project. Pipelines define the behavior to be triggered on user-defined
+events. For more information, see `the documentation on Automation
 <https://docs.airship.com/api/ua/#tag/automation>`__
 
 Creating an Automation
@@ -143,7 +143,7 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/put
 
 Lookup an Automation
 --------------------
-Lookup an existing automation for this app. For more information, see:
+Lookup an existing automation for a project. For more information, see:
 https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/get
 
 .. code-block:: python
@@ -159,7 +159,7 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/get
 
 Deleting an Automation
 ----------------------
-Delete an existing automation for this app. For more information, see:
+Delete an existing automation for a project. For more information, see:
 https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/delete
 
 .. code-block:: python
@@ -175,7 +175,7 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/delete
 
 Automation Listing
 ------------------
-List existing automations for this app. For more information, see:
+List existing automations for a project. For more information, see:
 https://docs.airship.com/api/ua/#operation/api/pipelines/get
 
 .. code-block:: python
@@ -191,7 +191,7 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/get
 
 Deleted Automation Listing
 --------------------------
-List deleted automations for this app. For more information, see:
+List deleted automations for a project. For more information, see:
 https://docs.airship.com/api/ua/#operation/api/pipelines/deleted/get
 
 .. code-block:: python
