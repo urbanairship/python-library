@@ -1,5 +1,7 @@
-Retrieving Device Information
-=============================
+Device Registration and Uninstall
+=================================
+Lookup, register and uninstall channels. For information about Email and SMS channels,
+see their documentation.
 
 Channel Listing
 ---------------
