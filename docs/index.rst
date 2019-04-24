@@ -1,8 +1,8 @@
 Airship Python Library
-============================
+======================
 
 ``urbanairship`` is a Python library for using the `Airship
-<http://urbanairship.com/>`_ web service in support of our messaging product 
+<http://airship.com/>`_ web service in support of our messaging product 
 lines and related features.
 
 Installation

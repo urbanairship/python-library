@@ -93,7 +93,7 @@ Single iOS Rich Push with notification
 
 
 Web Notification to a device with full web payload
-------------------------------------------
+--------------------------------------------------
 
 .. code-block:: python
 

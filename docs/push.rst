@@ -29,7 +29,7 @@ Audience Selectors
 
 An audience should specify one or more devices. An audience can be a
 device, such as a ``channel``, a tag,
-alias, segment, location or a combination. Audience selectors are
+alias, segment, location, or a combination. Audience selectors are
 combined with ``and_``, ``or_``, and ``not_``.
 
 .. py:data:: urbanairship.push.all_
@@ -78,8 +78,8 @@ you wish to target with one or more strings:
 
    push.device_types = ua.device_types('android', 'ios', 'web')
 
-Use of ``ua.all_`` was deprecated in version 5.0 and will be removed in version 6.0. 
-Please update to specify only the device_types needed in a given send.
+Use of ``ua.all_`` for `device_types` was deprecated in version 5.0 and 
+will be removed in version 6.0. Please update to specify only the device_types needed in a given send.
 
 .. autofunction:: urbanairship.push.payload.device_types
 
@@ -117,7 +117,7 @@ In-app messages do not require push.notification to be set:
 Actions
 -------
 
-Urban Airship Actions provides a convenient way to automatically
+Actions provides a convenient way to automatically
 perform tasks by name in response to push notifications,
 Rich App Page interactions and JavaScript. More information at
 https://docs.airship.com/api/ua/#schemas/actionsobject example:
