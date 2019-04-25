@@ -1,5 +1,8 @@
 Email
 =====
+Register email channels, set opt-in status, and manipulate tags on email channels.
+Email channels have unique properties for opt-in, tags and uninstall.
+For more information, please see the API documentation: https://docs.airship.com/api/ua/#tag/email
 
 Email Channel Registration
 --------------------------
@@ -26,7 +29,7 @@ set email_opt_in_level to `none`.
 
 Uninstall Email Channel
 -----------------------
-Removes an email address from Urban Airship. Use with caution.
+Removes an email address from Airship. Use with caution.
 If the uninstalled email address opts-in again, it will generate a new
 channel_id. The new channel_id cannot be reassociated with any opt-in
 information, tags, named users, insight reports, or other information

@@ -5,12 +5,13 @@ Reports
 Individual Push Response Stats
 ==============================
 
-Returns detailed report information about a specific push notification.
+Returns detailed report information about a specific notification send.
 Use the push_id, which is the identifier returned by the API that represents a
-specific push message delivery.
+specific message delivery.
+
 For more information,
 see `the documentation on Individual Push Response Stats
-<http://docs.urbanairship.com/api/ua.html#individual-push-response-statistics>`_
+<https://docs.airship.com/api/ua/#operation/api/reports/responses/push_id/get>`_
 
 .. code-block:: python
 
@@ -23,10 +24,12 @@ see `the documentation on Individual Push Response Stats
 Devices Report
 ==============
 
-Returns an app’s opted-in and installed device counts broken out by device
-type. This endpoint returns the same data that populates the Devices Report.
+Returns a project’s opted-in and installed device counts broken out by device
+type as a daily snapshot. This endpoint returns the same data that populates the 
+Devices Report on the web dashboard.
+
 For more information, see `the documentation on the Devices Report
-<http://docs.urbanairship.com/api/ua.html#devices-report-api>`_
+<https://docs.airship.com/api/ua/#operation/api/reports/devices/get>`_
 
 .. code-block:: python
 
@@ -41,9 +44,9 @@ For more information, see `the documentation on the Devices Report
 Push Report
 ===========
 
-Get the number of pushes you have sent within a specified time period.
+Get the number of notifications you have sent within a specified time period.
 For more information, see `the API documentation on Push Reports
-<http://docs.urbanairship.com/api/ua.html#push-report>`_.
+<https://docs.airship.com/api/ua/#operation/api/reports/sends/get>`_.
 
 .. code-block:: python
 
@@ -67,7 +70,7 @@ Response Report
 
 Get the number of direct and influenced opens of your app. For more 
 information, see `the documentation on Response Report
-<http://docs.urbanairship.com/api/ua.html#response-report>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/responses/get>`__
 
 .. code-block:: python
 
@@ -99,7 +102,7 @@ Get a listing of all pushes and basic response information in a given
 timeframe by instantiating an iterator object using ResponseList.
 Start and end date times are required parameters.
 For more information, see `the documentation on Response Listing
-<http://docs.urbanairship.com/api/ua.html#response-listing>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/responses/list/get>`__
 
 .. code-block:: python
 
@@ -124,7 +127,7 @@ App Opens Report
 
 Get the number of users who have opened your app within the specified time 
 period. For more information, see `the documentation on App Opens
-<http://docs.urbanairship.com/api/ua.html#app-opens-report>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/opens/get>`__
 
 .. code-block:: python
 
@@ -149,7 +152,7 @@ Time In App Report
 Get the average amount of time users have spent in your app within the 
 specified time period. For more information, see `the documentation on
 Time In App Report
-<http://docs.urbanairship.com/api/ua.html#time-in-app-report>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/timeinapp/get`__
 
 .. code-block:: python
 
@@ -174,7 +177,7 @@ Opt-In Report
 Get the number of opted-in push users who access the app within the specified 
 time period.
 For more information, see `the documentation on Opt In Report
-<http://docs.urbanairship.com/api/ua.html#opt-in-report>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/optins/get>`__
 
 .. code-block:: python
 
@@ -198,7 +201,7 @@ Opt-Out Report
 Get the number of opted-out push users who access the app within the specified 
 time period.
 For more information, see `the documentation on Opt Out Report
-<http://docs.urbanairship.com/api/ua.html#opt-out-report>`__
+<https://docs.airship.com/api/ua/#operation/api/reports/optouts/get>`__
 
 .. code-block:: python
 

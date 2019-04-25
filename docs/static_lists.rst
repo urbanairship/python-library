@@ -2,12 +2,12 @@ Static Lists
 ============
 
 With the Static List endpoint, you can easily target and manage
-lists of devices that are defined in your systems outside of Urban Airship.
+lists of devices that are defined in your systems outside of Airship.
 Any list or grouping of devices for which the canonical source of data about
 the members is elsewhere is a good candidate for Static Lists, e.g., members
 of a customer loyalty program.
 For more information, see `the documentation on Static Lists
-<http://docs.urbanairship.com/api/ua.html#static-lists>`__
+<https://docs.airship.com/api/ua/#tag/static-lists>`__
 
 
 Create List
@@ -80,9 +80,9 @@ Delete a static list.
 
 .. note::
     If you are attempting to update a current list by deleting it
-    and then recreating it with new data, stop and go to the upload
+    and then recreating it with new data, use the upload
     endpoint. There is no need to delete a list before uploading a
-    new CSV file. Moreover, once you delete a list, you will be unable
+    new CSV file. Moreover, once you delete a list you will be unable
     to create a list with the same name as the deleted list.
 
 
@@ -110,7 +110,7 @@ Lookup All Lists
 ----------------
 
 Retrieve information about all static lists. This call returns a paginated list of
-metadata that will not contain the actual lists of users.
+metadata that will not contain the lists of users.
 
 .. code-block:: python
 

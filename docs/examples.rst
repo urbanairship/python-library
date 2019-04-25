@@ -92,8 +92,8 @@ Single iOS Rich Push with notification
    push.send()
 
 
-Web Push to a device with full web payload
-------------------------------------------
+Web Notification to a device with full web payload
+--------------------------------------------------
 
 .. code-block:: python
 
