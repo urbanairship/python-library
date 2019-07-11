@@ -26,7 +26,8 @@ from .open_channel import (
 
 from .named_users import (
     NamedUser,
-    NamedUserList
+    NamedUserList,
+    NamedUserTags
 )
 
 from .static_lists import (

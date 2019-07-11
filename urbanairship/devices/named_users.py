@@ -2,6 +2,7 @@ import json
 import logging
 
 from urbanairship import common
+from urbanairship.devices import ChannelTags
 
 logger = logging.getLogger('urbanairship')
 
@@ -140,3 +141,14 @@ class NamedUserList(common.IteratorParent):
 
     def __init__(self, airship):
         super(NamedUserList, self).__init__(airship, None)
+
+
+class NamedUserTags(ChannelTags):
+    """Modify the tags for named users"""
+
+    def __init__(self, airship):
+        super(NamedUserTags, self).__init__(airship)
+        self.url = common.NAMED_USER_TAG_URL
+
+    def set_audience(self, user_ids):
+        self.audience['named_user_id'] = user_ids

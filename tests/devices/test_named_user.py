@@ -90,3 +90,31 @@ class TestNamedUserList(unittest.TestCase):
 
             for a in named_user_list:
                 self.assertEqual(a.named_user_id, name_list.pop())
+
+
+class TestNamedUserTags(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.named_user_tags = ua.NamedUserTags(self.airship)
+        self.mock_response = requests.Response()
+        self.mock_response._content = json.dumps([{'ok': True}]).encode('utf-8')
+
+        ua.Airship._request = mock.Mock()
+        ua.Airship._request.side_effect = [self.mock_response]
+
+    def test_set_audience(self):
+        self.named_user_tags.set_audience(['user-1', 'user-2'])
+
+        self.assertEqual(
+            self.named_user_tags.audience,
+            {
+                'named_user_id': ['user-1', 'user-2']
+            }
+        )
+
+    def test_add(self):
+        self.named_user_tags.set_audience(['user-1', 'user-2'])
+        self.named_user_tags.add('group1', ['tag1', 'tag2', 'tag3'])
+        result = self.named_user_tags.send()
+
+        self.assertEqual(result, [{'ok': True}])
