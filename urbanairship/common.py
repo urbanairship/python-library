@@ -35,6 +35,8 @@ EMAIL_UNINSTALL_URL = EMAIL_URL + '/uninstall'
 CREATE_AND_SEND_URL = BASE_URL + '/create-and-send'
 SCHEDULE_CREATE_AND_SEND_URL = SCHEDULES_URL + 'create-and-send'
 
+EXPERIMENTS_URL = BASE_URL + '/experiments'
+
 logger = logging.getLogger('urbanairship')
 
 
