@@ -1,7 +1,7 @@
 from urbanairship import common
 
 
-class Experiment(object):
+class AB_test(object):
 
     def _get_listing(self, url, limit=None):
         """List experiments
@@ -26,7 +26,7 @@ class Experiment(object):
     def list_experiments(self, _body_builder_):
         url = common.EXPERIMENTS_URL
         return self._get_listing(url)
- 
+
     def create(self):
         pass
 
