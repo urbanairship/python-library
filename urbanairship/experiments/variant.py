@@ -5,16 +5,19 @@ class Variant(object):
 
     def __init__(self,
                  description=None,
-                 id
+                 id,
+                 name
                  ):
         """
         :keyword description: [optional] A description of the variant.
         :keyword id: [optional] Reflects the position of the variant in the array
             (beginning at 0). This ID is applied automatically and only appears
             in responses.
+        :keyword name: [optional] A name for the variant.
         """
         self.description = description
         self.id = id
+        self.name = name
 
     @property
     def description(self):
@@ -45,3 +48,18 @@ class Variant(object):
             )
 
         self._id = value
+
+    @property
+    def name(self):
+        if not self._name:
+            return None
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str):
+            TypeError(
+                'the name must be a string type'
+            )
+
+        self._name = value
