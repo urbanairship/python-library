@@ -88,4 +88,4 @@ class Variant(object):
             TypeError(
                 'the name must be a integer type'
             )
-
+        self._weight = value
