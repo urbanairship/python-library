@@ -13,7 +13,7 @@ class AB_test(object):
         params = {}
         if isinstance(limit, int):
             params['limit'] = limit
-    
+
         response = self.airship.request(
             method='GET',
             body=None,
