@@ -6,16 +6,12 @@ class Variant(object):
     def __init__(self,
                  push,
                  description=None,
-                 id=None,
                  name=None,
                  schedule=None,
                  weight=None
                  ):
         """
         :keyword description: [optional] A description of the variant.
-        :keyword id: [optional] Reflects the position of the variant in the array
-            (beginning at 0). This ID is applied automatically and only appears
-            in responses
         :keyword name: [optional] A name for the variant
         :keyword push: [required] A push object without audience and device_types
             fields. These two fields are not allowed because they are already defined
@@ -25,7 +21,6 @@ class Variant(object):
             this variant. Defaults to 1.
         """
         self.description = description
-        self.id = id
         self.name = name
         self.push = push
         self.schedule = schedule
@@ -45,21 +40,6 @@ class Variant(object):
             )
 
         self._description = value
-
-    @property
-    def id(self):
-        if not self._id:
-            return None
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        if not isinstance(value, int):
-            TypeError(
-                'the description must be type integer'
-            )
-
-        self._id = value
 
     @property
     def name(self):
