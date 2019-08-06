@@ -149,17 +149,28 @@ class DeviceTokenList(common.IteratorParent):
         super(DeviceTokenList, self).__init__(airship, params)
 
 
-class ChannelList(DeviceTokenList):
+class ChannelList(common.IteratorParent):
     """Iterator for listing all channels for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
+    :ivar start_channel: uuid representing the channel_id to start with.
     :returns: Each ``next`` returns a :py:class:`ChannelInfo` object.
 
     """
+
     next_url = common.CHANNEL_URL
     data_attribute = 'channels'
     id_key = 'channel_id'
     instance_class = ChannelInfo
+
+    def __init__(self, airship, limit=None, start_channel=None):
+        channel_params = {}
+        if limit:
+            channel_params['limit'] = limit
+        if start_channel:
+            channel_params['start'] = start_channel
+
+        super(ChannelList, self).__init__(airship, params=channel_params)
 
 
 class APIDList(DeviceTokenList):
