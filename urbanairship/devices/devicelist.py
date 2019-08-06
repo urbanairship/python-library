@@ -153,6 +153,7 @@ class ChannelList(common.IteratorParent):
     """Iterator for listing all channels for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
+    :ivar start_channel: uuid representing the channel_id to start with.
     :returns: Each ``next`` returns a :py:class:`ChannelInfo` object.
 
     """
