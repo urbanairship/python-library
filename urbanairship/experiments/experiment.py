@@ -30,14 +30,14 @@ class Experiment(object):
             resulting pushes
         :keyword control: [optional] The proportional subset of the audience that will
              not receive a push
-        :keyword push: [optional] A push object without audience and device_types fields.
-            These two fields are not allowed because they are already defined in the
-            experiment object
+        :keyword push: [optional] A push object without audience and device_types
+            fields. These two fields are not allowed because they are already defined
+            in the experiment object
         :keyword in_app: [optional] An object specifying custom campaign categories
             related to the notification.
         :keyword message: [optional] A Message Center message
-        :keyword notification: [optional] The notification payload that is required unless
-            either message or in_app is present. You can provide an alert and any
+        :keyword notification: [optional] The notification payload that is required
+            unless either message or in_app is present. You can provide an alert and any
             platform overrides that apply to the device_type platforms you specify.
         :keyword options: [optional] A JSON dictionary for specifying non-payload
             options related to the delivery of the push
