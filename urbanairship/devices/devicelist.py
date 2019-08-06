@@ -169,7 +169,7 @@ class ChannelList(common.IteratorParent):
             channel_params['limit'] = limit
         if start_channel:
             channel_params['start'] = start_channel
-        
+
         super(ChannelList, self).__init__(airship, params=channel_params)
 
 

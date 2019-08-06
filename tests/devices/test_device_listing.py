@@ -188,13 +188,9 @@ class TestDeviceListing(unittest.TestCase):
 
         self.assertEquals(listing.next_url,
                           common.CHANNEL_URL)
-        
+
         self.assertEquals(listing.params,
-                            {
-                                'limit': self.limit,
-                                'start': self.start_channel
-                            }
-                         )
+                          {'limit': self.limit, 'start': self.start_channel})
 
     def test_device_token_listing(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
