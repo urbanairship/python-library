@@ -163,13 +163,13 @@ class ChannelList(common.IteratorParent):
     instance_class = ChannelInfo
 
     def __init__(self, airship, limit=None, start_channel=None):
-        params = {}
+        channel_params = {}
         if limit:
-            params['limit'] = limit
+            channel_params['limit'] = limit
         if start_channel:
-            params['start'] = start_channel
+            channel_params['start'] = start_channel
         
-        super(ChannelList, self).__init__(airship, params)
+        super(ChannelList, self).__init__(airship, params=channel_params)
 
 
 class APIDList(DeviceTokenList):
