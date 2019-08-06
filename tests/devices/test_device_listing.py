@@ -3,8 +3,10 @@ import unittest
 import mock
 import requests
 import datetime
+import uuid
 
 import urbanairship as ua
+from urbanairship import common
 from tests import TEST_KEY, TEST_SECRET
 
 
@@ -20,6 +22,8 @@ class TestDeviceListing(unittest.TestCase):
         self.device_token2 = '07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13'
         self.apid1 = '00000000-0000-0000-0000-000000000000'
         self.apid2 = '11111111-1111-1111-1111-111111111111'
+        self.limit = 500
+        self.start_channel = str(uuid.uuid4())
 
     def test_channel_listing(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
@@ -174,6 +178,23 @@ class TestDeviceListing(unittest.TestCase):
                     '%Y-%m-%dT%H:%M:%S'
                 )
             )
+
+    def test_channel_listing_params(self):
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
+
+        listing = ua.ChannelList(airship=airship,
+                                 limit=self.limit,
+                                 start_channel=self.start_channel)
+
+        self.assertEquals(listing.next_url,
+                          common.CHANNEL_URL)
+        
+        self.assertEquals(listing.params,
+                            {
+                                'limit': self.limit,
+                                'start': self.start_channel
+                            }
+                         )
 
     def test_device_token_listing(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
