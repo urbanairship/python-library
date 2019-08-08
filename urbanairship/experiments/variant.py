@@ -7,24 +7,41 @@ class Variant(object):
                  push,
                  description=None,
                  name=None,
-                 schedule=None,
-                 weight=None
+                 campaigns=None,
+                 in_app=None,
+                 message=None,
+                 notification=None,
+                 options=None
                  ):
+        # in the varient inside the PUSH: campaigns, in_app, message,
+        # notification, options
         """
-        :keyword description: [optional] A description of the variant.
-        :keyword name: [optional] A name for the variant
+
         :keyword push: [required] A push object without audience and device_types
             fields. These two fields are not allowed because they are already defined
             in the experiment object
-        :keyword schedule: [optional] The time when the push notification should be sent
-        :keyword weight: [optional] The proportion of the audience that will receive
-            this variant. Defaults to 1.
+        :keyword description: [optional] A description of the variant.
+        :keyword name: [optional] A name for the variant
+        :keyword campaings: [optional] An object specifying custom campaign categories
+            related to the notification
+        :keyword in_app: [optional] An object specifying custom campaign categories
+            related to the notification.
+        :keyword message: [optional] A Message Center message
+        :keyword notification: [optional] The notification payload that is required
+            unless either message or in_app is present. You can provide an alert and any
+            platform overrides that apply to the device_type platforms you specify.
+        :keyword options: [optional] A JSON dictionary for specifying non-payload
+            options related to the delivery of the push
+
         """
+        self.push = push
         self.description = description
         self.name = name
-        self.push = push
-        self.schedule = schedule
-        self.weight = weight
+        self.campaings = campaings
+        self.in_app = in_app
+        self.message = message
+        self.notification = notification
+        self.options = options
 
     @property
     def description(self):
@@ -55,17 +72,3 @@ class Variant(object):
             )
 
         self._name = value
-
-    @property
-    def weight(self):
-        if not self._weight:
-            return None
-        return self._weight
-
-    @weight.setter
-    def weight(self, value):
-        if not isinstance(value, int):
-            TypeError(
-                'the name must be a integer type'
-            )
-        self._weight = value

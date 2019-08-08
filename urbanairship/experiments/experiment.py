@@ -7,18 +7,15 @@ class Experiment(object):
                  audience,
                  device_types,
                  variants,
-                 push,
                  name=None,
                  description=None,
                  campaigns=None,
                  control=None,
-                 in_app=None,
-                 message=None,
-                 notification=None,
-                 options=None
+                 schedule=None,
+                 weight=None
                  ):
         """
-        :keyword audience: [required] The audience for the experiment
+        :keydword audience: [required] The audience for the experiment
         :keyword device_types: An array containing one or more strings identifying
             targeted platforms. Accepted platforms are ios, android, amazon, wns, web,
             sms, email, and open::<open_platform_name>
@@ -30,17 +27,10 @@ class Experiment(object):
             resulting pushes
         :keyword control: [optional] The proportional subset of the audience that will
              not receive a push
-        :keyword push: [optional] A push object without audience and device_types
-            fields. These two fields are not allowed because they are already defined
-            in the experiment object
-        :keyword in_app: [optional] An object specifying custom campaign categories
-            related to the notification.
-        :keyword message: [optional] A Message Center message
-        :keyword notification: [optional] The notification payload that is required
-            unless either message or in_app is present. You can provide an alert and any
-            platform overrides that apply to the device_type platforms you specify.
-        :keyword options: [optional] A JSON dictionary for specifying non-payload
-            options related to the delivery of the push
+        :keyword schedule: [optional] The time when the push notification should be sent
+        :keyword weight: [optional] The proportion of the audience that will receive
+            this variant. Defaults to 1.
+
         """
         self.audience = audience
         self.device_types = device_types
@@ -49,11 +39,8 @@ class Experiment(object):
         self.description = description
         self.campaigns = campaigns
         self.control = control
-        self.push = push
-        self.in_app = in_app
-        self.message = message
-        self.notification = notification
-        self.options = options
+        self.schedule = schedule
+        self.weight = weight
 
     @property
     def payload(self):
@@ -76,6 +63,8 @@ class Experiment(object):
                 variant_data['push']['campaigns'] = variant.push.campaigns
             if getattr(variant.push.in_app):
                 variant_data['push']['in_app'] = variant.push.in_app
+            if getattr(variant.push.message):
+                variant_data['push']['message'] = variant.push.message
             if getattr(variant.push.notification):
                 variant_data['push']['notification'] = variant.push.notification
             if getattr(variant.push.options):
@@ -138,3 +127,17 @@ class Experiment(object):
                 'control must be in a range of 0.0 and 1.0'
             )
         self._control = value
+
+    @property
+    def weight(self):
+        if not self._weight:
+            return None
+        return self._weight
+
+    @weight.setter
+    def weight(self, value):
+        if not isinstance(value, int):
+            TypeError(
+                'the name must be a integer type'
+            )
+        self._weight = value
