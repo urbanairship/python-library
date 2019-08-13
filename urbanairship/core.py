@@ -12,12 +12,13 @@ VALID_KEY = re.compile(r'^[\w-]{22}$')
 
 class Airship(object):
 
-    def __init__(self, key, secret):
+    def __init__(self, key, secret, location=None):
         self.key = key
         self.secret = secret
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
+        self.urls = common.Urls(location)
 
     @property
     def key(self):
