@@ -2,38 +2,54 @@ import logging
 import datetime
 import six
 
-SERVER = 'go.urbanairship.com'
-BASE_URL = "https://go.urbanairship.com/api"
-CHANNEL_URL = BASE_URL + '/channels/'
-OPEN_CHANNEL_URL = BASE_URL + '/channels/open/'
-DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
-APID_URL = BASE_URL + '/apids/'
-PUSH_URL = BASE_URL + '/push/'
-SCHEDULES_URL = BASE_URL + '/schedules/'
-TAGS_URL = BASE_URL + '/tags/'
-SEGMENTS_URL = BASE_URL + '/segments/'
-REPORTS_URL = BASE_URL + '/reports/'
-LISTS_URL = BASE_URL + '/lists/'
-LOCATION_URL = BASE_URL + '/location/'
-TEMPLATES_URL = BASE_URL + '/templates/'
-SCHEDULE_TEMPLATE_URL = TEMPLATES_URL + 'schedules/'
-PIPELINES_URL = BASE_URL + '/pipelines/'
 
-NAMED_USER_URL = BASE_URL + '/named_users/'
-NAMED_USER_TAG_URL = NAMED_USER_URL + 'tags/'
-NAMED_USER_DISASSOCIATE_URL = NAMED_USER_URL + 'disassociate/'
-NAMED_USER_ASSOCIATE_URL = NAMED_USER_URL + 'associate/'
+class Urls(object):
+    def __init__(self, location=None):
+        if not location or location == 'us':
+            self.base_url = 'https://go.urbanairship.com/api/'
+        elif location == 'eu':
+            self.base_url = 'https://go.airship.eu/api/'
 
-SMS_URL = CHANNEL_URL + 'sms'
-SMS_OPT_OUT_URL = SMS_URL + '/opt-out'
-SMS_UNINSTALL_URL = SMS_URL + '/uninstall'
+        self.channel_url = self.base_url + 'channels/'
+        self.open_channel_url = self.channel_url + 'open/'
+        self.device_token_url = self.base_url + 'device_tokens/'
+        self.apid_url = self.base_url + 'apids/'
+        self.push_url = self.base_url + 'push/'
+        self.schedules_url = self.base_url + 'schedules/'
+        self.tags_url = self.base_url + 'tags/'
+        self.segments_url = self.base_url + 'segments/'
+        self.reports_url = self.base_url + 'reports/'
+        self.lists_url = self.base_url + 'lists/'
+        self.location_url = self.base_url + 'location/'
 
-EMAIL_URL = CHANNEL_URL + 'email'
-EMAIL_TAGS_URL = EMAIL_URL + '/tags'
-EMAIL_UNINSTALL_URL = EMAIL_URL + '/uninstall'
+        self.templates_url = self.base_url + 'templates/'
+        self.schedule_template_url = self.templates_url + 'schedules/'
 
-CREATE_AND_SEND_URL = BASE_URL + '/create-and-send'
-SCHEDULE_CREATE_AND_SEND_URL = SCHEDULES_URL + 'create-and-send'
+        self.pipelines_url = self.base_url + 'pipelines/'
+
+        self.named_user_url = self.base_url + 'named_users/'
+        self.named_user_tag_url = self.named_user_url + 'tags/'
+        self.named_user_disassociate_url = self.named_user_url + 'disassociate/'
+        self.named_user_associate_url = self.named_user_url + 'associate/'
+
+        self.sms_url = self.channel_url + 'sms/'
+        self.sms_opt_out_url = self.sms_url + 'opt-out/'
+        self.sms_uninstall_url = self.sms_url + 'uninstall/'
+
+        self.email_url = self.channels_url + 'email/'
+        self.email_tags_url = self.email_url + 'tags/'
+        self.email_uninstall_url = self.email_url + 'uninstall/'
+
+        self.create_and_send_url = self.base_url + 'create-and-send/'
+        self.schedule_create_and_send_url = self.schedules_url + 'create-and-send/'
+
+    def get(self, endpoint):
+        url = getattr(self, endpoint, None)
+
+        if not url:
+            raise AttributeError('No url for endpoint %s' % endpoint)
+
+        return url
 
 EXPERIMENTS_URL = BASE_URL + '/experiments'
 EXPERIMENTS_SCHEDULE_URL = EXPERIMENTS_URL + '/scheduled'
