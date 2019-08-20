@@ -3,8 +3,6 @@ import json
 import logging
 import re
 
-from urbanairship import common
-
 logger = logging.getLogger('urbanairship')
 
 VALID_UUID = re.compile(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\Z')
@@ -52,7 +50,7 @@ class OpenChannel(object):
         if self.tags and not isinstance(self.tags, list):
             raise TypeError('"tags" must be a list')
 
-        url = common.OPEN_CHANNEL_URL
+        url = self.airship.urls.get('open_channel_url')
 
         channel_data = {
             'type': 'open',
@@ -98,7 +96,7 @@ class OpenChannel(object):
         if not self.address and self.opt_in is True:
             raise ValueError('Address must be set for opted in channels.')
 
-        url = common.OPEN_CHANNEL_URL
+        url = self.airship.urls.get('open_channel_url')
 
         channel_data = {
             'type': 'open',
@@ -155,7 +153,7 @@ class OpenChannel(object):
 
     def lookup(self, channel_id):
         """Retrieves an open channel from the provided channel ID."""
-        url = common.CHANNEL_URL + channel_id
+        url = self.airship.urls.get('channel_url') + channel_id
         response = self.airship._request(
             method='GET',
             body=None,
@@ -168,7 +166,7 @@ class OpenChannel(object):
 
     def uninstall(self):
         """Mark this OpenChannel object uninstalled"""
-        url = common.OPEN_CHANNEL_URL + 'uninstall/'
+        url = self.airship.urls.get('open_channel_url') + 'uninstall/'
         if self.address is None or self.open_platform is None:
             raise ValueError(
                 '"address" and "open_platform" are required attributes'

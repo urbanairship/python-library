@@ -1,8 +1,8 @@
 import json
 import logging
 
-from urbanairship import common
 from urbanairship.devices import ChannelTags
+from urbanairship import common
 
 logger = logging.getLogger('urbanairship')
 
@@ -36,7 +36,7 @@ class NamedUser(object):
         response = self._airship._request(
             'POST',
             body,
-            common.NAMED_USER_ASSOCIATE_URL,
+            self._airship.urls.get('named_user_associate_url'),
             'application/json',
             version=3
         )
@@ -59,7 +59,7 @@ class NamedUser(object):
         response = self._airship._request(
             'POST',
             body,
-            common.NAMED_USER_DISASSOCIATE_URL,
+            self._airship.urls.get('named_user_disassociate_url'),
             'application/json',
             version=3
         )
@@ -74,7 +74,7 @@ class NamedUser(object):
         response = self._airship._request(
             'GET',
             None,
-            common.NAMED_USER_URL,
+            self._airship.urls.get('named_user_url'),
             'application/json',
             version=3,
             params={'id': self.named_user_id}
@@ -114,7 +114,7 @@ class NamedUser(object):
         response = self._airship._request(
             'POST',
             body,
-            common.NAMED_USER_TAG_URL,
+            self._airship.urls.get('named_user_tag_url'),
             'application/json',
             version=3
         )
@@ -136,10 +136,11 @@ class NamedUser(object):
 
 class NamedUserList(common.IteratorParent):
     """Retrieves a list of NamedUsers"""
-    next_url = common.NAMED_USER_URL
+    next_url = None
     data_attribute = 'named_users'
 
     def __init__(self, airship):
+        self.next_url = airship.urls.get('named_user_url')
         super(NamedUserList, self).__init__(airship, None)
 
 
@@ -148,7 +149,7 @@ class NamedUserTags(ChannelTags):
 
     def __init__(self, airship):
         super(NamedUserTags, self).__init__(airship)
-        self.url = common.NAMED_USER_TAG_URL
+        self.url = airship.urls.get('named_user_tag_url')
 
     def set_audience(self, user_ids):
         self.audience['named_user_id'] = user_ids

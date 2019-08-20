@@ -2,7 +2,6 @@ import json
 import logging
 import warnings
 
-from urbanairship import common
 from urbanairship import devices
 
 
@@ -80,7 +79,7 @@ class Push(object):
         response = self._airship._request(
             method='POST',
             body=body,
-            url=common.PUSH_URL,
+            url=self._airship.urls.get('push_url'),
             content_type='application/json',
             version=3
         )
@@ -174,11 +173,11 @@ class ScheduledPush(object):
         body = json.dumps(self.payload)
 
         if hasattr(self.push, 'merge_data'):
-            url = common.SCHEDULE_TEMPLATE_URL
+            url = self._airship.urls.get('schedule_template_url')
         elif isinstance(self.push, CreateAndSendPush):
-            url = common.SCHEDULE_CREATE_AND_SEND_URL
+            url = self._airship.urls.get('schedule_create_and_send_url')
         else:
-            url = common.SCHEDULES_URL
+            url = self._airship.urls.get('schedules_url')
 
         response = self._airship._request(
             method='POST',
@@ -271,7 +270,7 @@ class TemplatePush(object):
         response = self._airship._request(
             method='POST',
             body=body,
-            url=common.TEMPLATES_URL + 'push',
+            url=self._airship.urls.get('templates_url') + 'push',
             content_type='application/json',
             version=3
         )
@@ -407,7 +406,7 @@ class CreateAndSendPush(object):
         response = self._airship._request(
             method='POST',
             body=body,
-            url=common.CREATE_AND_SEND_URL,
+            url=self._airship.urls.get('create_and_send_url'),
             content_type='application/json',
             version=3
         )

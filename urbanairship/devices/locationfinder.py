@@ -1,4 +1,3 @@
-from urbanairship import common
 import logging
 
 logger = logging.getLogger('urbanairship')
@@ -17,6 +16,7 @@ class LocationFinder(object):
         """
 
         params = {'q': name}
+        url = self.airship.urls.get('location_url')
 
         if location_type:
             params['type'] = location_type
@@ -24,7 +24,7 @@ class LocationFinder(object):
         resp = self.airship._request(
             'GET',
             None,
-            common.LOCATION_URL,
+            url,
             version=3,
             params=params
         )
@@ -47,7 +47,7 @@ class LocationFinder(object):
             raise TypeError('latitude and longitude need to be numbers')
 
         url = '{base_url}{latitude},{longitude}'.format(
-            base_url=common.LOCATION_URL,
+            base_url=self.airship.urls.get('location_url'),
             latitude=str(latitude),
             longitude=str(longitude))
 
@@ -89,7 +89,7 @@ class LocationFinder(object):
             raise TypeError('lat1, long1, lat2, and long2 need to be numbers')
 
         url = '{base_url}{lat1},{long1},{lat2},{long2}'.format(
-            base_url=common.LOCATION_URL,
+            base_url=self.airship.urls.get('location_url'),
             lat1=str(lat1),
             long1=str(long1),
             lat2=str(lat2),
@@ -131,7 +131,7 @@ class LocationFinder(object):
         resp = self.airship._request(
             'GET',
             None,
-            common.LOCATION_URL + 'from-alias',
+            self.airship.urls.get('location_url') + 'from-alias',
             version=3,
             params=params
         )
@@ -151,7 +151,7 @@ class LocationFinder(object):
         resp = self.airship._request(
             'GET',
             None,
-            common.LOCATION_URL + polygon_id,
+            self.airship.urls.get('location_url') + polygon_id,
             version=3,
             params=params
         )
@@ -166,7 +166,7 @@ class LocationFinder(object):
         resp = self.airship._request(
             'GET',
             None,
-            common.SEGMENTS_URL + 'dates/',
+            self.airship.urls.get('segments_url') + 'dates/',
             version=3,
         )
         return resp.json()

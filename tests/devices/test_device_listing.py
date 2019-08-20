@@ -187,7 +187,7 @@ class TestDeviceListing(unittest.TestCase):
                                  start_channel=self.start_channel)
 
         self.assertEquals(listing.next_url,
-                          common.CHANNEL_URL)
+                          airship.urls.get('channel_url'))
 
         self.assertEquals(listing.params,
                           {'limit': self.limit, 'start': self.start_channel})

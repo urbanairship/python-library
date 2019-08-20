@@ -2,8 +2,6 @@ import json
 import logging
 import re
 
-from urbanairship import common
-
 logger = logging.getLogger('urbanairship')
 
 VALID_EMAIL = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
@@ -142,7 +140,7 @@ class Email(object):
 
         :return: The response object from the API.
         """
-        url = common.EMAIL_URL
+        url = self.airship.urls.get('email_url')
         reg_payload = {
             'channel': {
                 'type': self._email_type,
@@ -206,7 +204,7 @@ class Email(object):
 
         :return: The response object from the API"""
 
-        url = common.EMAIL_UNINSTALL_URL
+        url = self.airship.urls.get('email_uninstall_url')
         uninstall_payload = {'email_address': self.address}
 
         body = json.dumps(uninstall_payload).encode('utf-8')
@@ -230,7 +228,7 @@ class EmailTags(object):
     """
     def __init__(self, airship, address):
         self.airship = airship
-        self.url = common.EMAIL_TAGS_URL
+        self.url = airship.urls.get('email_tags_url')
         self.address = address
         self.add_group = {}
         self.remove_group = {}

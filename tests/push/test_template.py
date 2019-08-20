@@ -43,10 +43,10 @@ class TestTemplatePush(unittest.TestCase):
 
 class TestTemplate(unittest.TestCase):
     def test_template_lookup1(self):
-        airship = mock.Mock()
-        airship._request.return_value = mock.Mock(
-            json=mock.Mock(
-                return_value={
+        with mock.patch.object(ua.Airship, '_request') as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
                     'ok': True,
                     'template': {
                         'id': 'ef34a8d9-0ad7-491c-86b0-aea74da15161',
@@ -71,16 +71,14 @@ class TestTemplate(unittest.TestCase):
                         }
                     }
                 }
-            )
-        )
+            ).encode('utf-8')
+        
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
         template_id = 'ef34a8d9-0ad7-491c-86b0-aea74da15161'
-        ua.Template(airship).lookup(template_id)
 
-        airship._request.assert_called_with(
-            body=None, method='GET', params={},
-            url='https://go.urbanairship.com/api/templates/' + template_id,
-            version=3
-        )
+        self.assertEqual(airship.urls.get('templates_url') + template_id,
+                        'https://go.urbanairship.com/api/templates/' + template_id)
+
 
     def test_template_lookup2(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:

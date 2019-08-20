@@ -10,6 +10,56 @@ logger = logging.getLogger('urbanairship')
 
 VALID_KEY = re.compile(r'^[\w-]{22}$')
 
+
+class Urls(object):
+    def __init__(self, location=None):
+        if not location or location == 'us':
+            self.base_url = 'https://go.urbanairship.com/api/'
+        elif location == 'eu':
+            self.base_url = 'https://go.airship.eu/api/'
+
+        self.channel_url = self.base_url + 'channels/'
+        self.open_channel_url = self.channel_url + 'open/'
+        self.device_token_url = self.base_url + 'device_tokens/'
+        self.apid_url = self.base_url + 'apids/'
+        self.push_url = self.base_url + 'push/'
+        self.schedules_url = self.base_url + 'schedules/'
+        self.tags_url = self.base_url + 'tags/'
+        self.segments_url = self.base_url + 'segments/'
+        self.reports_url = self.base_url + 'reports/'
+        self.lists_url = self.base_url + 'lists/'
+        self.location_url = self.base_url + 'location/'
+
+        self.templates_url = self.base_url + 'templates/'
+        self.schedule_template_url = self.templates_url + 'schedules/'
+
+        self.pipelines_url = self.base_url + 'pipelines/'
+
+        self.named_user_url = self.base_url + 'named_users/'
+        self.named_user_tag_url = self.named_user_url + 'tags/'
+        self.named_user_disassociate_url = self.named_user_url + 'disassociate/'
+        self.named_user_associate_url = self.named_user_url + 'associate/'
+
+        self.sms_url = self.channel_url + 'sms/'
+        self.sms_opt_out_url = self.sms_url + 'opt-out/'
+        self.sms_uninstall_url = self.sms_url + 'uninstall/'
+
+        self.email_url = self.channel_url + 'email/'
+        self.email_tags_url = self.email_url + 'tags/'
+        self.email_uninstall_url = self.email_url + 'uninstall/'
+
+        self.create_and_send_url = self.base_url + 'create-and-send/'
+        self.schedule_create_and_send_url = self.schedules_url + 'create-and-send/'
+
+    def get(self, endpoint):
+        url = getattr(self, endpoint, None)
+
+        if not url:
+            raise AttributeError('No url for endpoint %s' % endpoint)
+
+        return url
+
+
 class Airship(object):
 
     def __init__(self, key, secret, location=None):
@@ -18,7 +68,7 @@ class Airship(object):
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
-        self.urls = common.Urls(location)
+        self.urls = Urls(location)
 
     @property
     def key(self):
@@ -39,7 +89,6 @@ class Airship(object):
         if not VALID_KEY.match(value):
             raise ValueError('secrets must be 22 characters')
         self._secret = value
-
 
     def request(self, method, body, url,
                 content_type=None, version=None, params=None):

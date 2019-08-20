@@ -106,7 +106,7 @@ class Template(object):
         response = self.airship._request(
             method='POST',
             body=body,
-            url=common.TEMPLATES_URL,
+            url=self.airship.urls.get('templates_url'),
             content_type='application/json',
             version=3
         )
@@ -160,7 +160,7 @@ class Template(object):
         response = self.airship._request(
             method='POST',
             body=body,
-            url=common.TEMPLATES_URL + self.template_id,
+            url=self.airship.urls.get('templates_url') + self.template_id,
             content_type='application/json',
             version=3
         )
@@ -186,7 +186,7 @@ class Template(object):
         response = self.airship._request(
             method='DELETE',
             body=None,
-            url=common.TEMPLATES_URL + self.template_id,
+            url=self.airship.urls.get('templates_url') + self.template_id,
             version=3
         )
         logger.info(
@@ -217,7 +217,7 @@ class Template(object):
 
     def lookup(self, template_id):
         """Fetch metadata from a template ID"""
-        start_url = common.TEMPLATES_URL
+        start_url = self.airship.urls.get('templates_url')
         data_attribute = 'template'
         id_key = 'id'
         params = {}
@@ -240,13 +240,14 @@ class TemplateList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`Template` object.
 
     """
-    next_url = common.TEMPLATES_URL
+    next_url = None
     data_attribute = 'templates'
     id_key = 'id'
     instance_class = Template
 
     def __init__(self, airship, limit=None):
         params = {'limit': limit} if limit else {}
+        self.next_url = airship.urls.get('templates_url')
         super(TemplateList, self).__init__(airship, params)
 
 
