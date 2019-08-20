@@ -2,6 +2,7 @@ import json
 import gzip
 import collections
 import datetime
+
 from urbanairship import common
 
 CHUNK = 16 * 1024
@@ -25,7 +26,7 @@ class StaticList(object):
         response = self.airship._request(
             'POST',
             body,
-            common.LISTS_URL,
+            self.airship.urls.get('lists_url'),
             'application/json',
             version=3
         )
@@ -40,7 +41,7 @@ class StaticList(object):
         """
 
         zipped = GzipCompressReadStream(csv_file)
-        url = common.LISTS_URL + self.name + '/csv/'
+        url = self.airship.urls.get('lists_url') + self.name + '/csv/'
         response = self.airship._request(
             method='PUT',
             body=zipped,
@@ -58,16 +59,21 @@ class StaticList(object):
 
         if self.description is None and self.extra is None:
             raise ValueError('Either description or extra must be non-empty.')
+
         payload = {}
+
         if self.description is not None:
             payload['description'] = self.description
         if self.extra is not None:
             payload['extra'] = self.extra
+
         body = json.dumps(payload).encode('utf-8')
-        url = common.LISTS_URL + self.name
+        url = self.airship.urls.get('lists_url') + self.name
+
         response = self.airship._request(
             'PUT', body, url, 'application/json', version=3
         )
+
         return response.json()
 
     @classmethod
@@ -86,7 +92,7 @@ class StaticList(object):
         :return: Information about the static list
         """
 
-        url = common.LISTS_URL + self.name
+        url = self.airship.urls.get('lists_url') + self.name
         response = self.airship._request('GET', None, url, version=3)
         payload = response.json()
         return self.from_payload(payload, self.airship)
@@ -95,15 +101,16 @@ class StaticList(object):
         """
         :return: Delete the static list
         """
-        url = common.LISTS_URL + self.name
+        url = self.airship.urls.get('lists_url') + self.name
         return self.airship._request('DELETE', None, url, version=3)
 
 
 class StaticLists(common.IteratorParent):
-    next_url = common.LISTS_URL
+    next_url = None
     data_attribute = 'lists'
 
     def __init__(self, airship):
+        self.next_url = airship.urls.get('lists_url')
         super(StaticLists, self).__init__(airship, None)
 
 

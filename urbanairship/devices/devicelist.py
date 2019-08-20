@@ -32,6 +32,7 @@ class ChannelInfo(object):
 
     """
 
+    airship = None
     address = None
     alias = None
     background = None
@@ -71,7 +72,7 @@ class ChannelInfo(object):
 
     def lookup(self, channel_id):
         """Fetch metadata from a channel ID"""
-        start_url = common.CHANNEL_URL
+        start_url = self.airship.urls.get('channel_url')
         data_attribute = 'channel'
         id_key = 'channel_id'
         params = {}
@@ -139,12 +140,13 @@ class DeviceTokenList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
-    next_url = common.DEVICE_TOKEN_URL
+    next_url = None
     data_attribute = 'device_tokens'
     id_key = 'device_token'
     instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):
+        self.next_url = airship.urls.get('device_token_url')
         params = {'limit': limit} if limit else {}
         super(DeviceTokenList, self).__init__(airship, params)
 
@@ -158,12 +160,13 @@ class ChannelList(common.IteratorParent):
 
     """
 
-    next_url = common.CHANNEL_URL
+    next_url = None
     data_attribute = 'channels'
     id_key = 'channel_id'
     instance_class = ChannelInfo
 
     def __init__(self, airship, limit=None, start_channel=None):
+        self.next_url = airship.urls.get('channel_url')
         channel_params = {}
         if limit:
             channel_params['limit'] = limit
@@ -173,14 +176,19 @@ class ChannelList(common.IteratorParent):
         super(ChannelList, self).__init__(airship, params=channel_params)
 
 
-class APIDList(DeviceTokenList):
+class APIDList(common.IteratorParent):
     """Iterator for listing all APIDs for this application.
 
     :ivar limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
-    next_url = common.APID_URL
+    next_url = None
     data_attribute = 'apids'
     id_key = 'apid'
     instance_class = DeviceInfo
+
+    def __init__(self, airship, limit=None):
+        self.next_url = airship.urls.get('apid_url')
+        params = {'limit': limit} if limit else {}
+        super(APIDList, self).__init__(airship, params)

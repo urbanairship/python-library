@@ -1,4 +1,3 @@
-from urbanairship import common
 import json
 
 
@@ -14,7 +13,7 @@ class Automation(object):
         :keyword pipelines: A single Pipeline payload or list of Pipeline
         payloads
         """
-        url = common.PIPELINES_URL
+        url = self.airship.urls.get('segments_url')
         body = json.dumps(pipelines)
         response = self.airship.request(
             method='POST',
@@ -32,7 +31,7 @@ class Automation(object):
         :keyword pipelines: A single Pipeline payload or list of Pipeline
         payloads
         """
-        url = common.PIPELINES_URL + 'validate/'
+        url = self.airship.urls.get('segments_url') + 'validate/'
         body = json.dumps(pipelines)
         response = self.airship.request(
             method='POST',
@@ -51,7 +50,7 @@ class Automation(object):
         :keyword pipeline: Full Pipeline payload; partial updates are not
         supported
         """
-        url = common.PIPELINES_URL + pipeline_id
+        url = self.airship.urls.get('segments_url') + pipeline_id
         body = json.dumps(pipeline)
         response = self.airship.request(
             method='PUT',
@@ -68,7 +67,7 @@ class Automation(object):
 
         :keyword pipeline_id: A UA Pipeline ID
         """
-        url = common.PIPELINES_URL + pipeline_id
+        url = self.airship.urls.get('segments_url') + pipeline_id
         response = self.airship.request(
             method='DELETE',
             body=None,
@@ -83,7 +82,7 @@ class Automation(object):
 
         :keyword pipeline_id: A UA Pipeline ID
         """
-        url = common.PIPELINES_URL + pipeline_id
+        url = self.airship.urls.get('segments_url') + pipeline_id
         response = self.airship.request(
             method='GET',
             body=None,
@@ -106,7 +105,7 @@ class Automation(object):
         if isinstance(enabled, bool):
             params['enabled'] = enabled
 
-        url = common.PIPELINES_URL
+        url = self.airship.urls.get('segments_url')
         response = self.airship.request(
             method='GET',
             body=None,
@@ -126,7 +125,7 @@ class Automation(object):
         params = {}
         if start:
             params['start'] = start
-        url = common.PIPELINES_URL + 'deleted/'
+        url = self.airship.urls.get('segments_url') + 'deleted/'
         response = self.airship.request(
             method='GET',
             body=None,
