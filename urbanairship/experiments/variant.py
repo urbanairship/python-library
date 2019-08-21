@@ -7,14 +7,9 @@ class Variant(object):
                  push,
                  description=None,
                  name=None,
-                 campaigns=None,
-                 in_app=None,
-                 message=None,
-                 notification=None,
-                 options=None
                  ):
-        # in the varient inside the PUSH: campaigns, in_app, message,
-        # notification, options
+        # variants: description, id - from Airship, name, push*
+        # in the PUSH inside the varient: in_app,notification, options
         """
 
         :keyword push: [required] A push object without audience and device_types
@@ -22,26 +17,13 @@ class Variant(object):
             in the experiment object
         :keyword description: [optional] A description of the variant.
         :keyword name: [optional] A name for the variant
-        :keyword campaings: [optional] An object specifying custom campaign categories
-            related to the notification
-        :keyword in_app: [optional] An object specifying custom campaign categories
-            related to the notification.
-        :keyword message: [optional] A Message Center message
-        :keyword notification: [optional] The notification payload that is required
             unless either message or in_app is present. You can provide an alert and any
             platform overrides that apply to the device_type platforms you specify.
-        :keyword options: [optional] A JSON dictionary for specifying non-payload
-            options related to the delivery of the push
 
         """
         self.push = push
         self.description = description
         self.name = name
-        self.campaings = campaings
-        self.in_app = in_app
-        self.message = message
-        self.notification = notification
-        self.options = options
 
     @property
     def description(self):
