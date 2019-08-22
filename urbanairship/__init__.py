@@ -174,6 +174,10 @@ __all__ = [
 ]
 
 # Silence urllib3 INFO logging by default
+from .experiments import (
+    Experiment,
+    Variant
+)
 
 import logging
 logging.getLogger('requests.packages.urllib3.connectionpool')\
