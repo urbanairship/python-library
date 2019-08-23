@@ -18,6 +18,8 @@ class TestExperiment(unittest.TestCase):
         self.device_types = 'android'
         self.variants = []
 
+        #create a push object (better 2 so it's unic / variant)
+
     def test_simple_experiment(self):
         with mock.patch.object(ua.Airship, '_request') as mock_request:
             response = requests.Response()
