@@ -13,9 +13,9 @@ VALID_KEY = re.compile(r'^[\w-]{22}$')
 
 class Urls(object):
     def __init__(self, location=None):
-        if not location or location == 'us':
+        if not location or location.lower() == 'us':
             self.base_url = 'https://go.urbanairship.com/api/'
-        elif location == 'eu':
+        elif location.lower() == 'eu':
             self.base_url = 'https://go.airship.eu/api/'
 
         self.channel_url = self.base_url + 'channels/'
