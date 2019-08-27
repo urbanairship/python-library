@@ -48,7 +48,7 @@ argument is passed, the US data center will be used.
 .. code-block:: python
 
    import urbanairship as ua
-   eu_airship = ua.Airship('app_key', 'master_secret', location='eu')
+   eu_airship = ua.Airship('<app_key>', '<master_secret>', location='eu')
 
 Logging
 -------
