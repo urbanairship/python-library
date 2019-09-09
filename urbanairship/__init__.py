@@ -176,7 +176,8 @@ __all__ = [
 # Silence urllib3 INFO logging by default
 from .experiments import (
     Experiment,
-    Variant
+    Variant,
+    AB_test
 )
 
 import logging
