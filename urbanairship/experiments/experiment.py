@@ -49,33 +49,29 @@ class Experiment(object):
         variants_data = []
         for variant in self.variants:
             variant_data = {}
+            push_options = {}
 
-            if getattr(variant.description):
-                variant_data['descriptinon'] = variant.description
-            if getattr(variant.name):
+            if getattr(variant, 'description'):
+                variant_data['description'] = variant.description
+            if getattr(variant, 'name'):
                 variant_data['name'] = variant.name
-            if getattr(variant.schedule):
-                variant_data['schedule'] = variant.schedule
-            if getattr(variant.weight):
-                variant_data['weight'] = variant.weight
 
-            if getattr(variant.push.campaigns):
-                variant_data['push']['campaigns'] = variant.push.campaigns
-            if getattr(variant.push.in_app):
-                variant_data['push']['in_app'] = variant.push.in_app
-            if getattr(variant.push.message):
-                variant_data['push']['message'] = variant.push.message
-            if getattr(variant.push.notification):
-                variant_data['push']['notification'] = variant.push.notification
-            if getattr(variant.push.options):
-                variant_data['push']['options'] = variant.push.options
+            if getattr(variant.push, 'in_app'):
+                push_options['in_app'] = variant.push.in_app
+            if getattr(variant.push, 'notification'):
+                push_options['notification'] = variant.push.notification
+            if getattr(variant.push, 'options'):
+                push_options['options'] = variant.push.options
 
-        variants_data.append(variant_data)
+            variant_data['push'] = push_options
+            variants_data.append(variant_data)
 
         data = {
-            "audiance": self.audience,
+            "name": self.name,
+            "campaigns": self.campaigns,
+            "audience": self.audience,
             "device_types": self.device_types,
-            "variant": variants_data
+            "variants": variants_data
         }
 
         return data
@@ -141,3 +137,4 @@ class Experiment(object):
                 'the name must be a integer type'
             )
         self._weight = value
+        
