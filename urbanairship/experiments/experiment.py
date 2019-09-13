@@ -10,9 +10,7 @@ class Experiment(object):
                  name=None,
                  description=None,
                  campaigns=None,
-                 control=None,
-                 schedule=None,
-                 weight=None
+                 control=None
                  ):
         """
         :keydword audience: [required] The audience for the experiment
@@ -27,9 +25,6 @@ class Experiment(object):
             resulting pushes
         :keyword control: [optional] The proportional subset of the audience that will
              not receive a push
-        :keyword schedule: [optional] The time when the push notification should be sent
-        :keyword weight: [optional] The proportion of the audience that will receive
-            this variant. Defaults to 1.
 
         """
         self.audience = audience
@@ -39,8 +34,6 @@ class Experiment(object):
         self.description = description
         self.campaigns = campaigns
         self.control = control
-        self.schedule = schedule
-        self.weight = weight
 
     @property
     def payload(self):
@@ -123,18 +116,4 @@ class Experiment(object):
                 'control must be in a range of 0.0 and 1.0'
             )
         self._control = value
-
-    @property
-    def weight(self):
-        if not self._weight:
-            return None
-        return self._weight
-
-    @weight.setter
-    def weight(self, value):
-        if not isinstance(value, int):
-            TypeError(
-                'the name must be a integer type'
-            )
-        self._weight = value
         

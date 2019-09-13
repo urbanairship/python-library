@@ -7,6 +7,8 @@ class Variant(object):
                  push,
                  description=None,
                  name=None,
+                 schedule=None,
+                 weight=None
                  ):
         # variants: description, id - from Airship, name, push*
         # in the PUSH inside the varient: in_app,notification, options
@@ -19,11 +21,17 @@ class Variant(object):
         :keyword name: [optional] A name for the variant
             unless either message or in_app is present. You can provide an alert and any
             platform overrides that apply to the device_type platforms you specify.
+        :keyword schedule: [optional] The time when the push notification should be sent
+        :keyword weight: [optional] The proportion of the audience that will receive
+            this variant. Defaults to 1.
+
 
         """
         self.push = push
         self.description = description
         self.name = name
+        self.schedule = schedule
+        self.weight = weight
 
     @property
     def description(self):
@@ -54,3 +62,17 @@ class Variant(object):
             )
 
         self._name = value
+
+    @property
+    def weight(self):
+        if not self._weight:
+            return None
+        return self._weight
+
+    @weight.setter
+    def weight(self, value):
+        if not isinstance(value, int):
+            TypeError(
+                'the value must be a integer type'
+            )
+        self._weight = value
