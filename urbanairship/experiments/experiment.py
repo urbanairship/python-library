@@ -64,7 +64,9 @@ class Experiment(object):
             "campaigns": self.campaigns,
             "audience": self.audience,
             "device_types": self.device_types,
-            "variants": variants_data
+            "variants": variants_data,
+            "control": self.control,
+            "description": self.description
         }
 
         return data
