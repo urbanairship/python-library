@@ -102,11 +102,13 @@ class TestHalfExperiment(unittest.TestCase):
         # push_2.notification = ua.notification(alert="test message 2")
         # push_2.in_app = in_app
 
-        variant_1 = ua.Variant(push_1)
-                            #    description="A description of the variant one",
-                            #    name="Testing",
-                            #    schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30 )),
-                            #    weight=2)
+        variant_1 = ua.Variant(push_1,
+                               description="A description of the variant one",
+                               name="Testing",
+                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30))
+                               )
+                            #    weight=2
+                            #    )
         # variant_2 = ua.Variant(push_2,
         #                        description="A description of the variant two",
         #                        name="Testing",
@@ -163,6 +165,9 @@ class TestHalfExperiment(unittest.TestCase):
                 },
                 "variants": [
                     {
+                        "description": "A description of the variant one",
+                        "name": "Testing",
+                        "schedule": {"scheduled_time": "2025-10-10T18:45:30"},
                         "push": {
                             "notification": {
                                 "alert": "test message 1"
