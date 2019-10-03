@@ -51,13 +51,11 @@ class TestExperiment(unittest.TestCase):
                                               device_types=self.device_types,
                                               campaigns=self.campaigns,
                                               variants=self.variants,
-                                              description=self.description,
-                                              control=0.5
+                                              description=self.description
                                               )
             experiment_payload = {
                 "name":"Experiment Test",
                 "audience":"all",
-                "control":0.5,
                 "description":"just testing",
                 "device_types":["android", "ios"],
                 "campaigns":{
