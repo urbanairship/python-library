@@ -60,14 +60,19 @@ class Experiment(object):
             variants_data.append(variant_data)
 
         data = {
-            "name": self.name,
-            "campaigns": self.campaigns,
             "audience": self.audience,
             "device_types": self.device_types,
-            "variants": variants_data,
-            "control": self.control,
-            "description": self.description
+            "variants": variants_data
         }
+
+        if self.name is not None:
+            data["name"] = self.name
+        if self.description is not None:
+            data["description"] = self.description
+        if self.campaigns is not None:
+            data["campaigns"] = self.campaigns
+        if self.control is not None:
+            data["control"] = self.control
 
         return data
 
