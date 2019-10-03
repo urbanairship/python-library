@@ -55,6 +55,8 @@ class Experiment(object):
                 push_options['notification'] = variant.push.notification
             if getattr(variant.push, 'options'):
                 push_options['options'] = variant.push.options
+            if getattr(variant, 'schedule'):
+                variant_data['schedule'] = variant.schedule
 
             variant_data['push'] = push_options
             variants_data.append(variant_data)
