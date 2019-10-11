@@ -10,8 +10,6 @@ class Variant(object):
                  schedule=None,
                  weight=None
                  ):
-        # variants: description, id - from Airship, name, push*
-        # in the PUSH inside the varient: in_app,notification, options
         """
 
         :keyword push: [required] A push object without audience and device_types

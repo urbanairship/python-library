@@ -98,6 +98,10 @@ class TestHalfExperiment(unittest.TestCase):
         push_2 = self.airship.create_push()
         push_2.notification = ua.notification(alert="test message 2")
         # push_2.in_app = in_app
+        push_2.in_app = ua.in_app(alert="This part appears in-app!",
+                                  display_type="banner",
+                                  expiry="2025-10-14T12:00:00"         
+                                  )
 
         variant_1 = ua.Variant(push_1,
                                description="A description of the variant one",
@@ -121,7 +125,6 @@ class TestHalfExperiment(unittest.TestCase):
         self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
         self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
         self.variants = [variant_1, variant_2]
-        # self.variants = [variant_1]
 
 
     def test_half_experiment(self):
@@ -183,18 +186,12 @@ class TestHalfExperiment(unittest.TestCase):
                         "push": {
                             "notification": {
                                 "alert": "test message 2"
+                            },
+                            "in_app": {
+                                "alert": "This part appears in-app!",
+                                "display_type": "banner",
+                                "expiry": "2025-10-14T12:00:00"
                             }
-                            # "in_app": {
-                            #     "alert": "This part appears in-app!",
-                            #     "display_type": "banner",
-                            #     "expiry": "2025-10-14T12:00:00",
-                            #     "display": {
-                            #         "position": "top"
-                            #     },
-                            #     "actions": {
-                            #         "add_tag": "in-app"
-                            #     }
-                            # }
                         }
                     }
                 ]
