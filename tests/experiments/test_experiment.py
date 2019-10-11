@@ -84,7 +84,6 @@ class TestExperiment(unittest.TestCase):
 
 
 
-
 class TestHalfExperiment(unittest.TestCase):
     def setUp(self):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
@@ -96,23 +95,22 @@ class TestHalfExperiment(unittest.TestCase):
                            display_type="banner")
         push_1.in_app = in_app
 
-        # push_2 = self.airship.create_push()
-        # push_2.notification = ua.notification(alert="test message 2")
+        push_2 = self.airship.create_push()
+        push_2.notification = ua.notification(alert="test message 2")
         # push_2.in_app = in_app
 
         variant_1 = ua.Variant(push_1,
                                description="A description of the variant one",
                                name="Testing",
-                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30))
+                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30)),
+                               weight=2
                                )
-                            #    weight=2
-                            #    )
-        # variant_2 = ua.Variant(push_2,
-        #                        description="A description of the variant two",
-        #                        name="Testing",
-        #                        schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10,  18, 45, 30)),
-        #                        weight=2
-        #                        )
+        variant_2 = ua.Variant(push_2,
+                               description="A description of the variant two",
+                               name="Testing",
+                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10,  18, 45, 30)),
+                               weight=3
+                               )
 
         self.name = "Experiment Test"
         self.description = "just testing"
@@ -122,8 +120,8 @@ class TestHalfExperiment(unittest.TestCase):
         self.operation_id = "d67d4de6-934f-4ebb-aef0-250d89699b6b"
         self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
         self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
-        # self.variants = [variant_1, variant_2]
-        self.variants = [variant_1]
+        self.variants = [variant_1, variant_2]
+        # self.variants = [variant_1]
 
 
     def test_half_experiment(self):
@@ -166,6 +164,7 @@ class TestHalfExperiment(unittest.TestCase):
                         "description": "A description of the variant one",
                         "name": "Testing",
                         "schedule": {"scheduled_time": "2025-10-10T18:45:30"},
+                        "weight": 2,
                         "push": {
                             "notification": {
                                 "alert": "test message 1"
@@ -174,6 +173,28 @@ class TestHalfExperiment(unittest.TestCase):
                                 "alert": "This part appears in-app!",
                                 "display_type": "banner"
                             }
+                        }
+                    },
+                    {
+                        "description": "A description of the variant two",
+                        "name": "Testing",
+                        "schedule": {"scheduled_time": "2025-10-10T18:45:30"},
+                        "weight": 3,
+                        "push": {
+                            "notification": {
+                                "alert": "test message 2"
+                            }
+                            # "in_app": {
+                            #     "alert": "This part appears in-app!",
+                            #     "display_type": "banner",
+                            #     "expiry": "2025-10-14T12:00:00",
+                            #     "display": {
+                            #         "position": "top"
+                            #     },
+                            #     "actions": {
+                            #         "add_tag": "in-app"
+                            #     }
+                            # }
                         }
                     }
                 ]

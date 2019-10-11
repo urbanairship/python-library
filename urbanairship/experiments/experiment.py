@@ -9,6 +9,7 @@ class Experiment(object):
                  variants,
                  name=None,
                  description=None,
+                 weight=None,
                  campaigns=None,
                  control=None
                  ):
@@ -34,6 +35,7 @@ class Experiment(object):
         self.description = description
         self.campaigns = campaigns
         self.control = control
+        self.weight = weight
 
     @property
     def payload(self):
@@ -57,6 +59,8 @@ class Experiment(object):
                 push_options['options'] = variant.push.options
             if getattr(variant, 'schedule'):
                 variant_data['schedule'] = variant.schedule
+            if getattr(variant, 'weight'):
+                variant_data['weight'] = variant.weight
 
             variant_data['push'] = push_options
             variants_data.append(variant_data)
@@ -75,6 +79,9 @@ class Experiment(object):
             data["campaigns"] = self.campaigns
         if self.control is not None:
             data["control"] = self.control
+        
+        if self.weight is not None:
+            variant_data['weight'] = self.weight
 
         return data
 
