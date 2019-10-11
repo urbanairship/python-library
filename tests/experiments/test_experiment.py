@@ -97,10 +97,11 @@ class TestHalfExperiment(unittest.TestCase):
 
         push_2 = self.airship.create_push()
         push_2.notification = ua.notification(alert="test message 2")
-        # push_2.in_app = in_app
         push_2.in_app = ua.in_app(alert="This part appears in-app!",
                                   display_type="banner",
-                                  expiry="2025-10-14T12:00:00"         
+                                  expiry="2025-10-14T12:00:00"
+                                # looks like in_app does not check for dictionary for the display, there is no loop
+                                #   display=ua.in_app.display(position="top")
                                   )
 
         variant_1 = ua.Variant(push_1,
@@ -191,6 +192,9 @@ class TestHalfExperiment(unittest.TestCase):
                                 "alert": "This part appears in-app!",
                                 "display_type": "banner",
                                 "expiry": "2025-10-14T12:00:00"
+                                # "display": {
+                                #     "position": "top"
+                                # }
                             }
                         }
                     }
