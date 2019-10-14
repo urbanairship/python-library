@@ -84,7 +84,7 @@ class TestExperiment(unittest.TestCase):
 
 
 
-class TestHalfExperiment(unittest.TestCase):
+class TestFullExperiment(unittest.TestCase):
     def setUp(self):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
@@ -99,9 +99,9 @@ class TestHalfExperiment(unittest.TestCase):
         push_2.notification = ua.notification(alert="test message 2")
         push_2.in_app = ua.in_app(alert="This part appears in-app!",
                                   display_type="banner",
-                                  expiry="2025-10-14T12:00:00"
-                                # looks like in_app does not check for dictionary for the display, there is no loop
-                                #   display=ua.in_app.display(position="top")
+                                  expiry="2025-10-14T12:00:00",
+                                  display={"position":"top"},
+                                  actions={"add_tag":"in-app"}
                                   )
 
         variant_1 = ua.Variant(push_1,
@@ -128,7 +128,7 @@ class TestHalfExperiment(unittest.TestCase):
         self.variants = [variant_1, variant_2]
 
 
-    def test_half_experiment(self):
+    def test_full_experiment(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps({
@@ -191,10 +191,13 @@ class TestHalfExperiment(unittest.TestCase):
                             "in_app": {
                                 "alert": "This part appears in-app!",
                                 "display_type": "banner",
-                                "expiry": "2025-10-14T12:00:00"
-                                # "display": {
-                                #     "position": "top"
-                                # }
+                                "expiry": "2025-10-14T12:00:00",
+                                "display": {
+                                    "position": "top"
+                                },
+                                "actions": {
+                                    "add_tag": "in-app"
+                                }
                             }
                         }
                     }
