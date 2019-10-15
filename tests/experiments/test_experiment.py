@@ -27,12 +27,13 @@ class TestExperiment(unittest.TestCase):
         self.name = "Experiment Test"
         self.audience = "all"
         self.description = "just testing"
-        self.device_types = ["android", "ios"]
+        self.device_types = ["ios", "android"]
         self.campaigns = ua.campaigns(categories=["campaign", "categories"])
         self.operation_id = "d67d4de6-934f-4ebb-aef0-250d89699b6b"
         self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
         self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
         self.variants = [variant_1, variant_2]
+
 
     def test_simple_experiment(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
@@ -57,7 +58,7 @@ class TestExperiment(unittest.TestCase):
                 "name":"Experiment Test",
                 "audience":"all",
                 "description":"just testing",
-                "device_types":["android", "ios"],
+                "device_types":["ios", "android"],
                 "campaigns":{
                     "categories":[
                         "campaign","categories"
@@ -88,29 +89,29 @@ class TestFullExperiment(unittest.TestCase):
     def setUp(self):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
-        push_1 = self.airship.create_push()
-        push_1.notification = ua.notification(alert="test message 1")
+        push_3 = self.airship.create_push()
+        push_3.notification = ua.notification(alert="test message 1")
 
         in_app = ua.in_app(alert="This part appears in-app!",
                            display_type="banner")
-        push_1.in_app = in_app
+        push_3.in_app = in_app
 
-        push_2 = self.airship.create_push()
-        push_2.notification = ua.notification(alert="test message 2")
-        push_2.in_app = ua.in_app(alert="This part appears in-app!",
+        push_4 = self.airship.create_push()
+        push_4.notification = ua.notification(alert="test message 2")
+        push_4.in_app = ua.in_app(alert="This part appears in-app!",
                                   display_type="banner",
                                   expiry="2025-10-14T12:00:00",
                                   display={"position":"top"},
                                   actions={"add_tag":"in-app"}
                                   )
 
-        variant_1 = ua.Variant(push_1,
+        variant_3 = ua.Variant(push_3,
                                description="A description of the variant one",
                                name="Testing",
                                schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30)),
                                weight=2
                                )
-        variant_2 = ua.Variant(push_2,
+        variant_4 = ua.Variant(push_4,
                                description="A description of the variant two",
                                name="Testing",
                                schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10,  18, 45, 30)),
@@ -125,7 +126,7 @@ class TestFullExperiment(unittest.TestCase):
         self.operation_id = "d67d4de6-934f-4ebb-aef0-250d89699b6b"
         self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
         self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
-        self.variants = [variant_1, variant_2]
+        self.variants = [variant_3, variant_4]
 
 
     def test_full_experiment(self):
@@ -153,10 +154,7 @@ class TestFullExperiment(unittest.TestCase):
                 "audience": "all",
                 "control": 0.5,
                 "description": "just testing",
-                "device_types": [
-                    "ios",
-                    "android"
-                ],
+                "device_types": ["ios", "android"],
                 "campaigns": {
                     "categories": [
                         "campaign",
