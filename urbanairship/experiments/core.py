@@ -43,14 +43,17 @@ class AB_test(object):
             version=3
         )
         return response
-        
+
     def list_scheduled_experiment(self):
+        """ List scheduled experiments in order, from closest to the current
+        date-time to farthest """
+
         url = common.EXPERIMENTS_SCHEDULE_URL
         return self._get_listing(url)
 
     def delete(self, experiment_id):
         """ Delete a scheduled experiment. You can only delete experiments before they start
-        
+
         :keyword experiment_id: The unique identifier of the experiment, type string
         DELETE /api/experiments/scheduled/{experiment_id}
         """
@@ -64,8 +67,26 @@ class AB_test(object):
 
         return response
 
-    def validate(self):
-        pass
+    def validate(self, experiment):
+        """ Accepts the same range of payloads as /api/experiments,
+        but only parses and validates the payload without creating the experiment.
+        An experiment may validate and still fail to be delivered. For example,
+        you may have a valid experiment with no devices in your audience.
+            POST /api/experiments/validate
+
+        :keyword experiment: Body of the experiment you want to validate
+        """
+        url = common.EXPERIMENTS_VALIDATE
+        body = json.dumps(experiment)
+        response = self.airship.request(
+            methon='POST',
+            body=body,
+            url=url,
+            content_type='application/json',
+            version=3
+        )
+
+        return response
 
     def lookup(self):
         pass

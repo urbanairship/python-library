@@ -37,6 +37,7 @@ SCHEDULE_CREATE_AND_SEND_URL = SCHEDULES_URL + 'create-and-send'
 
 EXPERIMENTS_URL = BASE_URL + '/experiments'
 EXPERIMENTS_SCHEDULE_URL = EXPERIMENTS_URL + '/scheduled'
+EXPERIMENTS_VALIDATE = EXPERIMENTS_URL + '/validate'
 
 logger = logging.getLogger('urbanairship')
 
