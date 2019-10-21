@@ -3,7 +3,7 @@ import json
 
 
 class AB_test(object):
-    def __ini__(self, airship):
+    def __init__(self, airship):
         self.airship = airship
 
     def _get_listing(self, url, limit=None):
