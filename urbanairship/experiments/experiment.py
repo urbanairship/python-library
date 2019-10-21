@@ -79,7 +79,7 @@ class Experiment(object):
             data["campaigns"] = self.campaigns
         if self.control is not None:
             data["control"] = self.control
-        
+
         if self.weight is not None:
             variant_data['weight'] = self.weight
 
@@ -132,4 +132,3 @@ class Experiment(object):
                 'control must be in a range of 0.0 and 1.0'
             )
         self._control = value
-        

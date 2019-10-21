@@ -11,7 +11,6 @@ class Variant(object):
                  weight=None
                  ):
         """
-
         :keyword push: [required] A push object without audience and device_types
             fields. These two fields are not allowed because they are already defined
             in the experiment object
@@ -22,8 +21,6 @@ class Variant(object):
         :keyword schedule: [optional] The time when the push notification should be sent
         :keyword weight: [optional] The proportion of the audience that will receive
             this variant. Defaults to 1.
-
-
         """
         self.push = push
         self.description = description

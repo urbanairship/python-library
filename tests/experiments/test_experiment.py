@@ -30,8 +30,8 @@ class TestExperiment(unittest.TestCase):
         push_4.in_app = ua.in_app(alert="This part appears in-app!",
                                   display_type="banner",
                                   expiry="2025-10-14T12:00:00",
-                                  display={"position":"top"},
-                                  actions={"add_tag":"in-app"}
+                                  display={"position": "top"},
+                                  actions={"add_tag": "in-app"}
                                   )
 
         variant_1 = ua.Variant(push_1,
@@ -42,13 +42,15 @@ class TestExperiment(unittest.TestCase):
         variant_3 = ua.Variant(push_3,
                                description="A description of the variant one",
                                name="Testing",
-                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10, 18, 45, 30)),
+                               schedule=ua.scheduled_time(
+                                   datetime.datetime(2025, 10, 10, 18, 45, 30)),
                                weight=2
                                )
         variant_4 = ua.Variant(push_4,
                                description="A description of the variant two",
                                name="Testing",
-                               schedule=ua.scheduled_time(datetime.datetime(2025, 10, 10,  18, 45, 30)),
+                               schedule=ua.scheduled_time(datetime.datetime(
+                                   2025, 10, 10,  18, 45, 30)),
                                weight=3
                                )
 
@@ -83,30 +85,30 @@ class TestExperiment(unittest.TestCase):
                                               description=self.description
                                               )
             experiment_payload = {
-                "name":"Experiment Test",
-                "audience":"all",
-                "description":"just testing",
-                "device_types":["ios", "android"],
-                "campaigns":{
-                    "categories":[
-                        "campaign","categories"
+                "name": "Experiment Test",
+                "audience": "all",
+                "description": "just testing",
+                "device_types": ["ios", "android"],
+                "campaigns": {
+                    "categories": [
+                        "campaign", "categories"
                     ]},
-                "variants":[{
-                    "description":"A description of the variant",
-                    "name":"Testing",
-                    "push":{
-                        "notification":{
-                            "alert":"test message 1"
+                "variants": [{
+                    "description": "A description of the variant",
+                    "name": "Testing",
+                    "push": {
+                        "notification": {
+                            "alert": "test message 1"
                         }
                     }
                 },
-                {
-                    "push":{
-                        "notification":{
-                            "alert":"test message 2"
+                    {
+                        "push": {
+                            "notification": {
+                                "alert": "test message 2"
+                            }
                         }
                     }
-                }
                 ]
             }
             self.assertEqual(experiment_object.payload, experiment_payload)
