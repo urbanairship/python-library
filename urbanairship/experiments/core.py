@@ -88,5 +88,18 @@ class AB_test(object):
 
         return response
 
-    def lookup(self):
-        pass
+    def lookup(self, experiment_id):
+        """ Look up an experiment (A/B Test)
+
+        :keyword experiment_id: The unique identifier of the experiment, type string
+        """
+
+        url = common.EXPERIMENTS_URL + experiment_id
+        response = self.airship.request(
+            method='GET',
+            body=None,
+            url=url,
+            version=3
+        )
+
+        return response
