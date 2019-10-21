@@ -127,8 +127,10 @@ class Experiment(object):
             TypeError(
                 'the control must be type float'
             )
-        if not 0.0 >= value >= 1.0:
-            ValueError(
-                'control must be in a range of 0.0 and 1.0'
-            )
+        if value is not None:
+            if not 0.0 >= value >= 1.0:
+                ValueError(
+                    'control must be in a range of 0.0 and 1.0'
+                )
+
         self._control = value
