@@ -39,7 +39,7 @@ class AB_test(object):
             method='POST',
             body=body,
             url=url,
-            content_type='aplication/json',
+            content_type='application/json',
             version=3
         )
         return response

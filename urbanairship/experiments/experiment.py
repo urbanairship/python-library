@@ -46,20 +46,20 @@ class Experiment(object):
             variant_data = {}
             push_options = {}
 
-            if getattr(variant, 'description'):
+            if getattr(variant, 'description', None):
                 variant_data['description'] = variant.description
-            if getattr(variant, 'name'):
+            if getattr(variant, 'name', None):
                 variant_data['name'] = variant.name
 
-            if getattr(variant.push, 'in_app'):
+            if getattr(variant.push, 'in_app', None):
                 push_options['in_app'] = variant.push.in_app
-            if getattr(variant.push, 'notification'):
+            if getattr(variant.push, 'notification', None):
                 push_options['notification'] = variant.push.notification
-            if getattr(variant.push, 'options'):
+            if getattr(variant.push, 'options', None):
                 push_options['options'] = variant.push.options
-            if getattr(variant, 'schedule'):
+            if getattr(variant, 'schedule', None):
                 variant_data['schedule'] = variant.schedule
-            if getattr(variant, 'weight'):
+            if getattr(variant, 'weight', None):
                 variant_data['weight'] = variant.weight
 
             variant_data['push'] = push_options
