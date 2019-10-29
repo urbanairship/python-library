@@ -9,7 +9,7 @@ Create A/B Tests using the /api/experiments endpoint.
 <https://docs.airship.com/api/ua/#tag/a/b-tests>
 
 
-Create an Experiments
+Create an A/B Test
 ---------------------
 Ceate an experiment for this application. For more information, see:
 https://docs.airship.com/api/ua/#schemas%2fexperimentobject
@@ -19,11 +19,32 @@ https://docs.airship.com/api/ua/#schemas%2fexperimentobject
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
     audience = "all"
+    ab_test = ua.AB_test(airship)
     
 .. code-block:: python
 
 
-Create a variant
+Create an Experiment
+---------------------
+
+.. code-block:: python
+
+        experiment = ua.Experiment(
+        name=name,
+        audience=audience,
+        control=0.5,
+        description=description,
+        device_types=device_types,
+        campaigns=campaigns,
+        variants=variant_1
+    )
+    ab_test = ua.AB_test(airship=airship)
+    r = ab_test.create(experiment=experiment)
+
+.. code-block:: python
+
+
+Create a Variant
 ----------------
 The variants for the experiment.
 An experiment must have at least 1 variant and no more than 26.
@@ -50,27 +71,6 @@ https://docs.airship.com/api/ua/#schemas%2fexperimentobject
         name="Testing",
         schedule={"scheduled_time": "2025-10-10T18:45:30"},
         weight=3)
-
-    variant_2 = ua.Variant(
-        push_2,
-        description="A description of the variant two",
-        name="Testing",
-        schedule={"scheduled_time": "2025-10-10T18:45:30"},
-        weight=2)
-
-    variants = [variant_1, variant_2]
-
-        experiment = ua.Experiment(
-        name=name,
-        audience=audience,
-        control=0.5,
-        description=description,
-        device_types=device_types,
-        campaigns=campaigns,
-        variants=variants
-    )
-    ab_test = ua.AB_test(airship=airship)
-    r = ab_test.create(experiment=experiment)
 
 .. code-block:: python
 
@@ -102,46 +102,8 @@ https://docs.airship.com/api/ua/#operation/api/experiments/validate/post
 
         import urbanairship as ua
         airship = ua.Airship("app_key", "master_secret")
-        audience = "all"
-        push_1 = airship.create_push()
-        in_app_message = ua.in_app(alert="This part appears in-app!",
-                                    display_type="banner",
-                                    expiry="2025-10-14T12:00:00",
-                                    display={"position": "top"},
-                                    actions={"add_tag": "in-app"}
-                                    )
-        push_1.notification = ua.notification(alert="test message 1")
-        push_1.in_app = in_app_message
-        push_2 = airship.create_push()
-        push_2.notification = ua.notification(alert="test message 2")
-
-        variant_1 = ua.Variant(
-            push_1,
-            description="A description of the variant one",
-            name="Testing",
-            schedule={"scheduled_time": "2025-10-10T18:45:30"},
-            weight=3)
-
-        variant_2 = ua.Variant(
-            push_2,
-            description="A description of the variant two",
-            name="Testing",
-            schedule={"scheduled_time": "2025-10-10T18:45:30"},
-            weight=2)
-
-        variants = [variant_1, variant_2]
-
-            experiment = ua.Experiment(
-            name=name,
-            audience=audience,
-            control=0.5,
-            description=description,
-            device_types=device_types,
-            campaigns=campaigns,
-            variants=variants
-        )
         ab_test = ua.AB_test(airship=airship)
-        r = ab_test.create(experiment=experiment)
+        r = ab_test.validate(experiment=experiment)
 
 .. code-block:: python
 
