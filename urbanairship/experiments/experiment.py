@@ -14,7 +14,7 @@ class Experiment(object):
                  control=None
                  ):
         """
-        :keydword audience: [required] The audience for the experiment
+        :keyword audience: [required] The audience for the experiment
         :keyword device_types: An array containing one or more strings identifying
             targeted platforms. Accepted platforms are ios, android, amazon, wns, web,
             sms, email, and open::<open_platform_name>
