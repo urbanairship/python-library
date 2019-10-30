@@ -26,7 +26,7 @@ class AB_test(object):
         )
         return response
 
-    def list_experiments(self, _body_builder_):
+    def list_experiments(self):
         url = common.EXPERIMENTS_URL
         return self._get_listing(url)
 
@@ -94,7 +94,7 @@ class AB_test(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         """
 
-        url = common.EXPERIMENTS_URL + experiment_id
+        url = common.EXPERIMENTS_URL + "/" + experiment_id
         response = self.airship.request(
             method='GET',
             body=None,
