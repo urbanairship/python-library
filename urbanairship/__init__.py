@@ -177,7 +177,7 @@ __all__ = [
 from .experiments import (
     Experiment,
     Variant,
-    AB_test
+    ABTest
 )
 
 import logging

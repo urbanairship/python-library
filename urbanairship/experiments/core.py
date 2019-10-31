@@ -2,7 +2,7 @@ from urbanairship import common
 import json
 
 
-class AB_test(object):
+class ABTest(object):
     def __init__(self, airship):
         self.airship = airship
 
