@@ -84,7 +84,7 @@ class ABTest(object):
         url = common.EXPERIMENTS_VALIDATE
         body = json.dumps(experiment)
         response = self.airship.request(
-            methon='POST',
+            method='POST',
             body=body,
             url=url,
             content_type='application/json',
