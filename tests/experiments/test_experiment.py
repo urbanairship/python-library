@@ -12,6 +12,14 @@ from tests import TEST_KEY, TEST_SECRET
 class TestExperiment(unittest.TestCase):
     def setUp(self):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.name = "Experiment Test"
+        self.audience = "all"
+        self.description = "just testing"
+        self.device_types = ["ios", "android"]
+        self.campaigns = ua.campaigns(categories=["campaign", "categories"])
+        self.operation_id = "d67d4de6-934f-4ebb-aef0-250d89699b6b"
+        self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
+        self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
 
         push_1 = self.airship.create_push()
         push_1.notification = ua.notification(alert="test message 1")
@@ -54,16 +62,9 @@ class TestExperiment(unittest.TestCase):
                                weight=3
                                )
 
-        self.name = "Experiment Test"
-        self.audience = "all"
-        self.description = "just testing"
-        self.device_types = ["ios", "android"]
-        self.campaigns = ua.campaigns(categories=["campaign", "categories"])
-        self.operation_id = "d67d4de6-934f-4ebb-aef0-250d89699b6b"
-        self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
-        self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
         self.variants_1 = [variant_1, variant_2]
         self.variants_2 = [variant_3, variant_4]
+
 
     def test_simple_experiment(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
