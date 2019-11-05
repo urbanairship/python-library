@@ -26,12 +26,11 @@ class TestExperiment(unittest.TestCase):
 
         push_2 = self.airship.create_push()
         push_2.notification = ua.notification(alert="test message 2")
+
         push_3 = self.airship.create_push()
         push_3.notification = ua.notification(alert="test message 1")
-
-        in_app = ua.in_app(alert="This part appears in-app!",
-                           display_type="banner")
-        push_3.in_app = in_app
+        push_3.in_app = ua.in_app(alert="This part appears in-app!",
+                                  display_type="banner")
 
         push_4 = self.airship.create_push()
         push_4.notification = ua.notification(alert="test message 2")
@@ -64,7 +63,6 @@ class TestExperiment(unittest.TestCase):
 
         self.variants_1 = [variant_1, variant_2]
         self.variants_2 = [variant_3, variant_4]
-
 
     def test_simple_experiment(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
