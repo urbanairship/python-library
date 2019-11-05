@@ -62,7 +62,7 @@ class ABTest(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         DELETE /api/experiments/scheduled/{experiment_id}
         """
-        url = common.EXPERIMENTS_SCHEDULE_URL + experiment_id
+        url = common.EXPERIMENTS_SCHEDULE_URL + "/" + experiment_id
         response = self.airship.request(
             method='DELETE',
             body=None,
