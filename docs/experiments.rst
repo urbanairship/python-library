@@ -19,7 +19,7 @@ https://docs.airship.com/api/ua/#schemas%2fexperimentobject
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
     audience = "all"
-    ab_test = ua.AB_test(airship)
+    ab_test = ua.ABTest(airship)
     
 .. code-block:: python
 
@@ -38,7 +38,7 @@ Create an Experiment
         campaigns=campaigns,
         variants=variant_1
     )
-    ab_test = ua.AB_test(airship=airship)
+    ab_test = ua.ABTest(airship=airship)
     r = ab_test.create(experiment=experiment)
 
 .. code-block:: python
@@ -85,7 +85,7 @@ https://docs.airship.com/api/ua/#operation/api/experiments/scheduled/experiment_
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    experiment = ua.AB_test(airship)
+    experiment = ua.ABTest(airship)
 
     experiment.delete("d9bd410d-29cf-4b17-9272-80a3f3f0662c")
 
@@ -102,7 +102,7 @@ https://docs.airship.com/api/ua/#operation/api/experiments/validate/post
 
         import urbanairship as ua
         airship = ua.Airship("app_key", "master_secret")
-        ab_test = ua.AB_test(airship=airship)
+        ab_test = ua.ABTest(airship=airship)
         r = ab_test.validate(experiment=experiment)
 
 .. code-block:: python
@@ -118,7 +118,7 @@ https://docs.airship.com/api/ua/#operation/api/experiments/experiment_id/get
 
     import urbanairship as ua
     airship = ua.Airship("app_key", "master_secret")
-    experiment = ua.AB_test(airship)
+    experiment = ua.ABTest(airship)
 
     experiment.lookup("d9bd410d-29cf-4b17-9272-80a3f3f0662c")
 
