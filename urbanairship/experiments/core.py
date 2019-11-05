@@ -27,6 +27,11 @@ class ABTest(object):
         return response
 
     def list_experiments(self):
+        """ List experiments, sorted by created_at date/time from newest to oldest 
+
+        :keyword limit: Positive maximum number of elements to return per page.
+        Default limit is 10. Max: 100 and Min: 1.
+        """
         url = common.EXPERIMENTS_URL
         return self._get_listing(url)
 
