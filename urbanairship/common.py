@@ -43,6 +43,10 @@ class Urls(object):
         self.create_and_send_url = self.base_url + 'create-and-send/'
         self.schedule_create_and_send_url = self.schedules_url + 'create-and-send/'
 
+        self.experiments_url = self.base_url + '/experiments'
+        self.experiments_schedule_url = self.experiments_url + '/scheduled'
+        self.experiments_validate = self.experiments_url + '/validate'
+
     def get(self, endpoint):
         url = getattr(self, endpoint, None)
 
@@ -50,10 +54,6 @@ class Urls(object):
             raise AttributeError('No url for endpoint %s' % endpoint)
 
         return url
-
-EXPERIMENTS_URL = BASE_URL + '/experiments'
-EXPERIMENTS_SCHEDULE_URL = EXPERIMENTS_URL + '/scheduled'
-EXPERIMENTS_VALIDATE = EXPERIMENTS_URL + '/validate'
 
 logger = logging.getLogger('urbanairship')
 
@@ -64,7 +64,6 @@ class Unauthorized(Exception):
 
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
-
 
     :param args: For backwards compatibility, ``*args`` includes the status and
         response body.
