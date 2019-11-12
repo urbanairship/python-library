@@ -4,32 +4,28 @@
 About
 =====
 
-``urbanairship`` is a Python library for using the `Urban Airship
-<http://urbanairship.com/>`_ web service API for push notifications and rich
-app pages.
+``urbanairship`` is a Python library for using the `Airship
+<http://airship.com/>`_ REST API for push notifications, message
+center messages, email, and SMS.
 
 Requirements
 ============
 
-As of version 2.0.0, Python 2.7, 3.3 or 3.4 is required. 3.5 and 3.6 are also
-officially supported from version 3.0.0 on.
+As of version 5.2.0, either Python 2.7, 3.5, 3.6, or 3.7 is required. Other requirements can be found in requirements.txt.
 
-Functionality
-=============
+Questions
+=========
 
-Version 2.0.0 is a feature upgrade and backwards incompatible with versions
-earlier than 0.8.  This release focuses on support for Web Notify and removes
-support for Blackberry and MPNS.
-
-A more detailed list of changes can be found in the CHANGELOG.
+The best place to ask questions or report a problem is our support site:
+http://support.airship.com/
 
 Usage
 =====
 
 See the `full documentation for this library
-<http://docs.urbanairship.com/reference/libraries/python>`_, as well as the
-`Urban Airship API Documentation
-<http://docs.urbanairship.com/api/>`_.
+<https://docs.airship.com/api/libraries/python/>`_, as well as the
+`Airship API Documentation
+<https://docs.airship.com/api/ua/>`_.
 
 Simple iOS Push
 ---------------
@@ -52,7 +48,7 @@ Broadcast to iOS and Android devices
     >>> push.device_types = ua.device_types('ios', 'android')
     >>> push.send()
 
-Sending a rich app page to a single iOS device
+Sending a message center message to a single iOS device
 ----------------------------------------------
     >>> import urbanairship as ua
     >>> airship = ua.Airship('application_key', 'master_secret')
@@ -61,7 +57,7 @@ Sending a rich app page to a single iOS device
     >>> push.notification = ua.notification(alert='Hello')
     >>> push.device_types = ua.device_types('ios')
     >>> push.message = ua.message(
-    ...     'Hello, Rich Push User',
+    ...     'Hello, message center user',
     ...     '<html><h1>Hello!</h1><p>Goodbye.</p></html>')
     >>> push.send()
 
@@ -76,16 +72,10 @@ Web Push to a tag
     >>> push.device_types = ua.device_types('web')
     >>> push.send()
 
-Questions
-=========
-
-The best place to ask questions is our support site:
-http://support.urbanairship.com/
-
 History
 =======
 
-* 5.0 Support for Sms and Email push. See changelog for other updates.
+* 5.0 Support for SMS and Email messages. See changelog for other updates.
 * 4.0 Support for Automation, removed Feedback
 * 3.0 Support for Open Channels, several other significant changes
 * 2.0 Support for Web Notify and more iOS 10, stopped supporting Python 2.6
