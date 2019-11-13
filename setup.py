@@ -12,10 +12,10 @@ with open("urbanairship/__about__.py") as fp:
 setup(
     name="urbanairship",
     version=__about__["__version__"],
-    author="Urban Airship Customer Engineering",
-    author_email="customer-engineering@urbanairship.com",
-    url="http://urbanairship.com/",
-    description="Python package for using the Urban Airship API",
+    author="Airship Customer Engineering",
+    author_email="customer-engineering@airship.com",
+    url="https://airship.com/",
+    description="Python package for using the Airship API",
     long_description=open('README.rst').read(),
     packages=[
         "urbanairship",
