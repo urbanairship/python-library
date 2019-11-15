@@ -9,6 +9,7 @@ from .push import Push, ScheduledPush, TemplatePush
 logger = logging.getLogger('urbanairship')
 
 VALID_KEY = re.compile(r'^[\w-]{22}$')
+VALID_LOCATIONS = ['eu', 'us']
 
 
 class Urls(object):
@@ -69,6 +70,7 @@ class Airship(object):
     def __init__(self, key, secret, location=None):
         self.key = key
         self.secret = secret
+        self.location = location
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
@@ -83,6 +85,16 @@ class Airship(object):
         if not VALID_KEY.match(value):
             raise ValueError('keys must be 22 characters')
         self._key = value
+
+    @property
+    def location(self):
+        return self._location
+
+    @location.setter
+    def location(self, value):
+        if value not in VALID_LOCATIONS or not None:
+            raise ValueError('location must be {} or none'.format(VALID_LOCATIONS))
+        self._location = value
 
     @property
     def secret(self):
