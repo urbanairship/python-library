@@ -32,13 +32,13 @@ class ABTest(object):
         :keyword limit: Positive maximum number of elements to return per page.
         Default limit is 10. Max: 100 and Min: 1.
         """
-        url = common.EXPERIMENTS_URL
+        url = self.airship.urls.get('experiments_url')
         return self._get_listing(url)
 
     def create(self, experiment):
         """ Create an experiment """
 
-        url = common.EXPERIMENTS_URL
+        url = self.airship.urls.get('experiments_url')
         body = json.dumps(experiment.payload)
         response = self.airship.request(
             method='POST',
@@ -53,7 +53,7 @@ class ABTest(object):
         """ List scheduled experiments in order, from closest to the current
         date-time to farthest """
 
-        url = common.EXPERIMENTS_SCHEDULE_URL
+        url = self.airship.urls.get('experiments_schedule_url')
         return self._get_listing(url)
 
     def delete(self, experiment_id):
@@ -62,7 +62,8 @@ class ABTest(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         DELETE /api/experiments/scheduled/{experiment_id}
         """
-        url = common.EXPERIMENTS_SCHEDULE_URL + "/" + experiment_id
+
+        url = self.airship.urls.get('experiments_schedule_url') + '/' + experiment_id
         response = self.airship.request(
             method='DELETE',
             body=None,
@@ -82,6 +83,7 @@ class ABTest(object):
         :keyword experiment: Body of the experiment you want to validate
         """
         url = common.EXPERIMENTS_VALIDATE
+        url = self.airship.urls.get('experiments_validate')
         body = json.dumps(experiment)
         response = self.airship.request(
             method='POST',
@@ -99,7 +101,7 @@ class ABTest(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         """
 
-        url = common.EXPERIMENTS_URL + "/" + experiment_id
+        url = self.airship.urls.get('experiments_url') + '/' + experiment_id
         response = self.airship.request(
             method='GET',
             body=None,

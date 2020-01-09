@@ -1,14 +1,11 @@
 import json
 import logging
 
-from urbanairship import common
-
 logger = logging.getLogger('urbanairship')
 
 
 class ChannelUninstall(object):
     _airship = None
-    url = common.CHANNEL_URL + 'uninstall/'
 
     def __init__(self, airship):
         self._airship = airship
@@ -23,6 +20,9 @@ class ChannelUninstall(object):
             )
 
         body = json.dumps(channels)
-        response = self._airship._request('POST', body, self.url, version=3)
+        url = self._airship.urls.get('channel_url') + 'uninstall/'
+
+        response = self._airship._request('POST', body, url, version=3)
         logger.info('Successfully uninstalled {0} channels'.format(chan_num))
+
         return response

@@ -2,43 +2,6 @@ import logging
 import datetime
 import six
 
-SERVER = 'go.urbanairship.com'
-BASE_URL = "https://go.urbanairship.com/api"
-CHANNEL_URL = BASE_URL + '/channels/'
-OPEN_CHANNEL_URL = BASE_URL + '/channels/open/'
-DEVICE_TOKEN_URL = BASE_URL + '/device_tokens/'
-APID_URL = BASE_URL + '/apids/'
-PUSH_URL = BASE_URL + '/push/'
-SCHEDULES_URL = BASE_URL + '/schedules/'
-TAGS_URL = BASE_URL + '/tags/'
-SEGMENTS_URL = BASE_URL + '/segments/'
-REPORTS_URL = BASE_URL + '/reports/'
-LISTS_URL = BASE_URL + '/lists/'
-LOCATION_URL = BASE_URL + '/location/'
-TEMPLATES_URL = BASE_URL + '/templates/'
-SCHEDULE_TEMPLATE_URL = TEMPLATES_URL + 'schedules/'
-PIPELINES_URL = BASE_URL + '/pipelines/'
-
-NAMED_USER_URL = BASE_URL + '/named_users/'
-NAMED_USER_TAG_URL = NAMED_USER_URL + 'tags/'
-NAMED_USER_DISASSOCIATE_URL = NAMED_USER_URL + 'disassociate/'
-NAMED_USER_ASSOCIATE_URL = NAMED_USER_URL + 'associate/'
-
-SMS_URL = CHANNEL_URL + 'sms'
-SMS_OPT_OUT_URL = SMS_URL + '/opt-out'
-SMS_UNINSTALL_URL = SMS_URL + '/uninstall'
-
-EMAIL_URL = CHANNEL_URL + 'email'
-EMAIL_TAGS_URL = EMAIL_URL + '/tags'
-EMAIL_UNINSTALL_URL = EMAIL_URL + '/uninstall'
-
-CREATE_AND_SEND_URL = BASE_URL + '/create-and-send'
-SCHEDULE_CREATE_AND_SEND_URL = SCHEDULES_URL + 'create-and-send'
-
-EXPERIMENTS_URL = BASE_URL + '/experiments'
-EXPERIMENTS_SCHEDULE_URL = EXPERIMENTS_URL + '/scheduled'
-EXPERIMENTS_VALIDATE = EXPERIMENTS_URL + '/validate'
-
 logger = logging.getLogger('urbanairship')
 
 
@@ -48,7 +11,6 @@ class Unauthorized(Exception):
 
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
-
 
     :param args: For backwards compatibility, ``*args`` includes the status and
         response body.

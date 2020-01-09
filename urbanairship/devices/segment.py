@@ -20,7 +20,7 @@ class Segment(object):
     def create(self, airship):
         """Create a Segment object and return it."""
 
-        url = common.SEGMENTS_URL
+        url = airship.urls.get('segments_url')
 
         body = json.dumps(
             {
@@ -50,7 +50,7 @@ class Segment(object):
     def from_id(cls, airship, seg_id):
         """Retrieve a segment based on the provided ID."""
 
-        url = common.SEGMENTS_URL + seg_id
+        url = airship.urls.get('segments_url') + seg_id
         response = airship._request(
             method='GET',
             body=None,
@@ -80,7 +80,7 @@ class Segment(object):
         data['display_name'] = self.display_name
         data['criteria'] = self.criteria
 
-        url = common.SEGMENTS_URL + self.id
+        url = airship.urls.get('segments_url') + self.id
         body = json.dumps(data)
         response = airship._request(
             method='PUT',
@@ -94,7 +94,7 @@ class Segment(object):
         return response
 
     def delete(self, airship):
-        url = common.SEGMENTS_URL + self.id
+        url = airship.urls.get('segments_url') + self.id
         res = airship._request(
             method='DELETE',
             body=None,
@@ -112,9 +112,10 @@ class SegmentList(common.IteratorParent):
         :ivar limit: Number of segments to fetch
 
     """
-    next_url = common.SEGMENTS_URL
+    next_url = None
     data_attribute = 'segments'
 
     def __init__(self, airship, limit=None):
+        next_url = airship.urls.get('segments_url')
         params = {'limit': limit} if limit else {}
         super(SegmentList, self).__init__(airship, params)

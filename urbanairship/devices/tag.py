@@ -1,8 +1,6 @@
 import json
 import logging
 
-from urbanairship import common
-
 logger = logging.getLogger('urbanairship')
 
 
@@ -10,7 +8,7 @@ class ChannelTags(object):
     """Modify the tags for a channel"""
 
     def __init__(self, airship):
-        self.url = common.CHANNEL_URL + 'tags/'
+        self.url = airship.urls.get('channel_url') + 'tags/'
         self._airship = airship
         self.audience = {}
         self.add_group = {}
@@ -73,7 +71,7 @@ class OpenChannelTags(object):
     """Modify the tags for an open channel"""
 
     def __init__(self, airship):
-        self.url = common.OPEN_CHANNEL_URL + 'tags/'
+        self.url = airship.urls.get('open_channel_url') + 'tags/'
         self._airship = airship
         self.audience = {}
         self.add_group = {}

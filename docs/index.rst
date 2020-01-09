@@ -38,6 +38,18 @@ providing connection pooling and strict SSL checking. The ``Airship``
 object is threadsafe, and can be instantiated once and reused in
 multiple threads.
 
+EU Base URL
+-----------
+
+When creating an instance of ``urbanairship.Airship``, an optional argument
+may be added to specify use of Airship's EU data center. If no location
+argument is passed, the US data center will be used.
+
+.. code-block:: python
+
+   import urbanairship as ua
+   eu_airship = ua.Airship('<app_key>', '<master_secret>', location='eu')
+
 Logging
 -------
 

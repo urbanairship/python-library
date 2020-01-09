@@ -2,8 +2,6 @@ import json
 import logging
 import re
 
-from urbanairship import common
-
 logger = logging.getLogger('urbanairship')
 
 VALID_MSISDN = re.compile(r'[0-9]*$')
@@ -101,7 +99,7 @@ class Sms(object):
         :return: The response object from the api.
         """
 
-        url = common.SMS_URL
+        url = self.airship.urls.get('sms_url')
         reg_payload = self.common_payload
 
         if opted_in:
@@ -142,7 +140,7 @@ class Sms(object):
         :return: the response object from the api
         """
 
-        url = common.SMS_OPT_OUT_URL
+        url = self.airship.urls.get('sms_opt_out_url')
 
         response = self.airship.request(
             method='POST',
@@ -165,7 +163,7 @@ class Sms(object):
 
         :return: the response object from the api"""
 
-        url = common.SMS_UNINSTALL_URL
+        url = self.airship.urls.get('sms_uninstall_url')
 
         response = self.airship.request(
             method='POST',
@@ -188,7 +186,7 @@ class Sms(object):
         :return: the response object from the api
         """
 
-        url = common.SMS_URL + '{msisdn}/{sender}'.format(
+        url = self.airship.urls.get('sms_url') + '{msisdn}/{sender}'.format(
             msisdn=self.msisdn,
             sender=self.sender
         )
