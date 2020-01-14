@@ -9,7 +9,7 @@ from .push import Push, ScheduledPush, TemplatePush
 logger = logging.getLogger('urbanairship')
 
 VALID_KEY = re.compile(r'^[\w-]{22}$')
-VALID_LOCATIONS = ['eu', 'us']
+VALID_LOCATIONS = ['eu', 'us', None]
 
 
 class Urls(object):
@@ -92,8 +92,8 @@ class Airship(object):
 
     @location.setter
     def location(self, value):
-        if value not in VALID_LOCATIONS or not None:
-            raise ValueError('location must be {} or none'.format(VALID_LOCATIONS))
+        if value not in VALID_LOCATIONS:
+            raise ValueError('location must be {} or None'.format(VALID_LOCATIONS))
         self._location = value
 
     @property
