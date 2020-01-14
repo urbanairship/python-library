@@ -22,7 +22,7 @@ setup(
         "urbanairship.push",
         "urbanairship.devices",
         "urbanairship.reports",
-        "urbanairship.automation"
+        "urbanairship.automation",
         "urbanairship.experiments"
     ],
     license='BSD License',
