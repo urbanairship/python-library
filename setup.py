@@ -23,6 +23,7 @@ setup(
         "urbanairship.devices",
         "urbanairship.reports",
         "urbanairship.automation"
+        "urbanairship.experiments"
     ],
     license='BSD License',
     classifiers=[
