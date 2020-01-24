@@ -18,7 +18,6 @@ Automations are defined by one or more Pipeline objects
     airship = ua.Airship("app_key", "master_secret")
     automation = ua.Automation(airship)
     pipeline = ua.Pipeline(
-        airship,
         enabled=True,
         name="Automated Pipeline",
         outcome={
@@ -62,7 +61,6 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/validate/post
     airship = ua.Airship("app_key", "master_secret")
     automation = ua.Automation(airship)
     pipeline = ua.Pipeline(
-        airship,
         enabled=True,
         name="Automated Pipeline",
         outcome={
@@ -109,7 +107,6 @@ https://docs.airship.com/api/ua/#operation/api/pipelines/pipeline_id/put
     airship = ua.Airship("app_key", "master_secret")
     automation = ua.Automation(airship)
     pipeline = ua.Pipeline(
-        airship,
         enabled=True,
         name="Updated Pipeline",
         outcome={
