@@ -1,4 +1,12 @@
 --------------------
+5.3.0
+--------------------
+- Added support for Experiments (a/b testing)
+- Added support for Airship's European Union Cloud Site based projects
+- Added ability to pass a channel_id parameter to start channel listing at a given channel_id
+- Modified the documentation for Pipeline objects to reflect proper parameters
+
+--------------------
 5.2.0
 --------------------
 - Added Create and Send support for SMS, Email and Open Channels
