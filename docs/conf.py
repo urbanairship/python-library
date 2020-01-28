@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Urban Airship Python Library'
-copyright = u'2020, Urban Airship'
+copyright = u'2020, Airship'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
