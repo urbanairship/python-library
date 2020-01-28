@@ -1,17 +1,17 @@
 Experiments
 ===========
 
-With experiments endpoint you can easily manage your experiments (A/B tests) for an app.
-An experiment or A/B test
-is a set of distinct push notification variants sent to subsets of an audience.
+With the experiments endpoint you can easily manage your experiments (A/B tests) for an app.
+An experiment or A/B test is a set of distinct push notification 
+variants sent to subsets of an audience.
 You can create up to 26 notification variants and send each variant to an audience subset.
-Create A/B Tests using the /api/experiments endpoint. 
+Please refer to the documentation here for more information:
 <https://docs.airship.com/api/ua/#tag/a/b-tests>
 
 
 Create an A/B Test
 ---------------------
-Ceate an experiment for this application. For more information, see:
+Create an experiment for this application. For more information, see:
 https://docs.airship.com/api/ua/#schemas%2fexperimentobject
 
 .. code-block:: python
@@ -48,7 +48,7 @@ Create a Variant
 ----------------
 The variants for the experiment.
 An experiment must have at least 1 variant and no more than 26.
-Required to have a Push object withing:
+A Push object must be included:
 https://docs.airship.com/api/ua/#schemas%2fexperimentobject
 
 .. code-block:: python
@@ -77,7 +77,7 @@ https://docs.airship.com/api/ua/#schemas%2fexperimentobject
 
 Delete Experiment
 ------------------------
-Delete a scheduled experiment. You can only delete experiments before they start;
+Delete a scheduled experiment. You can only delete experiments before they start.
 For more information, see:
 https://docs.airship.com/api/ua/#operation/api/experiments/scheduled/experiment_id/delete
 
@@ -111,7 +111,8 @@ https://docs.airship.com/api/ua/#operation/api/experiments/validate/post
 
 Experiment lookup
 -----------------
-Look up an experiment (A/B Test). For more information see:
+Look up an experiment (A/B Test). 
+For more information see:
 https://docs.airship.com/api/ua/#operation/api/experiments/experiment_id/get
 
 .. code-block:: python
