@@ -49,7 +49,7 @@ Broadcast to iOS and Android devices
     >>> push.send()
 
 Sending a message center message to a single iOS device
-----------------------------------------------
+--------------------------------------------------------
     >>> import urbanairship as ua
     >>> airship = ua.Airship('application_key', 'master_secret')
     >>> push = airship.create_push()
