@@ -36,12 +36,12 @@ Complex audience with platform specifics
    )
    push.notification = ua.notification(
       ios=ua.ios(
-         alert='Kim Jong-Un wins U.S. Open',
+         alert='News Alert!',
          badge='+1',
          extra={'articleid': '123456'}
       ),
       android=ua.android(
-         alert='Breaking Android News! Glorious Leader Kim Jong-Un wins U.S. Open!',
+         alert='Breaking Android News! News Alert!',
          extra={'articleid': 'http://m.example.com/123456'}
       ),
       amazon=ua.amazon(
@@ -52,7 +52,7 @@ Complex audience with platform specifics
       )
       web=ua.web(
       alert='We are in your browser!',
-      title='Hello Sunshine',
+      title='Hello, World!',
       icon={
             'url': 'https://www.example.com/Sunshine_icon.png'
             },
@@ -71,13 +71,13 @@ Single iOS push
    push = airship.create_push()
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
-       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter')
+       ios=ua.ios(alert='Channel Alert!')
    )
    push.device_types = ua.device_types('ios')
    push.send()
 
 
-Single iOS Rich Push with notification
+Single iOS Message Center Send with notification
 --------------------------------------
 
 .. code-block:: python
@@ -85,10 +85,10 @@ Single iOS Rich Push with notification
    push = airship.create_push()
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(
-       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter')
+       ios=ua.ios(alert='Alert associated with Message Center')
    )
    push.device_types = ua.device_types('ios')
-   push.message = ua.message('New follower', '<h1>OMG It's Kim Jong-Un</h1>')
+   push.message = ua.message('New follower', '<h1>Message Center Headline!</h1>')
    push.send()
 
 
@@ -103,9 +103,9 @@ Web Notification to a device with full web payload
         alert='We are in your browser now!'
         web=ua.web(
             icon={
-                'url': 'https://www.example.com/Sunshine_icon.png'
+                'url': 'https://www.example.com/icon.png'
             },
-            title='Hello Sunshine',
+            title='Hello, World!',
             extra={'article_id': '12345'},
             time_to_live=12345,
             require_interaction=False
@@ -123,7 +123,7 @@ Open Channels send to a device with full open channel payload
     push = airship.create_push()
     push.audience = ua.open_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
     sms_overrides = ua.open_platform(
-        alert='We are in your texts now!',
+        alert='We are in your SMS now!',
         title='See my new homepage!',
         summary='A longer summary of some content',
         media_attachment='https://example.com/cat_standing_up.jpeg',
@@ -154,7 +154,7 @@ Message Center send with extra and without notification
    push.device_types = ua.device_types('ios', 'android')
    push.message = ua.message(
       title='New follower',
-      body='<h1>OMG It\'s Kim Jong-Un</h1>',
+      body='<h1>This is a Message Center Headline</h1>',
       extra={'articleid': 'http://m.example.com/123456'}
    )
    push.send()
@@ -174,7 +174,7 @@ Scheduled iOS Push
    sched.push = airship.create_push()
    sched.push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    sched.push.notification = ua.notification(
-       ios=ua.ios(alert='Kim Jong-Un is following you on Twitter'))
+       ios=ua.ios(alert='A scheduled message alert for iOS'))
    sched.push.device_types = ua.device_types('ios')
 
    sched.send()
@@ -201,7 +201,7 @@ In-App Message to all devices
                 button_actions={
                     'yes': ua.actions(open_={
                         'type':'url',
-                        'content':'https://www.urbanairship.com'
+                        'content':'https://www.airship.com'
                     })
                 }
             )

@@ -129,10 +129,10 @@ https://docs.airship.com/api/ua/#schemas/actionsobject example:
           actions=ua.actions(
               add_tag='new_tag',
               remove_tag='old_tag',
-              share='Check out Urban Airship!',
+              share='Check out Airship!',
               open_={
                   'type': 'url',
-                  'content': 'http://www.urbanairship.com'
+                  'content': 'http://www.airship.com'
               },
               app_defined={
                   'some_app_defined_action': 'some_values'
