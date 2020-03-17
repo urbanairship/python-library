@@ -116,6 +116,6 @@ class SegmentList(common.IteratorParent):
     data_attribute = 'segments'
 
     def __init__(self, airship, limit=None):
-        next_url = airship.urls.get('segments_url')
+        self.next_url = airship.urls.get('segments_url')
         params = {'limit': limit} if limit else {}
         super(SegmentList, self).__init__(airship, params)
