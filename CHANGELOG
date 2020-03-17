@@ -1,4 +1,9 @@
 --------------------
+5.3.1
+--------------------
+- Fixes an issue where SegmentsList URL was not being bulit properly.
+
+--------------------
 5.3.0
 --------------------
 - Added support for Experiments (a/b testing)
