@@ -1,4 +1,3 @@
-from urbanairship import common
 import json
 
 
