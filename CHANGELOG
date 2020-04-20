@@ -1,4 +1,9 @@
 --------------------
+5.3.2
+--------------------
+- Fixes an issue where Experiments Validate endpoint URL was not being built properly.
+
+--------------------
 5.3.1
 --------------------
 - Fixes an issue where SegmentsList URL was not being bulit properly.
