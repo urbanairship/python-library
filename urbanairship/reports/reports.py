@@ -88,6 +88,8 @@ class ReportsList(common.IteratorParent):
             self.next_url = base_url + 'opens/'
         elif self.data_attribute == 'timeinapp':
             self.next_url = base_url + 'timeinapp/'
+        elif self.data_attribute == 'events':
+            self.next_url = base_url + 'events/'
 
         params = {
             'start': start_date.strftime('%Y-%m-%d %H:%M:%S'),
@@ -120,3 +122,7 @@ class AppOpensList(ReportsList):
 
 class TimeInAppList(ReportsList):
     data_attribute = 'timeinapp'
+    
+
+class CustomEventsList(ReportsList):
+    data_attribute = 'events'
