@@ -218,3 +218,27 @@ For more information, see `the documentation on Opt Out Report
 
 .. note::
     precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
+
+
+Custom Events Report
+====================
+Get a summary of custom event counts and values, by custom event, within 
+the specified time period.
+For more information, see `the documentation on Custom Events Detail Listing
+<https://docs.airship.com/api/ua/#operation/api/reports/events/get>`__
+
+.. code-block:: python
+
+    import urbanairship as ua
+    from datetime import datetime
+
+    airship = ua.Airship('appkey', 'master_secret')
+    start_date = datetime(2015, 6, 1)
+    end_date = datetime(2015, 7, 1)
+    precision = 'HOURLY'
+    listing = ua.reports.CustomEventsList(airship, start_date, end_date, precision)
+    for resp in listing:
+        print(resp)
+
+.. note::
+    precision needs to be a member of ['HOURLY', 'DAILY', 'MONTHLY']
