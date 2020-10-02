@@ -93,6 +93,7 @@ from .reports import (
     ResponseReportList,
     AppOpensList,
     TimeInAppList,
+    CustomEventsList,
 )
 
 __all__ = [
@@ -160,6 +161,7 @@ __all__ = [
     ResponseReportList,
     AppOpensList,
     TimeInAppList,
+    CustomEventsList,
     StaticList,
     StaticLists,
     LocationFinder,

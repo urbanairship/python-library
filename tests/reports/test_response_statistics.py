@@ -406,5 +406,5 @@ class TestTimeInAppList(TestOptInList):
 
 
 class TestCustomEventsList(TestOptInList):
-    test_class = ua.reports.CustomeEventsList
+    test_class = ua.reports.CustomEventsList
     response_key = 'events'
