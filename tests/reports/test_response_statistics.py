@@ -403,3 +403,8 @@ class TestAppOpensList(TestOptInList):
 class TestTimeInAppList(TestOptInList):
     test_class = ua.reports.TimeInAppList
     response_key = 'timeinapp'
+
+
+class TestCustomEventsList(TestOptInList):
+    test_class = ua.reports.CustomEventsList
+    response_key = 'events'

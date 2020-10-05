@@ -8,4 +8,5 @@ from .reports import (
     ResponseReportList,
     AppOpensList,
     TimeInAppList,
+    CustomEventsList,
 )
