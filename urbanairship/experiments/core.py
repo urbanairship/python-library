@@ -82,7 +82,7 @@ class ABTest(object):
         :keyword experiment: Body of the experiment you want to validate
         """
         url = self.airship.urls.get('experiments_validate')
-        body = json.dumps(experiment)
+        body = json.dumps(experiment.payload)
         response = self.airship.request(
             method='POST',
             body=body,
