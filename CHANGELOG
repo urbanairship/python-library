@@ -1,6 +1,11 @@
 --------------------
 5.3.2
 --------------------
+- Fixes an issue where Experiments Validate payload was not being built properly.
+
+--------------------
+5.3.2
+--------------------
 - Fixes an issue where Experiments Validate endpoint URL was not being built properly.
 
 --------------------
