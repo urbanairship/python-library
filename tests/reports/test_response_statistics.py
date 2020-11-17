@@ -191,7 +191,7 @@ class TestResponseList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
-            callableObj=ua.reports.ResponseList,
+            ua.reports.ResponseList,
             airship=airship,
             start_date='2015-07-01',
             end_date=end_date
@@ -202,7 +202,7 @@ class TestResponseList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
-            callableObj=ua.reports.ResponseList,
+            ua.reports.ResponseList,
             airship=airship,
             start_date=None,
             end_date=end_date
@@ -257,7 +257,7 @@ class TestDevicesReport(unittest.TestCase):
         s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             ValueError,
-            callableObj=s.get,
+            s.get,
             date='2015-07-01'
         )
 
@@ -266,7 +266,7 @@ class TestDevicesReport(unittest.TestCase):
         s = ua.reports.DevicesReport(airship)
         self.assertRaises(
             TypeError,
-            callableObj=s.get,
+            s.get,
             date=None,
         )
 
@@ -334,7 +334,7 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
-            callableObj=ua.reports.OptInList,
+            ua.reports.OptInList,
             airship=airship,
             start_date='2015-7-1',
             end_date=end_date,
@@ -346,7 +346,7 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
-            callableObj=ua.reports.OptInList,
+            ua.reports.OptInList,
             airship=airship,
             start_date=None,
             end_date=end_date,
@@ -359,7 +359,7 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             ValueError,
-            callableObj=ua.reports.OptInList,
+            ua.reports.OptInList,
             airship=airship,
             start_date=start_date,
             end_date=end_date,
@@ -372,7 +372,7 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2015, 7, 2)
         self.assertRaises(
             TypeError,
-            callableObj=ua.reports.OptInList,
+            ua.reports.OptInList,
             airship=airship,
             start_date=start_date,
             end_date=end_date,

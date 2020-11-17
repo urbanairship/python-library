@@ -76,7 +76,7 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_coordinates(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.loc_finder,
+            self.loc_finder,
             latitude='123',
             longitude=123
         )
@@ -98,7 +98,7 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_bounding_box(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.loc_finder.bounding_box_lookup,
+            self.loc_finder.bounding_box_lookup,
             lat1='123',
             long1=123,
             lat2=123,
@@ -129,7 +129,7 @@ class TestLocationFinder(unittest.TestCase):
     def test_invalid_zoom(self):
         self.assertRaises(
             TypeError,
-            callableObj=self.loc_finder.polygon_lookup,
+            self.loc_finder.polygon_lookup,
             polygon_id='id',
             zoom='1'
         )
