@@ -45,7 +45,7 @@ class AirshipFailure(Exception):
             error_code = response.status_code
             details = response.content
 
-        logger.error(
+        logger.warning(
             "Request failed with status %d: '%s %s': %s",
             response.status_code, error_code, error, details)
 
