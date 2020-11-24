@@ -87,7 +87,7 @@ class TestChannelTags(unittest.TestCase):
 
         self.assertRaises(
             ValueError,
-            callableObj=self.channel_tags.send,
+            self.channel_tags.send,
         )
 
     def test_remove_and_set(self):
@@ -102,7 +102,7 @@ class TestChannelTags(unittest.TestCase):
 
         self.assertRaises(
             ValueError,
-            callableObj=self.channel_tags.send,
+            self.channel_tags.send,
         )
 
     def test_set(self):
