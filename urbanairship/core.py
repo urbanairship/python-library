@@ -104,7 +104,7 @@ class Airship(object):
     @location.setter
     def location(self, value):
         if value not in VALID_LOCATIONS:
-            raise ValueError('location must be {} or None'.format(VALID_LOCATIONS))
+            raise ValueError('location must be one of {}'.format(VALID_LOCATIONS))
         self._location = value
 
     @property
