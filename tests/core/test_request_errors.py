@@ -29,6 +29,25 @@ class TestAirshipCore(unittest.TestCase):
         except ValueError as e:
             self.assertIsInstance(e, ValueError)
 
+    def test_airship_location(self):
+        location = 'eu'
+
+        airship_eu = ua.Airship(key=TEST_KEY,
+                                secret=TEST_SECRET,
+                                location=location)
+
+        self.assertEqual(airship_eu.location, location)
+
+    def test_airship_location_exception(self):
+        invalid_location = "xx"
+
+        try:
+            airship_rasises_value_error = ua.Airship(key=TEST_KEY,
+                                                     secret=TEST_SECRET,
+                                                     location=invalid_location)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+
 
 class TestAirshipResponse(unittest.TestCase):
     test_channel = str(uuid.uuid4())
