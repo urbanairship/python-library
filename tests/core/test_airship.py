@@ -9,7 +9,47 @@ import urbanairship as ua
 from tests import TEST_SECRET, TEST_KEY
 
 
-class test_error_response(unittest.TestCase):
+class TestAirshipCore(unittest.TestCase):
+    def test_airship_timeout(self):
+        timeout_int = 50
+
+        airship_timeout = ua.Airship(key=TEST_KEY,
+                                     secret=TEST_SECRET,
+                                     timeout=timeout_int)
+
+        self.assertEqual(airship_timeout.timeout, timeout_int)
+
+    def test_airship_timeout_exception(self):
+        timeout_str = "50"
+
+        try:
+            airship_raises_value_error = ua.Airship(key=TEST_KEY,
+                                                    secret=TEST_SECRET,
+                                                    timeout=timeout_str)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+
+    def test_airship_location(self):
+        location = 'eu'
+
+        airship_eu = ua.Airship(key=TEST_KEY,
+                                secret=TEST_SECRET,
+                                location=location)
+
+        self.assertEqual(airship_eu.location, location)
+
+    def test_airship_location_exception(self):
+        invalid_location = "xx"
+
+        try:
+            airship_rasises_value_error = ua.Airship(key=TEST_KEY,
+                                                     secret=TEST_SECRET,
+                                                     location=invalid_location)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+
+
+class TestAirshipResponse(unittest.TestCase):
     test_channel = str(uuid.uuid4())
     airship = ua.Airship(TEST_KEY, TEST_SECRET)
     common_push = airship.create_push()
