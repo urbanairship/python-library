@@ -67,14 +67,25 @@ class Urls(object):
 
 class Airship(object):
 
-    def __init__(self, key, secret, location=None):
+    def __init__(self, key, secret, location=None, timeout=None):
         self.key = key
         self.secret = secret
         self.location = location
+        self.timeout = timeout
 
         self.session = requests.Session()
         self.session.auth = (key, secret)
-        self.urls = Urls(location)
+        self.urls = Urls(self.location)
+
+    @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        if not isinstance(value, int) and value is not None:
+            raise ValueError('Timeout must be an integer')
+        self._timeout = value
 
     @property
     def key(self):
@@ -135,7 +146,8 @@ class Airship(object):
         )
 
         response = self.session.request(
-            method, url, data=body, params=params, headers=headers)
+            method, url, data=body, params=params,
+            headers=headers, timeout=self.timeout)
 
         logger.debug(
             'Received %s response. Headers:\n\t%s\nBody:\n\t%s',
