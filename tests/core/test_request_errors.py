@@ -9,7 +9,7 @@ import urbanairship as ua
 from tests import TEST_SECRET, TEST_KEY
 
 
-class test_error_response(unittest.TestCase):
+class TestAirshipResponse(unittest.TestCase):
     test_channel = str(uuid.uuid4())
     airship = ua.Airship(TEST_KEY, TEST_SECRET)
     common_push = airship.create_push()
