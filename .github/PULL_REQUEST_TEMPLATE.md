@@ -16,9 +16,9 @@ Please include link to open issue if applicable.
 * I've tested in virtual environments for python versions:
 
 - [ ] 2.7
-- [ ] 3.5
 - [ ] 3.6
 - [ ] 3.7
+- [ ] 3.8
 
 ### Airship Contribution Agreement
 [Link here](https://docs.google.com/forms/d/e/1FAIpQLScErfiz-fXSPpVZ9r8Di2Tr2xDFxt5MgzUel0__9vqUgvko7Q/viewform)
