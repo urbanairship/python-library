@@ -1,4 +1,9 @@
 --------------------
+5.4.0
+--------------------
+- Adds request and response timeout parameter to main Airship class.
+
+--------------------
 5.3.3
 --------------------
 - Fixes an issue where Experiments Validate payload was not being built properly.
