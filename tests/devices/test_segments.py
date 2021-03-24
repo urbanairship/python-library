@@ -50,8 +50,13 @@ class TestSegment(unittest.TestCase):
 
         create_response = requests.Response()
         create_response.status_code = 200
-        create_response.headers['location'] = ('https://go.urbanairship.com/'
-                                               'api/segments/1234')
+        create_response._content = json.dumps(
+            {
+                'ok': True, 
+                'segment_id': '12345678-1234-1234-1234-1234567890ab', 
+                'operation_id': '12345678-1234-1234-1234-1234567890ab'
+            }
+            ).encode('utf-8')
 
         id_response = requests.Response()
         id_response._content = data

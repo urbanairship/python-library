@@ -38,8 +38,8 @@ class Segment(object):
             'Successful segment creation: {0}'.format(self.display_name)
         )
 
-        seg_url = response.headers['location']
-        seg_id = seg_url.split(url)[1]
+        payload = response.json()
+        seg_id = payload.get('segment_id')
 
         self.id = seg_id
         self.from_id(airship, seg_id)
