@@ -1,4 +1,9 @@
 --------------------
+5.4.1
+--------------------
+- Fixes an issue where segment creation function was throwing an error after creating the segment.
+
+--------------------
 5.4.0
 --------------------
 - Adds request and response timeout parameter to main Airship class.
