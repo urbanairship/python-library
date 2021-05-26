@@ -58,6 +58,10 @@ class AirshipFailure(Exception):
             response.content
         )
 
+    def __str__(self) -> str:
+        return f'Request failed with status {self.response.status_code}: ' \
+               f'"{self.error_code} {self.error}": {self.details}'
+
 
 @six.python_2_unicode_compatible
 class IteratorDataObj(object):
