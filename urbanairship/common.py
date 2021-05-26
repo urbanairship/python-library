@@ -4,6 +4,26 @@ import six
 
 logger = logging.getLogger('urbanairship')
 
+class InvalidURLError(Exception):
+    """Raised when uri schema error"""
+
+    def __init__(self, base_url):
+        self.message = f'Bad schema for : {base_url}'
+        super().__init__(self.message)
+
+    def __repr__(self):
+        return f'[{self.__class__.__name__}]:{self.message}'
+
+
+class ConnectionError(Exception):
+    """Raised when tcp connection error"""
+
+    def __init__(self, reason):
+        self.message = f'Bad Connection for : {reason}'
+        super().__init__(self.message)
+
+    def __repr__(self):
+        return f'[{self.__class__.__name__}]:{self.message}'
 
 class Unauthorized(Exception):
     """Raised when we get a 401 from the server"""

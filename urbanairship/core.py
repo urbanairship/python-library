@@ -4,6 +4,7 @@ import re
 import requests
 
 from . import common, __about__
+from .common import InvalidURLError,ConnectionError
 from .push import Push, ScheduledPush, TemplatePush
 
 logger = logging.getLogger('urbanairship')
@@ -145,9 +146,23 @@ class Airship(object):
             body
         )
 
-        response = self.session.request(
-            method, url, data=body, params=params,
-            headers=headers, timeout=self.timeout)
+        try:
+            response = self.session.request(
+                method, url, data=body, params=params,
+                headers=headers, timeout=self.timeout)
+            response.raise_for_status()
+
+        except requests.exceptions.MissingSchema as err:
+            raise InvalidURLError(err.request.base_url)
+
+        except requests.exceptions.ConnectionError as err:
+            raise ConnectionError(err.response.reason)
+
+        except requests.exceptions.HTTPError:
+            if response.status_code == 401:
+                raise common.Unauthorized
+            elif not (200 <= response.status_code < 300):
+                raise common.AirshipFailure.from_response(response)
 
         logger.debug(
             'Received %s response. Headers:\n\t%s\nBody:\n\t%s',
@@ -158,11 +173,6 @@ class Airship(object):
             ),
             response.content
         )
-
-        if response.status_code == 401:
-            raise common.Unauthorized
-        elif not (200 <= response.status_code < 300):
-            raise common.AirshipFailure.from_response(response)
 
         return response
 
