@@ -7,8 +7,8 @@ logger = logging.getLogger('urbanairship')
 class InvalidURLError(Exception):
     """Raised when uri schema error"""
 
-    def __init__(self, base_url):
-        self.message = f'Bad schema for : {base_url}'
+    def __init__(self, url):
+        self.message = f'Bad schema for : {url}'
         super().__init__(self.message)
 
     def __repr__(self):

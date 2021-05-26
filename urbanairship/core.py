@@ -153,7 +153,7 @@ class Airship(object):
             response.raise_for_status()
 
         except requests.exceptions.MissingSchema as err:
-            raise InvalidURLError(err.request.base_url)
+            raise InvalidURLError(err.request.url)
 
         except requests.exceptions.ConnectionError as err:
             raise ConnectionError(err.response.reason)
