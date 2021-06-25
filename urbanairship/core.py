@@ -67,14 +67,16 @@ class Urls(object):
 
 class Airship(object):
 
-    def __init__(self, key, secret, location=None, timeout=None):
+    def __init__(self, key=None, secret=None, token=None, location=None, timeout=None):
         self.key = key
         self.secret = secret
+        self.token = token
         self.location = location
         self.timeout = timeout
 
         self.session = requests.Session()
-        self.session.auth = (key, secret)
+        if self.token is None:
+            self.session.auth = (key, secret)
         self.urls = Urls(self.location)
 
     @property
@@ -93,7 +95,7 @@ class Airship(object):
 
     @key.setter
     def key(self, value):
-        if not VALID_KEY.match(value):
+        if value is not None and not VALID_KEY.match(value):
             raise ValueError('keys must be 22 characters')
         self._key = value
 
@@ -113,9 +115,17 @@ class Airship(object):
 
     @secret.setter
     def secret(self, value):
-        if not VALID_KEY.match(value):
+        if value is not None and not VALID_KEY.match(value):
             raise ValueError('secrets must be 22 characters')
         self._secret = value
+
+    @property
+    def token(self):
+        return self._token
+
+    @token.setter
+    def token(self, value):
+        self._token = value
 
     def request(self, method, body, url,
                 content_type=None, version=None, params=None):
@@ -133,7 +143,9 @@ class Airship(object):
             headers['Accept'] = ('application/vnd.urbanairship+json; '
                                  'version=%d;' % version)
         if encoding:
-            headers['Content-Encoding'] = encoding
+            headers['Content-Encoding'] = encoding        
+        if self.token:
+            headers['Authorization'] = 'Bearer %s' % (self.token)
 
         logger.debug(
             'Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s',
