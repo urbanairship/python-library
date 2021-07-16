@@ -96,6 +96,10 @@ def tag(tag):
     """Select a single tag."""
     return {'tag': tag}
 
+def tag_group(tag_group, tag):
+    """Select a tag group and a tag."""
+    payload = {'group': tag_group, 'tag': tag}
+    return payload
 
 def alias(alias):
     """Select a single alias."""
