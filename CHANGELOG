@@ -1,4 +1,9 @@
 --------------------
+5.5.0
+--------------------
+- Adds Tag Groups to audience object.
+
+--------------------
 5.4.1
 --------------------
 - Fixes an issue where segment creation function was throwing an error after creating the segment.
