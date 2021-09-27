@@ -1,7 +1,5 @@
-.. image:: https://travis-ci.org/urbanairship/python-library.svg?branch=master
-    :target: https://travis-ci.org/urbanairship/python-library
-
-About
+.. image:: https://github.com/urbanairship/python-library/actions/workflows/ci.yaml/badge.svg
+    :target: https://github.com/urbanairship/python-library/
 =====
 
 ``urbanairship`` is a Python library for using the `Airship
@@ -11,7 +9,7 @@ center messages, email, and SMS.
 Requirements
 ============
 
-As of version 5.2.0, either Python 2.7, 3.5, 3.6, or 3.7 is required. Other requirements can be found in requirements.txt.
+Python 2.7, 3.6, 3.7, or 3.8 is required. Other requirements can be found in requirements.txt.
 
 Questions
 =========
