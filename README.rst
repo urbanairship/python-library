@@ -1,5 +1,6 @@
 .. image:: https://github.com/urbanairship/python-library/actions/workflows/ci.yaml/badge.svg
     :target: https://github.com/urbanairship/python-library/
+    
 =====
 
 ``urbanairship`` is a Python library for using the `Airship
