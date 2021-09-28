@@ -1,4 +1,9 @@
 --------------------
+5.5.1
+--------------------
+- Adds X-AIRSHIP-APPKEY header to requests
+
+--------------------
 5.5.0
 --------------------
 - Adds Tag Groups to audience object.
