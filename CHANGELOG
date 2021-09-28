@@ -1,7 +1,7 @@
 --------------------
 5.5.1
 --------------------
-- Adds X-AIRSHIP-APPKEY header to requests
+- Adds app key to user agent string
 
 --------------------
 5.5.0
