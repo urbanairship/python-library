@@ -1,4 +1,9 @@
 --------------------
+5.5.1
+--------------------
+- Adds app key to user agent string
+
+--------------------
 5.5.0
 --------------------
 - Adds Tag Groups to audience object.

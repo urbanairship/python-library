@@ -272,7 +272,7 @@ class TestDevicesReport(unittest.TestCase):
 
 
 class TestOptInList(unittest.TestCase):
-    test_class = ua.reports.OptInList
+    class_to_test = ua.reports.OptInList
     response_key = 'optins'
 
     def test_list(self):
@@ -305,7 +305,7 @@ class TestOptInList(unittest.TestCase):
         end_date = datetime(2012, 4, 1)
         precision = 'MONTHLY'
 
-        response_list = self.test_class(
+        response_list = self.class_to_test(
             airship,
             start_date,
             end_date,
@@ -381,30 +381,30 @@ class TestOptInList(unittest.TestCase):
 
 
 class TestOptOutList(TestOptInList):
-    test_class = ua.reports.OptOutList
+    class_to_test = ua.reports.OptOutList
     response_key = 'optouts'
 
 
 class TestPushList(TestOptInList):
-    test_class = ua.reports.PushList
+    class_to_test = ua.reports.PushList
     response_key = 'sends'
 
 
 class TestResponseReportList(TestOptInList):
-    test_class = ua.reports.ResponseReportList
+    class_to_test = ua.reports.ResponseReportList
     response_key = 'responses'
 
 
 class TestAppOpensList(TestOptInList):
-    test_class = ua.reports.AppOpensList
+    class_to_test = ua.reports.AppOpensList
     response_key = 'opens'
 
 
 class TestTimeInAppList(TestOptInList):
-    test_class = ua.reports.TimeInAppList
+    class_to_test = ua.reports.TimeInAppList
     response_key = 'timeinapp'
 
 
 class TestCustomEventsList(TestOptInList):
-    test_class = ua.reports.CustomEventsList
+    class_to_test = ua.reports.CustomEventsList
     response_key = 'events'
