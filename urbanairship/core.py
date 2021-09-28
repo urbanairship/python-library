@@ -131,8 +131,7 @@ class Airship(object):
     ):
 
         headers = {
-            "User-agent": "UAPythonLib/{0}".format(__about__.__version__),
-            "X-AIRSHIP-APPKEY": self.key,
+            "User-agent": "UAPythonLib/{0} {1}".format(__about__.__version__, self.key),
         }
         if content_type:
             headers["Content-type"] = content_type
