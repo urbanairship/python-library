@@ -5,24 +5,18 @@ import urbanairship as ua
 
 
 class TestSchedule(unittest.TestCase):
-
     def test_scheduled_time(self):
         d = datetime.datetime(2013, 1, 1, 12, 56)
         self.assertEqual(
-            ua.scheduled_time(d),
-            {'scheduled_time': '2013-01-01T12:56:00'}
+            ua.scheduled_time(d), {"scheduled_time": "2013-01-01T12:56:00"}
         )
 
     def test_local_scheduled_time(self):
         d = datetime.datetime(2015, 1, 1, 12, 56)
         self.assertEqual(
-            ua.local_scheduled_time(d),
-            {'local_scheduled_time': '2015-01-01T12:56:00'}
+            ua.local_scheduled_time(d), {"local_scheduled_time": "2015-01-01T12:56:00"}
         )
 
     def test_best_time(self):
         d = datetime.datetime(2018, 10, 8)
-        self.assertEqual(
-            ua.best_time(d),
-            {'best_time': {'send_date': '2018-10-08'}}
-        )
+        self.assertEqual(ua.best_time(d), {"best_time": {"send_date": "2018-10-08"}})

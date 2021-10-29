@@ -5,7 +5,7 @@ import logging
 from urbanairship import common
 
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class Template(object):
@@ -31,9 +31,7 @@ class Template(object):
 
     """
 
-    def __init__(
-        self, airship, name=None, description=None, variables=None, push=None
-    ):
+    def __init__(self, airship, name=None, description=None, variables=None, push=None):
         self.airship = airship
         self._template_id = None
         self._created_at = None
@@ -74,13 +72,9 @@ class Template(object):
 
     @property
     def payload(self):
-        data = {
-            'name': self.name,
-            'variables': self.variables,
-            'push': self.push
-        }
+        data = {"name": self.name, "variables": self.variables, "push": self.push}
         if self.description is not None:
-            data['description'] = self.description
+            data["description"] = self.description
         return data
 
     def create(self):
@@ -92,28 +86,24 @@ class Template(object):
         """
 
         if not self.name:
-            raise ValueError('Must set name before template creation.')
+            raise ValueError("Must set name before template creation.")
 
         if not self.push:
-            raise ValueError('Must set push before template creation.')
+            raise ValueError("Must set push before template creation.")
 
-        if 'message' in self.push.keys():
-            raise ValueError(
-                'Message center is not supported by templates.'
-            )
+        if "message" in self.push.keys():
+            raise ValueError("Message center is not supported by templates.")
 
         body = json.dumps(self.payload)
         response = self.airship._request(
-            method='POST',
+            method="POST",
             body=body,
-            url=self.airship.urls.get('templates_url'),
-            content_type='application/json',
-            version=3
+            url=self.airship.urls.get("templates_url"),
+            content_type="application/json",
+            version=3,
         )
-        self._template_id = response.json().get('template_id')
-        logger.info(
-            'Successful template creation for template %s', self.template_id
-        )
+        self._template_id = response.json().get("template_id")
+        logger.info("Successful template creation for template %s", self.template_id)
 
         return response
 
@@ -127,46 +117,46 @@ class Template(object):
 
         update_payload = {}
 
-        if not self.name and not self.description \
-                and not self.push and not self.variables:
+        if (
+            not self.name
+            and not self.description
+            and not self.push
+            and not self.variables
+        ):
             raise ValueError(
-                'Must set at least one of name, description, push, or '
-                'variables before template update.'
+                "Must set at least one of name, description, push, or "
+                "variables before template update."
             )
 
         if self.name:
-            update_payload['name'] = self.name
+            update_payload["name"] = self.name
 
         if self.description:
-            update_payload['description'] = self.description
+            update_payload["description"] = self.description
 
-        if 'message' in self.push.keys():
-            raise ValueError(
-                'Message center is not supported by templates.'
-            )
+        if "message" in self.push.keys():
+            raise ValueError("Message center is not supported by templates.")
 
         if self.push:
-            update_payload['push'] = self.push
+            update_payload["push"] = self.push
 
         if self.variables:
-            update_payload['variables'] = self.variables
+            update_payload["variables"] = self.variables
 
         if not template_id and not self.template_id:
-            raise ValueError('Cannot update template without ID.')
+            raise ValueError("Cannot update template without ID.")
         if template_id:
             self._template_id = template_id
 
         body = json.dumps(update_payload)
         response = self.airship._request(
-            method='POST',
+            method="POST",
             body=body,
-            url=self.airship.urls.get('templates_url') + self.template_id,
-            content_type='application/json',
-            version=3
+            url=self.airship.urls.get("templates_url") + self.template_id,
+            content_type="application/json",
+            version=3,
         )
-        logger.info(
-            'Successful template update for template %s', self.template_id
-        )
+        logger.info("Successful template update for template %s", self.template_id)
 
         return response
 
@@ -179,19 +169,17 @@ class Template(object):
         """
 
         if not template_id and not self.template_id:
-            raise ValueError('Cannot delete template without ID.')
+            raise ValueError("Cannot delete template without ID.")
         if template_id:
             self._template_id = template_id
 
         response = self.airship._request(
-            method='DELETE',
+            method="DELETE",
             body=None,
-            url=self.airship.urls.get('templates_url') + self.template_id,
-            version=3
+            url=self.airship.urls.get("templates_url") + self.template_id,
+            version=3,
         )
-        logger.info(
-            'Successful template delete for template %s', self.template_id
-        )
+        logger.info("Successful template delete for template %s", self.template_id)
 
         return response
 
@@ -201,15 +189,15 @@ class Template(object):
         obj = cls(airship)
         obj._template_id = payload[id_key]
         for key in payload:
-            if key in ('created_at', 'modified_at', 'last_used'):
+            if key in ("created_at", "modified_at", "last_used"):
                 try:
                     payload[key] = datetime.datetime.strptime(
-                        payload[key], '%Y-%m-%dT%H:%M:%S.%fZ'
+                        payload[key], "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
                 except:
-                    payload[key] = 'UNKNOWN'
-                setattr(obj, '_' + key, payload[key])
-            elif key == 'template_id':
+                    payload[key] = "UNKNOWN"
+                setattr(obj, "_" + key, payload[key])
+            elif key == "template_id":
                 obj._template_id = payload[key]
             else:
                 setattr(obj, key, payload[key])
@@ -217,17 +205,13 @@ class Template(object):
 
     def lookup(self, template_id):
         """Fetch metadata from a template ID"""
-        start_url = self.airship.urls.get('templates_url')
-        data_attribute = 'template'
-        id_key = 'id'
+        start_url = self.airship.urls.get("templates_url")
+        data_attribute = "template"
+        id_key = "id"
         params = {}
         url = start_url + template_id
         response = self.airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3,
-            params=params
+            method="GET", body=None, url=url, version=3, params=params
         )
         payload = response.json()
         return self.from_payload(payload[data_attribute], id_key, self.airship)
@@ -240,14 +224,15 @@ class TemplateList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`Template` object.
 
     """
+
     next_url = None
-    data_attribute = 'templates'
-    id_key = 'id'
+    data_attribute = "templates"
+    id_key = "id"
     instance_class = Template
 
     def __init__(self, airship, limit=None):
-        params = {'limit': limit} if limit else {}
-        self.next_url = airship.urls.get('templates_url')
+        params = {"limit": limit} if limit else {}
+        self.next_url = airship.urls.get("templates_url")
         super(TemplateList, self).__init__(airship, params)
 
 
@@ -262,8 +247,8 @@ def merge_data(template_id, substitutions):
 
     md = {}
 
-    md['template_id'] = template_id
-    md['substitutions'] = {
+    md["template_id"] = template_id
+    md["substitutions"] = {
         key: val for key, val in iter(substitutions.items()) if val is not None
     }
 

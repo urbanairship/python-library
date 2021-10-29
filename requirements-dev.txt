@@ -1,0 +1,7 @@
+requests>=1.2
+six
+nose
+mock
+tox
+black
+pre-commit

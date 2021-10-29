@@ -9,14 +9,15 @@ class ScheduledList(common.IteratorParent):
     :ivar limit: Number of entries to fetch in a paginated request.
     :returns Each ``next`` returns a :py:class:`ScheduledPush` object.
     """
+
     next_url = None
-    data_attribute = 'schedules'
-    id_key = 'url'
+    data_attribute = "schedules"
+    id_key = "url"
     instance_class = ScheduledPush
 
     def __init__(self, airship, limit=None):
-        self.next_url = airship.urls.get('schedules_url')
-        params = {'limit': limit} if limit else {}
+        self.next_url = airship.urls.get("schedules_url")
+        params = {"limit": limit} if limit else {}
         super(ScheduledList, self).__init__(airship, params)
 
 
@@ -27,7 +28,7 @@ def scheduled_time(timestamp):
 
     """
 
-    return {'scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
+    return {"scheduled_time": timestamp.strftime("%Y-%m-%dT%H:%M:%S")}
 
 
 def local_scheduled_time(timestamp):
@@ -37,7 +38,7 @@ def local_scheduled_time(timestamp):
 
     """
 
-    return {'local_scheduled_time': timestamp.strftime('%Y-%m-%dT%H:%M:%S')}
+    return {"local_scheduled_time": timestamp.strftime("%Y-%m-%dT%H:%M:%S")}
 
 
 def best_time(timestamp):
@@ -47,4 +48,4 @@ def best_time(timestamp):
     :param timestamp: A ``datetime.datetime object.
     """
 
-    return {'best_time': {'send_date': timestamp.strftime('%Y-%m-%d')}}
+    return {"best_time": {"send_date": timestamp.strftime("%Y-%m-%d")}}

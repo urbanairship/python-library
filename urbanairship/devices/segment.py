@@ -3,7 +3,7 @@ import logging
 
 from urbanairship import common
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class Segment(object):
@@ -20,26 +20,16 @@ class Segment(object):
     def create(self, airship):
         """Create a Segment object and return it."""
 
-        url = airship.urls.get('segments_url')
+        url = airship.urls.get("segments_url")
 
         body = json.dumps(
-            {
-                'display_name': self.display_name,
-                'criteria': self.criteria
-            }
+            {"display_name": self.display_name, "criteria": self.criteria}
         )
-        response = airship._request(
-            method='POST',
-            body=body,
-            url=url,
-            version=3
-        )
-        logger.info(
-            'Successful segment creation: {0}'.format(self.display_name)
-        )
+        response = airship._request(method="POST", body=body, url=url, version=3)
+        logger.info("Successful segment creation: {0}".format(self.display_name))
 
         payload = response.json()
-        seg_id = payload.get('segment_id')
+        seg_id = payload.get("segment_id")
 
         self.id = seg_id
         self.from_id(airship, seg_id)
@@ -50,13 +40,8 @@ class Segment(object):
     def from_id(cls, airship, seg_id):
         """Retrieve a segment based on the provided ID."""
 
-        url = airship.urls.get('segments_url') + seg_id
-        response = airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
+        url = airship.urls.get("segments_url") + seg_id
+        response = airship._request(method="GET", body=None, url=url, version=3)
 
         payload = response.json()
         cls.id = seg_id
@@ -77,45 +62,34 @@ class Segment(object):
         """Updates the segment associated with data in the current object."""
 
         data = {}
-        data['display_name'] = self.display_name
-        data['criteria'] = self.criteria
+        data["display_name"] = self.display_name
+        data["criteria"] = self.criteria
 
-        url = airship.urls.get('segments_url') + self.id
+        url = airship.urls.get("segments_url") + self.id
         body = json.dumps(data)
-        response = airship._request(
-            method='PUT',
-            body=body,
-            url=url,
-            version=3
-        )
-        logger.info(
-            "Successful segment update: '{0}'".format(self.display_name))
+        response = airship._request(method="PUT", body=body, url=url, version=3)
+        logger.info("Successful segment update: '{0}'".format(self.display_name))
 
         return response
 
     def delete(self, airship):
-        url = airship.urls.get('segments_url') + self.id
-        res = airship._request(
-            method='DELETE',
-            body=None,
-            url=url,
-            version=3
-        )
-        logger.info(
-            "Successful segment deletion: '{0}'".format(self.display_name))
+        url = airship.urls.get("segments_url") + self.id
+        res = airship._request(method="DELETE", body=None, url=url, version=3)
+        logger.info("Successful segment deletion: '{0}'".format(self.display_name))
         return res
 
 
 class SegmentList(common.IteratorParent):
     """Retrieves a list of segments
 
-        :ivar limit: Number of segments to fetch
+    :ivar limit: Number of segments to fetch
 
     """
+
     next_url = None
-    data_attribute = 'segments'
+    data_attribute = "segments"
 
     def __init__(self, airship, limit=None):
-        self.next_url = airship.urls.get('segments_url')
-        params = {'limit': limit} if limit else {}
+        self.next_url = airship.urls.get("segments_url")
+        params = {"limit": limit} if limit else {}
         super(SegmentList, self).__init__(airship, params)

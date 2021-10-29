@@ -2,7 +2,7 @@ import logging
 import datetime
 import six
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class Unauthorized(Exception):
@@ -37,9 +37,9 @@ class AirshipFailure(Exception):
         """
         try:
             payload = response.json()
-            error = payload.get('error')
-            error_code = payload.get('error_code')
-            details = payload.get('details')
+            error = payload.get("error")
+            error_code = payload.get("error_code")
+            details = payload.get("details")
         except (ValueError, TypeError, KeyError):
             error = response.reason
             error_code = response.status_code
@@ -47,15 +47,14 @@ class AirshipFailure(Exception):
 
         logger.warning(
             "Request failed with status %d: '%s %s': %s",
-            response.status_code, error_code, error, details)
+            response.status_code,
+            error_code,
+            error,
+            details,
+        )
 
         return cls(
-            error,
-            error_code,
-            details,
-            response,
-            response.status_code,
-            response.content
+            error, error_code, details, response, response.status_code, response.content
         )
 
 
@@ -72,10 +71,7 @@ class IteratorDataObj(object):
             obj.airship = airship
         for key in payload:
             try:
-                val = datetime.datetime.strptime(
-                    payload[key],
-                    '%Y-%m-%d %H:%M:%S'
-                )
+                val = datetime.datetime.strptime(payload[key], "%Y-%m-%d %H:%M:%S")
             except (TypeError, ValueError):
                 val = payload[key]
             setattr(obj, key, val)
@@ -84,11 +80,10 @@ class IteratorDataObj(object):
     def __str__(self):
         print_str = ""
         for attr in dir(self):
-            if(
-                not attr.startswith('__') and
-                not hasattr(getattr(self, attr), '__call__')
+            if not attr.startswith("__") and not hasattr(
+                getattr(self, attr), "__call__"
             ):
-                print_str += attr + ': ' + str(getattr(self, attr)) + ', '
+                print_str += attr + ": " + str(getattr(self, attr)) + ", "
         return print_str[:-2]
 
 
@@ -111,16 +106,12 @@ class IteratorParent(six.Iterator):
     def __next__(self):
         try:
             return self.instance_class.from_payload(
-                next(self._token_iter),
-                self.id_key,
-                self.airship
+                next(self._token_iter), self.id_key, self.airship
             )
         except StopIteration:
             if self._load_page():
                 return self.instance_class.from_payload(
-                    next(self._token_iter),
-                    self.id_key,
-                    self.airship
+                    next(self._token_iter), self.id_key, self.airship
                 )
             else:
                 raise StopIteration
@@ -129,15 +120,11 @@ class IteratorParent(six.Iterator):
         if not self.next_url:
             return False
         response = self.airship.request(
-            method='GET',
-            body=None,
-            url=self.next_url,
-            version=3,
-            params=self.params
+            method="GET", body=None, url=self.next_url, version=3, params=self.params
         )
         self.params = None
         self._page = response.json()
-        check_url = self._page.get('next_page')
+        check_url = self._page.get("next_page")
         if check_url == self.next_url:
             return False
         self.next_url = check_url

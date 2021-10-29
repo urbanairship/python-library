@@ -6,44 +6,23 @@ from .devicelist import (
     DeviceInfo,
 )
 
-from .tag import (
-    ChannelTags,
-    OpenChannelTags
-)
+from .tag import ChannelTags, OpenChannelTags
 
-from .segment import (
-    Segment,
-    SegmentList
-)
+from .segment import Segment, SegmentList
 
-from .channel_uninstall import (
-    ChannelUninstall
-)
+from .channel_uninstall import ChannelUninstall
 
-from .open_channel import (
-    OpenChannel
-)
+from .open_channel import OpenChannel
 
-from .named_users import (
-    NamedUser,
-    NamedUserList,
-    NamedUserTags
-)
+from .named_users import NamedUser, NamedUserList, NamedUserTags
 
 from .static_lists import (
     StaticList,
     StaticLists,
 )
 
-from .locationfinder import (
-    LocationFinder
-)
+from .locationfinder import LocationFinder
 
-from .sms import (
-    Sms
-)
+from .sms import Sms
 
-from .email import (
-    Email,
-    EmailTags
-)
+from .email import Email, EmailTags

@@ -56,10 +56,7 @@ from .push import (
     merge_data,
 )
 
-from .automation import (
-    Automation,
-    Pipeline
-)
+from .automation import Automation, Pipeline
 
 from .devices import (
     ChannelList,
@@ -176,16 +173,12 @@ __all__ = [
     Pipeline,
     Email,
     EmailTags,
-    CreateAndSendPush
+    CreateAndSendPush,
 ]
 
 # Silence urllib3 INFO logging by default
-from .experiments import (
-    Experiment,
-    Variant,
-    ABTest
-)
+from .experiments import Experiment, Variant, ABTest
 
 import logging
-logging.getLogger('requests.packages.urllib3.connectionpool')\
-    .setLevel(logging.WARNING)
+
+logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(logging.WARNING)

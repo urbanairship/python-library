@@ -11,19 +11,14 @@ from tests import TEST_KEY, TEST_SECRET
 
 class TestSegmentList(unittest.TestCase):
     def test_segment_list(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
-                {
-                    "segments": [
-                        {"display_name": "test1"},
-                        {"display_name": "test2"}
-                    ]
-                }
-            ).encode('utf-8')
+                {"segments": [{"display_name": "test1"}, {"display_name": "test2"}]}
+            ).encode("utf-8")
             mock_request.return_value = response
 
-            name_list = ['test2', 'test1']
+            name_list = ["test2", "test1"]
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             seg_list = ua.SegmentList(airship)
 
@@ -33,30 +28,20 @@ class TestSegmentList(unittest.TestCase):
 
 class TestSegment(unittest.TestCase):
     def test_segment_create_update_delete(self):
-        name = 'test_segment'
-        criteria = json.dumps(
-            {
-                'and': [
-                    {'tag': 'TEST'},
-                    {'not': {'tag': 'TEST2'}}
-                ]
-            }
-        )
+        name = "test_segment"
+        criteria = json.dumps({"and": [{"tag": "TEST"}, {"not": {"tag": "TEST2"}}]})
 
-        data = json.dumps({
-            'name': name,
-            'criteria': criteria
-        }).encode('utf-8')
+        data = json.dumps({"name": name, "criteria": criteria}).encode("utf-8")
 
         create_response = requests.Response()
         create_response.status_code = 200
         create_response._content = json.dumps(
             {
-                'ok': True, 
-                'segment_id': '12345678-1234-1234-1234-1234567890ab', 
-                'operation_id': '12345678-1234-1234-1234-1234567890ab'
+                "ok": True,
+                "segment_id": "12345678-1234-1234-1234-1234567890ab",
+                "operation_id": "12345678-1234-1234-1234-1234567890ab",
             }
-            ).encode('utf-8')
+        ).encode("utf-8")
 
         id_response = requests.Response()
         id_response._content = data
@@ -69,9 +54,13 @@ class TestSegment(unittest.TestCase):
         del_response.status_code = 204
 
         ua.Airship._request = Mock()
-        ua.Airship._request.side_effect = [create_response, id_response,
-                                           id_response, update_response,
-                                           del_response]
+        ua.Airship._request.side_effect = [
+            create_response,
+            id_response,
+            id_response,
+            update_response,
+            del_response,
+        ]
 
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
@@ -84,11 +73,11 @@ class TestSegment(unittest.TestCase):
         self.assertEqual(seg.display_name, name)
         self.assertEqual(seg.criteria, criteria)
 
-        from_id = seg.from_id(airship, 'test_id')
+        from_id = seg.from_id(airship, "test_id")
         self.assertEqual(from_id.status_code, 200)
         self.assertEqual(from_id.content, data)
 
-        seg.display_name = 'new_test_segment'
+        seg.display_name = "new_test_segment"
         up_res = seg.update(airship)
         del_res = seg.delete(airship)
 

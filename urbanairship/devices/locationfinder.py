@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class LocationFinder(object):
@@ -15,20 +15,14 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        params = {'q': name}
-        url = self.airship.urls.get('location_url')
+        params = {"q": name}
+        url = self.airship.urls.get("location_url")
 
         if location_type:
-            params['type'] = location_type
+            params["type"] = location_type
 
-        resp = self.airship._request(
-            'GET',
-            None,
-            url,
-            version=3,
-            params=params
-        )
-        logger.info(u'Retrieved location info by name: %s' % name)
+        resp = self.airship._request("GET", None, url, version=3, params=params)
+        logger.info(u"Retrieved location info by name: %s" % name)
         return resp.json()
 
     def coordinates_lookup(self, latitude, longitude, location_type=None):
@@ -40,36 +34,32 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        coor_are_valid = isinstance(latitude, (int, float)) \
-            and isinstance(longitude, (int, float))
+        coor_are_valid = isinstance(latitude, (int, float)) and isinstance(
+            longitude, (int, float)
+        )
 
         if not coor_are_valid:
-            raise TypeError('latitude and longitude need to be numbers')
+            raise TypeError("latitude and longitude need to be numbers")
 
-        url = '{base_url}{latitude},{longitude}'.format(
-            base_url=self.airship.urls.get('location_url'),
+        url = "{base_url}{latitude},{longitude}".format(
+            base_url=self.airship.urls.get("location_url"),
             latitude=str(latitude),
-            longitude=str(longitude))
+            longitude=str(longitude),
+        )
 
         params = {}
 
         if location_type:
-            params['type'] = location_type
+            params["type"] = location_type
 
-        resp = self.airship._request(
-            'GET',
-            None,
-            url,
-            version=3,
-            params=params
+        resp = self.airship._request("GET", None, url, version=3, params=params)
+        logger.info(
+            "Retrieved location info by coordinates: %s,%s"
+            % (str(latitude), str(longitude))
         )
-        logger.info('Retrieved location info by coordinates: %s,%s' % (
-            str(latitude), str(longitude)))
         return resp.json()
 
-    def bounding_box_lookup(
-            self, lat1, long1, lat2, long2, location_type=None
-    ):
+    def bounding_box_lookup(self, lat1, long1, lat2, long2, location_type=None):
         """Lookup a location by bounding box
 
         :param lat1: First latitude of the location
@@ -80,36 +70,29 @@ class LocationFinder(object):
         :return: Information about the location
         """
 
-        loc1_valid = isinstance(lat1, (float, int)) \
-            and isinstance(long1, (float, int))
-        loc2_valid = isinstance(lat2, (float, int)) \
-            and isinstance(long2, (float, int))
+        loc1_valid = isinstance(lat1, (float, int)) and isinstance(long1, (float, int))
+        loc2_valid = isinstance(lat2, (float, int)) and isinstance(long2, (float, int))
 
         if not loc1_valid or not loc2_valid:
-            raise TypeError('lat1, long1, lat2, and long2 need to be numbers')
+            raise TypeError("lat1, long1, lat2, and long2 need to be numbers")
 
-        url = '{base_url}{lat1},{long1},{lat2},{long2}'.format(
-            base_url=self.airship.urls.get('location_url'),
+        url = "{base_url}{lat1},{long1},{lat2},{long2}".format(
+            base_url=self.airship.urls.get("location_url"),
             lat1=str(lat1),
             long1=str(long1),
             lat2=str(lat2),
-            long2=str(long2)
+            long2=str(long2),
         )
         params = {}
 
         if location_type:
-            params['type'] = location_type
+            params["type"] = location_type
 
-        resp = self.airship._request(
-            'GET',
-            None,
-            url,
-            version=3,
-            params=params
-        )
+        resp = self.airship._request("GET", None, url, version=3, params=params)
         logger.info(
-            'Retrieved location info by bounding box: %s,%s,%s,%s' % (
-                str(lat1), str(long1), str(lat2), str(long2)))
+            "Retrieved location info by bounding box: %s,%s,%s,%s"
+            % (str(lat1), str(long1), str(lat2), str(long2))
+        )
         return resp.json()
 
     def alias_lookup(self, from_alias):
@@ -122,51 +105,50 @@ class LocationFinder(object):
 
         if isinstance(from_alias, list):
             for alias in from_alias:
-                alias_parts = alias.split('=')
+                alias_parts = alias.split("=")
                 params[alias_parts[0]] = alias_parts[1]
         else:
-            alias_parts = from_alias.split('=')
+            alias_parts = from_alias.split("=")
             params[alias_parts[0]] = alias_parts[1]
 
         resp = self.airship._request(
-            'GET',
+            "GET",
             None,
-            self.airship.urls.get('location_url') + 'from-alias',
+            self.airship.urls.get("location_url") + "from-alias",
             version=3,
-            params=params
+            params=params,
         )
-        logger.info('Retrieved location info by alias: %s' % from_alias)
+        logger.info("Retrieved location info by alias: %s" % from_alias)
         return resp.json()
 
     def polygon_lookup(self, polygon_id, zoom):
-        """ Lookup the location by polygon id
+        """Lookup the location by polygon id
         :param polygon_id: polygon id of the location
         :param zoom: zoom level of the desired location information
         :return: Information about the location
         """
 
         if not isinstance(zoom, int) or zoom < 1 or zoom > 20:
-            raise TypeError('zoom needs to be an integer between 1 and 20')
-        params = {'zoom': str(zoom)}
+            raise TypeError("zoom needs to be an integer between 1 and 20")
+        params = {"zoom": str(zoom)}
         resp = self.airship._request(
-            'GET',
+            "GET",
             None,
-            self.airship.urls.get('location_url') + polygon_id,
+            self.airship.urls.get("location_url") + polygon_id,
             version=3,
-            params=params
+            params=params,
         )
         logger.info(
-            'Retrieved location info by polygon id: %s and zoom: %s' % (
-                polygon_id, str(zoom)
-            )
+            "Retrieved location info by polygon id: %s and zoom: %s"
+            % (polygon_id, str(zoom))
         )
         return resp.json()
 
     def date_ranges(self):
         resp = self.airship._request(
-            'GET',
+            "GET",
             None,
-            self.airship.urls.get('segments_url') + 'dates/',
+            self.airship.urls.get("segments_url") + "dates/",
             version=3,
         )
         return resp.json()

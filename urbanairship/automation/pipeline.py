@@ -3,16 +3,18 @@ class Pipeline(object):
     an Automation pipeline
     """
 
-    def __init__(self,
-                 enabled=None,
-                 outcome=[],
-                 name=None,
-                 immediate_trigger=[],
-                 cancellation_trigger=[],
-                 historical_trigger=None,
-                 constraint=[],
-                 condition=[],
-                 timing=None):
+    def __init__(
+        self,
+        enabled=None,
+        outcome=[],
+        name=None,
+        immediate_trigger=[],
+        cancellation_trigger=[],
+        historical_trigger=None,
+        constraint=[],
+        condition=[],
+        timing=None,
+    ):
         """Create Pipeline object for Automation payload
 
         :keyword enabled: boolean value determines active status of the
@@ -50,30 +52,27 @@ class Pipeline(object):
     def payload(self):
         """JSON serialized Pipeline object"""
         if not isinstance(self.enabled, bool):
-            raise TypeError('enabled is required and must be a boolean value')
+            raise TypeError("enabled is required and must be a boolean value")
         if not self.outcome:
-            raise ValueError('outcome is required for automation pipelines')
+            raise ValueError("outcome is required for automation pipelines")
 
-        data = {
-            "enabled": self.enabled,
-            "outcome": self.outcome
-        }
+        data = {"enabled": self.enabled, "outcome": self.outcome}
 
         if self.name is not None:
             if isinstance(self.name, str):
-                data['name'] = self.name
+                data["name"] = self.name
         if self.immediate_trigger is not None:
-            data['immediate_trigger'] = self.immediate_trigger
+            data["immediate_trigger"] = self.immediate_trigger
         if self.cancellation_trigger is not None:
-            data['cancellation_trigger'] = self.cancellation_trigger
+            data["cancellation_trigger"] = self.cancellation_trigger
         if self.historical_trigger is not None:
-            data['historical_trigger'] = self.historical_trigger
+            data["historical_trigger"] = self.historical_trigger
         if self.constraint is not None:
-            data['constraint'] = self.constraint
+            data["constraint"] = self.constraint
         if self.condition is not None:
-            data['condition'] = self.condition
+            data["condition"] = self.condition
         if self.timing is not None:
-            data['timing'] = self.timing
+            data["timing"] = self.timing
 
         return data
 
@@ -102,20 +101,18 @@ class Pipeline(object):
         elif isinstance(outcome_object, list):
             to_set = []
             for push in outcome_object:
-                if 'push' in push:
+                if "push" in push:
                     to_set.append(push)
                 else:
-                    to_set.append({'push': push})
+                    to_set.append({"push": push})
             self._outcomes = to_set
         elif isinstance(outcome_object, dict):
-            if 'push' in outcome_object:
+            if "push" in outcome_object:
                 self._outcomes = [outcome_object]
             else:
-                self._outcomes = [{'push': outcome_object}]
+                self._outcomes = [{"push": outcome_object}]
         else:
-            raise TypeError(
-                    'outcome must be outcome object or list of outcome objects'
-            )
+            raise TypeError("outcome must be outcome object or list of outcome objects")
 
     def append_outcome_object(self, push_object):
         """Append outcome object to current Pipeline outcome
@@ -124,9 +121,7 @@ class Pipeline(object):
         Pipeline object
         """
         if not isinstance(push_object, dict):
-            TypeError(
-                'outcome object requires a push object as a dictionary'
-            )
+            TypeError("outcome object requires a push object as a dictionary")
 
         to_append = {}
         if isinstance(push_object, dict):
@@ -160,8 +155,8 @@ class Pipeline(object):
         if event_identifiers:
             if not isinstance(event_identifiers, (dict, list)):
                 TypeError(
-                    'immediate trigger must be an event identifier dictionary '
-                    'or list of event identifier dictionaries'
+                    "immediate trigger must be an event identifier dictionary "
+                    "or list of event identifier dictionaries"
                 )
 
             if isinstance(event_identifiers, list):
@@ -204,8 +199,8 @@ class Pipeline(object):
         if event_identifiers:
             if not isinstance(event_identifiers, (str, dict, list)):
                 TypeError(
-                    'immediate trigger must be an event identifier or '
-                    'list of event identifiers'
+                    "immediate trigger must be an event identifier or "
+                    "list of event identifiers"
                 )
 
             if isinstance(event_identifiers, list):
@@ -241,19 +236,18 @@ class Pipeline(object):
         triggering Pipeline outcome
         """
         if historical_trigger_object:
-            if historical_trigger_object['event'] != "open":
+            if historical_trigger_object["event"] != "open":
                 raise ValueError(
-                    'only allowable value of historical trigger "event" is '
-                    '"open"'
+                    'only allowable value of historical trigger "event" is ' '"open"'
                 )
 
-            if historical_trigger_object['equals'] != 0:
+            if historical_trigger_object["equals"] != 0:
                 raise ValueError(
                     'only allowable value of historial trigger "equals" is 0'
                 )
 
-            if 0 >= historical_trigger_object['days'] > 90:
-                raise ValueError('days of inactivity must be between 1 and 90')
+            if 0 >= historical_trigger_object["days"] > 90:
+                raise ValueError("days of inactivity must be between 1 and 90")
 
         self._historical_trigger = historical_trigger_object
 
@@ -275,8 +269,8 @@ class Pipeline(object):
         if constraint_objects:
             if not isinstance(constraint_objects, (dict, list)):
                 TypeError(
-                    'constraint must be single constraint object or list of '
-                    'constraint objects'
+                    "constraint must be single constraint object or list of "
+                    "constraint objects"
                 )
 
             if isinstance(constraint_objects, list):
@@ -293,7 +287,7 @@ class Pipeline(object):
         constraint
         """
         if not isinstance(constraint_object, dict):
-            TypeError('a single constraint object must be a dictionary')
+            TypeError("a single constraint object must be a dictionary")
 
         self._constraints.append(constraint_object)
 
@@ -318,13 +312,13 @@ class Pipeline(object):
         if condition_sets:
             if not isinstance(condition_sets, (list, dict)):
                 raise TypeError(
-                    'condition_sets must be a condition set '
-                    'or list of condition sets'
+                    "condition_sets must be a condition set "
+                    "or list of condition sets"
                 )
 
             if isinstance(condition_sets, list):
                 if len(condition_sets) > 20:
-                    raise ValueError('condition maximum is 20 condition sets')
+                    raise ValueError("condition maximum is 20 condition sets")
 
             if self._validate_condition_set(condition_sets):
                 if isinstance(condition_sets, list):
@@ -340,7 +334,7 @@ class Pipeline(object):
         :keyword condition_set: One or list of condition sets
         """
         if not isinstance(condition_set, dict):
-            TypeError('a single condition set object must be a dictionary')
+            TypeError("a single condition set object must be a dictionary")
 
         if self._validate_condition_set(condition_set):
             self._condition_sets.append(condition_set)
@@ -357,17 +351,17 @@ class Pipeline(object):
         if isinstance(condition_sets, list):
             for condition_set in condition_sets:
                 for operator in condition_set:
-                    if operator not in ['and', 'or']:
+                    if operator not in ["and", "or"]:
                         invalid_operators.append(operator)
         else:
             for operator in condition_sets:
-                if operator not in ['and', 'or']:
+                if operator not in ["and", "or"]:
                     invalid_operators.append(operator)
 
         if invalid_operators:
             raise KeyError(
                 'invalid operators: {}, must be "and" or "or"'.format(
-                    ', '.join(invalid_operators)
+                    ", ".join(invalid_operators)
                 )
             )
 
@@ -385,25 +379,21 @@ class Pipeline(object):
         delivery times for Pipeline
         """
         if timing_object:
-            if 'delay' in timing_object:
-                delay = timing_object['delay']['seconds']
+            if "delay" in timing_object:
+                delay = timing_object["delay"]["seconds"]
 
                 if not (isinstance(delay, int) and delay > 0):
-                    raise ValueError('delay must be an integer greater than 0')
+                    raise ValueError("delay must be an integer greater than 0")
 
-            if 'schedule' in timing_object:
-                schedule = timing_object['schedule']
-                if 'type' not in schedule:
+            if "schedule" in timing_object:
+                schedule = timing_object["schedule"]
+                if "type" not in schedule:
                     raise KeyError('"type" is required for a timing schedule')
-                if not schedule['type'] in ('local', 'utc'):
-                    raise ValueError(
-                        'timing schedule "type" must be "local" or "utc"'
-                    )
+                if not schedule["type"] in ("local", "utc"):
+                    raise ValueError('timing schedule "type" must be "local" or "utc"')
 
-                if 'dayparts' not in schedule:
-                    raise KeyError(
-                        '"dayparts" is required for a timing schedule'
-                    )
+                if "dayparts" not in schedule:
+                    raise KeyError('"dayparts" is required for a timing schedule')
 
             self._timing = timing_object
         else:

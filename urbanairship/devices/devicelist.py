@@ -2,7 +2,7 @@ import datetime
 import logging
 from urbanairship import common
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class ChannelInfo(object):
@@ -60,29 +60,25 @@ class ChannelInfo(object):
         if airship:
             obj.airship = airship
         for key in payload:
-            if key in ('created', 'last_registration'):
+            if key in ("created", "last_registration"):
                 try:
                     payload[key] = datetime.datetime.strptime(
-                        payload[key], '%Y-%m-%dT%H:%M:%S'
+                        payload[key], "%Y-%m-%dT%H:%M:%S"
                     )
                 except:
-                    payload[key] = 'UNKNOWN'
+                    payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj
 
     def lookup(self, channel_id):
         """Fetch metadata from a channel ID"""
-        start_url = self.airship.urls.get('channel_url')
-        data_attribute = 'channel'
-        id_key = 'channel_id'
+        start_url = self.airship.urls.get("channel_url")
+        data_attribute = "channel"
+        id_key = "channel_id"
         params = {}
         url = start_url + channel_id
         response = self.airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3,
-            params=params
+            method="GET", body=None, url=url, version=3, params=params
         )
         payload = response.json()
         return self.from_payload(payload[data_attribute], id_key, self.airship)
@@ -115,20 +111,18 @@ class DeviceInfo(object):
 
     @classmethod
     def from_payload(cls, payload, device_key, airship):
-        """Create based on results from a DeviceTokenList or APIDList iterator.
-
-        """
+        """Create based on results from a DeviceTokenList or APIDList iterator."""
         obj = cls(airship)
         obj.id = payload[device_key]
         obj.device_type = device_key
         for key in payload:
-            if key in 'created':
+            if key in "created":
                 try:
                     payload[key] = datetime.datetime.strptime(
-                        payload[key], '%Y-%m-%d %H:%M:%S'
+                        payload[key], "%Y-%m-%d %H:%M:%S"
                     )
                 except:
-                    payload[key] = 'UNKNOWN'
+                    payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj
 
@@ -140,14 +134,15 @@ class DeviceTokenList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
+
     next_url = None
-    data_attribute = 'device_tokens'
-    id_key = 'device_token'
+    data_attribute = "device_tokens"
+    id_key = "device_token"
     instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):
-        self.next_url = airship.urls.get('device_token_url')
-        params = {'limit': limit} if limit else {}
+        self.next_url = airship.urls.get("device_token_url")
+        params = {"limit": limit} if limit else {}
         super(DeviceTokenList, self).__init__(airship, params)
 
 
@@ -161,17 +156,17 @@ class ChannelList(common.IteratorParent):
     """
 
     next_url = None
-    data_attribute = 'channels'
-    id_key = 'channel_id'
+    data_attribute = "channels"
+    id_key = "channel_id"
     instance_class = ChannelInfo
 
     def __init__(self, airship, limit=None, start_channel=None):
-        self.next_url = airship.urls.get('channel_url')
+        self.next_url = airship.urls.get("channel_url")
         channel_params = {}
         if limit:
-            channel_params['limit'] = limit
+            channel_params["limit"] = limit
         if start_channel:
-            channel_params['start'] = start_channel
+            channel_params["start"] = start_channel
 
         super(ChannelList, self).__init__(airship, params=channel_params)
 
@@ -183,12 +178,13 @@ class APIDList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
+
     next_url = None
-    data_attribute = 'apids'
-    id_key = 'apid'
+    data_attribute = "apids"
+    id_key = "apid"
     instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):
-        self.next_url = airship.urls.get('apid_url')
-        params = {'limit': limit} if limit else {}
+        self.next_url = airship.urls.get("apid_url")
+        params = {"limit": limit} if limit else {}
         super(APIDList, self).__init__(airship, params)

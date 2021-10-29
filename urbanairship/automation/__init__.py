@@ -1,7 +1,3 @@
-from .core import (
-    Automation
-)
+from .core import Automation
 
-from .pipeline import (
-    Pipeline
-)
+from .pipeline import Pipeline

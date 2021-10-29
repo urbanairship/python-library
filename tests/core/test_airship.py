@@ -13,9 +13,9 @@ class TestAirshipCore(unittest.TestCase):
     def test_airship_timeout(self):
         timeout_int = 50
 
-        airship_timeout = ua.Airship(key=TEST_KEY,
-                                     secret=TEST_SECRET,
-                                     timeout=timeout_int)
+        airship_timeout = ua.Airship(
+            key=TEST_KEY, secret=TEST_SECRET, timeout=timeout_int
+        )
 
         self.assertEqual(airship_timeout.timeout, timeout_int)
 
@@ -23,18 +23,16 @@ class TestAirshipCore(unittest.TestCase):
         timeout_str = "50"
 
         try:
-            airship_raises_value_error = ua.Airship(key=TEST_KEY,
-                                                    secret=TEST_SECRET,
-                                                    timeout=timeout_str)
+            airship_raises_value_error = ua.Airship(
+                key=TEST_KEY, secret=TEST_SECRET, timeout=timeout_str
+            )
         except ValueError as e:
             self.assertIsInstance(e, ValueError)
 
     def test_airship_location(self):
-        location = 'eu'
+        location = "eu"
 
-        airship_eu = ua.Airship(key=TEST_KEY,
-                                secret=TEST_SECRET,
-                                location=location)
+        airship_eu = ua.Airship(key=TEST_KEY, secret=TEST_SECRET, location=location)
 
         self.assertEqual(airship_eu.location, location)
 
@@ -42,9 +40,9 @@ class TestAirshipCore(unittest.TestCase):
         invalid_location = "xx"
 
         try:
-            airship_rasises_value_error = ua.Airship(key=TEST_KEY,
-                                                     secret=TEST_SECRET,
-                                                     location=invalid_location)
+            airship_rasises_value_error = ua.Airship(
+                key=TEST_KEY, secret=TEST_SECRET, location=invalid_location
+            )
         except ValueError as e:
             self.assertIsInstance(e, ValueError)
 
@@ -53,16 +51,14 @@ class TestAirshipResponse(unittest.TestCase):
     test_channel = str(uuid.uuid4())
     airship = ua.Airship(TEST_KEY, TEST_SECRET)
     common_push = airship.create_push()
-    common_push.device_types = ua.device_types('ios', 'android', 'amazon')
+    common_push.device_types = ua.device_types("ios", "android", "amazon")
     common_push.audience = ua.channel(test_channel)
-    common_push.notification = ua.notification(alert='testing')
+    common_push.notification = ua.notification(alert="testing")
 
     def test_unauthorized(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({
-                'ok': False
-            }).encode('utf-8')
+            response._content = json.dumps({"ok": False}).encode("utf-8")
             response.status_code = 401
             mock_request.return_value = response
 
@@ -72,11 +68,9 @@ class TestAirshipResponse(unittest.TestCase):
                 self.assertIsInstance(ua.Unauthorized, e)
 
     def test_client_error(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({
-                'ok': False
-            }).encode('utf-8')
+            response._content = json.dumps({"ok": False}).encode("utf-8")
             response.status_code = 400
             mock_request.return_value = response
 
@@ -87,11 +81,9 @@ class TestAirshipResponse(unittest.TestCase):
                 self.assertEqual(r.status_code, 400)
 
     def test_server_error(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({
-                'ok': False
-            }).encode('utf-8')
+            response._content = json.dumps({"ok": False}).encode("utf-8")
             response.status_code = 500
             mock_request.return_value = response
 

@@ -12,21 +12,27 @@ from tests import TEST_KEY, TEST_SECRET
 
 class TestDeviceListing(unittest.TestCase):
     def setUp(self):
-        self.channel1 = '2ce7bb20-03a1-417d-bef5-61306e3755d7'
-        self.channel2 = '4c3b6679-16f9-450a-9781-938cb3e9db7c'
-        self.channel3 = 'aaabf77c-432e-4468-8b4a-0a173685e58f'
-        self.push_address1 = '28A97947F08FF0E0026EF38D157E0B1777B8DDD33D3B16130679288CEED645AF'
-        self.push_address2 = 'dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We'
+        self.channel1 = "2ce7bb20-03a1-417d-bef5-61306e3755d7"
+        self.channel2 = "4c3b6679-16f9-450a-9781-938cb3e9db7c"
+        self.channel3 = "aaabf77c-432e-4468-8b4a-0a173685e58f"
+        self.push_address1 = (
+            "28A97947F08FF0E0026EF38D157E0B1777B8DDD33D3B16130679288CEED645AF"
+        )
+        self.push_address2 = "dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We"
         self.push_address3 = None
-        self.device_token1 = '0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB'
-        self.device_token2 = '07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13'
-        self.apid1 = '00000000-0000-0000-0000-000000000000'
-        self.apid2 = '11111111-1111-1111-1111-111111111111'
+        self.device_token1 = (
+            "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB"
+        )
+        self.device_token2 = (
+            "07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13"
+        )
+        self.apid1 = "00000000-0000-0000-0000-000000000000"
+        self.apid2 = "11111111-1111-1111-1111-111111111111"
         self.limit = 500
         self.start_channel = str(uuid.uuid4())
 
     def test_channel_listing(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
@@ -45,45 +51,22 @@ class TestDeviceListing(unittest.TestCase):
                             "alias": "null",
                             "tags": [],
                             "tag_groups": {
-                                "ua_background_enabled": [
-                                    "true"
-                                ],
-                                "ua_ios_app_version": [
-                                    "1.0"
-                                ],
-                                "timezone": [
-                                    "America/Los_Angeles"
-                                ],
-                                "ua_locale_country": [
-                                    "US"
-                                ],
-                                "ua_locale_language": [
-                                    "en"
-                                ],
-                                "ua_ios_model": [
-                                    "iPad2,5"
-                                ],
-                                "ua_ios_sdk_version": [
-                                    "7.2.X"
-                                ],
-                                "ua_ios_version": [
-                                    "9.3.X"
-                                ],
-                                "ua_opt_in": [
-                                    "true"
-                                ],
-                                "ua_location_enabled": [
-                                    "false"
-                                ]
+                                "ua_background_enabled": ["true"],
+                                "ua_ios_app_version": ["1.0"],
+                                "timezone": ["America/Los_Angeles"],
+                                "ua_locale_country": ["US"],
+                                "ua_locale_language": ["en"],
+                                "ua_ios_model": ["iPad2,5"],
+                                "ua_ios_sdk_version": ["7.2.X"],
+                                "ua_ios_version": ["9.3.X"],
+                                "ua_opt_in": ["true"],
+                                "ua_location_enabled": ["false"],
                             },
                             "ios": {
                                 "badge": 0,
-                                "quiettime": {
-                                    "start": "null",
-                                    "end": "null"
-                                },
-                                "tz": "null"
-                            }
+                                "quiettime": {"start": "null", "end": "null"},
+                                "tz": "null",
+                            },
                         },
                         {
                             "channel_id": "4c3b6679-16f9-450a-9781-938cb3e9db7c",
@@ -92,19 +75,15 @@ class TestDeviceListing(unittest.TestCase):
                             "opt_in": "false",
                             "background": "false",
                             "push_address": "dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We",
-                            'created': 'None',
+                            "created": "None",
                             "last_registration": "2016-08-22T17:20:27",
                             "named_user_id": "null",
                             "alias": "null",
                             "tags": [],
                             "tag_groups": {
-                                "ua_background_enabled": [
-                                    "false"
-                                ],
-                                "ua_opt_in": [
-                                    "false"
-                                ]
-                            }
+                                "ua_background_enabled": ["false"],
+                                "ua_opt_in": ["false"],
+                            },
                         },
                         {
                             "channel_id": "aaabf77c-432e-4468-8b4a-0a173685e58f",
@@ -117,7 +96,7 @@ class TestDeviceListing(unittest.TestCase):
                                 "timezone": ["America/Los_Angeles"],
                                 "ua_locale_country": ["US"],
                                 "ua_locale_language": ["en"],
-                                "ua_opt_in": ["true"]
+                                "ua_opt_in": ["true"],
                             },
                             "created": "2017-08-11T19:17:33",
                             "address": "+1 8008675309",
@@ -126,14 +105,14 @@ class TestDeviceListing(unittest.TestCase):
                                 "open_platform_name": "sms",
                                 "identifiers": {
                                     "likes-spam": "false",
-                                    "likes-cats": "very true"
-                                }
+                                    "likes-cats": "very true",
+                                },
                             },
-                            "last_registration": "2017-08-11T19:17:33"
-                        }
-                    ]
+                            "last_registration": "2017-08-11T19:17:33",
+                        },
+                    ],
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
 
             response.status_code = 200
             mock_request.return_value = response
@@ -149,51 +128,39 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(channel_responses[1].channel_id, self.channel2)
             self.assertEquals(channel_responses[2].channel_id, self.channel3)
 
-            self.assertEquals(
-                channel_responses[0].push_address, self.push_address1
-            )
-            self.assertEquals(
-                channel_responses[1].push_address, self.push_address2
-            )
-            self.assertEquals(
-                channel_responses[2].push_address, self.push_address3
-            )
+            self.assertEquals(channel_responses[0].push_address, self.push_address1)
+            self.assertEquals(channel_responses[1].push_address, self.push_address2)
+            self.assertEquals(channel_responses[2].push_address, self.push_address3)
 
-            self.assertEquals(channel_responses[0].device_type, 'ios')
-            self.assertEquals(channel_responses[1].device_type, 'android')
-            self.assertEquals(channel_responses[2].device_type, 'open')
+            self.assertEquals(channel_responses[0].device_type, "ios")
+            self.assertEquals(channel_responses[1].device_type, "android")
+            self.assertEquals(channel_responses[2].device_type, "open")
 
             self.assertEquals(
                 channel_responses[0].created,
-                datetime.datetime.strptime(
-                    '2016-08-17T23:29:52',
-                    '%Y-%m-%dT%H:%M:%S'
-                )
+                datetime.datetime.strptime("2016-08-17T23:29:52", "%Y-%m-%dT%H:%M:%S"),
             )
-            self.assertEquals(channel_responses[1].created, 'UNKNOWN')
+            self.assertEquals(channel_responses[1].created, "UNKNOWN")
             self.assertEquals(
                 channel_responses[2].created,
-                datetime.datetime.strptime(
-                    '2017-08-11T19:17:33',
-                    '%Y-%m-%dT%H:%M:%S'
-                )
+                datetime.datetime.strptime("2017-08-11T19:17:33", "%Y-%m-%dT%H:%M:%S"),
             )
 
     def test_channel_listing_params(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
-        listing = ua.ChannelList(airship=airship,
-                                 limit=self.limit,
-                                 start_channel=self.start_channel)
+        listing = ua.ChannelList(
+            airship=airship, limit=self.limit, start_channel=self.start_channel
+        )
 
-        self.assertEquals(listing.next_url,
-                          airship.urls.get('channel_url'))
+        self.assertEquals(listing.next_url, airship.urls.get("channel_url"))
 
-        self.assertEquals(listing.params,
-                          {'limit': self.limit, 'start': self.start_channel})
+        self.assertEquals(
+            listing.params, {"limit": self.limit, "start": self.start_channel}
+        )
 
     def test_device_token_listing(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
@@ -206,7 +173,7 @@ class TestDeviceListing(unittest.TestCase):
                             "alias": None,
                             "active": False,
                             "created": "2013-07-17 21:17:42",
-                            "device_token": "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB"
+                            "device_token": "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB",
                         },
                         {
                             "tags": ["tag1", "tag2"],
@@ -214,10 +181,10 @@ class TestDeviceListing(unittest.TestCase):
                             "active": True,
                             "created": "2016-02-05 22:55:54",
                             "device_token": "07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13",
-                        }
-                    ]
+                        },
+                    ],
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
 
             response.status_code = 200
             mock_request.return_value = response
@@ -232,24 +199,22 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(dt_responses[0].device_token, self.device_token1)
             self.assertEquals(dt_responses[1].device_token, self.device_token2)
             self.assertEquals(dt_responses[0].alias, None)
-            self.assertEquals(dt_responses[1].alias, 'an_alias')
+            self.assertEquals(dt_responses[1].alias, "an_alias")
             self.assertEquals(dt_responses[0].active, False)
             self.assertEquals(dt_responses[1].active, True)
             self.assertEquals(
                 dt_responses[0].created,
-                datetime.datetime.strptime(
-                        '2013-07-17 21:17:42', '%Y-%m-%d %H:%M:%S')
+                datetime.datetime.strptime("2013-07-17 21:17:42", "%Y-%m-%d %H:%M:%S"),
             )
             self.assertEquals(
                 dt_responses[1].created,
-                datetime.datetime.strptime(
-                        '2016-02-05 22:55:54', '%Y-%m-%d %H:%M:%S')
+                datetime.datetime.strptime("2016-02-05 22:55:54", "%Y-%m-%d %H:%M:%S"),
             )
             self.assertListEqual(dt_responses[0].tags, [])
-            self.assertListEqual(dt_responses[1].tags, ['tag1', 'tag2'])
+            self.assertListEqual(dt_responses[1].tags, ["tag1", "tag2"])
 
     def test_apid_listing(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
@@ -267,11 +232,11 @@ class TestDeviceListing(unittest.TestCase):
                             "alias": "alias1",
                             "active": True,
                             "created": "2013-01-25 00:55:06",
-                            "apid": "11111111-1111-1111-1111-111111111111"
-                        }
-                    ]
+                            "apid": "11111111-1111-1111-1111-111111111111",
+                        },
+                    ],
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
 
             response.status_code = 200
             mock_request.return_value = response
@@ -288,16 +253,14 @@ class TestDeviceListing(unittest.TestCase):
             self.assertEquals(apid_responses[0].active, False)
             self.assertEquals(apid_responses[1].active, True)
             self.assertEquals(apid_responses[0].alias, None)
-            self.assertEquals(apid_responses[1].alias, 'alias1')
+            self.assertEquals(apid_responses[1].alias, "alias1")
             self.assertEquals(
                 apid_responses[0].created,
-                datetime.datetime.strptime(
-                        '2015-04-25 23:01:53', '%Y-%m-%d %H:%M:%S')
+                datetime.datetime.strptime("2015-04-25 23:01:53", "%Y-%m-%d %H:%M:%S"),
             )
             self.assertEquals(
                 apid_responses[1].created,
-                datetime.datetime.strptime(
-                        '2013-01-25 00:55:06', '%Y-%m-%d %H:%M:%S')
+                datetime.datetime.strptime("2013-01-25 00:55:06", "%Y-%m-%d %H:%M:%S"),
             )
             self.assertListEqual(apid_responses[0].tags, [])
-            self.assertListEqual(apid_responses[1].tags, ['tag1'])
+            self.assertListEqual(apid_responses[1].tags, ["tag1"])

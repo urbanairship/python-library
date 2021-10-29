@@ -13,303 +13,267 @@ class TestPush(unittest.TestCase):
     def test_full_payload(self):
         p = ua.Push(None)
         p.audience = ua.all_
-        p.notification = ua.notification(alert='Hello')
+        p.notification = ua.notification(alert="Hello")
         p.options = ua.options(expiry=10080)
-        p.campaigns = ua.campaigns(
-            categories=['kittens', 'tacos', 'horse_racing']
-            )
+        p.campaigns = ua.campaigns(categories=["kittens", "tacos", "horse_racing"])
         p.device_types = ua.all_
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
-            extra={'more': 'stuff'},
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
+            extra={"more": "stuff"},
             expiry=10080,
-            icons={'list_icon': 'http://cdn.example.com/message.png'},
-            options={'some_delivery_option': 'true'},
+            icons={"list_icon": "http://cdn.example.com/message.png"},
+            options={"some_delivery_option": "true"},
         )
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'notification': {'alert': 'Hello'},
-                'device_types': 'all',
-                'options': {
-                    'expiry': 10080
+                "audience": "all",
+                "notification": {"alert": "Hello"},
+                "device_types": "all",
+                "options": {"expiry": 10080},
+                "campaigns": {"categories": ["kittens", "tacos", "horse_racing"]},
+                "message": {
+                    "title": "Title",
+                    "body": "Body",
+                    "content_type": "text/html",
+                    "content_encoding": "utf8",
+                    "extra": {"more": "stuff"},
+                    "expiry": 10080,
+                    "icons": {"list_icon": "http://cdn.example.com/message.png"},
+                    "options": {"some_delivery_option": "true"},
                 },
-                'campaigns': {
-                    'categories': ['kittens', 'tacos', 'horse_racing']
-                },
-                'message': {
-                    'title': 'Title',
-                    'body': 'Body',
-                    'content_type': 'text/html',
-                    'content_encoding': 'utf8',
-                    'extra': {'more': 'stuff'},
-                    'expiry': 10080,
-                    'icons': {
-                        'list_icon': 'http://cdn.example.com/message.png'
-                    },
-                    'options': {'some_delivery_option': 'true'},
-                }
-            }
+            },
         )
 
     def test_web_push(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Hello',
+            alert="Hello",
             web={
-                'title': 'This is a title.',
-                'icon': {'url': 'https://example.com/icon.png'},
-                'extra': {'attribute': 'id'},
-                'time_to_live': 12345,
-                'require_interaction': False
-            }
+                "title": "This is a title.",
+                "icon": {"url": "https://example.com/icon.png"},
+                "extra": {"attribute": "id"},
+                "time_to_live": 12345,
+                "require_interaction": False,
+            },
         )
-        p.device_types = 'web'
+        p.device_types = "web"
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'device_types': 'web',
-                'notification': {
-                    'alert': 'Hello',
-                    'web': {
-                        'title': 'This is a title.',
-                        'icon': {'url': 'https://example.com/icon.png'},
-                        'extra': {'attribute': 'id'},
-                        'time_to_live': 12345,
-                        'require_interaction': False
+                "audience": "all",
+                "device_types": "web",
+                "notification": {
+                    "alert": "Hello",
+                    "web": {
+                        "title": "This is a title.",
+                        "icon": {"url": "https://example.com/icon.png"},
+                        "extra": {"attribute": "id"},
+                        "time_to_live": 12345,
+                        "require_interaction": False,
                     },
-                }
-            }
+                },
+            },
         )
 
     def test_web_push_to_channel(self):
         p = ua.Push(None)
-        p.audience = ua.channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
-        p.notification = ua.notification(
-            alert='Hello individual'
-        )
-        p.device_types = 'web'
+        p.audience = ua.channel("7bdf2204-4c1b-4a23-8648-9ea74c6be4a3")
+        p.notification = ua.notification(alert="Hello individual")
+        p.device_types = "web"
 
         self.assertEqual(
             p.payload,
             {
-                'audience': {
-                    'channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
-                },
-                'notification': {'alert': 'Hello individual'},
-                'device_types': 'web'
-            }
+                "audience": {"channel": "7bdf2204-4c1b-4a23-8648-9ea74c6be4a3"},
+                "notification": {"alert": "Hello individual"},
+                "device_types": "web",
+            },
         )
 
     def test_open_channel_push(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Hello closed channels',
+            alert="Hello closed channels",
             open_platform={
-                'email': {
-                    'alert': 'Hello open channels',
-                    'title': 'This is a title.',
-                    'summary': 'A longer summary of some content',
-                    'media_attachment':
-                        'https://example.com/cat_standing_up.jpeg',
-                    'extra': {'attribute': 'id'},
-                    'interactive': {
-                        'type': 'ua_yes_no_foreground',
-                        'button_actions': {
-                            'yes': {
-                                'open': {
-                                    'content': 'https://www.urbanairship.com',
-                                    'type': 'url'
+                "email": {
+                    "alert": "Hello open channels",
+                    "title": "This is a title.",
+                    "summary": "A longer summary of some content",
+                    "media_attachment": "https://example.com/cat_standing_up.jpeg",
+                    "extra": {"attribute": "id"},
+                    "interactive": {
+                        "type": "ua_yes_no_foreground",
+                        "button_actions": {
+                            "yes": {
+                                "open": {
+                                    "content": "https://www.urbanairship.com",
+                                    "type": "url",
                                 }
                             },
-                            'no': {
-                                'app_defined': {
-                                    'foo': 'bar'
-                                }
-                            }
-                        }
-                    }
+                            "no": {"app_defined": {"foo": "bar"}},
+                        },
+                    },
                 }
-            }
+            },
         )
-        p.device_types = 'open::email'
+        p.device_types = "open::email"
         self.assertDictEqual(
             p.payload,
             {
-                'audience': 'all',
-                'device_types': 'open::email',
-                'notification': {
-                    'alert': 'Hello closed channels',
-                    'open::email': {
-                        'alert': 'Hello open channels',
-                        'title': 'This is a title.',
-                        'summary': 'A longer summary of some content',
-                        'media_attachment':
-                            'https://example.com/cat_standing_up.jpeg',
-                        'extra': {'attribute': 'id'},
-                        'interactive': {
-                            'type': 'ua_yes_no_foreground',
-                            'button_actions': {
-                                'yes': {
-                                    'open': {
-                                        'content':
-                                            'https://www.urbanairship.com',
-                                        'type': 'url'
+                "audience": "all",
+                "device_types": "open::email",
+                "notification": {
+                    "alert": "Hello closed channels",
+                    "open::email": {
+                        "alert": "Hello open channels",
+                        "title": "This is a title.",
+                        "summary": "A longer summary of some content",
+                        "media_attachment": "https://example.com/cat_standing_up.jpeg",
+                        "extra": {"attribute": "id"},
+                        "interactive": {
+                            "type": "ua_yes_no_foreground",
+                            "button_actions": {
+                                "yes": {
+                                    "open": {
+                                        "content": "https://www.urbanairship.com",
+                                        "type": "url",
                                     }
                                 },
-                                'no': {
-                                    'app_defined': {
-                                        'foo': 'bar'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                "no": {"app_defined": {"foo": "bar"}},
+                            },
+                        },
+                    },
+                },
+            },
         )
 
     def test_open_channel_push_to_channel(self):
         p = ua.Push(None)
-        p.audience = ua.open_channel('7bdf2204-4c1b-4a23-8648-9ea74c6be4a3')
-        p.notification = ua.notification(
-            alert='Hello individual'
-        )
-        p.device_types = 'open::sms'
+        p.audience = ua.open_channel("7bdf2204-4c1b-4a23-8648-9ea74c6be4a3")
+        p.notification = ua.notification(alert="Hello individual")
+        p.device_types = "open::sms"
 
         self.assertEqual(
             p.payload,
             {
-                'audience': {
-                    'open_channel': '7bdf2204-4c1b-4a23-8648-9ea74c6be4a3'
-                },
-                'notification': {'alert': 'Hello individual'},
-                'device_types': 'open::sms'
-            }
+                "audience": {"open_channel": "7bdf2204-4c1b-4a23-8648-9ea74c6be4a3"},
+                "notification": {"alert": "Hello individual"},
+                "device_types": "open::sms",
+            },
         )
 
     def test_actions(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Hello',
+            alert="Hello",
             actions=ua.actions(
-                add_tag='new_tag',
-                remove_tag='old_tag',
-                share='Check out Urban Airship!',
-                open_={
-                    'type': 'url',
-                    'content': 'http://www.urbanairship.com'
-                },
-                app_defined={'some_app_defined_action': 'some_values'}
-            )
+                add_tag="new_tag",
+                remove_tag="old_tag",
+                share="Check out Urban Airship!",
+                open_={"type": "url", "content": "http://www.urbanairship.com"},
+                app_defined={"some_app_defined_action": "some_values"},
+            ),
         )
         p.device_types = ua.all_
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
         )
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'notification': {
-                    'alert': 'Hello',
-                    'actions': {
-                        'add_tag': 'new_tag',
-                        'remove_tag': 'old_tag',
-                        'share': 'Check out Urban Airship!',
-                        'open': {
-                            'type': 'url',
-                            'content': 'http://www.urbanairship.com'
+                "audience": "all",
+                "notification": {
+                    "alert": "Hello",
+                    "actions": {
+                        "add_tag": "new_tag",
+                        "remove_tag": "old_tag",
+                        "share": "Check out Urban Airship!",
+                        "open": {
+                            "type": "url",
+                            "content": "http://www.urbanairship.com",
                         },
-                        'app_defined': {
-                            'some_app_defined_action': 'some_values'
-                        }
-                    }
+                        "app_defined": {"some_app_defined_action": "some_values"},
+                    },
                 },
-                'device_types': 'all',
-                'message': {
-                    'title': 'Title',
-                    'body': 'Body',
-                    'content_type': 'text/html',
-                    'content_encoding': 'utf8',
-                }
-            }
+                "device_types": "all",
+                "message": {
+                    "title": "Title",
+                    "body": "Body",
+                    "content_type": "text/html",
+                    "content_encoding": "utf8",
+                },
+            },
         )
 
     def test_interactive(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Hey, click yes!',
+            alert="Hey, click yes!",
             interactive=ua.interactive(
-                type='some_type',
+                type="some_type",
                 button_actions={
-                    'yes': {
-                        'add_tag': 'clicked_yes',
-                        'remove_tag': 'never_clicked_yes',
-                        'open': {
-                            'type': 'url',
-                            'content': 'http://www.urbanairship.com'
-                        }
+                    "yes": {
+                        "add_tag": "clicked_yes",
+                        "remove_tag": "never_clicked_yes",
+                        "open": {
+                            "type": "url",
+                            "content": "http://www.urbanairship.com",
+                        },
                     },
-                    'no': {
-                        'add_tag': 'hater'
-                    }
-                }
-            )
+                    "no": {"add_tag": "hater"},
+                },
+            ),
         )
         p.device_types = ua.all_
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
         )
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'notification': {
-                    'alert': 'Hey, click yes!',
-                    'interactive': {
-                        'type': 'some_type',
-                        'button_actions': {
-                            'yes': {
-                                'add_tag': 'clicked_yes',
-                                'remove_tag': 'never_clicked_yes',
-                                'open': {
-                                    'type': 'url',
-                                    'content': 'http://www.urbanairship.com'
-                                }
+                "audience": "all",
+                "notification": {
+                    "alert": "Hey, click yes!",
+                    "interactive": {
+                        "type": "some_type",
+                        "button_actions": {
+                            "yes": {
+                                "add_tag": "clicked_yes",
+                                "remove_tag": "never_clicked_yes",
+                                "open": {
+                                    "type": "url",
+                                    "content": "http://www.urbanairship.com",
+                                },
                             },
-                            'no': {
-                                'add_tag': 'hater'
-                            }
-                        }
-                    }
+                            "no": {"add_tag": "hater"},
+                        },
+                    },
                 },
-                'device_types': 'all',
-                'message': {
-                    'title': 'Title',
-                    'body': 'Body',
-                    'content_type': 'text/html',
-                    'content_encoding': 'utf8',
-                }
-            }
+                "device_types": "all",
+                "message": {
+                    "title": "Title",
+                    "body": "Body",
+                    "content_type": "text/html",
+                    "content_encoding": "utf8",
+                },
+            },
         )
 
     def test_in_app(self):
@@ -318,116 +282,94 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.in_app = ua.in_app(
-            alert='Alert message',
-            display_type='banner',
-            display={
-                'position': 'top',
-                'duration': '500'
-            },
+            alert="Alert message",
+            display_type="banner",
+            display={"position": "top", "duration": "500"},
             interactive=ua.interactive(
-                type='ua_yes_no_foreground',
+                type="ua_yes_no_foreground",
                 button_actions={
-                    'yes': ua.actions(open_={
-                        'type': 'url',
-                        'content': 'https://www.urbanairship.com'
-                    })
-                }
-            )
+                    "yes": ua.actions(
+                        open_={"type": "url", "content": "https://www.urbanairship.com"}
+                    )
+                },
+            ),
         )
 
         self.assertEqual(
             p.in_app,
             {
-                'alert': 'Alert message',
-                'display_type': 'banner',
-                'display': {
-                    'position': 'top',
-                    'duration': '500'
-                },
-                'interactive': {
-                    'button_actions': {
-                        'yes': {
-                            'open': {
-                                'content': 'https://www.urbanairship.com',
-                                'type': 'url'
+                "alert": "Alert message",
+                "display_type": "banner",
+                "display": {"position": "top", "duration": "500"},
+                "interactive": {
+                    "button_actions": {
+                        "yes": {
+                            "open": {
+                                "content": "https://www.urbanairship.com",
+                                "type": "url",
                             }
                         }
                     },
-                    'type': 'ua_yes_no_foreground'
-                }
-            }
+                    "type": "ua_yes_no_foreground",
+                },
+            },
         )
 
     def test_sms_push_to_sender(self):
         p = ua.Push(None)
-        p.audience = ua.sms_sender('12345')
-        p.notification = ua.notification(
-            alert='sending sms to all with sender'
-        )
-        p.device_types = ua.device_types('sms')
+        p.audience = ua.sms_sender("12345")
+        p.notification = ua.notification(alert="sending sms to all with sender")
+        p.device_types = ua.device_types("sms")
 
         self.assertEqual(
             p.payload,
             {
-                'audience': {
-                    'sms_sender': '12345'
-                },
-                'device_types': ['sms'],
-                'notification': {
-                    'alert': 'sending sms to all with sender'
-                }
-            }
+                "audience": {"sms_sender": "12345"},
+                "device_types": ["sms"],
+                "notification": {"alert": "sending sms to all with sender"},
+            },
         )
 
     def test_sms_push_to_id(self):
         p = ua.Push(None)
-        p.audience = ua.sms_id('01230984567', '12345')
-        p.notification = ua.notification(
-            alert='send sms to id with sender and msisdn'
-        )
-        p.device_types = ua.device_types('sms')
+        p.audience = ua.sms_id("01230984567", "12345")
+        p.notification = ua.notification(alert="send sms to id with sender and msisdn")
+        p.device_types = ua.device_types("sms")
 
         self.assertEqual(
             p.payload,
             {
-                'audience': {
-                    'sms_id': {
-                        'sender': '12345',
-                        'msisdn': '01230984567'
-                    }
-                },
-                'device_types': ['sms'],
-                'notification': {
-                    'alert': 'send sms to id with sender and msisdn'
-                }
-            }
+                "audience": {"sms_id": {"sender": "12345", "msisdn": "01230984567"}},
+                "device_types": ["sms"],
+                "notification": {"alert": "send sms to id with sender and msisdn"},
+            },
         )
 
     def test_sms_overrides(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='top level alert',
+            alert="top level alert",
             sms=ua.sms(
-                alert='sms override alert',
-                expiry='2018-04-01T12:00:00',
-            )
+                alert="sms override alert",
+                expiry="2018-04-01T12:00:00",
+            ),
         )
-        p.device_types = ua.device_types('sms')
+        p.device_types = ua.device_types("sms")
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'device_types': ['sms'],
-                'notification': {
-                    'alert': 'top level alert',
-                    'sms': {
-                        'alert': 'sms override alert',
-                        'expiry': '2018-04-01T12:00:00'
-                    }
-                }
-            }
+                "audience": "all",
+                "device_types": ["sms"],
+                "notification": {
+                    "alert": "top level alert",
+                    "sms": {
+                        "alert": "sms override alert",
+                        "expiry": "2018-04-01T12:00:00",
+                    },
+                },
+            },
         )
 
     def test_email_overrides(self):
@@ -435,34 +377,34 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             email=ua.email(
-                message_type='transactional',
-                plaintext_body='hello',
-                reply_to='tegan@sara.xyz',
-                sender_address='the@con.abc',
-                sender_name='test_name',
-                subject='hi',
-                html_body='<html>so rich!</html>'
+                message_type="transactional",
+                plaintext_body="hello",
+                reply_to="tegan@sara.xyz",
+                sender_address="the@con.abc",
+                sender_name="test_name",
+                subject="hi",
+                html_body="<html>so rich!</html>",
             )
         )
-        p.device_types = ua.device_types('email')
+        p.device_types = ua.device_types("email")
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'device_types': ['email'],
-                'notification': {
-                    'email': {
-                        'message_type': 'transactional',
-                        'plaintext_body': 'hello',
-                        'reply_to': 'tegan@sara.xyz',
-                        'sender_address': 'the@con.abc',
-                        'sender_name': 'test_name',
-                        'subject': 'hi',
-                        'html_body': '<html>so rich!</html>'
+                "audience": "all",
+                "device_types": ["email"],
+                "notification": {
+                    "email": {
+                        "message_type": "transactional",
+                        "plaintext_body": "hello",
+                        "reply_to": "tegan@sara.xyz",
+                        "sender_address": "the@con.abc",
+                        "sender_name": "test_name",
+                        "subject": "hi",
+                        "html_body": "<html>so rich!</html>",
                     }
-                }
-            }
+                },
+            },
         )
 
     def test_email_missing_device_type(self):
@@ -470,16 +412,16 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             email=ua.email(
-                message_type='transactional',
-                plaintext_body='hello',
-                reply_to='tegan@sara.xyz',
-                sender_address='the@con.abc',
-                sender_name='test_name',
-                subject='hi',
-                html_body='<html>so rich!</html>'
+                message_type="transactional",
+                plaintext_body="hello",
+                reply_to="tegan@sara.xyz",
+                sender_address="the@con.abc",
+                sender_name="test_name",
+                subject="hi",
+                html_body="<html>so rich!</html>",
             )
         )
-        p.device_types = ua.device_types('ios')
+        p.device_types = ua.device_types("ios")
 
         with self.assertRaises(ValueError):
             p.send()
@@ -489,13 +431,13 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             email=ua.email(
-                message_type='transactional',
-                plaintext_body='hello',
-                reply_to='tegan@sara.xyz',
-                sender_address='the@con.abc',
-                sender_name='test_name',
-                subject='hi',
-                html_body='<html>so rich!</html>'
+                message_type="transactional",
+                plaintext_body="hello",
+                reply_to="tegan@sara.xyz",
+                sender_address="the@con.abc",
+                sender_name="test_name",
+                subject="hi",
+                html_body="<html>so rich!</html>",
             )
         )
         p.device_types = ua.all_
@@ -506,10 +448,8 @@ class TestPush(unittest.TestCase):
     def test_email_missing_override(self):
         p = ua.Push(None)
         p.audience = ua.all_
-        p.notification = ua.notification(
-            alert='no email to be found!'
-        )
-        p.device_types = ua.device_types('email')
+        p.notification = ua.notification(alert="no email to be found!")
+        p.device_types = ua.device_types("email")
 
         with self.assertRaises(ValueError):
             p.send()
@@ -518,27 +458,24 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert='Top level alert',
+            alert="Top level alert",
             ios=ua.ios(
-                alert='iOS override alert',
-                sound='cat.caf',
-            )
+                alert="iOS override alert",
+                sound="cat.caf",
+            ),
         )
-        p.device_types = ua.device_types('ios')
+        p.device_types = ua.device_types("ios")
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'device_types': ['ios'],
-                'notification': {
-                    'alert': 'Top level alert',
-                    'ios': {
-                        'alert': 'iOS override alert',
-                        'sound': 'cat.caf'
-                    }
-                }
-            }
+                "audience": "all",
+                "device_types": ["ios"],
+                "notification": {
+                    "alert": "Top level alert",
+                    "ios": {"alert": "iOS override alert", "sound": "cat.caf"},
+                },
+            },
         )
 
     def test_ios_overrides(self):
@@ -546,204 +483,186 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             ios=ua.ios(
-                alert={'title': 'this is',
-                       'body': 'backwards',
-                       'summary-arg': 'Matmos',
-                       'summary-arg-count': 1},
-                sound={'name': 'Amplified Synapse',
-                       'volume': 0.8,
-                       'critical': False},
-                thread_id='plastic minor',
+                alert={
+                    "title": "this is",
+                    "body": "backwards",
+                    "summary-arg": "Matmos",
+                    "summary-arg-count": 1,
+                },
+                sound={"name": "Amplified Synapse", "volume": 0.8, "critical": False},
+                thread_id="plastic minor",
                 priority=10,
                 badge=3,
-                extra={'office': 'furniture'},
+                extra={"office": "furniture"},
                 mutable_content=False,
-                title='this is',
-                subtitle='backwards',
-                collapse_id='nugent sand'
+                title="this is",
+                subtitle="backwards",
+                collapse_id="nugent sand",
             )
         )
         p.options = ua.options(10080)
-        p.device_types = 'ios'
+        p.device_types = "ios"
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
         )
 
         self.assertEqual(
             p.payload,
             {
-                'audience': 'all',
-                'notification': {
-                    'ios': {
-                        'alert': {
-                            'title': 'this is',
-                            'body': 'backwards',
-                            'summary-arg': 'Matmos',
-                            'summary-arg-count': 1
+                "audience": "all",
+                "notification": {
+                    "ios": {
+                        "alert": {
+                            "title": "this is",
+                            "body": "backwards",
+                            "summary-arg": "Matmos",
+                            "summary-arg-count": 1,
                         },
-                        'sound': {
-                            'name': 'Amplified Synapse',
-                            'volume': 0.8,
-                            'critical': False
+                        "sound": {
+                            "name": "Amplified Synapse",
+                            "volume": 0.8,
+                            "critical": False,
                         },
-                        'thread_id': 'plastic minor',
-                        'priority': 10,
-                        'badge': 3,
-                        'extra': {
-                            'office': 'furniture'
-                        },
-                        'mutable_content': False,
-                        'title': 'this is',
-                        'subtitle': 'backwards',
-                        'collapse_id': 'nugent sand'
+                        "thread_id": "plastic minor",
+                        "priority": 10,
+                        "badge": 3,
+                        "extra": {"office": "furniture"},
+                        "mutable_content": False,
+                        "title": "this is",
+                        "subtitle": "backwards",
+                        "collapse_id": "nugent sand",
                     }
                 },
-                'device_types': 'ios',
-                'options': {
-                    'expiry': 10080
+                "device_types": "ios",
+                "options": {"expiry": 10080},
+                "message": {
+                    "title": "Title",
+                    "body": "Body",
+                    "content_type": "text/html",
+                    "content_encoding": "utf8",
                 },
-                'message': {
-                    'title': 'Title',
-                    'body': 'Body',
-                    'content_type': 'text/html',
-                    'content_encoding': 'utf8',
-                }
-            }
+            },
         )
 
     def test_full_scheduled_payload(self):
         p = ua.Push(None)
         p.audience = ua.all_
-        p.notification = ua.notification(alert='Hello')
+        p.notification = ua.notification(alert="Hello")
         p.options = ua.options(10080)
         p.device_types = ua.all_
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
-            extra={'more': 'stuff'},
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
+            extra={"more": "stuff"},
             expiry=10080,
-            icons={
-                'list_icon': 'http://cdn.example.com/message.png'
-            },
-            options={'some_delivery_option': 'true'},
+            icons={"list_icon": "http://cdn.example.com/message.png"},
+            options={"some_delivery_option": "true"},
         )
         sched = ua.ScheduledPush(None)
         sched.push = p
-        sched.name = 'a schedule'
-        sched.schedule = ua.scheduled_time(
-            datetime.datetime(2014, 1, 1, 12, 0, 0)
-        )
+        sched.name = "a schedule"
+        sched.schedule = ua.scheduled_time(datetime.datetime(2014, 1, 1, 12, 0, 0))
 
         self.assertEqual(
             sched.payload,
             {
-                'name': 'a schedule',
-                'schedule': {'scheduled_time': '2014-01-01T12:00:00'},
-                'push': {
-                    'audience': 'all',
-                    'notification': {'alert': 'Hello'},
-                    'device_types': 'all',
-                    'options': {
-                        'expiry': 10080
+                "name": "a schedule",
+                "schedule": {"scheduled_time": "2014-01-01T12:00:00"},
+                "push": {
+                    "audience": "all",
+                    "notification": {"alert": "Hello"},
+                    "device_types": "all",
+                    "options": {"expiry": 10080},
+                    "message": {
+                        "title": "Title",
+                        "body": "Body",
+                        "content_type": "text/html",
+                        "content_encoding": "utf8",
+                        "extra": {"more": "stuff"},
+                        "expiry": 10080,
+                        "icons": {"list_icon": "http://cdn.example.com/message.png"},
+                        "options": {"some_delivery_option": "true"},
                     },
-                    'message': {
-                        'title': 'Title',
-                        'body': 'Body',
-                        'content_type': 'text/html',
-                        'content_encoding': 'utf8',
-                        'extra': {'more': 'stuff'},
-                        'expiry': 10080,
-                        'icons': {
-                            'list_icon': 'http://cdn.example.com/message.png'
-                        },
-                        'options': {'some_delivery_option': 'true'},
-                    },
-                }
-            }
+                },
+            },
         )
 
     def test_local_scheduled_payload(self):
         p = ua.Push(None)
         p.audience = ua.all_
-        p.notification = ua.notification(alert='Hello')
+        p.notification = ua.notification(alert="Hello")
         p.options = ua.options(10080)
         p.device_types = ua.all_
         p.message = ua.message(
-            title='Title',
-            body='Body',
-            content_type='text/html',
-            content_encoding='utf8',
+            title="Title",
+            body="Body",
+            content_type="text/html",
+            content_encoding="utf8",
         )
 
         sched = ua.ScheduledPush(None)
         sched.push = p
-        sched.name = 'a schedule in device local time'
+        sched.name = "a schedule in device local time"
         sched.schedule = ua.local_scheduled_time(
             datetime.datetime(2015, 1, 1, 12, 0, 0)
         )
 
-        self.assertEqual(sched.payload, {
-            'name': 'a schedule in device local time',
-            'schedule': {'local_scheduled_time': '2015-01-01T12:00:00'},
-            'push': {
-                'audience': 'all',
-                'notification': {'alert': 'Hello'},
-                'device_types': 'all',
-                'options': {
-                    'expiry': 10080
+        self.assertEqual(
+            sched.payload,
+            {
+                "name": "a schedule in device local time",
+                "schedule": {"local_scheduled_time": "2015-01-01T12:00:00"},
+                "push": {
+                    "audience": "all",
+                    "notification": {"alert": "Hello"},
+                    "device_types": "all",
+                    "options": {"expiry": 10080},
+                    "message": {
+                        "title": "Title",
+                        "body": "Body",
+                        "content_type": "text/html",
+                        "content_encoding": "utf8",
+                    },
                 },
-                'message': {
-                    'title': 'Title',
-                    'body': 'Body',
-                    'content_type': 'text/html',
-                    'content_encoding': 'utf8'
-                },
-            }
-        })
+            },
+        )
 
     def test_push_success(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
-                {
-                    'push_ids': [
-                        '0492662a-1b52-4343-a1f9-c6b0c72931c0'
-                    ]
-                }
-            ).encode('utf-8')
+                {"push_ids": ["0492662a-1b52-4343-a1f9-c6b0c72931c0"]}
+            ).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             push = airship.create_push()
             push.audience = ua.all_
-            push.notification = ua.notification(alert='Hello')
+            push.notification = ua.notification(alert="Hello")
             push.options = ua.options(expiry=10080)
             push.device_types = ua.all_
             pr = push.send()
-            self.assertEqual(
-                pr.push_ids,
-                ['0492662a-1b52-4343-a1f9-c6b0c72931c0']
-            )
+            self.assertEqual(pr.push_ids, ["0492662a-1b52-4343-a1f9-c6b0c72931c0"])
 
     def test_schedule_success(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    'schedule_urls': [
+                    "schedule_urls": [
                         (
-                            'https://go.urbanairship.com/api/schedules/'
-                            '0492662a-1b52-4343-a1f9-c6b0c72931c0'
+                            "https://go.urbanairship.com/api/schedules/"
+                            "0492662a-1b52-4343-a1f9-c6b0c72931c0"
                         )
                     ]
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -751,7 +670,7 @@ class TestPush(unittest.TestCase):
             sched = ua.ScheduledPush(airship)
             push = airship.create_push()
             push.audience = ua.all_
-            push.notification = ua.notification(alert='Hello')
+            push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
             sched.push = push
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
@@ -760,21 +679,21 @@ class TestPush(unittest.TestCase):
             self.assertEquals(
                 sched.url,
                 (
-                    'https://go.urbanairship.com/api/schedules/'
-                    '0492662a-1b52-4343-a1f9-c6b0c72931c0'
-                )
+                    "https://go.urbanairship.com/api/schedules/"
+                    "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                ),
             )
 
     def test_scheduled_template(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    'schedule_urls': [
-                        'https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3'
+                    "schedule_urls": [
+                        "https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3"
                     ]
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -783,11 +702,13 @@ class TestPush(unittest.TestCase):
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
 
             template_push = airship.create_template_push()
-            template_push.audience = ua.ios_channel('780ba0c5-45be-4f29-befa-39135cb05b59')
-            template_push.device_types = ua.device_types('ios')
+            template_push.audience = ua.ios_channel(
+                "780ba0c5-45be-4f29-befa-39135cb05b59"
+            )
+            template_push.device_types = ua.device_types("ios")
             template_push.merge_data = ua.merge_data(
-                template_id='780ba0c5-45be-4f29-befa-39135cb05b59',
-                substitutions={'key': 'value'}
+                template_id="780ba0c5-45be-4f29-befa-39135cb05b59",
+                substitutions={"key": "value"},
             )
 
             sched.push = template_push
@@ -795,22 +716,22 @@ class TestPush(unittest.TestCase):
 
             self.assertEqual(
                 sched.url,
-                'https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3'
+                "https://go.urbanairship.com/api/schedules/40fe5b31-8997-4819-9aeb-e6c4ae95e5d3",
             )
 
     def test_local_schedule_success(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    'schedule_urls': [
+                    "schedule_urls": [
                         (
-                            'https://go.urbanairship.com/api/schedules/'
-                            '0492662a-1b52-4343-a1f9-c6b0c72931c0'
+                            "https://go.urbanairship.com/api/schedules/"
+                            "0492662a-1b52-4343-a1f9-c6b0c72931c0"
                         )
                     ]
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -818,7 +739,7 @@ class TestPush(unittest.TestCase):
             sched = ua.ScheduledPush(airship)
             push = airship.create_push()
             push.audience = ua.all_
-            push.notification = ua.notification(alert='Hello')
+            push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
             sched.push = push
             sched.schedule = ua.local_scheduled_time(datetime.datetime.now())
@@ -827,43 +748,45 @@ class TestPush(unittest.TestCase):
             self.assertEquals(
                 sched.url,
                 (
-                    'https://go.urbanairship.com/api/schedules/'
-                    '0492662a-1b52-4343-a1f9-c6b0c72931c0'
-                )
+                    "https://go.urbanairship.com/api/schedules/"
+                    "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                ),
             )
 
     def test_schedule_from_url(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({
-                'name': 'a schedule',
-                'schedule': {'scheduled_time': '2013-07-15T18:40:20'},
-                'push': {
-                    'audience': 'all',
-                    'notification': {'alert': 'Hello'},
-                    'device_types': 'all',
-                    'options': {'expiry': 10080},
-                    'message': {
-                        'title': 'Title',
-                        'body': 'Body',
-                        'content_type': 'text/html',
-                        'content_encoding': 'utf8',
+            response._content = json.dumps(
+                {
+                    "name": "a schedule",
+                    "schedule": {"scheduled_time": "2013-07-15T18:40:20"},
+                    "push": {
+                        "audience": "all",
+                        "notification": {"alert": "Hello"},
+                        "device_types": "all",
+                        "options": {"expiry": 10080},
+                        "message": {
+                            "title": "Title",
+                            "body": "Body",
+                            "content_type": "text/html",
+                            "content_encoding": "utf8",
+                        },
                     },
-                },
-            }).encode('utf-8')
+                }
+            ).encode("utf-8")
 
             response.status_code = 200
             mock_request.return_value = response
 
             url = (
-                'https://go.urbanairship.com/api/schedules/'
-                '0492662a-1b52-4343-a1f9-c6b0c72931c0'
+                "https://go.urbanairship.com/api/schedules/"
+                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush.from_url(airship, url)
 
-            self.assertEqual(sched.push.device_types, 'all')
+            self.assertEqual(sched.push.device_types, "all")
 
     def test_cancel(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
@@ -872,14 +795,14 @@ class TestPush(unittest.TestCase):
         # Fail w/o URL
         self.assertRaises(ValueError, sched.cancel)
 
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response.status_code = 204
             mock_request.return_value = response
 
             url = (
-                'https://go.urbanairship.com/api/schedules/'
-                '0492662a-1b52-4343-a1f9-c6b0c72931c0'
+                "https://go.urbanairship.com/api/schedules/"
+                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
             sched.url = url
 
@@ -891,32 +814,31 @@ class TestPush(unittest.TestCase):
         # Fail w/o URL
         self.assertRaises(ValueError, sched.update)
 
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             url = (
-                'https://go.urbanairship.com/api/schedules/'
-                '0492662a-1b52-4343-a1f9-c6b0c72931c0'
+                "https://go.urbanairship.com/api/schedules/"
+                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
 
             response = requests.Response()
             response.status_code = 202
             response._content = json.dumps(
                 {
-                    'schedule_urls':
-                        [
-                            (
-                                'https://go.urbanairship.com/api/schedules/'
-                                '0492662a-1b52-4343-a1f9-c6b0c72931c0'
-                            )
-                        ]
+                    "schedule_urls": [
+                        (
+                            "https://go.urbanairship.com/api/schedules/"
+                            "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                        )
+                    ]
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
 
             mock_request.return_value = response
 
             sched.url = url
             push = airship.create_push()
             push.audience = ua.all_
-            push.notification = ua.notification(alert='Hello')
+            push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
             sched.push = push
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
@@ -927,7 +849,7 @@ class TestPush(unittest.TestCase):
         self.url1 = "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc"
         self.url2 = "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c"
 
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
@@ -936,38 +858,22 @@ class TestPush(unittest.TestCase):
                     "schedules": [
                         {
                             "url": "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc",
-                            "schedule": {
-                                "scheduled_time": "2018-10-09T18:43:34"
-                            },
+                            "schedule": {"scheduled_time": "2018-10-09T18:43:34"},
                             "name": "Test1 Schedule",
                             "push": {
                                 "audience": "all",
                                 "device_types": "all",
-                                "notification": {
-                                    "alert": "Hello, python!"
-                                }
+                                "notification": {"alert": "Hello, python!"},
                             },
-                            "push_ids": [
-                                "a4ed2e7b-de88-4fbc-9ccc-eb9de75b7c6e"
-                            ]
+                            "push_ids": ["a4ed2e7b-de88-4fbc-9ccc-eb9de75b7c6e"],
                         },
                         {
                             "url": "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c",
-                            "schedule": {
-                                "local_scheduled_time": "2018-12-29T20:41:29"
-                            },
+                            "schedule": {"local_scheduled_time": "2018-12-29T20:41:29"},
                             "push": {
-                                "audience": {
-                                    "named_user": "python_library"
-                                },
-                                "device_types": [
-                                    "ios",
-                                    "android",
-                                    "amazon"
-                                ],
-                                "notification": {
-                                    "alert": "Hello Python Local Time"
-                                },
+                                "audience": {"named_user": "python_library"},
+                                "device_types": ["ios", "android", "amazon"],
+                                "notification": {"alert": "Hello Python Local Time"},
                             },
                             "push_ids": [
                                 "b13b40f3-7a2e-40c5-8df1-cb657878e983",
@@ -1011,12 +917,12 @@ class TestPush(unittest.TestCase):
                                 "5e25be82-a68c-47a6-852b-911108214209",
                                 "4a91e9d9-10f6-4264-bc0c-a1096722d95f",
                                 "3c453695-7051-42e9-ab57-4912151c7e42",
-                                "2f390cf6-fcb1-4492-b47f-fb7b58c717a6"
-                            ]
-                        }
-                    ]
+                                "2f390cf6-fcb1-4492-b47f-fb7b58c717a6",
+                            ],
+                        },
+                    ],
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
 
             response.status_code = 200
             mock_request.return_value = response
@@ -1028,56 +934,36 @@ class TestPush(unittest.TestCase):
             for schedule in ua.ScheduledList(airship):
                 schedule_listing.append(schedule)
 
-            self.assertEquals(
-                schedule_listing[0].url, self.url1
-            )
-            self.assertEquals(
-                schedule_listing[1].url, self.url2
-            )
+            self.assertEquals(schedule_listing[0].url, self.url1)
+            self.assertEquals(schedule_listing[1].url, self.url2)
 
-            self.assertEquals(
-                len(schedule_listing[0].push_ids), 1
-            )
-            self.assertEquals(
-                len(schedule_listing[1].push_ids), 42
-            )
+            self.assertEquals(len(schedule_listing[0].push_ids), 1)
+            self.assertEquals(len(schedule_listing[1].push_ids), 42)
 
     def test_options_int_expiry(self):
         opt = ua.options(expiry=10080)
-        self.assertEqual(
-            opt,
-            {'expiry': 10080}
-        )
+        self.assertEqual(opt, {"expiry": 10080})
 
     def test_options_date_expiry(self):
-        opt = ua.options(expiry='2015-04-01T12:00:00')
-        self.assertEqual(
-            opt,
-            {'expiry': '2015-04-01T12:00:00'}
-        )
+        opt = ua.options(expiry="2015-04-01T12:00:00")
+        self.assertEqual(opt, {"expiry": "2015-04-01T12:00:00"})
 
     def test_campaigns_list(self):
-        cam = ua.campaigns(categories=['bugs', 'worms'])
-        self.assertEqual(
-            cam,
-            {'categories': ['bugs', 'worms']}
-        )
+        cam = ua.campaigns(categories=["bugs", "worms"])
+        self.assertEqual(cam, {"categories": ["bugs", "worms"]})
 
         with self.assertRaises(ValueError):
             ua.campaigns(categories=[])
 
         with self.assertRaises(TypeError):
-            ua.campaigns({'categories': ['bugs', 'worms']})
+            ua.campaigns({"categories": ["bugs", "worms"]})
 
     def test_campaigns_str(self):
-        cam = ua.campaigns(categories='bugs')
-        self.assertEqual(
-            cam,
-            {'categories': ['bugs']}
-        )
+        cam = ua.campaigns(categories="bugs")
+        self.assertEqual(cam, {"categories": ["bugs"]})
 
         with self.assertRaises(ValueError):
             ua.campaigns(
-                categories='''a_long_string_so_long_its_longer_than_
-                                    sixty_four_characters_too_long'''
+                categories="""a_long_string_so_long_its_longer_than_
+                                    sixty_four_characters_too_long"""
             )

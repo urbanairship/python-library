@@ -15,17 +15,39 @@ elif PY2:
     string_type = basestring
 
 # Valid autobadge values: auto, +N, -N
-VALID_AUTOBADGE = re.compile(r'^(auto|[+-][\d]+)$')
+VALID_AUTOBADGE = re.compile(r"^(auto|[+-][\d]+)$")
 VALID_ANDROID_CATEGORIES = [
-    "alarm", "call", "email", "err", "event", "msg", "promo",
-    "recommendation", "service", "social", "status", "sys", "transport"
+    "alarm",
+    "call",
+    "email",
+    "err",
+    "event",
+    "msg",
+    "promo",
+    "recommendation",
+    "service",
+    "social",
+    "status",
+    "sys",
+    "transport",
 ]
-VALID_ICON_COLOR = re.compile(r'^#[0-9a-f]{6}$')
+VALID_ICON_COLOR = re.compile(r"^#[0-9a-f]{6}$")
 
 
-def notification(alert=None, ios=None, android=None, amazon=None,
-                 web=None, wns=None, actions=None, interactive=None,
-                 in_app=None, open_platform=None, sms=None, email=None):
+def notification(
+    alert=None,
+    ios=None,
+    android=None,
+    amazon=None,
+    web=None,
+    wns=None,
+    actions=None,
+    interactive=None,
+    in_app=None,
+    open_platform=None,
+    sms=None,
+    email=None,
+):
     """Create a notification payload.
 
     :keyword alert: A simple text alert, applicable for all platforms.
@@ -46,39 +68,52 @@ def notification(alert=None, ios=None, android=None, amazon=None,
     """
     payload = {}
     if alert is not None:
-        payload['alert'] = alert
+        payload["alert"] = alert
     if actions is not None:
-        payload['actions'] = actions
+        payload["actions"] = actions
     if ios is not None:
-        payload['ios'] = ios
+        payload["ios"] = ios
     if android is not None:
-        payload['android'] = android
+        payload["android"] = android
     if amazon is not None:
-        payload['amazon'] = amazon
+        payload["amazon"] = amazon
     if web is not None:
-        payload['web'] = web
+        payload["web"] = web
     if wns is not None:
-        payload['wns'] = wns
+        payload["wns"] = wns
     if sms is not None:
-        payload['sms'] = sms
+        payload["sms"] = sms
     if email is not None:
-        payload['email'] = email
+        payload["email"] = email
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if in_app is not None:
-        payload['in_app'] = in_app
+        payload["in_app"] = in_app
     if open_platform is not None:
         for platform, overrides in open_platform.items():
-            payload['open::' + platform] = overrides
+            payload["open::" + platform] = overrides
     if not payload:
-        raise ValueError('Notification body may not be empty')
+        raise ValueError("Notification body may not be empty")
     return payload
 
 
-def ios(alert=None, badge=None, sound=None, content_available=False,
-        extra=None, expiry=None, interactive=None, category=None, title=None,
-        mutable_content=None, subtitle=None, media_attachment=None,
-        priority=None, collapse_id=None, thread_id=None):
+def ios(
+    alert=None,
+    badge=None,
+    sound=None,
+    content_available=False,
+    extra=None,
+    expiry=None,
+    interactive=None,
+    category=None,
+    title=None,
+    mutable_content=None,
+    subtitle=None,
+    media_attachment=None,
+    priority=None,
+    collapse_id=None,
+    thread_id=None,
+):
     """iOS/APNS specific platform override payload.
 
     :keyword alert: iOS format alert, as either a string or dictionary. If
@@ -134,67 +169,83 @@ def ios(alert=None, badge=None, sound=None, content_available=False,
     payload = {}
     if alert is not None:
         if not (isinstance(alert, (string_type, dict))):
-            raise ValueError('iOS alert must be a string or dictionary')
-        payload['alert'] = alert
+            raise ValueError("iOS alert must be a string or dictionary")
+        payload["alert"] = alert
     if badge is not None:
         if not (isinstance(badge, (string_type, int))):
-            raise ValueError('iOS badge must be an integer or string')
+            raise ValueError("iOS badge must be an integer or string")
         if isinstance(badge, string_type) and not VALID_AUTOBADGE.match(badge):
-            raise ValueError('Invalid iOS autobadge value')
-        payload['badge'] = badge
+            raise ValueError("Invalid iOS autobadge value")
+        payload["badge"] = badge
     if sound is not None:
         if not (isinstance(sound, (string_type, dict))):
-            raise ValueError('iOS sound must a string or dictionary')
-        if isinstance(sound, dict) and 'name' not in sound:
-            raise ValueError('if iOS sound is a dict, name key must be used')
-        payload['sound'] = sound
+            raise ValueError("iOS sound must a string or dictionary")
+        if isinstance(sound, dict) and "name" not in sound:
+            raise ValueError("if iOS sound is a dict, name key must be used")
+        payload["sound"] = sound
     if content_available:
-        payload['content-available'] = 1
+        payload["content-available"] = 1
     if extra is not None:
-        payload['extra'] = extra
+        payload["extra"] = extra
     if expiry is not None:
         if not (isinstance(expiry, (string_type, int))):
-            raise ValueError('iOS expiry must be an integer or string')
-        payload['expiry'] = expiry
+            raise ValueError("iOS expiry must be an integer or string")
+        payload["expiry"] = expiry
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if category is not None:
         if not (isinstance(category, string_type)):
-            raise ValueError('iOS category must be a string')
-        payload['category'] = category
+            raise ValueError("iOS category must be a string")
+        payload["category"] = category
     if title is not None:
         if not (isinstance(title, string_type)):
-            raise ValueError('iOS title must be a string')
-        payload['title'] = title
+            raise ValueError("iOS title must be a string")
+        payload["title"] = title
     if mutable_content is not None:
-        payload['mutable_content'] = mutable_content
+        payload["mutable_content"] = mutable_content
     if subtitle is not None:
-        payload['subtitle'] = subtitle
+        payload["subtitle"] = subtitle
     if media_attachment is not None:
-        payload['media_attachment'] = media_attachment
+        payload["media_attachment"] = media_attachment
     if priority is not None:
         if priority not in {10, 5}:
-            raise ValueError('iOS priority must be set to one of 5 or 10.')
-        payload['priority'] = priority
+            raise ValueError("iOS priority must be set to one of 5 or 10.")
+        payload["priority"] = priority
     if collapse_id is not None:
         if not (isinstance(collapse_id, string_type)):
-            raise ValueError('iOS collapse_id must be a string')
-        payload['collapse_id'] = collapse_id
+            raise ValueError("iOS collapse_id must be a string")
+        payload["collapse_id"] = collapse_id
     if thread_id is not None:
         if not (isinstance(thread_id, string_type)):
-            raise ValueError('iOS therad_id must be a string')
-        payload['thread_id'] = thread_id
+            raise ValueError("iOS therad_id must be a string")
+        payload["thread_id"] = thread_id
 
     return payload
 
 
-def android(alert=None, collapse_key=None, time_to_live=None,
-            delay_while_idle=False, extra=None, interactive=None,
-            local_only=None, wearable=None, delivery_priority=None,
-            style=None, title=None, summary=None, sound=None, priority=None,
-            category=None, visibility=None, public_notification=None,
-            notification_tag=None, notification_channel=None, icon=None,
-            icon_color=None):
+def android(
+    alert=None,
+    collapse_key=None,
+    time_to_live=None,
+    delay_while_idle=False,
+    extra=None,
+    interactive=None,
+    local_only=None,
+    wearable=None,
+    delivery_priority=None,
+    style=None,
+    title=None,
+    summary=None,
+    sound=None,
+    priority=None,
+    category=None,
+    visibility=None,
+    public_notification=None,
+    notification_tag=None,
+    notification_channel=None,
+    icon=None,
+    icon_color=None,
+):
     """Android specific platform override payload.
 
     All keyword arguments are optional.
@@ -246,85 +297,97 @@ def android(alert=None, collapse_key=None, time_to_live=None,
     """
     payload = {}
     if alert is not None:
-        payload['alert'] = alert
+        payload["alert"] = alert
     if collapse_key is not None:
-        payload['collapse_key'] = collapse_key
+        payload["collapse_key"] = collapse_key
     if time_to_live is not None:
-        payload['time_to_live'] = time_to_live
+        payload["time_to_live"] = time_to_live
         if not (isinstance(time_to_live, (string_type, int))):
-            raise ValueError('Android time_to_live value must be an '
-                             'integer or time set in UTC as a string')
+            raise ValueError(
+                "Android time_to_live value must be an "
+                "integer or time set in UTC as a string"
+            )
     if delay_while_idle:
-        payload['delay_while_idle'] = True
+        payload["delay_while_idle"] = True
     if extra is not None:
-        payload['extra'] = extra
+        payload["extra"] = extra
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if local_only is not None:
         if not (isinstance(local_only, bool)):
-            raise ValueError('Android local_only must be a boolean value')
-        payload['local_only'] = local_only
+            raise ValueError("Android local_only must be a boolean value")
+        payload["local_only"] = local_only
     if wearable is not None:
         if not (isinstance(wearable, dict)):
-            raise ValueError('Android wearable must be a dictionary')
-        payload['wearable'] = wearable
+            raise ValueError("Android wearable must be a dictionary")
+        payload["wearable"] = wearable
     if delivery_priority is not None:
-        if delivery_priority not in {'high', 'normal'}:
+        if delivery_priority not in {"high", "normal"}:
             raise ValueError(
                 "delivery_priority must be set to one of 'high' or 'normal'."
             )
         payload["delivery_priority"] = delivery_priority
     if style is not None:
-        payload['style'] = style
+        payload["style"] = style
     if title is not None:
-        payload['title'] = title
+        payload["title"] = title
     if summary is not None:
-        payload['summary'] = summary
+        payload["summary"] = summary
     if sound is not None:
-        payload['sound'] = sound
+        payload["sound"] = sound
     if priority is not None:
         if priority not in range(-2, 3):
             raise ValueError(
-                'priority must be set to one of {}.'.format(
-                    ', '.join([str(i) for i in range(-2, 3)])
+                "priority must be set to one of {}.".format(
+                    ", ".join([str(i) for i in range(-2, 3)])
                 )
             )
-        payload['priority'] = priority
+        payload["priority"] = priority
     if category is not None:
         if category not in VALID_ANDROID_CATEGORIES:
             raise ValueError(
-                'category must be set to one of {}.'.format(
-                    ', '.join(VALID_ANDROID_CATEGORIES)
+                "category must be set to one of {}.".format(
+                    ", ".join(VALID_ANDROID_CATEGORIES)
                 )
             )
-        payload['category'] = category
+        payload["category"] = category
     if visibility is not None:
         if visibility not in range(-1, 2):
             raise ValueError(
-                'visibility must be set to one of {}.'.format(
-                    ', '.join([str(i) for i in range(-1, 2)])
+                "visibility must be set to one of {}.".format(
+                    ", ".join([str(i) for i in range(-1, 2)])
                 )
             )
-        payload['visibility'] = visibility
+        payload["visibility"] = visibility
     if public_notification is not None:
-        payload['public_notification'] = public_notification
+        payload["public_notification"] = public_notification
     if notification_tag is not None:
-        payload['notification_tag'] = notification_tag
+        payload["notification_tag"] = notification_tag
     if notification_channel is not None:
-        payload['notification_channel'] = notification_channel
+        payload["notification_channel"] = notification_channel
     if icon is not None:
-        payload['icon'] = icon
+        payload["icon"] = icon
     if icon_color is not None:
-        if (isinstance(icon_color, string_type) and not
-                VALID_ICON_COLOR.match(icon_color)):
-            raise ValueError('icon_color must be in format #rrggbb')
-        payload['icon_color'] = icon_color
+        if isinstance(icon_color, string_type) and not VALID_ICON_COLOR.match(
+            icon_color
+        ):
+            raise ValueError("icon_color must be in format #rrggbb")
+        payload["icon_color"] = icon_color
 
     return payload
 
 
-def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
-           title=None, summary=None, interactive=None, style=None, sound=None):
+def amazon(
+    alert=None,
+    consolidation_key=None,
+    expires_after=None,
+    extra=None,
+    title=None,
+    summary=None,
+    interactive=None,
+    style=None,
+    sound=None,
+):
     """Amazon specific platform override payload.
 
     All keyword arguments are optional.
@@ -347,31 +410,40 @@ def amazon(alert=None, consolidation_key=None, expires_after=None, extra=None,
     """
     payload = {}
     if alert is not None:
-        payload['alert'] = alert
+        payload["alert"] = alert
     if consolidation_key is not None:
-        payload['consolidation_key'] = consolidation_key
+        payload["consolidation_key"] = consolidation_key
     if expires_after is not None:
-        payload['expires_after'] = expires_after
+        payload["expires_after"] = expires_after
         if not (isinstance(expires_after, (string_type, int))):
-            raise ValueError('Amazon time_to_live value must be an '
-                             'integer or time set in UTC as a string')
+            raise ValueError(
+                "Amazon time_to_live value must be an "
+                "integer or time set in UTC as a string"
+            )
     if extra is not None:
-        payload['extra'] = extra
+        payload["extra"] = extra
     if title is not None:
-        payload['title'] = title
+        payload["title"] = title
     if summary is not None:
-        payload['summary'] = summary
+        payload["summary"] = summary
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if style is not None:
-        payload['style'] = style
+        payload["style"] = style
     if sound is not None:
-        payload['sound'] = sound
+        payload["sound"] = sound
     return payload
 
 
-def web(alert=None, extra=None, icon=None, title=None, interactive=None,
-        time_to_live=None, require_interaction=None):
+def web(
+    alert=None,
+    extra=None,
+    icon=None,
+    title=None,
+    interactive=None,
+    time_to_live=None,
+    require_interaction=None,
+):
     """Web specific platform override payload.
 
     All keyword arguments are optional
@@ -398,25 +470,25 @@ def web(alert=None, extra=None, icon=None, title=None, interactive=None,
     """
     payload = {}
     if alert is not None:
-        payload['alert'] = alert
+        payload["alert"] = alert
     if extra is not None:
-        payload['extra'] = extra
-    if icon is not None:                # todo: possibly set 'url' key
-        payload['icon'] = icon
+        payload["extra"] = extra
+    if icon is not None:  # todo: possibly set 'url' key
+        payload["icon"] = icon
         if not isinstance(icon, dict):
-            raise TypeError('icon must be a dictionary')
+            raise TypeError("icon must be a dictionary")
     if title is not None:
-        payload['title'] = title
+        payload["title"] = title
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if time_to_live is not None:
         if not (isinstance(time_to_live, (string_type, int))):
-            raise ValueError('Web time_to_live must be an integer or string')
-        payload['time_to_live'] = time_to_live
+            raise ValueError("Web time_to_live must be an integer or string")
+        payload["time_to_live"] = time_to_live
     if require_interaction is not None:
         if not (isinstance(require_interaction, (bool))):
-            raise ValueError('require_interaction must be boolean type')
-        payload['require_interaction'] = require_interaction
+            raise ValueError("require_interaction must be boolean type")
+        payload["require_interaction"] = require_interaction
     return payload
 
 
@@ -440,24 +512,32 @@ def sms(alert=None, expiry=None, template_alert=None):
     """
     payload = {}
     if not alert and not template_alert:
-        raise ValueError('One of alert and template_alert must be set.')
+        raise ValueError("One of alert and template_alert must be set.")
     elif alert and template_alert:
-        raise ValueError('alert and template_alert cannot both be used.')
+        raise ValueError("alert and template_alert cannot both be used.")
 
     if alert is not None:
-        payload = {'alert': alert}
+        payload = {"alert": alert}
     elif template_alert is not None:
-        payload = {'template': {'fields': {'alert': template_alert}}}
-    
+        payload = {"template": {"fields": {"alert": template_alert}}}
+
     if expiry is not None:
         if not (isinstance(expiry, (string_type, int))):
-            raise ValueError('expiry value must be a string or integer')
-        payload['expiry'] = expiry
+            raise ValueError("expiry value must be a string or integer")
+        payload["expiry"] = expiry
     return payload
 
 
-def email(message_type, plaintext_body, reply_to, sender_address,
-          sender_name, subject, html_body=None, variable_defaults=None):
+def email(
+    message_type,
+    plaintext_body,
+    reply_to,
+    sender_address,
+    sender_name,
+    subject,
+    html_body=None,
+    variable_defaults=None,
+):
     """
     Required platform override when email in ua.device_types.
     Specifies content of the email being sent. All other notification
@@ -480,26 +560,23 @@ def email(message_type, plaintext_body, reply_to, sender_address,
     :param variable_details: Required for CreateAndSendPush with inline templates.
         a list of dicts of default values for inline template variables.
     """
-    if message_type not in ('transactional', 'commercial'):
-        raise ValueError('message_type must be either transactional or commercial')
+    if message_type not in ("transactional", "commercial"):
+        raise ValueError("message_type must be either transactional or commercial")
 
     payload = {}
-    payload['message_type'] = message_type
-    payload['reply_to'] = reply_to
-    payload['sender_address'] = sender_address
-    payload['sender_name'] = sender_name
+    payload["message_type"] = message_type
+    payload["reply_to"] = reply_to
+    payload["sender_address"] = sender_address
+    payload["sender_name"] = sender_name
 
-    alert_payload = {
-        'subject': subject,
-        'plaintext_body': plaintext_body
-    }
+    alert_payload = {"subject": subject, "plaintext_body": plaintext_body}
     if html_body is not None:
-        alert_payload['html_body'] = html_body
+        alert_payload["html_body"] = html_body
 
     if variable_defaults is not None:
-        payload['template'] = {
-            'variable_defaults': variable_defaults,
-            'fields': alert_payload
+        payload["template"] = {
+            "variable_defaults": variable_defaults,
+            "fields": alert_payload,
         }
     else:
         payload.update(alert_payload)
@@ -507,8 +584,15 @@ def email(message_type, plaintext_body, reply_to, sender_address,
     return payload
 
 
-def open_platform(alert=None, title=None, extra=None, summary=None,
-                  media_attachment=None, interactive=None, template_alert=None):
+def open_platform(
+    alert=None,
+    title=None,
+    extra=None,
+    summary=None,
+    media_attachment=None,
+    interactive=None,
+    template_alert=None,
+):
     """Open platform specific override payload.
 
     All keyword arguments are optional.
@@ -556,23 +640,23 @@ def open_platform(alert=None, title=None, extra=None, summary=None,
     """
     payload = {}
     if extra is not None:
-        payload['extra'] = extra
+        payload["extra"] = extra
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
 
     alert_payload = {}
     if title is not None:
-        alert_payload['title'] = title
+        alert_payload["title"] = title
     if summary is not None:
-        alert_payload['summary'] = summary
+        alert_payload["summary"] = summary
     if media_attachment is not None:
-        alert_payload['media_attachment'] = media_attachment
+        alert_payload["media_attachment"] = media_attachment
 
     if template_alert is not None:
-        alert_payload['alert'] = template_alert
-        payload = {'template': {'fields': alert_payload}}
+        alert_payload["alert"] = template_alert
+        payload = {"template": {"fields": alert_payload}}
     else:
-        alert_payload['alert'] = alert
+        alert_payload["alert"] = alert
         payload.update(alert_payload)
 
     return payload
@@ -585,22 +669,30 @@ def wns_payload(alert=None, toast=None, tile=None, badge=None):
 
     """
     if sum(1 for x in (alert, toast, tile, badge) if x) != 1:
-        raise ValueError('WNS payload must have one notification type.')
+        raise ValueError("WNS payload must have one notification type.")
     payload = {}
     if alert is not None:
-        payload['alert'] = alert
+        payload["alert"] = alert
     if toast is not None:
-        payload['toast'] = toast
+        payload["toast"] = toast
     if tile is not None:
-        payload['tile'] = tile
+        payload["tile"] = tile
     if badge is not None:
-        payload['badge'] = badge
+        payload["badge"] = badge
     return payload
 
 
-def message(title, body, content_type=None, content_encoding=None,
-            extra=None, expiry=None, icons=None, options=None,
-            campaigns=None):
+def message(
+    title,
+    body,
+    content_type=None,
+    content_encoding=None,
+    extra=None,
+    expiry=None,
+    icons=None,
+    options=None,
+    campaigns=None,
+):
     """Rich push message payload creation.
 
     :param title: Required, string
@@ -620,38 +712,46 @@ def message(title, body, content_type=None, content_encoding=None,
 
     """
     payload = {
-        'title': title,
-        'body': body,
+        "title": title,
+        "body": body,
     }
     if content_type is not None:
-        payload['content_type'] = content_type
+        payload["content_type"] = content_type
     if content_encoding is not None:
-        payload['content_encoding'] = content_encoding
+        payload["content_encoding"] = content_encoding
     if extra is not None:
-        payload['extra'] = extra
+        payload["extra"] = extra
     if expiry is not None:
-        payload['expiry'] = expiry
+        payload["expiry"] = expiry
         if not (isinstance(expiry, (string_type, int))):
-            raise ValueError('Expiry value must be an '
-                             'integer or time set in UTC as a string')
+            raise ValueError(
+                "Expiry value must be an " "integer or time set in UTC as a string"
+            )
     if icons is not None:
         if not isinstance(icons, dict):
-            raise TypeError('icons must be a dictionary')
-        payload['icons'] = icons
+            raise TypeError("icons must be a dictionary")
+        payload["icons"] = icons
     if options is not None:
         if not isinstance(options, dict):
-            raise TypeError('options must be a dictionary')
-        payload['options'] = options
+            raise TypeError("options must be a dictionary")
+        payload["options"] = options
     if campaigns is not None:
         if not isinstance(campaigns, dict):
-            raise TypeError('campaigns must be a dictionary')
-        payload['campaigns'] = campaigns
+            raise TypeError("campaigns must be a dictionary")
+        payload["campaigns"] = campaigns
 
     return payload
 
 
-def in_app(alert, display_type, expiry=None, display=None,
-           actions=None, interactive=None, extra=None):
+def in_app(
+    alert,
+    display_type,
+    expiry=None,
+    display=None,
+    actions=None,
+    interactive=None,
+    extra=None,
+):
     """In-App push message payload creation.
 
     :param alert: Required, string
@@ -672,19 +772,19 @@ def in_app(alert, display_type, expiry=None, display=None,
 
     payload = {}
 
-    payload['alert'] = alert
-    payload['display_type'] = display_type
+    payload["alert"] = alert
+    payload["display_type"] = display_type
 
     if expiry is not None:
-        payload['expiry'] = expiry
+        payload["expiry"] = expiry
     if display is not None:
-        payload['display'] = display
+        payload["display"] = display
     if actions is not None:
-        payload['actions'] = actions
+        payload["actions"] = actions
     if interactive is not None:
-        payload['interactive'] = interactive
+        payload["interactive"] = interactive
     if extra is not None:
-        extra['extra'] = extra
+        extra["extra"] = extra
 
     return payload
 
@@ -700,24 +800,13 @@ def device_types(*types):
     ValueError: Invalid device type 'symbian'
 
     """
-    valid_device_types = (
-        'ios',
-        'android',
-        'amazon',
-        'wns',
-        'web',
-        'sms',
-        'email'
-    )
-    if types == 'all' or (len(types) == 1 and types[0] == 'all'):
-        warnings.warn(
-            "The device type 'all' has been deprecated.",
-            DeprecationWarning
-        )
-        return 'all'
+    valid_device_types = ("ios", "android", "amazon", "wns", "web", "sms", "email")
+    if types == "all" or (len(types) == 1 and types[0] == "all"):
+        warnings.warn("The device type 'all' has been deprecated.", DeprecationWarning)
+        return "all"
 
     for t in types:
-        is_open = isinstance(t, string_type) and t.startswith('open::')
+        is_open = isinstance(t, string_type) and t.startswith("open::")
         if t not in valid_device_types and not is_open:
             raise ValueError("Invalid device type '%s'" % t)
     return [t for t in types]
@@ -732,10 +821,11 @@ def options(expiry=None):
     """
     payload = {}
     if expiry is not None:
-        payload['expiry'] = expiry
+        payload["expiry"] = expiry
     if not (isinstance(expiry, (string_type, int))):
-        raise ValueError('Expiry value must be an '
-                         'integer or time set in UTC as a string')
+        raise ValueError(
+            "Expiry value must be an " "integer or time set in UTC as a string"
+        )
     return payload
 
 
@@ -749,12 +839,10 @@ def campaigns(categories=None):
     payload = {}
     if categories is not None:
         if not isinstance(categories, collections.Sequence):
-            raise TypeError('Each category must be a string')
+            raise TypeError("Each category must be a string")
         if isinstance(categories, list):
             if not categories or len(categories) > 10:
-                raise ValueError(
-                    'Categories list must contain between 1 and 10 items'
-                )
+                raise ValueError("Categories list must contain between 1 and 10 items")
         if isinstance(categories, string_type):
             categories = [categories]
 
@@ -763,12 +851,11 @@ def campaigns(categories=None):
                 raise ValueError("Invalid category type '%s'" % c)
             if not len(c) or len(c) > 64:
                 raise ValueError("Invalid category name '%s'" % c)
-        payload['categories'] = [c for c in categories]
+        payload["categories"] = [c for c in categories]
     return payload
 
 
-def actions(add_tag=None, remove_tag=None,
-            open_=None, share=None, app_defined=None):
+def actions(add_tag=None, remove_tag=None, open_=None, share=None, app_defined=None):
     """Actions payload creation.
 
     :keyword add_tag: Adds a tag to the device. Expects a
@@ -792,28 +879,28 @@ def actions(add_tag=None, remove_tag=None,
     payload = {}
     if add_tag is not None:
         if not (isinstance(add_tag, (collections.Sequence))):
-            raise TypeError('add_tag must be a string or a list of strings')
+            raise TypeError("add_tag must be a string or a list of strings")
         if isinstance(add_tag, list) and not add_tag:
-            raise ValueError('add_tag list cannot be empty')
-        payload['add_tag'] = add_tag
+            raise ValueError("add_tag list cannot be empty")
+        payload["add_tag"] = add_tag
     if remove_tag is not None:
         if not (isinstance(remove_tag, (collections.Sequence))):
-            raise TypeError('remove_tag must be a string or a list of strings')
+            raise TypeError("remove_tag must be a string or a list of strings")
         if isinstance(remove_tag, list) and not remove_tag:
-            raise ValueError('remove_tag list cannot be empty')
-        payload['remove_tag'] = remove_tag
+            raise ValueError("remove_tag list cannot be empty")
+        payload["remove_tag"] = remove_tag
     if open_ is not None:
         if not (isinstance(open_, dict)):
-            raise TypeError('open_ must be a dictionary')
-        payload['open'] = open_
+            raise TypeError("open_ must be a dictionary")
+        payload["open"] = open_
     if share is not None:
         if not (isinstance(share, string_type)):
-            raise TypeError('share must be a string')
-        payload['share'] = share
+            raise TypeError("share must be a string")
+        payload["share"] = share
     if app_defined is not None:
         if not (isinstance(app_defined, dict)):
-            raise TypeError('app_defined must be a dictionary')
-        payload['app_defined'] = app_defined
+            raise TypeError("app_defined must be a dictionary")
+        payload["app_defined"] = app_defined
     return payload
 
 
@@ -827,11 +914,11 @@ def interactive(type=None, button_actions=None):
 
     payload = {}
     if type is not None:
-        payload['type'] = type
+        payload["type"] = type
         if button_actions is not None:
             if not isinstance(button_actions, dict):
                 raise TypeError("'button_actions' must be a dictionary")
-            payload['button_actions'] = button_actions
+            payload["button_actions"] = button_actions
     else:
         raise AttributeError("'interactive' must have a type attribute")
 
@@ -848,9 +935,9 @@ def wearable(background_image=None, extra_pages=None, interactive=None):
         notification payload for the wearable device.
     """
     payload = {
-        'background_image': background_image,
-        'extra_pages': extra_pages,
-        'interactive': interactive
+        "background_image": background_image,
+        "extra_pages": extra_pages,
+        "interactive": interactive,
     }
     return {key: val for key, val in iter(payload.items()) if val is not None}
 
@@ -862,7 +949,7 @@ def public_notification(title=None, alert=None, summary=None):
     :keyword alert: Optional string. The notification alert.
     :keyword summary: Optional string. The notification summary.
     """
-    payload = {'title': title, 'alert': alert, 'summary': summary}
+    payload = {"title": title, "alert": alert, "summary": summary}
     return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
@@ -879,16 +966,16 @@ def style(style_type, content, title=None, summary=None):
         notification.
 
     """
-    mapping = {
-        'big_text': 'big_text', 'big_picture': 'big_picture', 'inbox': 'lines'
-    }
+    mapping = {"big_text": "big_text", "big_picture": "big_picture", "inbox": "lines"}
     if style_type not in mapping.keys():
-        raise ValueError('style_type must be one of {}.'.format(
-            ', '.join(mapping.keys())
-        ))
+        raise ValueError(
+            "style_type must be one of {}.".format(", ".join(mapping.keys()))
+        )
     payload = {
-        'type': style_type, mapping[style_type]: content,
-        'title': title, 'summary': summary
+        "type": style_type,
+        mapping[style_type]: content,
+        "title": title,
+        "summary": summary,
     }
     return {key: val for key, val in iter(payload.items()) if val is not None}
 
@@ -904,7 +991,7 @@ def media_attachment(url, content=None, options=None):
     :keyword options: Optional dictionary. Describes how to display the
         resource given by the URL. See :func:`options`.
     """
-    payload = {'url': url, 'content': content, 'options': options}
+    payload = {"url": url, "content": content, "options": options}
     return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
@@ -916,7 +1003,7 @@ def content(title=None, subtitle=None, body=None):
     :keyword subtitle: String.
     :keyword body: String.
     """
-    payload = {'title': title, 'subtitle': subtitle, 'options': options}
+    payload = {"title": title, "subtitle": subtitle, "options": options}
     return {key: val for key, val in iter(payload.items()) if val is not None}
 
 
@@ -928,5 +1015,5 @@ def crop(x=None, y=None, width=None, height=None):
     :keyword width: Optional float. The width of the final crop.
     :keyword height: Optional float. The height of the final crop.
     """
-    payload = {'x': x, 'y': y, 'width': width, 'height': height}
+    payload = {"x": x, "y": y, "width": width, "height": height}
     return {key: val for key, val in iter(payload.items()) if val is not None}

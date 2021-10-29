@@ -2,10 +2,10 @@ import json
 import logging
 import re
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
-VALID_MSISDN = re.compile(r'[0-9]*$')
-VALID_SENDER = re.compile(r'[0-9]*$')
+VALID_MSISDN = re.compile(r"[0-9]*$")
+VALID_SENDER = re.compile(r"[0-9]*$")
 
 
 class Sms(object):
@@ -40,7 +40,7 @@ class Sms(object):
     @template_fields.setter
     def template_fields(self, value):
         if not isinstance(value, (dict, type(None))):
-            raise TypeError('template_fields must be a dict')
+            raise TypeError("template_fields must be a dict")
 
         self._template_fields = value
 
@@ -51,7 +51,7 @@ class Sms(object):
     @sender.setter
     def sender(self, value):
         if not VALID_SENDER.match(value):
-            raise ValueError('sender must be a numeric string')
+            raise ValueError("sender must be a numeric string")
         self._sender = value
 
     @property
@@ -61,32 +61,32 @@ class Sms(object):
     @msisdn.setter
     def msisdn(self, value):
         if not VALID_MSISDN.match(value):
-            raise ValueError('msisdn must be a numeric string')
+            raise ValueError("msisdn must be a numeric string")
         self._msisdn = value
 
     @property
     def common_payload(self):
         return {
-            'sender': self.sender,
-            'msisdn': self.msisdn,
+            "sender": self.sender,
+            "msisdn": self.msisdn,
         }
 
     @property
     def create_and_send_audience(self):
         audience = {
-            'ua_sender': self.sender,
-            'ua_msisdn': self.msisdn,
+            "ua_sender": self.sender,
+            "ua_msisdn": self.msisdn,
         }
 
         if self.template_fields:
             audience.update(self.template_fields)
 
         if self.opted_in:
-            audience['ua_opted_in'] = self.opted_in
+            audience["ua_opted_in"] = self.opted_in
         else:
             raise ValueError(
-                'sms objects for create and send must include opt-in datestamps'
-                )
+                "sms objects for create and send must include opt-in datestamps"
+            )
         return audience
 
     def register(self, opted_in=False):
@@ -99,38 +99,28 @@ class Sms(object):
         :return: The response object from the api.
         """
 
-        url = self.airship.urls.get('sms_url')
+        url = self.airship.urls.get("sms_url")
         reg_payload = self.common_payload
 
         if opted_in:
-            reg_payload['opted_in'] = opted_in
+            reg_payload["opted_in"] = opted_in
 
-        body = json.dumps(reg_payload).encode('utf-8')
+        body = json.dumps(reg_payload).encode("utf-8")
 
-        response = self.airship.request(
-            method='POST',
-            body=body,
-            url=url,
-            version=3
-        )
+        response = self.airship.request(method="POST", body=body, url=url, version=3)
 
-        if response.json().get('status') == 'pending':
+        if response.json().get("status") == "pending":
             logger.info(
-                'Channel creation for msisdn %s pending user opt-in' % (
-                    self.msisdn
-                )
+                "Channel creation for msisdn %s pending user opt-in" % (self.msisdn)
             )
-        elif response.json().get('channel_id') is not None:
-            self.channel_id = response.json().get('channel_id')
+        elif response.json().get("channel_id") is not None:
+            self.channel_id = response.json().get("channel_id")
             logger.info(
-                'Successfully registered Sms channel with channel_id %s' % (
-                    self.channel_id
-                )
+                "Successfully registered Sms channel with channel_id %s"
+                % (self.channel_id)
             )
         else:
-            logger.info(
-                'Channel not yet created.'
-            )
+            logger.info("Channel not yet created.")
 
         return response
 
@@ -140,19 +130,18 @@ class Sms(object):
         :return: the response object from the api
         """
 
-        url = self.airship.urls.get('sms_opt_out_url')
+        url = self.airship.urls.get("sms_opt_out_url")
 
         response = self.airship.request(
-            method='POST',
-            body=json.dumps(self.common_payload).encode('utf-8'),
+            method="POST",
+            body=json.dumps(self.common_payload).encode("utf-8"),
             url=url,
-            version=3
+            version=3,
         )
 
         logger.info(
-            'Opted out Sms channel with sender: %s and msisdn: %s' % (
-                self.sender, self.msisdn
-            )
+            "Opted out Sms channel with sender: %s and msisdn: %s"
+            % (self.sender, self.msisdn)
         )
 
         return response
@@ -163,19 +152,18 @@ class Sms(object):
 
         :return: the response object from the api"""
 
-        url = self.airship.urls.get('sms_uninstall_url')
+        url = self.airship.urls.get("sms_uninstall_url")
 
         response = self.airship.request(
-            method='POST',
-            body=json.dumps(self.common_payload).encode('utf-8'),
+            method="POST",
+            body=json.dumps(self.common_payload).encode("utf-8"),
             url=url,
-            version=3
+            version=3,
         )
 
         logger.info(
-            'Uninstalled Sms channel with sender: %s and msisdn: %s' % (
-                self.sender, self.msisdn
-            )
+            "Uninstalled Sms channel with sender: %s and msisdn: %s"
+            % (self.sender, self.msisdn)
         )
 
         return response
@@ -186,16 +174,10 @@ class Sms(object):
         :return: the response object from the api
         """
 
-        url = self.airship.urls.get('sms_url') + '{msisdn}/{sender}'.format(
-            msisdn=self.msisdn,
-            sender=self.sender
+        url = self.airship.urls.get("sms_url") + "{msisdn}/{sender}".format(
+            msisdn=self.msisdn, sender=self.sender
         )
 
-        response = self.airship.request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
+        response = self.airship.request(method="GET", body=None, url=url, version=3)
 
         return response

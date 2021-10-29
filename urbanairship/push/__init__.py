@@ -1,7 +1,7 @@
 from .core import (
-    Push, 
-    ScheduledPush, 
-    TemplatePush, 
+    Push,
+    ScheduledPush,
+    TemplatePush,
     CreateAndSendPush,
 )
 

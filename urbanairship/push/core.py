@@ -5,7 +5,7 @@ import warnings
 from urbanairship import devices
 
 
-logger = logging.getLogger('urbanairship')
+logger = logging.getLogger("urbanairship")
 
 
 class Push(object):
@@ -24,18 +24,18 @@ class Push(object):
     @property
     def payload(self):
         data = {
-            'audience': self.audience,
-            'notification': self.notification,
-            'device_types': self.device_types,
+            "audience": self.audience,
+            "notification": self.notification,
+            "device_types": self.device_types,
         }
         if self.options is not None:
-            data['options'] = self.options
+            data["options"] = self.options
         if self.campaigns is not None:
-            data['campaigns'] = self.campaigns
+            data["campaigns"] = self.campaigns
         if self.message is not None:
-            data['message'] = self.message
+            data["message"] = self.message
         if self.in_app is not None:
-            data['in_app'] = self.in_app
+            data["in_app"] = self.in_app
         return data
 
     @property
@@ -44,10 +44,9 @@ class Push(object):
 
     @device_types.setter
     def device_types(self, types):
-        if types == 'all' or (len(types) == 1 and types[0] == 'all'):
+        if types == "all" or (len(types) == 1 and types[0] == "all"):
             warnings.warn(
-                "The device type 'all' has been deprecated.",
-                DeprecationWarning
+                "The device type 'all' has been deprecated.", DeprecationWarning
             )
         self._device_types = types
 
@@ -60,34 +59,36 @@ class Push(object):
         :raises Unauthorized: Authentication failed.
         :raises ValueError: Required keys missing or incorrect values included.
         """
-        if 'email' in self.payload['notification']:
-            if self.payload['device_types'] == 'all':
+        if "email" in self.payload["notification"]:
+            if self.payload["device_types"] == "all":
                 raise ValueError(
-                    'device_types cannot be all when including an email override'
+                    "device_types cannot be all when including an email override"
                 )
-            if 'email' not in self.payload['device_types']:
+            if "email" not in self.payload["device_types"]:
                 raise ValueError(
-                    'email must be in device_types if email override is included'
+                    "email must be in device_types if email override is included"
                 )
-        if 'email' in self.payload['device_types'] \
-                and 'email' not in self.payload['notification']:
+        if (
+            "email" in self.payload["device_types"]
+            and "email" not in self.payload["notification"]
+        ):
             raise ValueError(
-                'email override must be included when email is in device_types'
+                "email override must be included when email is in device_types"
             )
 
         body = json.dumps(self.payload)
         response = self._airship._request(
-            method='POST',
+            method="POST",
             body=body,
-            url=self._airship.urls.get('push_url'),
-            content_type='application/json',
-            version=3
+            url=self._airship.urls.get("push_url"),
+            content_type="application/json",
+            version=3,
         )
 
         data = response.json()
-        logger.info('Push successful. push_ids: %s',
-                    ', '.join(data.get('push_ids', []))
-                    )
+        logger.info(
+            "Push successful. push_ids: %s", ", ".join(data.get("push_ids", []))
+        )
 
         return PushResponse(response)
 
@@ -107,23 +108,18 @@ class ScheduledPush(object):
         """Load an existing scheduled push from its URL."""
 
         sched = cls(airship)
-        response = sched._airship._request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
+        response = sched._airship._request(method="GET", body=None, url=url, version=3)
         payload = response.json()
-        sched.name = payload.get('name')
-        sched.schedule = payload['schedule']
+        sched.name = payload.get("name")
+        sched.schedule = payload["schedule"]
         sched.push = Push(airship)
-        sched.push.audience = payload['push']['audience']
-        sched.push.notification = payload['push']['notification']
-        sched.push.device_types = payload['push']['device_types']
-        if 'message' in payload['push']:
-            sched.push.message = payload['push']['message']
-        if 'options' in payload['push']:
-            sched.push.options = payload['push']['options']
+        sched.push.audience = payload["push"]["audience"]
+        sched.push.notification = payload["push"]["notification"]
+        sched.push.device_types = payload["push"]["device_types"]
+        if "message" in payload["push"]:
+            sched.push.message = payload["push"]["message"]
+        if "options" in payload["push"]:
+            sched.push.options = payload["push"]["options"]
         sched.url = url
         return sched
 
@@ -138,26 +134,23 @@ class ScheduledPush(object):
 
     @property
     def payload(self):
-        if hasattr(self.push, 'merge_data'):  # create template payload
+        if hasattr(self.push, "merge_data"):  # create template payload
             data = self.push.payload
-            data['schedule'] = self.schedule
+            data["schedule"] = self.schedule
         elif isinstance(self.push, CreateAndSendPush):  # create cas payload
-            if 'scheduled_time' not in self.schedule:
+            if "scheduled_time" not in self.schedule:
                 raise ValueError(
-                    'only scheduled_time supported with create and send schedules'
+                    "only scheduled_time supported with create and send schedules"
                 )
-            data = {
-                'schedule': self.schedule,
-                'push': self.push.payload
-            }
+            data = {"schedule": self.schedule, "push": self.push.payload}
         else:
             data = {
-                'schedule': self.schedule,
-                'push': self.push.payload,
+                "schedule": self.schedule,
+                "push": self.push.payload,
             }
 
         if self.name is not None:
-            data['name'] = self.name
+            data["name"] = self.name
 
         return data
 
@@ -172,61 +165,59 @@ class ScheduledPush(object):
         """
         body = json.dumps(self.payload)
 
-        if hasattr(self.push, 'merge_data'):
-            url = self._airship.urls.get('schedule_template_url')
+        if hasattr(self.push, "merge_data"):
+            url = self._airship.urls.get("schedule_template_url")
         elif isinstance(self.push, CreateAndSendPush):
-            url = self._airship.urls.get('schedule_create_and_send_url')
+            url = self._airship.urls.get("schedule_create_and_send_url")
         else:
-            url = self._airship.urls.get('schedules_url')
+            url = self._airship.urls.get("schedules_url")
 
         response = self._airship._request(
-            method='POST',
+            method="POST",
             body=body,
             url=url,
-            content_type='application/json',
-            version=3
+            content_type="application/json",
+            version=3,
         )
         data = response.json()
 
-        urls = data.get('schedule_urls', [])
+        urls = data.get("schedule_urls", [])
         if urls:
             self.url = urls[0]
-            logger.info('Scheduled push successful. schedule_urls: %s',
-                        ', '.join(data.get('schedule_urls', [])))
+            logger.info(
+                "Scheduled push successful. schedule_urls: %s",
+                ", ".join(data.get("schedule_urls", [])),
+            )
 
         else:
-            logger.info('Scheduled push resulted in zero messages scheduled.')
+            logger.info("Scheduled push resulted in zero messages scheduled.")
 
         return PushResponse(response)
 
     def cancel(self):
         """Cancel a previously scheduled notification."""
         if not self.url:
-            raise ValueError('Cannot cancel ScheduledPush without url.')
+            raise ValueError("Cannot cancel ScheduledPush without url.")
 
-        self._airship._request(
-            method='DELETE',
-            body=None,
-            url=self.url,
-            version=3
-        )
+        self._airship._request(method="DELETE", body=None, url=self.url, version=3)
 
     def update(self):
         if not self.url:
-            raise ValueError(
-                'Cannot update ScheduledPush without url.')
+            raise ValueError("Cannot update ScheduledPush without url.")
         body = json.dumps(self.payload)
         response = self._airship._request(
-            method='PUT',
+            method="PUT",
             body=body,
             url=self.url,
-            content_type='application/json',
-            version=3
+            content_type="application/json",
+            version=3,
         )
 
         data = response.json()
-        logger.info('Scheduled push update successful. schedule_urls: %s',
-                    ', '.join(data.get('schedule_urls', [])))
+        logger.info(
+            "Scheduled push update successful. schedule_urls: %s",
+            ", ".join(data.get("schedule_urls", [])),
+        )
 
         return PushResponse(response)
 
@@ -243,9 +234,9 @@ class TemplatePush(object):
     @property
     def payload(self):
         data = {
-            'audience': self.audience,
-            'device_types': self.device_types,
-            'merge_data': self.merge_data
+            "audience": self.audience,
+            "device_types": self.device_types,
+            "merge_data": self.merge_data,
         }
 
         return data
@@ -261,24 +252,24 @@ class TemplatePush(object):
         """
 
         if not self.audience:
-            raise ValueError('Must set audience for template push.')
+            raise ValueError("Must set audience for template push.")
 
         if not self.device_types:
-            raise ValueError('Must set device_types for template push.')
+            raise ValueError("Must set device_types for template push.")
 
         body = json.dumps(self.payload)
         response = self._airship._request(
-            method='POST',
+            method="POST",
             body=body,
-            url=self._airship.urls.get('templates_url') + 'push',
-            content_type='application/json',
-            version=3
+            url=self._airship.urls.get("templates_url") + "push",
+            content_type="application/json",
+            version=3,
         )
 
         data = response.json()
-        logger.info('Push successful. push_ids: %s',
-                    ', '.join(data.get('push_ids', []))
-                    )
+        logger.info(
+            "Push successful. push_ids: %s", ", ".join(data.get("push_ids", []))
+        )
 
         return PushResponse(response)
 
@@ -309,26 +300,24 @@ class CreateAndSendPush(object):
 
     @device_types.setter
     def device_types(self, values):
-        accepted_device_types = ('sms', 'email', 'open::')
+        accepted_device_types = ("sms", "email", "open::")
 
         if len(values) != 1:
-            raise ValueError('only a single device_type may be used.')
+            raise ValueError("only a single device_type may be used.")
 
         for value in values:
             if value[:6] not in accepted_device_types:
                 raise ValueError(
-                    'device_types must be one of {}'.format(
-                        str(accepted_device_types)
-                        )
-                    )
+                    "device_types must be one of {}".format(str(accepted_device_types))
+                )
 
         self._device_types = values
 
     @property
     def audience(self):
-        if 'email' in self.device_types:
+        if "email" in self.device_types:
             return self._email_audience()
-        elif 'sms' in self.device_types:
+        elif "sms" in self.device_types:
             return self._sms_audience()
         else:
             return self._open_channel_audience()
@@ -340,21 +329,21 @@ class CreateAndSendPush(object):
     @channels.setter
     def channels(self, value):
         if type(value) is not list:
-            raise TypeError('channels must be a list')
+            raise TypeError("channels must be a list")
         if len(value) > 1000:
-            raise ValueError('channels list must have 1000 or fewer items')
+            raise ValueError("channels list must have 1000 or fewer items")
 
         self._channels = value
 
     @property
     def payload(self):
         data = {
-            'audience': self.audience,
-            'notification': self.notification,
-            'device_types': self.device_types
+            "audience": self.audience,
+            "notification": self.notification,
+            "device_types": self.device_types,
         }
         if self.campaigns is not None:
-            data['campaigns'] = self.campaigns
+            data["campaigns"] = self.campaigns
         return data
 
     def _email_audience(self):
@@ -362,10 +351,10 @@ class CreateAndSendPush(object):
         for email in self.channels:
             if not isinstance(email, devices.Email):
                 raise TypeError(
-                    'Can only use email channels when device_types is email'
+                    "Can only use email channels when device_types is email"
                 )
             addresses.append(email.create_and_send_audience)
-        audience = {'create_and_send': addresses}
+        audience = {"create_and_send": addresses}
 
         return audience
 
@@ -373,11 +362,9 @@ class CreateAndSendPush(object):
         addresses = []
         for sms in self.channels:
             if not isinstance(sms, devices.Sms):
-                raise TypeError(
-                    'Can only use Sms objects when device_types is sms'
-                    )
+                raise TypeError("Can only use Sms objects when device_types is sms")
             addresses.append(sms.create_and_send_audience)
-        audience = {'create_and_send': addresses}
+        audience = {"create_and_send": addresses}
 
         return audience
 
@@ -386,10 +373,10 @@ class CreateAndSendPush(object):
         for open_channel in self.channels:
             if not isinstance(open_channel, devices.OpenChannel):
                 raise TypeError(
-                    'Can only use OpenChannel objects when device_types is open::'
+                    "Can only use OpenChannel objects when device_types is open::"
                 )
             addresses.append(open_channel.create_and_send_audience)
-        audience = {'create_and_send': addresses}
+        audience = {"create_and_send": addresses}
 
         return audience
 
@@ -404,14 +391,14 @@ class CreateAndSendPush(object):
         """
         body = json.dumps(self.payload)
         response = self._airship._request(
-            method='POST',
+            method="POST",
             body=body,
-            url=self._airship.urls.get('create_and_send_url'),
-            content_type='application/json',
-            version=3
+            url=self._airship.urls.get("create_and_send_url"),
+            content_type="application/json",
+            version=3,
         )
 
-        logger.info('Create and Send successful')
+        logger.info("Create and Send successful")
 
         return PushResponse(response)
 
@@ -424,6 +411,7 @@ class PushResponse(object):
     later.
 
     """
+
     ok = None
     push_ids = None
     schedule_url = None
@@ -432,11 +420,11 @@ class PushResponse(object):
 
     def __init__(self, response):
         data = response.json()
-        self.push_ids = data.get('push_ids')
-        self.schedule_url = data.get('schedule_urls', [])
-        self.operation_id = data.get('operation_id')
-        self.ok = data.get('ok')
+        self.push_ids = data.get("push_ids")
+        self.schedule_url = data.get("schedule_urls", [])
+        self.operation_id = data.get("operation_id")
+        self.ok = data.get("ok")
         self.payload = data
 
     def __str__(self):
-        return 'Response Payload: {0}'.format(self.payload)
+        return "Response Payload: {0}".format(self.payload)

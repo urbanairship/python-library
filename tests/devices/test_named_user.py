@@ -11,7 +11,7 @@ from tests import TEST_KEY, TEST_SECRET
 
 class TestNamedUser(unittest.TestCase):
     def test_Named_User(self):
-        ok_true = json.dumps({'ok': True}).encode('utf-8')
+        ok_true = json.dumps({"ok": True}).encode("utf-8")
 
         associate_response = requests.Response()
         associate_response.status_code = 200
@@ -22,69 +22,73 @@ class TestNamedUser(unittest.TestCase):
         disassociate_response.status_code = 200
 
         lookup_response = requests.Response()
-        lookup_response._content = json.dumps({
-            'ok': True,
-            'named_user': {
-                'named_user_id': 'name1',
-                'tags': {'group_name': ['tag1', 'tag2']}
+        lookup_response._content = json.dumps(
+            {
+                "ok": True,
+                "named_user": {
+                    "named_user_id": "name1",
+                    "tags": {"group_name": ["tag1", "tag2"]},
+                },
             }
-        }).encode('utf-8')
+        ).encode("utf-8")
 
         ua.Airship._request = Mock()
         ua.Airship._request.side_effect = [
-            associate_response, disassociate_response, lookup_response
+            associate_response,
+            disassociate_response,
+            lookup_response,
         ]
 
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
 
-        nu = ua.NamedUser(airship, 'name1')
+        nu = ua.NamedUser(airship, "name1")
 
-        associate = nu.associate('channel_id', 'ios')
+        associate = nu.associate("channel_id", "ios")
 
         self.assertEqual(associate.status_code, 200)
         self.assertEqual(associate.ok, True)
 
-        disassociate = nu.disassociate('channel_id', 'ios')
+        disassociate = nu.disassociate("channel_id", "ios")
         self.assertEqual(disassociate.status_code, 200)
         self.assertEqual(disassociate.ok, True)
 
         lookup = nu.lookup()
 
-        self.assertEqual(lookup['ok'], True)
-        self.assertEqual(lookup['named_user'], {
-            'named_user_id': 'name1',
-            'tags': {'group_name': ['tag1', 'tag2']}
-        })
+        self.assertEqual(lookup["ok"], True)
+        self.assertEqual(
+            lookup["named_user"],
+            {"named_user_id": "name1", "tags": {"group_name": ["tag1", "tag2"]}},
+        )
 
     def test_named_user_tag(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
-        nu = ua.NamedUser(airship, 'named_user_id')
+        nu = ua.NamedUser(airship, "named_user_id")
 
         self.assertRaises(
             ValueError,
             nu.tag,
-            'tag_group_name',
-            add={'group': 'tag'},
-            set={'group': 'other_tag'}
+            "tag_group_name",
+            add={"group": "tag"},
+            set={"group": "other_tag"},
         )
 
 
 class TestNamedUserList(unittest.TestCase):
     def test_NamedUserlist_iteration(self):
-        with mock.patch.object(ua.Airship, '_request') as mock_request:
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
             response._content = json.dumps(
                 {
-                    'named_users': [
-                        {'named_user_id': 'name1'},
-                        {'named_user_id': 'name2'},
-                        {'named_user_id': 'name3'}
+                    "named_users": [
+                        {"named_user_id": "name1"},
+                        {"named_user_id": "name2"},
+                        {"named_user_id": "name3"},
                     ]
                 }
-            ).encode('utf-8')
+            ).encode("utf-8")
             mock_request.return_value = response
 
-            name_list = ['name3', 'name2', 'name1']
+            name_list = ["name3", "name2", "name1"]
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             named_user_list = ua.NamedUserList(airship)
 
@@ -97,24 +101,21 @@ class TestNamedUserTags(unittest.TestCase):
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.named_user_tags = ua.NamedUserTags(self.airship)
         self.mock_response = requests.Response()
-        self.mock_response._content = json.dumps([{'ok': True}]).encode('utf-8')
+        self.mock_response._content = json.dumps([{"ok": True}]).encode("utf-8")
 
         ua.Airship._request = mock.Mock()
         ua.Airship._request.side_effect = [self.mock_response]
 
     def test_set_audience(self):
-        self.named_user_tags.set_audience(['user-1', 'user-2'])
+        self.named_user_tags.set_audience(["user-1", "user-2"])
 
         self.assertEqual(
-            self.named_user_tags.audience,
-            {
-                'named_user_id': ['user-1', 'user-2']
-            }
+            self.named_user_tags.audience, {"named_user_id": ["user-1", "user-2"]}
         )
 
     def test_add(self):
-        self.named_user_tags.set_audience(['user-1', 'user-2'])
-        self.named_user_tags.add('group1', ['tag1', 'tag2', 'tag3'])
+        self.named_user_tags.set_audience(["user-1", "user-2"])
+        self.named_user_tags.add("group1", ["tag1", "tag2", "tag3"])
         result = self.named_user_tags.send()
 
-        self.assertEqual(result, [{'ok': True}])
+        self.assertEqual(result, [{"ok": True}])

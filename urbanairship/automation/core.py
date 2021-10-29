@@ -13,14 +13,14 @@ class Automation(object):
         :keyword pipelines: A single Pipeline payload or list of Pipeline
         payloads
         """
-        url = self.airship.urls.get('pipelines_url')
+        url = self.airship.urls.get("pipelines_url")
         body = json.dumps(pipelines)
         response = self.airship.request(
-            method='POST',
+            method="POST",
             body=body,
             url=url,
-            content_type='application/json',
-            version=3
+            content_type="application/json",
+            version=3,
         )
 
         return response
@@ -31,14 +31,14 @@ class Automation(object):
         :keyword pipelines: A single Pipeline payload or list of Pipeline
         payloads
         """
-        url = self.airship.urls.get('pipelines_url') + 'validate/'
+        url = self.airship.urls.get("pipelines_url") + "validate/"
         body = json.dumps(pipelines)
         response = self.airship.request(
-            method='POST',
+            method="POST",
             body=body,
             url=url,
-            content_type='application/json',
-            version=3
+            content_type="application/json",
+            version=3,
         )
 
         return response
@@ -50,14 +50,10 @@ class Automation(object):
         :keyword pipeline: Full Pipeline payload; partial updates are not
         supported
         """
-        url = self.airship.urls.get('pipelines_url') + pipeline_id
+        url = self.airship.urls.get("pipelines_url") + pipeline_id
         body = json.dumps(pipeline)
         response = self.airship.request(
-            method='PUT',
-            body=body,
-            url=url,
-            content_type='application/json',
-            version=3
+            method="PUT", body=body, url=url, content_type="application/json", version=3
         )
 
         return response
@@ -67,13 +63,8 @@ class Automation(object):
 
         :keyword pipeline_id: A UA Pipeline ID
         """
-        url = self.airship.urls.get('pipelines_url') + pipeline_id
-        response = self.airship.request(
-            method='DELETE',
-            body=None,
-            url=url,
-            version=3
-        )
+        url = self.airship.urls.get("pipelines_url") + pipeline_id
+        response = self.airship.request(method="DELETE", body=None, url=url, version=3)
 
         return response
 
@@ -82,13 +73,8 @@ class Automation(object):
 
         :keyword pipeline_id: A UA Pipeline ID
         """
-        url = self.airship.urls.get('pipelines_url') + pipeline_id
-        response = self.airship.request(
-            method='GET',
-            body=None,
-            url=url,
-            version=3
-        )
+        url = self.airship.urls.get("pipelines_url") + pipeline_id
+        response = self.airship.request(method="GET", body=None, url=url, version=3)
 
         return response
 
@@ -101,17 +87,13 @@ class Automation(object):
         """
         params = {}
         if isinstance(limit, int):
-            params['limit'] = limit
+            params["limit"] = limit
         if isinstance(enabled, bool):
-            params['enabled'] = enabled
+            params["enabled"] = enabled
 
-        url = self.airship.urls.get('pipelines_url')
+        url = self.airship.urls.get("pipelines_url")
         response = self.airship.request(
-            method='GET',
-            body=None,
-            params=params,
-            url=url,
-            version=3
+            method="GET", body=None, params=params, url=url, version=3
         )
 
         return response
@@ -124,14 +106,10 @@ class Automation(object):
         """
         params = {}
         if start:
-            params['start'] = start
-        url = self.airship.urls.get('pipelines_url') + 'deleted/'
+            params["start"] = start
+        url = self.airship.urls.get("pipelines_url") + "deleted/"
         response = self.airship.request(
-            method='GET',
-            body=None,
-            params=params,
-            url=url,
-            version=3
+            method="GET", body=None, params=params, url=url, version=3
         )
 
         return response

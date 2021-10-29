@@ -1,4 +1,3 @@
-
 try:
     from setuptools import setup
 except (ImportError):
@@ -16,26 +15,23 @@ setup(
     author_email="customer-engineering@airship.com",
     url="https://airship.com/",
     description="Python package for using the Airship API",
-    long_description=open('README.rst').read(),
+    long_description=open("README.rst").read(),
     packages=[
         "urbanairship",
         "urbanairship.push",
         "urbanairship.devices",
         "urbanairship.reports",
         "urbanairship.automation",
-        "urbanairship.experiments"
+        "urbanairship.experiments",
     ],
-    license='BSD License',
+    license="BSD License",
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
-        'Operating System :: OS Independent',
-        'Topic :: Software Development :: Libraries'
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
+        "Topic :: Software Development :: Libraries",
     ],
-    install_requires=[
-        'requests>=1.2',
-        'six'
-    ],
+    install_requires=["requests>=1.2", "six"],
 )

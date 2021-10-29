@@ -3,13 +3,7 @@ class Variant(object):
     and no more than 26.
     """
 
-    def __init__(self,
-                 push,
-                 description=None,
-                 name=None,
-                 schedule=None,
-                 weight=None
-                 ):
+    def __init__(self, push, description=None, name=None, schedule=None, weight=None):
         """
         :keyword push: [required] A push object without audience and device_types
             fields. These two fields are not allowed because they are already defined
@@ -37,9 +31,7 @@ class Variant(object):
     @description.setter
     def description(self, value):
         if not isinstance(value, str):
-            TypeError(
-                'the description must be type string'
-            )
+            TypeError("the description must be type string")
 
         self._description = value
 
@@ -52,9 +44,7 @@ class Variant(object):
     @name.setter
     def name(self, value):
         if not isinstance(value, str):
-            TypeError(
-                'the name must be a string type'
-            )
+            TypeError("the name must be a string type")
 
         self._name = value
 
@@ -67,7 +57,5 @@ class Variant(object):
     @weight.setter
     def weight(self, value):
         if not isinstance(value, int):
-            TypeError(
-                'the value must be a integer type'
-            )
+            TypeError("the value must be a integer type")
         self._weight = value

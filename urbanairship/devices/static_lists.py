@@ -16,19 +16,19 @@ class StaticList(object):
         self.extra = None
 
     def create(self):
-        payload = {'name': self.name}
+        payload = {"name": self.name}
         if self.description is not None:
-            payload['description'] = self.description
+            payload["description"] = self.description
         if self.extra is not None:
-            payload['extra'] = self.extra
+            payload["extra"] = self.extra
 
-        body = json.dumps(payload).encode('utf-8')
+        body = json.dumps(payload).encode("utf-8")
         response = self.airship._request(
-            'POST',
+            "POST",
             body,
-            self.airship.urls.get('lists_url'),
-            'application/json',
-            version=3
+            self.airship.urls.get("lists_url"),
+            "application/json",
+            version=3,
         )
         return response.json()
 
@@ -41,14 +41,14 @@ class StaticList(object):
         """
 
         zipped = GzipCompressReadStream(csv_file)
-        url = self.airship.urls.get('lists_url') + self.name + '/csv/'
+        url = self.airship.urls.get("lists_url") + self.name + "/csv/"
         response = self.airship._request(
-            method='PUT',
+            method="PUT",
             body=zipped,
             url=url,
-            content_type='text/csv',
+            content_type="text/csv",
             version=3,
-            encoding='gzip'
+            encoding="gzip",
         )
         return response.json()
 
@@ -58,31 +58,31 @@ class StaticList(object):
         """
 
         if self.description is None and self.extra is None:
-            raise ValueError('Either description or extra must be non-empty.')
+            raise ValueError("Either description or extra must be non-empty.")
 
         payload = {}
 
         if self.description is not None:
-            payload['description'] = self.description
+            payload["description"] = self.description
         if self.extra is not None:
-            payload['extra'] = self.extra
+            payload["extra"] = self.extra
 
-        body = json.dumps(payload).encode('utf-8')
-        url = self.airship.urls.get('lists_url') + self.name
+        body = json.dumps(payload).encode("utf-8")
+        url = self.airship.urls.get("lists_url") + self.name
 
         response = self.airship._request(
-            'PUT', body, url, 'application/json', version=3
+            "PUT", body, url, "application/json", version=3
         )
 
         return response.json()
 
     @classmethod
     def from_payload(cls, payload, airship):
-        obj = cls(airship, payload['name'])
+        obj = cls(airship, payload["name"])
         for key in payload:
-            if key in 'created' or key in 'last_updated':
+            if key in "created" or key in "last_updated":
                 payload[key] = datetime.datetime.strptime(
-                    payload[key], '%Y-%m-%dT%H:%M:%S'
+                    payload[key], "%Y-%m-%dT%H:%M:%S"
                 )
             setattr(obj, key, payload[key])
         return obj
@@ -92,8 +92,8 @@ class StaticList(object):
         :return: Information about the static list
         """
 
-        url = self.airship.urls.get('lists_url') + self.name
-        response = self.airship._request('GET', None, url, version=3)
+        url = self.airship.urls.get("lists_url") + self.name
+        response = self.airship._request("GET", None, url, version=3)
         payload = response.json()
         return self.from_payload(payload, self.airship)
 
@@ -101,16 +101,16 @@ class StaticList(object):
         """
         :return: Delete the static list
         """
-        url = self.airship.urls.get('lists_url') + self.name
-        return self.airship._request('DELETE', None, url, version=3)
+        url = self.airship.urls.get("lists_url") + self.name
+        return self.airship._request("DELETE", None, url, version=3)
 
 
 class StaticLists(common.IteratorParent):
     next_url = None
-    data_attribute = 'lists'
+    data_attribute = "lists"
 
     def __init__(self, airship):
-        self.next_url = airship.urls.get('lists_url')
+        self.next_url = airship.urls.get("lists_url")
         super(StaticLists, self).__init__(airship, None)
 
 
@@ -135,7 +135,7 @@ class Buffer(object):
         if size < 0:
             ret_list[-1], remainder = ret_list[-1][:size], ret_list[-1][size:]
             self.__buf.appendleft(remainder)
-        ret = b''.join(ret_list)
+        ret = b"".join(ret_list)
         self.__size -= len(ret)
         return ret
 
@@ -146,11 +146,11 @@ class Buffer(object):
         pass
 
 
-class GzipCompressReadStream (object):
+class GzipCompressReadStream(object):
     def __init__(self, file_obj):
         self.__input = file_obj
         self.__buf = Buffer()
-        self.__gzip = gzip.GzipFile(None, mode='wb', fileobj=self.__buf)
+        self.__gzip = gzip.GzipFile(None, mode="wb", fileobj=self.__buf)
         self.is_finished = False
 
     def read(self, size):

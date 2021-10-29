@@ -1,12 +1,12 @@
 import re
 import sys
 
-DEVICE_TOKEN_FORMAT = re.compile(r'^[0-9a-fA-F]{64}$')
+DEVICE_TOKEN_FORMAT = re.compile(r"^[0-9a-fA-F]{64}$")
 UUID_FORMAT = re.compile(
-    r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}'
-    r'-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
-SMS_SENDER_FORMAT = re.compile(r'^[0-9]*$')
-SMS_MSISDN_FORMAT = re.compile(r'^[0-9]*$')
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" r"-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
+SMS_SENDER_FORMAT = re.compile(r"^[0-9]*$")
+SMS_MSISDN_FORMAT = re.compile(r"^[0-9]*$")
 
 # Python coarse version differentiation
 PY2 = sys.version_info[0] == 2
@@ -24,93 +24,93 @@ elif PY2:
 def ios_channel(uuid):
     """Select a single iOS Channel"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid iOS Channel')
-    return {'ios_channel': uuid.lower().strip()}
+        raise ValueError("Invalid iOS Channel")
+    return {"ios_channel": uuid.lower().strip()}
 
 
 def android_channel(uuid):
     """Select a single Android Channel"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid Android Channel')
-    return {'android_channel': uuid.lower().strip()}
+        raise ValueError("Invalid Android Channel")
+    return {"android_channel": uuid.lower().strip()}
 
 
 def amazon_channel(uuid):
     """Select a single Amazon Channel"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid Amazon Channel')
-    return {'amazon_channel': uuid.lower().strip()}
+        raise ValueError("Invalid Amazon Channel")
+    return {"amazon_channel": uuid.lower().strip()}
 
 
 def device_token(token):
     """Select a single iOS device token"""
     # Ensure the device token is valid
     if not DEVICE_TOKEN_FORMAT.match(token):
-        raise ValueError('Invalid device token')
-    return {'device_token': token.upper().strip()}
+        raise ValueError("Invalid device token")
+    return {"device_token": token.upper().strip()}
 
 
 def apid(uuid):
     """Select a single Android APID"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid APID')
-    return {'apid': uuid.lower().strip()}
+        raise ValueError("Invalid APID")
+    return {"apid": uuid.lower().strip()}
 
 
 def channel(uuid):
     """Select a single Web Channel"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid Channel')
-    return {'channel': uuid.lower().strip()}
+        raise ValueError("Invalid Channel")
+    return {"channel": uuid.lower().strip()}
 
 
 def open_channel(uuid):
     """Select a single Open Channel"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid Open Channel')
-    return {'open_channel': uuid.lower().strip()}
+        raise ValueError("Invalid Open Channel")
+    return {"open_channel": uuid.lower().strip()}
 
 
 def sms_sender(sender):
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
-        raise ValueError('sms_sender value must be a numeric string.')
-    return {'sms_sender': sender}
+        raise ValueError("sms_sender value must be a numeric string.")
+    return {"sms_sender": sender}
 
 
 def sms_id(msisdn, sender):
     if not (isinstance(msisdn, string_type) or SMS_MSISDN_FORMAT.match(msisdn)):
-        raise ValueError('msisdn value must be a numeric string.')
+        raise ValueError("msisdn value must be a numeric string.")
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
-        raise ValueError('sender value must be a numeric string.')
-    return {'sms_id': {'sender': sender, 'msisdn': msisdn}}
+        raise ValueError("sender value must be a numeric string.")
+    return {"sms_id": {"sender": sender, "msisdn": msisdn}}
 
 
 def wns(uuid):
     """Select a single Windows 8 APID"""
     if not UUID_FORMAT.match(uuid):
-        raise ValueError('Invalid wns')
-    return {'wns': uuid.lower().strip()}
+        raise ValueError("Invalid wns")
+    return {"wns": uuid.lower().strip()}
 
 
 def tag(tag):
     """Select a single tag."""
-    return {'tag': tag}
+    return {"tag": tag}
 
 
 def tag_group(tag_group, tag):
     """Select a tag group and a tag."""
-    payload = {'group': tag_group, 'tag': tag}
+    payload = {"group": tag_group, "tag": tag}
     return payload
 
 
 def alias(alias):
     """Select a single alias."""
-    return {'alias': alias}
+    return {"alias": alias}
 
 
 def segment(segment):
     """Select a single segment."""
-    return {'segment': segment}
+    return {"segment": segment}
 
 
 # Compound selectors
@@ -123,7 +123,7 @@ def or_(*children):
     {'or': [{'tag': 'sports'}, {'tag': 'business'}]}
 
     """
-    return {'or': [child for child in children]}
+    return {"or": [child for child in children]}
 
 
 def and_(*children):
@@ -133,7 +133,7 @@ def and_(*children):
     {'and': [{'tag': 'sports'}, {'tag': 'business'}]}
 
     """
-    return {'and': [child for child in children]}
+    return {"and": [child for child in children]}
 
 
 def not_(child):
@@ -143,10 +143,11 @@ def not_(child):
     {'not': {'and': [{'tag': 'sports'}, {'tag': 'business'}]}}
 
     """
-    return {'not': child}
+    return {"not": child}
 
 
 # Location selectors
+
 
 def location(date=None, **kwargs):
     """Select a location expression.
@@ -174,11 +175,11 @@ def location(date=None, **kwargs):
 
     """
     if not len(kwargs) == 1:
-        raise ValueError('Must specify a single location id or alias')
+        raise ValueError("Must specify a single location id or alias")
     if date is None:
-        raise ValueError('Must specify a time period specifier')
-    kwargs['date'] = date
-    return {'location': kwargs}
+        raise ValueError("Must specify a time period specifier")
+    kwargs["date"] = date
+    return {"location": kwargs}
 
 
 def recent_date(**kwargs):
@@ -194,13 +195,13 @@ def recent_date(**kwargs):
     {'recent': {'weeks': 3}}
     """
     if not len(kwargs) == 1:
-        raise ValueError('Must specify a single date resolution')
+        raise ValueError("Must specify a single date resolution")
     resolution = list(kwargs.keys())[0]
     value = list(kwargs.values())[0]
 
-    if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
-        raise ValueError('Invalid date resolution: %s' % resolution)
-    payload = {'recent': {resolution: value}}
+    if resolution not in ("minutes" "hours" "days" "weeks" "months" "years"):
+        raise ValueError("Invalid date resolution: %s" % resolution)
+    payload = {"recent": {resolution: value}}
     return payload
 
 
@@ -221,12 +222,12 @@ def absolute_date(resolution, start, end):
     {'minutes': {'end': '2012-01-01 12:45', 'start': '2012-01-01 12:00'}}
 
     """
-    if resolution not in ('minutes' 'hours' 'days' 'weeks' 'months' 'years'):
-        raise ValueError('Invalid date resolution: %s' % resolution)
+    if resolution not in ("minutes" "hours" "days" "weeks" "months" "years"):
+        raise ValueError("Invalid date resolution: %s" % resolution)
 
-    payload = {resolution: {'start': start, 'end': end}}
+    payload = {resolution: {"start": start, "end": end}}
     return payload
 
 
 def named_user(name):
-    return {'named_user': name}
+    return {"named_user": name}
