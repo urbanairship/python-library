@@ -498,6 +498,9 @@ class TestPush(unittest.TestCase):
                 title="this is",
                 subtitle="backwards",
                 collapse_id="nugent sand",
+                interruption_level="critical",
+                relevance_score=0.75,
+                target_content_id="big day coming",
             )
         )
         p.options = ua.options(10080)
@@ -534,6 +537,9 @@ class TestPush(unittest.TestCase):
                         "title": "this is",
                         "subtitle": "backwards",
                         "collapse_id": "nugent sand",
+                        "interruption_level": "critical",
+                        "relevance_score": 0.75,
+                        "target_content_id": "big day coming"
                     }
                 },
                 "device_types": "ios",
@@ -967,3 +973,69 @@ class TestPush(unittest.TestCase):
                 categories="""a_long_string_so_long_its_longer_than_
                                     sixty_four_characters_too_long"""
             )
+
+    def test_amazon_overrides(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            amazon=ua.amazon(
+                alert="overridden alert",
+                consolidation_key="consolidated on",
+                expires_after=123456789,
+                extra={"key": "value"},
+                title="this is the title",
+                summary="summarized",
+                notification_tag="you are it",
+                notification_channel="my cool channel",
+                icon="icon.img",
+                icon_color="#1234ff",
+            )
+        )
+        p.device_types = ua.device_types("amazon")
+
+        self.assertEqual(
+            p.payload,
+            {
+                "audience": "all",
+                "device_types": ["amazon"],
+                "notification": {
+                    "amazon": {
+                        "alert": "overridden alert",
+                        "consolidation_key": "consolidated on",
+                        "expires_after": 123456789,
+                        "extra": {"key": "value"},
+                        "title": "this is the title",
+                        "summary": "summarized",
+                        "notification_tag": "you are it",
+                        "notification_channel": "my cool channel",
+                        "icon": "icon.img",
+                        "icon_color": "#1234ff",
+                    }
+                }
+            }
+        )
+
+    def test_standard_amazon_push(self):
+        p = ua.Push(None)
+        p.audience = ua.all_
+        p.notification = ua.notification(
+            alert="top level alert",
+            amazon=ua.amazon(
+                alert="amazon override alert"
+            )
+        )
+        p.device_types = ua.device_types("amazon")
+
+        self.assertEqual(
+            p.payload,
+            {
+                "audience": "all",
+                "device_types": ["amazon"],
+                "notification": {
+                    "alert": "top level alert",
+                    "amazon": {
+                        "alert": "amazon override alert"
+                    }
+                }
+            }
+        )
