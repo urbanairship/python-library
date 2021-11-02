@@ -123,7 +123,7 @@ def ios(
         a dictionary, the accepted keys must match those in
         `Apple's Payload Key Reference
         <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html>_.
-        Some options are only available with cetain iOS versions on the device being
+        Some options are only available with certain iOS versions on the device being
         sent to.
     :keyword badge: An integer badge value or an *autobadge* string.
     :keyword sound: If a string, the name of a sound file in the app bundle.
@@ -166,8 +166,9 @@ def ios(
         with iOS 12.
     :keyword interruption_level: Optional, a string. Indicates the importance and
         delivery timing of a notification. Must be one of: passive, active,
-        time-sensitive, critical. Note: Requires entitlement grant from Apple. Once this
-        grant has been enabled, contact Airship Support to enable support with our APIs.
+        time-sensitive, critical. Note: Use of the 'critical' levels requires an 
+        entitlement grant from Apple. Once this grant has been enabled, contact Airship 
+        Support to enable support with our APIs.
     :keyword relevance_score: Optional, a number from 0.0 to 1.0. Used to sort
         notifications for an app. The notification with highest score is featured in
         the notification summary.
