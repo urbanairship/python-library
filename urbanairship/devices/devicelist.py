@@ -1,5 +1,6 @@
 import datetime
 import logging
+
 from urbanairship import common
 
 logger = logging.getLogger("urbanairship")
@@ -29,7 +30,20 @@ class ChannelInfo(object):
     :ivar open: Open channel specific information, e.g. ``identifiers`` and
         ``open_platform_name``.
     :ivar web: Web notify specific information, e.g. ``subscription``.
-
+    :ivar named_user_id: A customer-chosen ID that represents the device user.
+    :ivar device_attributes: Native attribute properties that Airship gathers
+        automatically assigns to a channel. Varies by channel type.
+    :ivar attributes: A dictionary of attributes that you've associated with the
+        channel.
+    :ivar commercial_opted_in: The date-time when a user gave explicit permission
+        to receive commercial emails.
+    :ivar commcercial_opted_out: The date-time when a user explicitly denied permission
+        to receive commercial emails.
+    :ivar transactional_opted_in: The date-time when a user gave explicit permission to
+        receive transactional emails. Users do not need to opt-in to receive
+        transactional emails unless they have previously opted out.
+    :ivar transactional_opted_out: The date-time when a user explicitly denied
+        permission to receive transactional emails.
     """
 
     airship = None
@@ -48,6 +62,13 @@ class ChannelInfo(object):
     ios = None
     open = None
     web = None
+    named_user_id = None
+    device_attributes = None
+    attributes = None
+    commercial_opted_in = None
+    commercial_opted_out = None
+    transactional_opted_in = None
+    transactional_opted_out = None
 
     def __init__(self, airship):
         self.airship = airship
@@ -60,7 +81,14 @@ class ChannelInfo(object):
         if airship:
             obj.airship = airship
         for key in payload:
-            if key in ("created", "last_registration"):
+            if key in (
+                "created",
+                "last_registration",
+                "commercial_opted_in",
+                "commercial_opted_out",
+                "transactional_opted_in",
+                "transactional_opted_out",
+            ):
                 try:
                     payload[key] = datetime.datetime.strptime(
                         payload[key], "%Y-%m-%dT%H:%M:%S"
