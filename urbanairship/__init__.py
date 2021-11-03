@@ -79,6 +79,9 @@ from .devices import (
     Sms,
     Email,
     EmailTags,
+    Attribute,
+    ModifyAttributes,
+    AttributeResponse
 )
 
 from .reports import (
@@ -138,6 +141,14 @@ __all__ = [
     device_types,
     scheduled_time,
     local_scheduled_time,
+    sms,
+    email,
+    wearable,
+    public_notification,
+    style,
+    best_time,
+    named_user,
+    merge_data,
     ChannelList,
     ChannelInfo,
     OpenChannel,
@@ -164,8 +175,6 @@ __all__ = [
     StaticList,
     StaticLists,
     LocationFinder,
-    named_user,
-    merge_data,
     Template,
     TemplateList,
     ScheduledList,
@@ -174,6 +183,11 @@ __all__ = [
     Email,
     EmailTags,
     CreateAndSendPush,
+    ChannelTags,
+    OpenChannelTags,
+    Attribute,
+    AttributeResponse,
+    ModifyAttributes,
 ]
 
 # Silence urllib3 INFO logging by default

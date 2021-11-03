@@ -26,3 +26,5 @@ from .locationfinder import LocationFinder
 from .sms import Sms
 
 from .email import Email, EmailTags
+
+from .attributes import Attribute, ModifyAttributes, AttributeResponse

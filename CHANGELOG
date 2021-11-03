@@ -2,6 +2,8 @@
 
 - Adds iOS platform options for: interruption_level, relevance_score, and target_content_id
 - Adds amazon platform options for: notification_tag, notification_channel, icon, icon_color
+- Adds support for setting attributes on channel ids and named user ids
+- Adds support for removing attributes from channel ids and named user ids
 
 ---
 

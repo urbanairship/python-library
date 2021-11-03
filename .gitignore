@@ -14,3 +14,4 @@ test_data.csv
 nosetests.xml
 .noseids
 /mypython
+ipynb/
