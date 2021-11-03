@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 
@@ -19,8 +20,6 @@ elif PY2:
     string_type = basestring
 
 # Value selectors; device IDs, aliases, tags, etc.
-
-
 def ios_channel(uuid):
     """Select a single iOS Channel"""
     if not UUID_FORMAT.match(uuid):
@@ -113,9 +112,98 @@ def segment(segment):
     return {"segment": segment}
 
 
+def named_user(name):
+    return {"named_user": name}
+
+
+# Attribute selectors
+def date_attribute(attribute, operator, precision=None, value=None):
+    """
+    Select an audience to send to based on an attribute object with a DATE schema type,
+    including predefined and device attributes.
+    Please refer to https://docs.airship.com/api/ua/?http#schemas-dateattribute for
+    more information about using this selector, including information about required
+    data formatting for values.
+    Custom attributes must be defined in the Airship UI prior to use.
+    """
+    if operator not in ["is_empty", "before", "after", "range", "equals"]:
+        raise ValueError(
+            "operator must be one of: 'is_empty', 'before', 'after', 'range', 'equals'"
+        )
+
+    selector = {"attribute": attribute, "operator": operator}
+
+    if operator == "range":
+        if value is None:
+            raise ValueError(
+                "value must be included when using the '{0}' operator".format(operator)
+            )
+
+        selector["value"] = value
+
+    if operator in ["before", "after", "equals"]:
+        if value is None:
+            raise ValueError(
+                "value must be included when using the '{0}' operator".format(operator)
+            )
+        if precision is None:
+            raise ValueError(
+                "precision must be included when using the '{0}' operator".format(
+                    operator
+                )
+            )
+
+        selector["value"] = value
+        selector["precision"] = precision
+
+    return selector
+
+
+def text_attribute(attribute, operator, value):
+    """
+    Select an audience to send to based on an attribute object with a TEXT schema type,
+    including predefined and device attributes.
+
+    Please refer to https://docs.airship.com/api/ua/?http#schemas-textattribute for
+    more information about using this selector, including information about required
+    data formatting for values.
+
+    Custom attributes must be defined in the Airship UI prior to use.
+    """
+    if operator not in ["equals", "contains", "less", "greater", "is_empty"]:
+        raise ValueError(
+            "operator must be one of 'equals', 'contains', 'less', 'greater', 'is_empty'"
+        )
+
+    if type(value) is not str:
+        raise ValueError("value must be a string")
+
+    return {"attribute": attribute, "operator": operator, "value": value}
+
+
+def number_attribute(attribute, operator, value):
+    """
+    Select an audience to send to based on an attribute object with a INTEGER schema
+    type, including predefined and device attributes.
+
+    Please refer to https://docs.airship.com/api/ua/?http#schemas-numberattribute for
+    more information about using this selector, including information about required
+    data formatting for values.
+
+    Custom attributes must be defined in the Airship UI prior to use.
+    """
+    if operator not in ["equals", "contains", "less", "greater", "is_empty"]:
+        raise ValueError(
+            "operator must be one of 'equals', 'contains', 'less', 'greater', 'is_empty'"
+        )
+
+    if type(value) is not int:
+        raise ValueError("value must be an integer")
+
+    return {"attribute": attribute, "operator": operator, "value": value}
+
+
 # Compound selectors
-
-
 def or_(*children):
     """Select devices that match at least one of the given selectors.
 
@@ -147,8 +235,6 @@ def not_(child):
 
 
 # Location selectors
-
-
 def location(date=None, **kwargs):
     """Select a location expression.
 
@@ -227,7 +313,3 @@ def absolute_date(resolution, start, end):
 
     payload = {resolution: {"start": start, "end": end}}
     return payload
-
-
-def named_user(name):
-    return {"named_user": name}

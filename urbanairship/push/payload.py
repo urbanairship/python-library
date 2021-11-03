@@ -1,7 +1,7 @@
 # coding=utf-8
+import collections
 import re
 import sys
-import collections
 import warnings
 
 # Python coarse version differentiation
@@ -166,8 +166,8 @@ def ios(
         with iOS 12.
     :keyword interruption_level: Optional, a string. Indicates the importance and
         delivery timing of a notification. Must be one of: passive, active,
-        time-sensitive, critical. Note: Use of the 'critical' levels requires an 
-        entitlement grant from Apple. Once this grant has been enabled, contact Airship 
+        time-sensitive, critical. Note: Use of the 'critical' levels requires an
+        entitlement grant from Apple. Once this grant has been enabled, contact Airship
         Support to enable support with our APIs.
     :keyword relevance_score: Optional, a number from 0.0 to 1.0. Used to sort
         notifications for an app. The notification with highest score is featured in
@@ -768,10 +768,7 @@ def message(
         10 'categories'
 
     """
-    payload = {
-        "title": title,
-        "body": body,
-    }
+    payload = {"title": title, "body": body}
     if content_type is not None:
         payload["content_type"] = content_type
     if content_encoding is not None:
@@ -1054,7 +1051,7 @@ def media_attachment(url, content=None, options=None):
 
 def content(title=None, subtitle=None, body=None):
     """iOS content builder. Each argument describes the portions of the
-    notifcation that should be modified if the media_attachment succeeds.
+    notification that should be modified if the media_attachment succeeds.
 
     :keyword title: String.
     :keyword subtitle: String.

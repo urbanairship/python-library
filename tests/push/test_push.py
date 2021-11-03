@@ -4,7 +4,6 @@ import unittest
 
 import mock
 import requests
-
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
@@ -350,10 +349,7 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert="top level alert",
-            sms=ua.sms(
-                alert="sms override alert",
-                expiry="2018-04-01T12:00:00",
-            ),
+            sms=ua.sms(alert="sms override alert", expiry="2018-04-01T12:00:00"),
         )
         p.device_types = ua.device_types("sms")
 
@@ -459,10 +455,7 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert="Top level alert",
-            ios=ua.ios(
-                alert="iOS override alert",
-                sound="cat.caf",
-            ),
+            ios=ua.ios(alert="iOS override alert", sound="cat.caf"),
         )
         p.device_types = ua.device_types("ios")
 
@@ -539,7 +532,7 @@ class TestPush(unittest.TestCase):
                         "collapse_id": "nugent sand",
                         "interruption_level": "critical",
                         "relevance_score": 0.75,
-                        "target_content_id": "big day coming"
+                        "target_content_id": "big day coming",
                     }
                 },
                 "device_types": "ios",
@@ -1011,18 +1004,15 @@ class TestPush(unittest.TestCase):
                         "icon": "icon.img",
                         "icon_color": "#1234ff",
                     }
-                }
-            }
+                },
+            },
         )
 
     def test_standard_amazon_push(self):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(
-            alert="top level alert",
-            amazon=ua.amazon(
-                alert="amazon override alert"
-            )
+            alert="top level alert", amazon=ua.amazon(alert="amazon override alert")
         )
         p.device_types = ua.device_types("amazon")
 
@@ -1033,9 +1023,7 @@ class TestPush(unittest.TestCase):
                 "device_types": ["amazon"],
                 "notification": {
                     "alert": "top level alert",
-                    "amazon": {
-                        "alert": "amazon override alert"
-                    }
-                }
-            }
+                    "amazon": {"alert": "amazon override alert"},
+                },
+            },
         )
