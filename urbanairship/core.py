@@ -1,9 +1,11 @@
 import logging
 import re
+import sys
+import warnings
 
 import requests
 
-from . import common, __about__
+from . import __about__, common
 from .push import Push, ScheduledPush, TemplatePush
 
 logger = logging.getLogger("urbanairship")
@@ -77,6 +79,12 @@ class Airship(object):
         self.session.auth = (key, secret)
         self.urls = Urls(self.location)
 
+        if sys.version[0] == "2":
+            warnings.warn(
+                "Support for Python 2.x will be removed in urbanairship version 6.0",
+                DeprecationWarning,
+            )
+
     @property
     def timeout(self):
         return self._timeout
@@ -132,7 +140,7 @@ class Airship(object):
     ):
 
         headers = {
-            "User-agent": "UAPythonLib/{0} {1}".format(__about__.__version__, self.key),
+            "User-agent": "UAPythonLib/{0} {1}".format(__about__.__version__, self.key)
         }
         if content_type:
             headers["Content-type"] = content_type

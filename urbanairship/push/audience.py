@@ -1,6 +1,7 @@
 import datetime
 import re
 import sys
+import warnings
 
 DEVICE_TOKEN_FORMAT = re.compile(r"^[0-9a-fA-F]{64}$")
 UUID_FORMAT = re.compile(
@@ -236,7 +237,8 @@ def not_(child):
 
 # Location selectors
 def location(date=None, **kwargs):
-    """Select a location expression.
+    """DEPRECATED - Will be removed in version 6.0
+    Select a location expression.
 
     Location selectors are made up of either an id or an alias and a date
     period specifier. Use a date specification function to generate the time
@@ -260,6 +262,11 @@ def location(date=None, **kwargs):
                   'us_zip': '94103'}}
 
     """
+    warnings.warn(
+        "The location audience selector is deprecated and will be removed in version 6.0",
+        DeprecationWarning,
+    )
+
     if not len(kwargs) == 1:
         raise ValueError("Must specify a single location id or alias")
     if date is None:
@@ -269,7 +276,8 @@ def location(date=None, **kwargs):
 
 
 def recent_date(**kwargs):
-    """Select a recent date range for a location selector.
+    """DEPRECATED - Will be removed in version 6.0
+    Select a recent date range for a location selector.
 
     :keyword resolution: One keyword time resolution specifier, e.g. ``hours``
         or ``days``.
@@ -280,6 +288,11 @@ def recent_date(**kwargs):
     >>> recent_date(weeks=3)
     {'recent': {'weeks': 3}}
     """
+    warnings.warn(
+        "The recent_date audience selector is deprecated and will be removed in version 6.0",
+        DeprecationWarning,
+    )
+
     if not len(kwargs) == 1:
         raise ValueError("Must specify a single date resolution")
     resolution = list(kwargs.keys())[0]
@@ -292,7 +305,8 @@ def recent_date(**kwargs):
 
 
 def absolute_date(resolution, start, end):
-    """Select an absolute date range for a location selector.
+    """DEPRECATED - Will be removed in version 6.0
+    Select an absolute date range for a location selector.
 
     :keyword resolution: Time resolution specifier, e.g. ``hours`` or ``days``.
     :keyword start: UTC start time in ISO 8601 format.
@@ -308,6 +322,11 @@ def absolute_date(resolution, start, end):
     {'minutes': {'end': '2012-01-01 12:45', 'start': '2012-01-01 12:00'}}
 
     """
+    warnings.warn(
+        "The absolute_date audience selector is deprecated and will be removed in version 6.0",
+        DeprecationWarning,
+    )
+
     if resolution not in ("minutes" "hours" "days" "weeks" "months" "years"):
         raise ValueError("Invalid date resolution: %s" % resolution)
 

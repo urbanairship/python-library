@@ -1,11 +1,20 @@
 import logging
+import warnings
 
 logger = logging.getLogger("urbanairship")
 
 
 class LocationFinder(object):
     def __init__(self, airship):
+        """
+        DEPRECATED - Will be removed in version 6.0
+        """
         self.airship = airship
+
+        warnings.warn(
+            "LocationFinder is deprecated and will be removed in version 6.0",
+            DeprecationWarning,
+        )
 
     def name_lookup(self, name, location_type=None):
         """Lookup a location by name
@@ -146,9 +155,6 @@ class LocationFinder(object):
 
     def date_ranges(self):
         resp = self.airship._request(
-            "GET",
-            None,
-            self.airship.urls.get("segments_url") + "dates/",
-            version=3,
+            "GET", None, self.airship.urls.get("segments_url") + "dates/", version=3
         )
         return resp.json()

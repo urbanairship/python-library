@@ -6,6 +6,9 @@
 - Adds attributes, device_attributes, named_user_id, commercial_opted_in, commercial_opted_out, transactional_opted_in, transactional_opted_out to channel look up and listing.
 - Adds support for setting attributes on channel ids and named user ids
 - Adds support for removing attributes from channel ids and named user ids
+- Deprecates location-based audience selectors: location, recent_date, absolute_date. These will be removed in version 6.0
+- Deprecates class LocationFinder. This will be removed in version 6.0
+- Deprecates support for Python 2. Support will be removed in version 6.0
 
 ---
 
