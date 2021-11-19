@@ -1,5 +1,6 @@
-from urbanairship import common
 from datetime import datetime
+
+from urbanairship import common
 
 
 class IndividualResponseStats(object):
@@ -65,6 +66,12 @@ class ReportsList(common.IteratorParent):
 
         base_url = airship.urls.get("reports_url")
 
+        params = {
+            "start": start_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "end": end_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "precision": precision,
+        }
+
         if self.data_attribute == "optins":
             self.next_url = base_url + "optins/"
         elif self.data_attribute == "optouts":
@@ -79,12 +86,9 @@ class ReportsList(common.IteratorParent):
             self.next_url = base_url + "timeinapp/"
         elif self.data_attribute == "events":
             self.next_url = base_url + "events/"
-
-        params = {
-            "start": start_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "end": end_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "precision": precision,
-        }
+        elif self.data_attribute == "total_counts":
+            self.next_url = base_url + "web/interaction/"
+            params["app_key"] = airship.key
 
         super(ReportsList, self).__init__(airship, params)
 
@@ -115,3 +119,7 @@ class TimeInAppList(ReportsList):
 
 class CustomEventsList(ReportsList):
     data_attribute = "events"
+
+
+class WebResponseReport(ReportsList):
+    data_attribute = "total_counts"

@@ -29,7 +29,7 @@ from .devices import (
     StaticList,
     StaticLists,
 )
-from .experiments import ABTest, Experiment, Variant
+from .experiments import ABTest, Experiment, Variant, ExperimentReport
 from .push import (
     CreateAndSendPush,
     Push,
@@ -99,6 +99,7 @@ from .reports import (
     ResponseList,
     ResponseReportList,
     TimeInAppList,
+    WebResponseReport,
 )
 
 __all__ = [
@@ -195,6 +196,7 @@ __all__ = [
     Attribute,
     AttributeResponse,
     ModifyAttributes,
+    WebResponseReport,
     ExperimentReport,
 ]
 

@@ -10,4 +10,5 @@ from .reports import (
     ResponseList,
     ResponseReportList,
     TimeInAppList,
+    WebResponseReport,
 )

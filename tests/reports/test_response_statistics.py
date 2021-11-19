@@ -1,11 +1,10 @@
-import unittest
 import json
-from mock import Mock
+import unittest
 from datetime import datetime
 
 import requests
-
 import urbanairship as ua
+from mock import Mock
 from tests import TEST_KEY, TEST_SECRET
 
 
@@ -243,11 +242,7 @@ class TestDevicesReport(unittest.TestCase):
     def test_empty_date(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
         s = ua.reports.DevicesReport(airship)
-        self.assertRaises(
-            TypeError,
-            s.get,
-            date=None,
-        )
+        self.assertRaises(TypeError, s.get, date=None)
 
 
 class TestOptInList(unittest.TestCase):
@@ -372,3 +367,8 @@ class TestTimeInAppList(TestOptInList):
 class TestCustomEventsList(TestOptInList):
     class_to_test = ua.reports.CustomEventsList
     response_key = "events"
+
+
+class TestWebResponseReport(TestOptInList):
+    class_to_test = ua.reports.WebResponseReport
+    response_key = "total_counts"
