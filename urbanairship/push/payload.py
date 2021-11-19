@@ -592,15 +592,20 @@ def email(
     sender_address,
     sender_name,
     subject,
+    attachments=None,
     html_body=None,
     variable_defaults=None,
+    bcc=None,
+    bypass_opt_in_level=None,
+    click_tracking=None,
+    open_tracking=None,
 ):
     """
     Required platform override when email in ua.device_types.
     Specifies content of the email being sent. All other notification
     fields are not used in the email if included.
 
-    See https://docs.urbanairship.com/api/ua/#schemas%2femailoverrideobject
+    See https://docs.airship.com/api/ua/#schemas-emailoverrideobject
         for additional caveats.
 
     :param message_type: Required. One of transactional or commercial.
@@ -616,6 +621,17 @@ def email(
     :param html_body: Optional. The HTML content of the email.
     :param variable_details: Required for CreateAndSendPush with inline templates.
         a list of dicts of default values for inline template variables.
+    :param attachments: Optional. A list of `attachment_id` values from the API.
+    :param bcc: Optional. An array of email addresses that you want to blind copy on
+        this email. Using addresses that Airship has not enabled for BCC will return
+        a 400.
+    :param bypass_opt_in_level: Optional. You can set this toggle when `message_type` is
+        set to `transactional` to send a business critical email. If true, the message
+        will be sent to your entire audience, ignoring `transactional_opted_out` status.
+    :param click_tracking: Optional. `True` by default. Set to `False` to prevent click
+        tracking for GDPR compliance.
+    :param open_tracking: Optional. `True` by default. Set to `False` to prevent “open”
+        tracking for GDPR compliance.
     """
     if message_type not in ("transactional", "commercial"):
         raise ValueError("message_type must be either transactional or commercial")
@@ -629,6 +645,27 @@ def email(
     alert_payload = {"subject": subject, "plaintext_body": plaintext_body}
     if html_body is not None:
         alert_payload["html_body"] = html_body
+
+    if attachments is not None:
+        if type(attachments) is not list:
+            raise ValueError("attachments must be a list.")
+        payload["attachments"] = [{"id": id} for id in attachments]
+
+    if bcc is not None:
+        alert_payload["bcc"] = bcc
+
+    if bypass_opt_in_level is not None:
+        alert_payload["bypass_opt_in_level"] = bypass_opt_in_level
+
+    if click_tracking is not None:
+        if type(click_tracking) is not bool:
+            raise ValueError("click_tracking must be a boolean value.")
+        alert_payload["click_tracking"] = click_tracking
+
+    if open_tracking is not None:
+        if type(open_tracking) is not bool:
+            raise ValueError("open_tracking must be a boolean value.")
+        alert_payload["open_tracking"] = open_tracking
 
     if variable_defaults is not None:
         payload["template"] = {

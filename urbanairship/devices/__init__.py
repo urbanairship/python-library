@@ -1,30 +1,11 @@
-from .devicelist import (
-    ChannelList,
-    ChannelInfo,
-    DeviceTokenList,
-    APIDList,
-    DeviceInfo,
-)
-
 from .tag import ChannelTags, OpenChannelTags
-
-from .segment import Segment, SegmentList
-
+from .attributes import Attribute, AttributeResponse, ModifyAttributes
 from .channel_uninstall import ChannelUninstall
-
-from .open_channel import OpenChannel
-
-from .named_users import NamedUser, NamedUserList, NamedUserTags
-
-from .static_lists import (
-    StaticList,
-    StaticLists,
-)
-
+from .devicelist import APIDList, ChannelInfo, ChannelList, DeviceInfo, DeviceTokenList
+from .email import Email, EmailAttachment, EmailTags
 from .locationfinder import LocationFinder
-
+from .named_users import NamedUser, NamedUserList, NamedUserTags
+from .open_channel import OpenChannel
+from .segment import Segment, SegmentList
 from .sms import Sms
-
-from .email import Email, EmailTags
-
-from .attributes import Attribute, ModifyAttributes, AttributeResponse
+from .static_lists import StaticList, StaticLists

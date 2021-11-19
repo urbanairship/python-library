@@ -59,6 +59,8 @@ class Urls(object):
         self.experiments_schedule_url = self.experiments_url + "scheduled/"
         self.experiments_validate = self.experiments_url + "validate/"
 
+        self.attachment_url = self.base_url + "attachments/"
+
     def get(self, endpoint):
         url = getattr(self, endpoint, None)
 

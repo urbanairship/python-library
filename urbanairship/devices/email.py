@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 import re
@@ -16,7 +17,7 @@ class Email(object):
 
     Please see the email documentation for important information about
     opt-in times and email types.
-    https://docs.urbanairship.com/api/ua/#operation/api/channels/email
+    hhttps://docs.airship.com/api/ua/#tag-email
 
     :param address: Required. The email address the object represents.
     :param commercial_opted_in: Optional. A string in ISO 8601 format that
@@ -34,6 +35,12 @@ class Email(object):
         to locale country setting.
     :param locale_language: Optional. The device property tag related
         to locale language setting.
+    :param opt_in_mode: Optional. The opt-in mode for registering the channel. `classic`
+        is the default when unspecified, `double` creates a `double_opt_in` event.
+    :param properties: Optional. An object containing event properties. You can use
+        these properties to filter the double opt-in event and reference them in your
+        message content by using handlebars. Items in the `properties` object are
+        limited to a 255-character maximum string length.
     :param timezone: Optional. The deice property tag related to
         timezone setting.
     :param template_fields: For use with CreateAndSend with inline templates.
@@ -50,6 +57,8 @@ class Email(object):
         transactional_opted_out=None,
         locale_country=None,
         locale_language=None,
+        opt_in_mode=None,
+        properties=None,
         timezone=None,
         template_fields=None,
     ):
@@ -61,6 +70,8 @@ class Email(object):
         self.transactional_opted_out = transactional_opted_out
         self.locale_country = locale_country
         self.locale_language = locale_language
+        self.opt_in_mode = opt_in_mode
+        self.properties = properties
         self.timezone = timezone
         self.template_fields = template_fields
         self._email_type = "email"  # only acceptable value at this time
@@ -76,6 +87,17 @@ class Email(object):
             raise TypeError("template_fields must be a dict")
 
         self._template_fields = value
+
+    @property
+    def opt_in_mode(self):
+        return self._opt_in_mode
+
+    @opt_in_mode.setter
+    def opt_in_mode(self, value):
+        if value not in ["classic", "double"] and value is not None:
+            raise ValueError("opt_in_mode must be one of: 'classic' or 'double'")
+
+        self._opt_in_mode = value
 
     @property
     def address(self):
@@ -129,9 +151,7 @@ class Email(object):
 
     @property
     def create_and_send_audience(self):
-        audience = {
-            "ua_address": self.address,
-        }
+        audience = {"ua_address": self.address}
         if self.commercial_opted_in:
             audience["ua_commercial_opted_in"] = self.commercial_opted_in
         if self.transactional_opted_in:
@@ -150,12 +170,7 @@ class Email(object):
         :return: The response object from the API.
         """
         url = self.airship.urls.get("email_url")
-        reg_payload = {
-            "channel": {
-                "type": self._email_type,
-                "address": self.address,
-            }
-        }
+        reg_payload = {"channel": {"type": self._email_type, "address": self.address}}
 
         if self.commercial_opted_in:
             reg_payload["channel"]["commercial_opted_in"] = self.commercial_opted_in
@@ -176,6 +191,10 @@ class Email(object):
             reg_payload["channel"]["locale_country"] = self.locale_country
         if self.timezone is not None:
             reg_payload["channel"]["timezone"] = self.timezone
+        if self.opt_in_mode is not None:
+            reg_payload["channel"]["opt_in_mode"] = self.opt_in_mode
+        if self.properties is not None:
+            reg_payload["channel"]["properties"] = self.properties
 
         body = json.dumps(reg_payload).encode("utf-8")
 
@@ -212,6 +231,17 @@ class Email(object):
         response = self.airship.request(method="POST", body=body, url=url, version=3)
 
         logger.info("Uninstalled email address: %s" % self.address)
+
+        return response
+
+    @classmethod
+    def lookup(cls, airship, address):
+        if not VALID_EMAIL.match(address) and address is not None:
+            raise ValueError("Invalid email address format")
+
+        url = airship.urls.get("email_url") + address
+
+        response = airship.request(method="GET", url=url, version=3, body=None)
 
         return response
 
@@ -303,3 +333,54 @@ class EmailTags(object):
         )
 
         return response
+
+
+class EmailAttachment(object):
+    """
+    Create an email attachment from a file.
+    Please see https://docs.airship.com/api/ua/#operation/api/attachments/post
+    for important information about file size, content type, and send type limitations.
+
+    :param filename: Required. The name of the uploaded file (max 255 UTF-8 bytes).
+        Multiple files with the same name are allowed in separate requests.
+    :param content_type: Required: The mimetype of the uploaded file including the
+        charset parameter, if needed.
+    :param filepath: Required. A path to the file to be uploaded and attached. File must
+        have permissions set to be opened in 'rb' (binary) mode.
+
+    :return: the response object from the API including the 'attachment_ids' uuid to
+        be used in the email override object.
+    """
+
+    def __init__(self, airship, filename, content_type, filepath):
+        self.airship = airship
+        self.filename = filename
+        self.content_type = content_type
+        self.filepath = filepath
+
+    def _encode_attachment(self, filepath):
+        file = open(filepath, "rb").read()
+        enc = base64.urlsafe_b64encode(file)
+
+        return str(enc)
+
+    @property
+    def req_payload(self):
+        attachment_payload = {
+            "filename": self.filename,
+            "content_type": self.content_type,
+            "data": self._encode_attachment(self.filepath),
+        }
+
+        return attachment_payload
+
+    def post(self):
+        response = self.airship.request(
+            method="POST",
+            body=json.dumps(self.req_payload),
+            url=self.airship.urls.get("attachment_url"),
+            content_type="application/json",
+            version=3,
+        )
+
+        return response.json()

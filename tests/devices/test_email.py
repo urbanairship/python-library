@@ -1,10 +1,10 @@
+import base64
 import json
-import mock
 import unittest
 import uuid
 
+import mock
 import requests
-
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
@@ -17,6 +17,7 @@ class TestEmail(unittest.TestCase):
         self.locale_language = "en"
         self.timezone = "America/Los_Angeles"
         self.channel_id = str(uuid.uuid4())
+        self.opt_in_mode = "double"
 
     def test_email_reg(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
@@ -89,11 +90,13 @@ class TestEmail(unittest.TestCase):
                 locale_country=self.locale_country,
                 locale_language=self.locale_language,
                 timezone=self.timezone,
+                opt_in_mode=self.opt_in_mode,
             )
 
             r = email_obj.register()
 
             self.assertEqual(self.channel_id, email_obj.channel_id)
+            self.assertEqual(self.opt_in_mode, email_obj.opt_in_mode)
             self.assertEqual(201, r.status_code)
 
     def test_email_uninstall(self):
@@ -107,10 +110,28 @@ class TestEmail(unittest.TestCase):
 
             email_obj = ua.Email(airship=self.airship, address=self.address)
 
-            r = email_obj.register()
+            r = email_obj.uninstall()
 
-            self.assertEqual(self.channel_id, email_obj.channel_id)
             self.assertEqual(200, r.status_code)
+
+    def test_email_lookup(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "ok": True,
+                    "channel": {"channel_id": self.channel_id, "device_type": "email"},
+                }
+            )
+            response.status_code = 200
+            mock_request.return_value = response
+
+            lookup = ua.Email.lookup(airship=self.airship, address=self.address)
+
+            self.assertEqual(200, lookup.status_code)
+            self.assertEqual(
+                "email", json.loads(lookup.content)["channel"]["device_type"]
+            )
 
 
 class TestEmailTags(unittest.TestCase):
@@ -154,7 +175,7 @@ class TestEmailTags(unittest.TestCase):
             mock_request.return_value = response
 
             email_tags = ua.EmailTags(airship=self.airship, address=self.address)
-            email_tags.remove(group=self.test_group, tags=self.test_tags)
+            email_tags.set(group=self.test_group, tags=self.test_tags)
             response = email_tags.send()
 
             self.assertEqual(200, response.status_code)
@@ -172,3 +193,28 @@ class TestEmailTags(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 email_tags.send()
+
+
+class TestEmailAttachment(unittest.TestCase):
+    def setUp(self):
+        self.attachment = ua.EmailAttachment(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            filename="test_file.png",
+            content_type='image/png; charset="UTF-8"',
+            filepath="tests/data/logo.png",
+        )
+        file = open("tests/data/logo.png", "rb").read()
+        self.encoded = str(base64.urlsafe_b64encode(file))
+
+    def test_encoding(self):
+        self.assertEqual(self.encoded, self.attachment.req_payload.get("data"))
+
+    def test_payload(self):
+        self.assertDictEqual(
+            self.attachment.req_payload,
+            {
+                "filename": "test_file.png",
+                "content_type": 'image/png; charset="UTF-8"',
+                "data": self.encoded,
+            },
+        )

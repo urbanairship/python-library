@@ -380,6 +380,7 @@ class TestPush(unittest.TestCase):
                 sender_name="test_name",
                 subject="hi",
                 html_body="<html>so rich!</html>",
+                attachments=["16d7442e-5ad4-4ab2-b65a-99c63e39a1d6"],
             )
         )
         p.device_types = ua.device_types("email")
@@ -398,6 +399,7 @@ class TestPush(unittest.TestCase):
                         "sender_name": "test_name",
                         "subject": "hi",
                         "html_body": "<html>so rich!</html>",
+                        "attachments": [{"id": "16d7442e-5ad4-4ab2-b65a-99c63e39a1d6"}],
                     }
                 },
             },

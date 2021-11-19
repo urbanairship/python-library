@@ -31,7 +31,7 @@ class TestStaticList(unittest.TestCase):
             "alias,marianb".split(","),
             "named_user,billg".split(","),
         ]
-        self.path = "test_data.csv"
+        self.path = "tests/data/test_data.csv"
 
         with open(self.path, "wt") as csv_file:
             writer = csv.writer(csv_file, delimiter=",")
@@ -188,7 +188,7 @@ class TestStaticLists(unittest.TestCase):
                         "last_updated": "2015-05-30 23:42:39",
                         "channel_count": 23,
                         "status": "processing",
-                    },
+                    }
                 ]
             }
         ).encode("utf-8")
