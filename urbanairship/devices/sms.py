@@ -14,7 +14,7 @@ class Sms(object):
 
     :param airship: Required. An urbanairship.Airship object instantiated with
         master authentication.
-    :param sender: Required. The a number that recipients will recieve SMS
+    :param sender: Required. The a number that recipients will receive SMS
         notifications from. This must match your Urban Airship configuration.
     :param msisdn: Required. The mobile phone number you want to register as
         an SMS channel (or send a request to opt-in).

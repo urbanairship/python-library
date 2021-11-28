@@ -315,7 +315,7 @@ notification, you can update or cancel it before it's sent.
 Scheduled Message Listing
 -------------------------
 
-List all pending Scheduled messages on a project, icluding those to Device Local Time and Best Time to Send:
+List all pending Scheduled messages on a project, including those to Device Local Time and Best Time to Send:
 
    .. code-block:: python
 

@@ -19,7 +19,7 @@ class Experiment(object):
         :keyword device_types: An array containing one or more strings identifying
             targeted platforms. Accepted platforms are ios, android, amazon, wns, web,
             sms, email, and open::<open_platform_name>
-        :keywors variants: [required] The variants for the experiment. An experiment
+        :keyword variants: [required] The variants for the experiment. An experiment
             must have at least 1 variant and no more than 26.
         :keyword name: [optional] A name for the experiment
         :keyword description: [optional] A description of the experiment

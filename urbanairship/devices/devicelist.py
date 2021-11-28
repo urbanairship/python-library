@@ -37,7 +37,7 @@ class ChannelInfo(object):
         channel.
     :ivar commercial_opted_in: The date-time when a user gave explicit permission
         to receive commercial emails.
-    :ivar commcercial_opted_out: The date-time when a user explicitly denied permission
+    :ivar commercial_opted_out: The date-time when a user explicitly denied permission
         to receive commercial emails.
     :ivar transactional_opted_in: The date-time when a user gave explicit permission to
         receive transactional emails. Users do not need to opt-in to receive

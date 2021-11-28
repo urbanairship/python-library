@@ -667,7 +667,7 @@ def open_platform(
         ``url``.
     :keyword template_alert: For use with CreateAndSendPush. A string with
         inline template substitution fields. The name of these must match
-        subsititutions on the OpenChannel objects used with CreateAndSendPush.
+        substitutions on the OpenChannel objects used with CreateAndSendPush.
 
     >>> sms_overrides = open_platform(
     ...    alert='Hello!',
