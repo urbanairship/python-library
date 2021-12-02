@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 import re
@@ -14,7 +15,7 @@ class Sms(object):
 
     :param airship: Required. An urbanairship.Airship object instantiated with
         master authentication.
-    :param sender: Required. The a number that recipients will recieve SMS
+    :param sender: Required. The a number that recipients will receive SMS
         notifications from. This must match your Urban Airship configuration.
     :param msisdn: Required. The mobile phone number you want to register as
         an SMS channel (or send a request to opt-in).
@@ -66,17 +67,11 @@ class Sms(object):
 
     @property
     def common_payload(self):
-        return {
-            "sender": self.sender,
-            "msisdn": self.msisdn,
-        }
+        return {"sender": self.sender, "msisdn": self.msisdn}
 
     @property
     def create_and_send_audience(self):
-        audience = {
-            "ua_sender": self.sender,
-            "ua_msisdn": self.msisdn,
-        }
+        audience = {"ua_sender": self.sender, "ua_msisdn": self.msisdn}
 
         if self.template_fields:
             audience.update(self.template_fields)
@@ -179,5 +174,45 @@ class Sms(object):
         )
 
         response = self.airship.request(method="GET", body=None, url=url, version=3)
+
+        return response
+
+
+class KeywordInteraction(object):
+    def __init__(self, airship, keyword, msisdn, sender_ids, timestamp=None):
+        self.airship = airship
+        self.keyword = keyword
+        self.msisdn = msisdn
+        self.sender_ids = sender_ids
+        self.timestamp = timestamp
+
+        if type(sender_ids) is not list:
+            raise ValueError("sender_ids must be a list")
+
+    @property
+    def timestamp(self):
+        return self._timestamp.replace(microsecond=0).isoformat()
+
+    @timestamp.setter
+    def timestamp(self, value):
+        if type(value) is not datetime and value is not None:
+            raise ValueError("timestamp must be a datetime object")
+
+        self._timestamp = value
+
+    @property
+    def payload(self):
+        return {"keyword": self.keyword, "sender_ids": self.sender_ids}
+
+    @property
+    def url(self):
+        return "{base_url}sms/{msisdn}/keywords".format(
+            base_url=self.airship.urls.get("base_url"), msisdn=self.msisdn
+        )
+
+    def post(self):
+        response = self.airship.request(
+            method="POST", url=self.url, body=self.payload, version=3
+        )
 
         return response

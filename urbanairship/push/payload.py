@@ -549,9 +549,9 @@ def web(
     return payload
 
 
-def sms(alert=None, expiry=None, template_alert=None):
+def sms(alert=None, expiry=None, template_alert=None, shorten_links=None):
     """Sms platform specific override payload
-
+    See: https://docs.airship.com/api/ua/#schemas-smsoverrideobject
     One of alert or template_alert must be used.
 
     :keyword alert: An optional string. Overrides the alert provided at the
@@ -562,6 +562,10 @@ def sms(alert=None, expiry=None, template_alert=None):
         fields in this alert string.
     :keyword expiry: Optional. Delivery expiration, as either absolute
         UTC timestamp (string), or number of seconds from now (integer).
+    :keyword shorten_links: Optional. If true, Airship will shorten http/https links
+        (space delimited) in the message text fields, producing unique, 25 character
+        URLs for each member of your audience. If using this feature, please see the
+        documentation linked above.
 
 
     >>> sms(alert='sms override alert!', expiry='2018-04-01T12:00:00') # doctest: +SKIP
@@ -582,7 +586,67 @@ def sms(alert=None, expiry=None, template_alert=None):
         if not (isinstance(expiry, (string_type, int))):
             raise ValueError("expiry value must be a string or integer")
         payload["expiry"] = expiry
+
+    if shorten_links is not None:
+        if type(shorten_links) is not bool:
+            raise ValueError("shorten_links must be a boolean")
+        payload["shorten_links"] = shorten_links
+
     return payload
+
+
+def mms(
+    fallback_text,
+    content_type,
+    url,
+    shorten_links=None,
+    content_length=None,
+    text=None,
+    subject=None,
+):
+    """
+    Provides the content for a push to MMS channels. If sms is in the `device_type`
+        array, your request may include this object. It cannot be combined with an
+        SMS Platform Override as a single push can only include either an SMS or MMS
+        payload.
+        Please see the documentation here: https://docs.airship.com/api/ua/#schemas-mmsoverrideobject
+
+    :param fallback_text: Required. If a member of your audience cannot receive MMS
+        messages, they will receive your fallback text with a link to the
+        original content.
+    :param content_type: Required. The MIME type of the image specified in the URL.
+        The MIME type must match the extension in the url.
+    :param url: Required. The http or https URL of the media attachment for the slide.
+        The URL must end in one of .gif, .jpeg, .jpg, .png, or .vcf (case-insensitive).
+        While the content_length field is optional, your image must still be under 2MB
+        for JPEGs and PNGs, 1 MB for GIFs, or 2048000 bytes for text/vcard.
+    :param shorten_links: Optional. If true, Airship will shorten http/https links
+        (space delimited) in the message text fields, producing unique, 25 character
+        URLs for each member of your audience. If using this feature, please see the
+        documentation linked above.
+    :param content_length: Optional. The length of the attachment in bytes. If using
+        this feature, please see the documentation linked above.
+    :param text: Optional. Text that you want to display along with the media
+        attachment. The order of media and text in the message is not guaranteed.
+    :param subject: Optional. The subject for the MMS message, normally displayed in
+        bold. The subject might not appear for recipients if the Sender is a Toll-Free
+        number.
+    """
+    slides = [{"media": {"content_type": content_type, "url": url}}]
+    if text is not None:
+        slides[0]["text"] = text
+    if content_length is not None:
+        slides[0]["media"]["content_length"] = content_length
+
+    payload = {"fallback_text": fallback_text, "slides": slides}
+
+    if shorten_links is not None:
+        payload["shorten_links"] = shorten_links
+
+    if subject is not None:
+        payload["subject"] = subject
+
+    return {"mms": payload}
 
 
 def email(

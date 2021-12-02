@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import mock
 import unittest
@@ -56,11 +57,7 @@ class TestSMS(unittest.TestCase):
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {
-                    "ok": True,
-                }
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True}).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -77,11 +74,7 @@ class TestSMS(unittest.TestCase):
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {
-                    "ok": True,
-                }
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True}).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -129,3 +122,31 @@ class TestSMS(unittest.TestCase):
             r = sms_obj.lookup()
 
             self.assertTrue(r.ok)
+
+
+class TestSmsKeywordInteraction(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.sender_ids = ["12345", "09876"]
+        self.msisdn = "15035556789"
+        self.keyword = "from_a_motel_six"
+        self.timestamp = datetime(2014, 10, 8, 12, 0, 0)
+        self.interaction = ua.KeywordInteraction(
+            airship=self.airship,
+            keyword=self.keyword,
+            msisdn=self.msisdn,
+            sender_ids=self.sender_ids,
+            timestamp=self.timestamp,
+        )
+
+    def test_payload(self):
+        self.assertEqual(
+            self.interaction.payload,
+            {"keyword": self.keyword, "sender_ids": self.sender_ids},
+        )
+
+    def test_url(self):
+        self.assertEqual(
+            self.interaction.url,
+            "https://go.urbanairship.com/api/sms/15035556789/keywords",
+        )

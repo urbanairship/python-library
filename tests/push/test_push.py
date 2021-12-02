@@ -349,7 +349,11 @@ class TestPush(unittest.TestCase):
         p.audience = ua.all_
         p.notification = ua.notification(
             alert="top level alert",
-            sms=ua.sms(alert="sms override alert", expiry="2018-04-01T12:00:00"),
+            sms=ua.sms(
+                alert="sms override alert",
+                expiry="2018-04-01T12:00:00",
+                shorten_links=True,
+            ),
         )
         p.device_types = ua.device_types("sms")
 
@@ -363,8 +367,41 @@ class TestPush(unittest.TestCase):
                     "sms": {
                         "alert": "sms override alert",
                         "expiry": "2018-04-01T12:00:00",
+                        "shorten_links": True,
                     },
                 },
+            },
+        )
+
+    def test_mms_overrides(self):
+        mms_payload = ua.mms(
+            fallback_text="an airbag saved my life",
+            content_type="image/gif",
+            url="https://c.tenor.com/ZhKMg4_yCTgAAAAC/surprised-pikachu.gif",
+            shorten_links=True,
+            content_length=1000,
+            text="hey man slow down",
+            subject="this is what you get",
+        )
+
+        self.assertEqual(
+            mms_payload,
+            {
+                "mms": {
+                    "subject": "this is what you get",
+                    "fallback_text": "an airbag saved my life",
+                    "shorten_links": True,
+                    "slides": [
+                        {
+                            "text": "hey man slow down",
+                            "media": {
+                                "url": "https://c.tenor.com/ZhKMg4_yCTgAAAAC/surprised-pikachu.gif",
+                                "content_type": "image/gif",
+                                "content_length": 1000,
+                            },
+                        }
+                    ],
+                }
             },
         )
 
