@@ -50,6 +50,22 @@ class Push(object):
             )
         self._device_types = types
 
+    def validate(self):
+        """
+        Test push payload against the validate endpoint. No sends will result from this
+        method being called. This method is otherwise identical to the `send` method.
+        """
+
+        response = self._airship._request(
+            method="POST",
+            body=json.dumps(self.payload),
+            url=self._airship.urls.get("validate_url"),
+            content_type="application/json",
+            version=3,
+        )
+
+        return PushResponse(response)
+
     def send(self):
         """Send the notification.
 

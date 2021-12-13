@@ -26,6 +26,7 @@ class Urls(object):
         self.device_token_url = self.base_url + "device_tokens/"
         self.apid_url = self.base_url + "apids/"
         self.push_url = self.base_url + "push/"
+        self.validate_url = self.push_url + "validate/"
         self.schedules_url = self.base_url + "schedules/"
         self.tags_url = self.base_url + "tags/"
         self.segments_url = self.base_url + "segments/"
