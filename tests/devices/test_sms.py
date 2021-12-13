@@ -85,6 +85,29 @@ class TestSMS(unittest.TestCase):
 
             self.assertTrue(r.ok)
 
+    def test_sms_registration_payload_property(self):
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            opted_in="2018-02-13T11:58:59",
+            locale_country="us",
+            locale_language="en",
+            timezone="America/Los_Angeles",
+        )
+
+        self.assertEqual(
+            sms._registration_payload,
+            {
+                "sender": "12345",
+                "msisdn": "15035556789",
+                "locale_language": "en",
+                "locale_country": "us",
+                "timezone": "America/Los_Angeles",
+                "opted_in": "2018-02-13T11:58:59",
+            },
+        )
+
     def test_sms_lookup(self):
         sender = "12345"
         msisdn = "15035556789"

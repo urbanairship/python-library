@@ -18,6 +18,64 @@ class TestEmail(unittest.TestCase):
         self.timezone = "America/Los_Angeles"
         self.channel_id = str(uuid.uuid4())
         self.opt_in_mode = "double"
+        self.email = ua.Email(
+            airship=self.airship,
+            address="i_dont_like_spam@airship.com",
+            commercial_opted_in="2021-01-01T12:00:00",
+            locale_country="us",
+            locale_language="en",
+            timezone="America/Los_Angeles",
+            transactional_opted_in="2021-02-21T13:00:00",
+            opt_in_mode="double",
+        )
+
+    def test_email_full_payload_property(self):
+        self.assertEqual(
+            self.email._full_payload,
+            {
+                "type": "email",
+                "address": "i_dont_like_spam@airship.com",
+                "commercial_opted_in": "2021-01-01T12:00:00",
+                "locale_country": "us",
+                "locale_language": "en",
+                "timezone": "America/Los_Angeles",
+                "transactional_opted_in": "2021-02-21T13:00:00",
+                "opt_in_mode": "double",
+            },
+        )
+
+    def test_email_reg_payload_property(self):
+        self.assertEqual(
+            self.email._registration_payload,
+            {
+                "opt_in_mode": "double",
+                "channel": {
+                    "type": "email",
+                    "address": "i_dont_like_spam@airship.com",
+                    "commercial_opted_in": "2021-01-01T12:00:00",
+                    "locale_country": "us",
+                    "locale_language": "en",
+                    "timezone": "America/Los_Angeles",
+                    "transactional_opted_in": "2021-02-21T13:00:00",
+                },
+            },
+        )
+
+    def test_email_update_payload(self):
+        self.assertEqual(
+            self.email._update_payload,
+            {
+                "channel": {
+                    "type": "email",
+                    "address": "i_dont_like_spam@airship.com",
+                    "commercial_opted_in": "2021-01-01T12:00:00",
+                    "locale_country": "us",
+                    "locale_language": "en",
+                    "timezone": "America/Los_Angeles",
+                    "transactional_opted_in": "2021-02-21T13:00:00",
+                }
+            },
+        )
 
     def test_email_reg(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:

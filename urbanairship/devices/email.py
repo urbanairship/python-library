@@ -150,6 +150,57 @@ class Email(object):
         self._transactional_opted_out = value
 
     @property
+    def _full_payload(self):
+        if self.address == None:
+            raise ValueError(
+                "address must be set to register or update an email channel"
+            )
+
+        payload = {"type": self._email_type}
+
+        reg_payload_keys = [
+            "address",
+            "commercial_opted_in",
+            "commercial_opted_out",
+            "locale_country",
+            "locale_language",
+            "opt_in_mode",
+            "properties",
+            "timezone",
+            "transactional_opted_in",
+            "transactional_opted_out",
+        ]
+
+        for key in reg_payload_keys:
+            if getattr(self, key) is not None:
+                payload[key] = getattr(self, key)
+
+        return payload
+
+    @property
+    def _registration_payload(self):
+        full_payload = self._full_payload
+        opt_in_mode = full_payload.pop("opt_in_mode", None)
+        properties = full_payload.pop("properties", None)
+
+        payload = {"channel": full_payload}
+        if opt_in_mode:
+            payload["opt_in_mode"] = opt_in_mode
+        if properties:
+            payload["properties"] = properties
+
+        return payload
+
+    @property
+    def _update_payload(self):
+        payload = self._full_payload
+
+        payload.pop("opt_in_mode", None)
+        payload.pop("properties", None)
+
+        return {"channel": payload}
+
+    @property
     def create_and_send_audience(self):
         audience = {"ua_address": self.address}
         if self.commercial_opted_in:
@@ -170,35 +221,13 @@ class Email(object):
         :return: The response object from the API.
         """
         url = self.airship.urls.get("email_url")
-        reg_payload = {"channel": {"type": self._email_type, "address": self.address}}
 
-        if self.commercial_opted_in:
-            reg_payload["channel"]["commercial_opted_in"] = self.commercial_opted_in
-        if self.commercial_opted_out:
-            reg_payload["channel"]["commercial_opted_out"] = self.commercial_opted_out
-        if self.transactional_opted_in:
-            reg_payload["channel"][
-                "transactional_opted_in"
-            ] = self.transactional_opted_in
-        if self.transactional_opted_out:
-            reg_payload["channel"][
-                "transactional_opted_out"
-            ] = self.transactional_opted_out
-
-        if self.locale_language is not None:
-            reg_payload["channel"]["locale_language"] = self.locale_language
-        if self.locale_country is not None:
-            reg_payload["channel"]["locale_country"] = self.locale_country
-        if self.timezone is not None:
-            reg_payload["channel"]["timezone"] = self.timezone
-        if self.opt_in_mode is not None:
-            reg_payload["channel"]["opt_in_mode"] = self.opt_in_mode
-        if self.properties is not None:
-            reg_payload["channel"]["properties"] = self.properties
-
-        body = json.dumps(reg_payload).encode("utf-8")
-
-        response = self.airship.request(method="POST", body=body, url=url, version=3)
+        response = self.airship.request(
+            method="POST",
+            body=json.dumps(self._registration_payload).encode("utf-8"),
+            url=url,
+            version=3,
+        )
 
         if response.status_code == 201:
             self.channel_id = response.json().get("channel_id")
@@ -210,6 +239,31 @@ class Email(object):
             logger.info(
                 "Successful registration call made to channel_id %s" % (self.channel_id)
             )
+
+        return response
+
+    def update(self, channel_id=None):
+        """
+        Updates an existing email channel.
+
+        :param channel_id Optional: An existing airship-provided channel_id UUID for an
+            email channel.
+            If this object was created with this class, the channel_id value
+            should be assigned. Otherwise, pass it here. Other values are set as
+            properties on an instance of this class before the update call.
+        """
+        if channel_id:
+            self.channel_id = channel_id
+
+        if self.channel_id is None:
+            raise ValueError("Email channel must have a channel_id to update.")
+
+        response = self.airship.request(
+            method="PUT",
+            body=json.dumps(self._update_payload),
+            url=self.airship.urls.get("email_url") + self.channel_id,
+            version=3,
+        )
 
         return response
 

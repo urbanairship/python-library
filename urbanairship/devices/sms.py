@@ -2,11 +2,21 @@ from datetime import datetime
 import json
 import logging
 import re
+import sys
 
 logger = logging.getLogger("urbanairship")
 
 VALID_MSISDN = re.compile(r"[0-9]*$")
 VALID_SENDER = re.compile(r"[0-9]*$")
+
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+# Set version string type
+if sys.version_info[0] == 2:
+    string_type = basestring
+else:
+    string_type = str
 
 
 class Sms(object):
@@ -24,15 +34,79 @@ class Sms(object):
         receive messages. This is required for use with CreateAndSend.
     :param template_fields: For use with CreateAndSend with inline templates.
         A dict of template field names and their substitution values.
+    :param locale_country: The ISO 3166 two-character country code. The value for this
+        field becomes a tag in the ua_locale_country tag group.
+    :param locale_language: The ISO 639-1 two-character language code. The value for
+        this field becomes a tag in the ua_locale_language tag group.
+    :param timezone: The IANA identifier for a timezone, e.g. "America/Los_Angeles".
+        The value in this field becomes a tag in the timezone tag group.
     """
 
-    def __init__(self, airship, sender, msisdn, opted_in=False, template_fields=None):
+    def __init__(
+        self,
+        airship,
+        sender,
+        msisdn,
+        opted_in=None,
+        template_fields=None,
+        locale_country=None,
+        locale_language=None,
+        timezone=None,
+    ):
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
         self.opted_in = opted_in
         self.template_fields = template_fields
+        self.locale_country = locale_country
+        self.locale_language = locale_language
+        self.timezone = timezone
         self.channel_id = None
+
+    @property
+    def locale_country(self):
+        return self._locale_country
+
+    @locale_country.setter
+    def locale_country(self, value):
+        if not isinstance(value, (string_type, type(None))) and len(value) != 2:
+            raise ValueError("locale_country must be a 2 character string")
+
+        self._locale_country = value
+
+    @property
+    def opted_in(self):
+        if not self._opted_in:
+            return self._opted_in
+
+        return self._opted_in.strftime("%Y-%m-%dT%H:%M:%S")
+
+    @opted_in.setter
+    def opted_in(self, value):
+        if not value:
+            self._opted_in = None
+            return
+
+        self._opted_in = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+
+    @property
+    def locale_language(self):
+        return self._locale_language
+
+    @locale_language.setter
+    def locale_language(self, value):
+        if not isinstance(value, (str, type(None))) and len(value) != 2:
+            raise ValueError("locale_language must be a 2 character string")
+
+        self._locale_language = value
+
+    @property
+    def timezone(self):
+        return self._timezone
+
+    @timezone.setter
+    def timezone(self, value):
+        self._timezone = value
 
     @property
     def template_fields(self):
@@ -70,6 +144,24 @@ class Sms(object):
         return {"sender": self.sender, "msisdn": self.msisdn}
 
     @property
+    def _registration_payload(self):
+        payload = self.common_payload
+
+        reg_payload_keys = [
+            "locale_language",
+            "locale_country",
+            "timezone",
+            "template_fields",
+            "opted_in",
+        ]
+
+        for key in reg_payload_keys:
+            if getattr(self, key) is not None:
+                payload[key] = getattr(self, key)
+
+        return payload
+
+    @property
     def create_and_send_audience(self):
         audience = {"ua_sender": self.sender, "ua_msisdn": self.msisdn}
 
@@ -84,7 +176,7 @@ class Sms(object):
             )
         return audience
 
-    def register(self, opted_in=False):
+    def register(self, opted_in=None):
         """Register an Sms channel with the sender ID and MSISDN
 
         :param opted_in: Optional UTC ISO 8601 datetime string that represents the
@@ -94,13 +186,11 @@ class Sms(object):
         :return: The response object from the api.
         """
 
+        if opted_in is not None:
+            self.opted_in = opted_in
+
         url = self.airship.urls.get("sms_url")
-        reg_payload = self.common_payload
-
-        if opted_in:
-            reg_payload["opted_in"] = opted_in
-
-        body = json.dumps(reg_payload).encode("utf-8")
+        body = json.dumps(self._registration_payload)
 
         response = self.airship.request(method="POST", body=body, url=url, version=3)
 
@@ -116,6 +206,32 @@ class Sms(object):
             )
         else:
             logger.info("Channel not yet created.")
+
+        return response
+
+    def update(self, channel_id=None):
+        """
+        Updates properties of an existing SMS channel.
+
+        :param channel_id Optional: An existing airship-provided channel_id UUID for an SMS
+            channel. If this object was created with this class, the channel_id value
+            should be assigned. Otherwise, pass it here. Other values are set as
+            properties on an instance of this class before the update call.
+
+        :return: The response object from the API
+        """
+        if channel_id is not None:
+            self.channel_id = channel_id
+
+        if self.channel_id is None:
+            raise ValueError("SMS Channel must have a channel id to update.")
+
+        response = self.airship.request(
+            method="PUT",
+            body=json.dumps(self._registration_payload).encode("utf-8"),
+            url=self.airship.urls.get("sms_url") + self.channel_id,
+            version=3,
+        )
 
         return response
 
