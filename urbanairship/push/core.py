@@ -108,6 +108,34 @@ class Push(object):
 
         return PushResponse(response)
 
+    @classmethod
+    def message_center_delete(cls, airship, push_id):
+        """
+        Delete a Message Center message completely, removing it from every user's inbox.
+        This is an asynchronous call; a success response means that the deletion has
+        been queued for processing.
+        This delete call will work with either the message_id or the push_id of the
+        accompanying push notification.
+        This endpoint will not work with a group_id from an automated message or a
+        push to local time delivery. To delete a rich message that was part of an
+        automated or local time delivery, you must use the relevant push_id from the
+        operation.
+
+        :param airship: Required. Airship object instantiated with auth that corresponds
+            to message to be deleted.
+        :param push_id: Required. The message_id to delete or the push_id of the
+            accompanying push notification.
+        """
+
+        response = airship._request(
+            method="DELETE",
+            url=airship.urls.get("message_center_delete_url") + push_id,
+            body="",
+            version=3,
+        )
+
+        return response
+
 
 class ScheduledPush(object):
     """A scheduled push notification. Set schedule, push, and send."""
@@ -162,6 +190,7 @@ class ScheduledPush(object):
             data = {"schedule": self.schedule, "push": self.push.payload}
         else:
             data = {"schedule": self.schedule, "push": self.push.payload}
+
             if self.recurring:
                 data["schedule"].update(self.recurring)
 
