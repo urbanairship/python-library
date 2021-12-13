@@ -43,6 +43,7 @@ class Urls(object):
         self.named_user_tag_url = self.named_user_url + "tags/"
         self.named_user_disassociate_url = self.named_user_url + "disassociate/"
         self.named_user_associate_url = self.named_user_url + "associate/"
+        self.named_user_uninstall_url = self.named_user_url + "uninstall/"
 
         self.sms_url = self.channel_url + "sms/"
         self.sms_opt_out_url = self.sms_url + "opt-out/"

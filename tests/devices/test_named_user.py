@@ -43,12 +43,11 @@ class TestNamedUser(unittest.TestCase):
 
         nu = ua.NamedUser(airship, "name1")
 
-        associate = nu.associate("channel_id", "ios")
-
+        associate = nu.associate(channel_id="channel_id", device_type="ios")
         self.assertEqual(associate.status_code, 200)
         self.assertEqual(associate.ok, True)
 
-        disassociate = nu.disassociate("channel_id", "ios")
+        disassociate = nu.disassociate(channel_id="channel_id", device_type="ios")
         self.assertEqual(disassociate.status_code, 200)
         self.assertEqual(disassociate.ok, True)
 
@@ -59,6 +58,43 @@ class TestNamedUser(unittest.TestCase):
             lookup["named_user"],
             {"named_user_id": "name1", "tags": {"group_name": ["tag1", "tag2"]}},
         )
+
+    def test_channel_associate_payload_property(self):
+        named_user = ua.NamedUser(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET), named_user_id="cowboy_dan"
+        )
+        named_user.channel_id = "524bb82-8499-4ba5-b313-2157b1b1771f"
+        named_user.device_type = "ios"
+
+        self.assertEqual(
+            named_user._channel_associate_payload,
+            {
+                "named_user_id": "cowboy_dan",
+                "channel_id": "524bb82-8499-4ba5-b313-2157b1b1771f",
+                "device_type": "ios",
+            },
+        )
+
+    def test_email_associate_payload_property(self):
+        named_user = ua.NamedUser(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET), named_user_id="cowboy_dan"
+        )
+        named_user.email_address = "major_player@cowboyscene.net"
+
+        self.assertEqual(
+            named_user._email_associate_payload,
+            {
+                "named_user_id": "cowboy_dan",
+                "email_address": "major_player@cowboyscene.net",
+            },
+        )
+
+    def test_named_user_uninstall_raises(self):
+        with self.assertRaises(ValueError):
+            ua.NamedUser.uninstall(
+                airship=ua.Airship(TEST_KEY, TEST_SECRET),
+                named_users="should_be_a_list",
+            )
 
     def test_named_user_tag(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)
@@ -71,6 +107,22 @@ class TestNamedUser(unittest.TestCase):
             add={"group": "tag"},
             set={"group": "other_tag"},
         )
+
+    def test_named_user_update_raises(self):
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        nu = ua.NamedUser(airship, "named_user_id")
+
+        with self.assertRaises(ValueError):
+            nu.update()
+
+    def test_named_user_attributes_raises(self):
+        airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        nu = ua.NamedUser(airship, "named_user_id")
+
+        with self.assertRaises(ValueError):
+            nu.attributes(
+                attributes={"action": "set", "key": "type", "value": "not_a_list"}
+            )
 
 
 class TestNamedUserList(unittest.TestCase):
