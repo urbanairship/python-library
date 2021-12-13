@@ -47,7 +47,14 @@ from .payload import (
     web,
     wns_payload,
 )
-from .schedule import ScheduledList, best_time, local_scheduled_time, scheduled_time
+from .schedule import (
+    ScheduledList,
+    best_time,
+    local_scheduled_time,
+    scheduled_time,
+    schedule_exclusion,
+    recurring_schedule,
+)
 from .template import Template, TemplateList, merge_data
 
 # Common selector for audience & device_types

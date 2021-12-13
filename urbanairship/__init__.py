@@ -76,6 +76,8 @@ from .push import (
     or_,
     public_notification,
     recent_date,
+    recurring_schedule,
+    schedule_exclusion,
     scheduled_time,
     segment,
     sms,

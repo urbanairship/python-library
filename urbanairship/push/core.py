@@ -99,6 +99,7 @@ class ScheduledPush(object):
     def __init__(self, airship):
         self._airship = airship
         self.schedule = None
+        self.recurring = None
         self.name = None
         self.push = None
         self.url = None
@@ -137,22 +138,32 @@ class ScheduledPush(object):
         if hasattr(self.push, "merge_data"):  # create template payload
             data = self.push.payload
             data["schedule"] = self.schedule
-        elif isinstance(self.push, CreateAndSendPush):  # create cas payload
+        elif isinstance(self.push, CreateAndSendPush):  # create create and send payload
             if "scheduled_time" not in self.schedule:
                 raise ValueError(
                     "only scheduled_time supported with create and send schedules"
                 )
             data = {"schedule": self.schedule, "push": self.push.payload}
         else:
-            data = {
-                "schedule": self.schedule,
-                "push": self.push.payload,
-            }
+            data = {"schedule": self.schedule, "push": self.push.payload}
+            if self.recurring:
+                data["schedule"].update(self.recurring)
 
         if self.name is not None:
             data["name"] = self.name
 
         return data
+
+    @property
+    def api_url(self):
+        if hasattr(self.push, "merge_data"):
+            url = self._airship.urls.get("schedule_template_url")
+        elif isinstance(self.push, CreateAndSendPush):
+            url = self._airship.urls.get("schedule_create_and_send_url")
+        else:
+            url = self._airship.urls.get("schedules_url")
+
+        return url
 
     def send(self):
         """Schedule the notification
@@ -163,19 +174,10 @@ class ScheduledPush(object):
         :raises Unauthorized: Authentication failed.
 
         """
-        body = json.dumps(self.payload)
-
-        if hasattr(self.push, "merge_data"):
-            url = self._airship.urls.get("schedule_template_url")
-        elif isinstance(self.push, CreateAndSendPush):
-            url = self._airship.urls.get("schedule_create_and_send_url")
-        else:
-            url = self._airship.urls.get("schedules_url")
-
         response = self._airship._request(
             method="POST",
-            body=body,
-            url=url,
+            body=json.dumps(self.payload),
+            url=self.api_url,
             content_type="application/json",
             version=3,
         )
@@ -194,12 +196,50 @@ class ScheduledPush(object):
 
         return PushResponse(response)
 
+    def validate(self):
+        """Validates a scheduled push for sending"""
+        response = self._airship._request(
+            method="POST",
+            body=json.dumps(self.payload),
+            url=self.api_url,
+            content_type="application/json",
+            version=3,
+        )
+
+        return response
+
+    def pause(self):
+        """Pause a recurring schedule"""
+        if not self.url:
+            raise ValueError("Cannot pause ScheduledPush without url.")
+
+        response = self._airship._request(
+            method="POST", body="", url=self.url + "/pause", version=3
+        )
+
+        return response
+
+    def resume(self):
+        """Resume a paused recurring schedule"""
+        if not self.url:
+            raise ValueError("Cannot resume ScheduledPush without url.")
+
+        response = self._airship._request(
+            method="POST", body="", url=self.url + "/resume", version=3
+        )
+
+        return response
+
     def cancel(self):
         """Cancel a previously scheduled notification."""
         if not self.url:
             raise ValueError("Cannot cancel ScheduledPush without url.")
 
-        self._airship._request(method="DELETE", body=None, url=self.url, version=3)
+        response = self._airship._request(
+            method="DELETE", body=None, url=self.url, version=3
+        )
+
+        return response
 
     def update(self):
         if not self.url:
