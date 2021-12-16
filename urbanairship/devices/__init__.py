@@ -9,3 +9,4 @@ from .open_channel import OpenChannel
 from .segment import Segment, SegmentList
 from .sms import Sms, KeywordInteraction
 from .static_lists import StaticList, StaticLists
+from .subscription_lists import SubscriptionList

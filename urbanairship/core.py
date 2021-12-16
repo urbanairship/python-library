@@ -35,6 +35,7 @@ class Urls(object):
         self.location_url = self.base_url + "location/"
         self.attributes_url = self.channel_url + "attributes/"
         self.message_center_delete_url = self.base_url + "user/messages/"
+        self.subscription_lists_url = self.channel_url + "subscription_lists/"
 
         self.templates_url = self.base_url + "templates/"
         self.schedule_template_url = self.templates_url + "schedules/"

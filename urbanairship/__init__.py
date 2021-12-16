@@ -30,6 +30,7 @@ from .devices import (
     Sms,
     StaticList,
     StaticLists,
+    SubscriptionList,
 )
 from .experiments import ABTest, Experiment, Variant
 from .push import (
@@ -78,6 +79,8 @@ from .push import (
     recent_date,
     recurring_schedule,
     schedule_exclusion,
+    static_list,
+    subscription_list,
     scheduled_time,
     segment,
     sms,
@@ -160,6 +163,10 @@ __all__ = [
     best_time,
     named_user,
     merge_data,
+    recurring_schedule,
+    schedule_exclusion,
+    static_list,
+    subscription_list,
     ChannelList,
     ChannelInfo,
     OpenChannel,
@@ -206,6 +213,7 @@ __all__ = [
     WebResponseReport,
     ExperimentReport,
     KeywordInteraction,
+    SubscriptionList,
 ]
 
 

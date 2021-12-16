@@ -19,6 +19,8 @@ from .audience import (
     segment,
     sms_id,
     sms_sender,
+    subscription_list,
+    static_list,
     tag,
     tag_group,
     text_attribute,
@@ -123,4 +125,6 @@ __all__ = [
     merge_data,
     text_attribute,
     number_attribute,
+    static_list,
+    subscription_list,
 ]

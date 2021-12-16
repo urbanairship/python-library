@@ -117,6 +117,14 @@ def named_user(name):
     return {"named_user": name}
 
 
+def subscription_list(list_id):
+    return {"subscription_lists": list_id}
+
+
+def static_list(list_id):
+    return {"static_list": list_id}
+
+
 # Attribute selectors
 def date_attribute(attribute, operator, precision=None, value=None):
     """
