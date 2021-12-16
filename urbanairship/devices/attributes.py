@@ -3,6 +3,8 @@ import logging
 from datetime import datetime
 import re
 
+from .static_lists import GzipCompressReadStream
+
 logger = logging.getLogger("urbanairship")
 
 
@@ -144,6 +146,96 @@ class ModifyAttributes(object):
         )
 
         return AttributeResponse(response=response)
+
+
+class AttributeList(object):
+    """
+    Define and manage attribute lists; upload corresponding attribute data in CSV format.
+
+    :param airship: Required. An unbanairship.Airship instance.
+    :param list_name: Required. The name of your list. Must be prefixed
+        with "ua_attributes_"
+    :param description: Required. A description of your list.
+    :param extra: Optional. An optional dict of up to 100 key-value (string-to-string)
+        pairs associated with the list.
+    """
+
+    def __init__(self, airship, list_name, description, extra=None):
+        self.airship = airship
+        self.list_name = list_name
+        self.description = description
+        self.extra = extra
+
+    @property
+    def _create_payload(self):
+        payload = {"name": self.list_name, "description": self.description}
+
+        if self.extra:
+            payload["extra"] = self.extra
+
+        return payload
+
+    def create(self):
+        response = self.airship.request(
+            method="POST",
+            url=self.airship.urls.get("attributes_list_url"),
+            body=json.dumps(self._create_payload),
+            content_type="application/json",
+            version=3,
+        )
+
+        return response
+
+    def upload(self, file_path):
+        """
+        Upload a CSV that will set attribute values on the specified channels or
+            named users. Please see the documentation at
+            https://docs.airship.com/api/ua/#operation-api-attribute-lists-list_name-csv-put
+            for details about list formatting, size limits, and error responses.
+
+        :param file_path: Required. Local path to the csv file to be uploaded.
+        """
+        with open(file_path, "rb") as open_file:
+            response = self.airship._request(
+                method="PUT",
+                body=GzipCompressReadStream(open_file),
+                url=self.airship.urls.get("attributes_list_url")
+                + self.list_name
+                + "/csv/",
+                content_type="text/csv",
+                version=3,
+                encoding="gzip",
+            )
+
+        return response
+
+    def get_errors(self):
+        """
+        Returns csv of attribute list processing errors. During processing, after a
+            list is uploaded, errors can occur. Depending on the type of list
+            processing, an error file may be created, showing a user exactly what
+            went wrong.
+        """
+        response = self.airship.request(
+            method="GET",
+            body={},
+            url=self.airship.urls.get("attributes_list_url")
+            + self.list_name
+            + "/errors/",
+        )
+
+        return response
+
+    @classmethod
+    def list(cls, airship):
+        response = airship._request(
+            method="GET",
+            url=airship.urls.get("attributes_list_url"),
+            body={},
+            version=3,
+        )
+
+        return response
 
 
 class AttributeResponse(object):

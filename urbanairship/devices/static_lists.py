@@ -77,6 +77,25 @@ class StaticList(object):
         return response.json()
 
     @classmethod
+    def download(cls, airship, list_name):
+        """
+        Allows you to download the contents of a static list. Alias and named_user
+            values are resolved to channels.
+
+        :param airship: Required. An urbanairship.Airship instance.
+        :param list_name: Required. Name of an existing list to download.
+
+        :return: csv list data
+        """
+        response = airship._request(
+            method="GET",
+            url=airship.urls.get("lists_url") + list_name + "/csv/",
+            body={},
+        )
+
+        return response
+
+    @classmethod
     def from_payload(cls, payload, airship):
         obj = cls(airship, payload["name"])
         for key in payload:

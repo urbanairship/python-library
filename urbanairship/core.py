@@ -34,6 +34,7 @@ class Urls(object):
         self.lists_url = self.base_url + "lists/"
         self.location_url = self.base_url + "location/"
         self.attributes_url = self.channel_url + "attributes/"
+        self.attributes_list_url = self.base_url + "attribute-lists/"
         self.message_center_delete_url = self.base_url + "user/messages/"
         self.subscription_lists_url = self.channel_url + "subscription_lists/"
 
@@ -131,8 +132,17 @@ class Airship(object):
             raise ValueError("secrets must be 22 characters")
         self._secret = value
 
-    def request(self, method, body, url, content_type=None, version=None, params=None):
-        return self._request(method, body, url, content_type, version, params)
+    def request(
+        self,
+        method,
+        body,
+        url,
+        content_type=None,
+        version=None,
+        params=None,
+        encoding=None,
+    ):
+        return self._request(method, body, url, content_type, version, params, encoding)
 
     def _request(
         self,

@@ -1,9 +1,13 @@
 import datetime
-from time import time
 import unittest
+import mock
+import json
+
+import requests
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
+
 
 class TestAttribute(unittest.TestCase):
     def setUp(self):
@@ -136,8 +140,7 @@ class TestModifyAttributes(unittest.TestCase):
     def test_no_devices(self):
         with self.assertRaises(ValueError) as err_ctx:
             ua.ModifyAttributes(
-                airship=self.test_airship,
-                attributes=[self.set_attribute],
+                airship=self.test_airship, attributes=[self.set_attribute]
             )
 
             self.assertEqual(
@@ -157,3 +160,48 @@ class TestModifyAttributes(unittest.TestCase):
                 err_ctx.message,
                 "Either channel or named_user must be included, not both",
             )
+
+
+class TestAttributeList(unittest.TestCase):
+    def setUp(self):
+        self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
+        self.list_name = "my_test_list"
+        self.description = "this is my cool list"
+        self.extra = {"key": "value"}
+        self.file_path = "tests/data/attribute_list.csv"
+        self.attr_list = ua.AttributeList(
+            airship=self.airship,
+            list_name=self.list_name,
+            description=self.description,
+            extra=self.extra,
+        )
+
+    def test_create(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({"ok": True}).encode("UTF-8")
+            mock_request.return_value = response
+
+            result = self.attr_list.create()
+
+            self.assertEqual(result.json(), {"ok": True})
+
+    def test_upload(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({"ok": True}).encode("UTF-8")
+            mock_request.return_value = response
+
+            result = self.attr_list.upload(file_path=self.file_path)
+
+            self.assertEqual(result.json(), {"ok": True})
+
+    def test_create_payload_property(self):
+        self.assertEqual(
+            self.attr_list._create_payload,
+            {
+                "name": self.list_name,
+                "description": self.description,
+                "extra": self.extra,
+            },
+        )

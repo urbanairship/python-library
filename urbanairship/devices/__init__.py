@@ -1,5 +1,5 @@
 from .tag import ChannelTags, OpenChannelTags
-from .attributes import Attribute, AttributeResponse, ModifyAttributes
+from .attributes import Attribute, AttributeResponse, ModifyAttributes, AttributeList
 from .channel_uninstall import ChannelUninstall
 from .devicelist import APIDList, ChannelInfo, ChannelList, DeviceInfo, DeviceTokenList
 from .email import Email, EmailAttachment, EmailTags
