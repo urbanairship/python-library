@@ -37,6 +37,7 @@ from .payload import (
     in_app,
     interactive,
     ios,
+    localization,
     message,
     mms,
     notification,

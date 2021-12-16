@@ -6,10 +6,12 @@ import mock
 import requests
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
+from urbanairship.push.payload import in_app, localization
 
 
 class TestPush(unittest.TestCase):
     def test_full_payload(self):
+
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert="Hello")
@@ -26,6 +28,11 @@ class TestPush(unittest.TestCase):
             icons={"list_icon": "http://cdn.example.com/message.png"},
             options={"some_delivery_option": "true"},
         )
+        p.localizations = [
+            ua.localization(
+                country="us", language="es", notification=ua.notification(alert="Hola")
+            )
+        ]
         self.assertEqual(
             p.payload,
             {
@@ -44,6 +51,13 @@ class TestPush(unittest.TestCase):
                     "icons": {"list_icon": "http://cdn.example.com/message.png"},
                     "options": {"some_delivery_option": "true"},
                 },
+                "localizations": [
+                    {
+                        "language": "es",
+                        "country": "us",
+                        "notification": {"alert": "Hola"},
+                    }
+                ],
             },
         )
 
@@ -1066,3 +1080,33 @@ class TestPush(unittest.TestCase):
                 },
             },
         )
+
+    def test_localization(self):
+        localization = ua.localization(
+            country="fr",
+            language="fr",
+            notification=ua.notification(alert="bonjour"),
+            in_app=ua.in_app(alert="bonjour", display_type="banner"),
+            message=ua.message(title="bonjour", body="<html><h1>Bonjour!</h1></html>"),
+        )
+        self.assertEqual(
+            localization,
+            {
+                "country": "fr",
+                "language": "fr",
+                "notification": {"alert": "bonjour"},
+                "in_app": {"alert": "bonjour", "display_type": "banner"},
+                "message": {
+                    "title": "bonjour",
+                    "body": "<html><h1>Bonjour!</h1></html>",
+                },
+            },
+        )
+
+    def test_localization_raises_no_country_lang(self):
+        with self.assertRaises(ValueError):
+            ua.localization(notification=ua.notification(alert="oops"))
+
+    def testlocalization_raises_no_content(self):
+        with self.assertRaises(ValueError):
+            ua.localization(country="us", language="en")

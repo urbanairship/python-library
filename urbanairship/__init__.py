@@ -63,6 +63,7 @@ from .push import (
     ios,
     ios_channel,
     local_scheduled_time,
+    localization,
     location,
     merge_data,
     message,

@@ -20,6 +20,7 @@ class Push(object):
         self.campaigns = None
         self.message = None
         self.in_app = None
+        self.localizations = None
 
     @property
     def payload(self):
@@ -36,6 +37,8 @@ class Push(object):
             data["message"] = self.message
         if self.in_app is not None:
             data["in_app"] = self.in_app
+        if self.localizations is not None:
+            data["localizations"] = self.localizations
         return data
 
     @property
@@ -498,6 +501,7 @@ class PushResponse(object):
     """
 
     ok = None
+    localized_ids = None
     push_ids = None
     schedule_url = None
     operation_id = None
@@ -505,6 +509,7 @@ class PushResponse(object):
 
     def __init__(self, response):
         data = response.json()
+        self.localized_ids = data.get("localized_ids", [])
         self.push_ids = data.get("push_ids")
         self.schedule_url = data.get("schedule_urls", [])
         self.operation_id = data.get("operation_id")

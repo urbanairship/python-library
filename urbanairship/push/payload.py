@@ -1172,3 +1172,44 @@ def crop(x=None, y=None, width=None, height=None):
     """
     payload = {"x": x, "y": y, "width": width, "height": height}
     return {key: val for key, val in iter(payload.items()) if val is not None}
+
+
+def localization(
+    language=None, country=None, notification=None, message=None, in_app=None
+):
+    """
+    Localized content for a push notification, message center message, or in app
+        message. Localization must include at least one of language or country.
+        Localization content must include at least one of notificaiton, message, or
+        in_app.
+
+    :param language: Optional. The ISO 639-1 two-letter language code for this
+        localization.
+    :param country: Optional. The ISO 3166-2 two-letter country code for this
+        localization.
+    :param notification: Optional. An urbanairship.notification containing localized
+        push notification content.
+    :param message: Optional. An urbanairship.message containing localized message
+        center content.
+    :param in_app: Optional. An urbanarship.in_app containing localized in_app content.
+    """
+    if language is None and country is None:
+        raise ValueError("One of language or country must be included.")
+    if all([notification is None, message is None, in_app is None]):
+        raise ValueError(
+            "At least one of notification, message, or in_app must be included."
+        )
+
+    data = {}
+    if language:
+        data["language"] = language
+    if country:
+        data["country"] = country
+    if notification:
+        data["notification"] = notification
+    if message:
+        data["message"] = message
+    if in_app:
+        data["in_app"] = in_app
+
+    return data
