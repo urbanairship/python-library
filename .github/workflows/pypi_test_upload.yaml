@@ -1,0 +1,37 @@
+name: Pypi Test Build and Upload
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Python 3.9 for build
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+
+    - name: Install pypa/build
+      run: >-
+        python -m
+        pip install
+        build
+        --user
+    - name: Build binary wheel and source tarball
+      run: >-
+        python -m
+        build
+        --sdist
+        --wheel
+        --outdir dist/
+    - name: Publish to test Pypi
+      if: ${{github.repository == 'urbanairship/python-library-dev'}}
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        password: ${{ secrets.PYPI_TEST_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
