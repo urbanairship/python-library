@@ -1,6 +1,6 @@
 .. image:: https://github.com/urbanairship/python-library/actions/workflows/ci.yaml/badge.svg
     :target: https://github.com/urbanairship/python-library/
-    
+
 =====
 
 ``urbanairship`` is a Python library for using the `Airship
@@ -10,7 +10,7 @@ center messages, email, and SMS.
 Requirements
 ============
 
-Python 2.7, 3.6, 3.7, or 3.8 is required. Other requirements can be found in requirements.txt.
+Python 2.7, 3.6, 3.7, 3.8, or 3.9 is required. Other requirements can be found in requirements.txt.
 
 Questions
 =========

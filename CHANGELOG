@@ -1,3 +1,34 @@
+# urbanairship changelog
+
+## 5.7.0
+
+- Adds Custom Event Reports
+- Adds Experiments Overview and Variant Reports
+- Adds Scheduled Experiment Listing
+- Adds Web Response Reports
+- Adds opt_in_mode and properties to Email class
+- Adds email attachments support in the EmailAttachment class
+- Adds mms audience override
+- Adds shorten_links support to sms and mms sends
+- Adds support for SMS keyword interactions in the KeywordInteraction class
+- Adds update method to Email class
+- Adds update method to Sms class
+- Adds support for push validation
+- Adds email association and disassociation to NamedUser class
+- Adds Named User uninstall, attributes, and update methods
+- Adds message_center_delete class method to Push class
+- Adds schedule_exclusion
+- Adds recurring_schedule and ScheduledPush.recurring
+- Adds pause and resume methods to ScheduledPush for recurring schedules
+- Adds validate method to ScheduledPush
+- Adds support for push and scheduled push localization
+- Adds SubscriptionList class for subscribing and unsubscribing audiences
+- Adds subscription_list and static_list audience selectors
+- Adds AttributeList class with methods for create, upload, get_errors, and list
+- Adds download class method to StaticList class
+
+---
+
 ## 5.6.0
 
 - Adds iOS platform options for: interruption_level, relevance_score, and target_content_id
