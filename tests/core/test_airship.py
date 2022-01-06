@@ -6,7 +6,7 @@ import uuid
 import requests
 
 import urbanairship as ua
-from tests import TEST_SECRET, TEST_KEY
+from tests import TEST_SECRET, TEST_KEY, TEST_TOKEN
 
 
 class TestAirshipCore(unittest.TestCase):
@@ -22,12 +22,8 @@ class TestAirshipCore(unittest.TestCase):
     def test_airship_timeout_exception(self):
         timeout_str = "50"
 
-        try:
-            airship_raises_value_error = ua.Airship(
-                key=TEST_KEY, secret=TEST_SECRET, timeout=timeout_str
-            )
-        except ValueError as e:
-            self.assertIsInstance(e, ValueError)
+        with self.assertRaises(ValueError):
+            ua.Airship(key=TEST_KEY, secret=TEST_SECRET, timeout=timeout_str)
 
     def test_airship_location(self):
         location = "eu"
@@ -39,12 +35,25 @@ class TestAirshipCore(unittest.TestCase):
     def test_airship_location_exception(self):
         invalid_location = "xx"
 
-        try:
-            airship_rasises_value_error = ua.Airship(
-                key=TEST_KEY, secret=TEST_SECRET, location=invalid_location
-            )
-        except ValueError as e:
-            self.assertIsInstance(e, ValueError)
+        with self.assertRaises(ValueError):
+            ua.Airship(key=TEST_KEY, secret=TEST_SECRET, location=invalid_location)
+
+    def test_token_auth(self):
+        test_airship = ua.Airship(key=TEST_KEY, token=TEST_TOKEN)
+
+        self.assertEqual(TEST_TOKEN, test_airship.token)
+
+    def test_no_secret_nor_token(self):
+        with self.assertRaises(
+            ValueError, msg="One of token or secret must be used, not both"
+        ):
+            ua.Airship(key=TEST_KEY)
+
+    def test_both_secret_and_token(self):
+        with self.assertRaises(
+            ValueError, msg="Either token or secret must be included"
+        ):
+            ua.Airship(key=TEST_KEY, secret=TEST_SECRET, token=TEST_TOKEN)
 
 
 class TestAirshipResponse(unittest.TestCase):

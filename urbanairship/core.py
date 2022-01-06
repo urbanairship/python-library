@@ -76,21 +76,37 @@ class Urls(object):
 
 
 class Airship(object):
-    def __init__(self, key, secret, location=None, timeout=None):
+    def __init__(self, key, secret=None, token=None, location="us", timeout=None):
+        """Main client class for interacting with the Airship API.
+
+        :param key: [required] An Airship project key used to authenticate
+        :param secret: [optional] The Airship-generated app or master secret for the
+        provided key
+        :param token: [optional] An Airship-generated bearer token for the provided key
+        :param location: [optional] The Airship cloud site your project is associated
+        with. Possible values: 'us', 'eu'. Defaults to 'us'.
+        :param: timeout: [optional] An integer specifying the number of seconds used
+        for a timeout threshold
+        """
         self.key = key
         self.secret = secret
+        self.token = token
         self.location = location
         self.timeout = timeout
-
-        self.session = requests.Session()
-        self.session.auth = (key, secret)
         self.urls = Urls(self.location)
 
-        if sys.version[0] == "2":
-            warnings.warn(
-                "Support for Python 2.x will be removed in urbanairship version 6.0",
-                DeprecationWarning,
+        if all([secret, token]):
+            raise ValueError("One of token or secret must be used, not both")
+
+        self.session = requests.Session()
+        if self.token:
+            self.session.headers.update(
+                {"X-UA-Appkey": key, "Authorization": f"Bearer {self.token}"}
             )
+        elif self.secret:
+            self.session.auth = (key, secret)
+        else:
+            raise ValueError("Either token or secret must be included")
 
     @property
     def timeout(self):
@@ -128,9 +144,17 @@ class Airship(object):
 
     @secret.setter
     def secret(self, value):
-        if not VALID_KEY.match(value):
+        if isinstance(value, str) and not VALID_KEY.match(value):
             raise ValueError("secrets must be 22 characters")
         self._secret = value
+
+    @property
+    def token(self):
+        return self._token
+
+    @token.setter
+    def token(self, value):
+        self._token = value
 
     def request(
         self,
