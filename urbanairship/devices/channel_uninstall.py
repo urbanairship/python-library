@@ -5,12 +5,23 @@ logger = logging.getLogger("urbanairship")
 
 
 class ChannelUninstall(object):
+    """
+    Uninstalls a channel id.
+
+    :param airship: Required. An urbanairshi.Airship instance
+    """
+
     _airship = None
 
     def __init__(self, airship):
         self._airship = airship
 
     def uninstall(self, channels):
+        """
+        Perform the channel unistall on a list of channel UUIDs.
+
+        :param channels: Required. A list of channel_id UUIDs.
+        """
         chan_num = len(channels)
 
         if chan_num > 200:

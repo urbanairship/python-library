@@ -82,7 +82,7 @@ class Segment(object):
 class SegmentList(common.IteratorParent):
     """Retrieves a list of segments
 
-    :ivar limit: Number of segments to fetch
+    :keyword limit: Number of segments to fetch
 
     """
 

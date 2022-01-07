@@ -177,7 +177,8 @@ class Sms(object):
         return audience
 
     def register(self, opted_in=None):
-        """Register an Sms channel with the sender ID and MSISDN
+        """
+        Register an Sms channel with the sender ID and MSISDN
 
         :param opted_in: Optional UTC ISO 8601 datetime string that represents the
             date and time when explicit permission was received from the
@@ -236,7 +237,8 @@ class Sms(object):
         return response
 
     def opt_out(self):
-        """mark an sms channel at opted-out by sender ID and MSISDN
+        """
+        Mark an sms channel at opted-out by sender ID and MSISDN
 
         :return: the response object from the api
         """
@@ -258,7 +260,8 @@ class Sms(object):
         return response
 
     def uninstall(self):
-        """Uninstall and remove all associated data from Urban Airship
+        """
+        Uninstall and remove all associated data from Airship
         systems. Channel cannot be opted-in again. Use with caution.
 
         :return: the response object from the api"""
@@ -280,7 +283,8 @@ class Sms(object):
         return response
 
     def lookup(self):
-        """Look up Sms channel information
+        """
+        Look up Sms channel information
 
         :return: the response object from the api
         """
@@ -295,6 +299,16 @@ class Sms(object):
 
 
 class KeywordInteraction(object):
+    """
+    Trigger Mobile Originated (MO) keyword interactions on behalf of an MSISDN.
+
+    :param airship: Required. An urbanairship.Airship instance.
+    :param keyword: Required. The keyword to use for the interaction.
+    :param msisdn: Required. The MSISDN to use for the interacton.
+    :param sender_ids: Required. A list of sender id values to use for the interaction.
+    :param timestamp: Optional. A datetime.datetime representing the time of the interaction.
+    """
+
     def __init__(self, airship, keyword, msisdn, sender_ids, timestamp=None):
         self.airship = airship
         self.keyword = keyword
@@ -327,6 +341,7 @@ class KeywordInteraction(object):
         )
 
     def post(self):
+        """Send the interaction"""
         response = self.airship.request(
             method="POST", url=self.url, body=self.payload, version=3
         )

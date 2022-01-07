@@ -5,3 +5,4 @@ mock
 tox
 black
 pre-commit
+sphinx-rtd-theme

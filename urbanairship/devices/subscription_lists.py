@@ -4,8 +4,8 @@ import json
 class SubscriptionList(object):
     """
     Subscribe or unsubscribe channels to/from Subscription lists. These lists must
-        be created in the Airship web dashboard prior to making these calls. The
-        value for list_id can be found after creating these lists.
+    be created in the Airship web dashboard prior to making these calls. The
+    value for list_id can be found after creating these lists.
 
     :param airship: Required. An urbanairship.Airship instance.
     :param list_id: Required. The list_id from the Airship web dashboard.

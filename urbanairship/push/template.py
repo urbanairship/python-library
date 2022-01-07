@@ -11,18 +11,18 @@ logger = logging.getLogger("urbanairship")
 class Template(object):
     """Information object for a template.
 
-    :ivar template_id: UUID; the ID of this template, set automatically.
-    :ivar created_at: UTC datetime when the template was created.
-    :ivar modified_at: UTC datetime when the template was last modified.
-    :ivar last_used: UTC datetime when the template was last used for a push
+    :keyword template_id: UUID; the ID of this template, set automatically.
+    :keyword created_at: UTC datetime when the template was created.
+    :keyword modified_at: UTC datetime when the template was last modified.
+    :keyword last_used: UTC datetime when the template was last used for a push
         notification. Will be set to 'UNKNOWN' if never used.
-    :ivar name: Required, name of the template, set during
+    :keyword name: Required, name of the template, set during
         creation/modification.
-    :ivar description: Optional, description of the template, set during
+    :keyword description: Optional, description of the template, set during
         creation/modification.
-    :ivar variables: Required, an array of `Template Variable Objects
+    :keyword variables: Required, an array of `Template Variable Objects
         <https://docs.urbanairship.com/api/ua/#template-variable-object>`_.
-    :ivar push: Optional, a  push specification object, as defined by the `Push
+    :keyword push: Optional, a  push specification object, as defined by the `Push
         Object specification
         <https://docs.urbanairship.com/api/ua/#push-object>`_, but does not
         include ``audience`` or ``device_types`` since those are set when push
@@ -220,7 +220,7 @@ class Template(object):
 class TemplateList(common.IteratorParent):
     """Iterator for listing all templates for this application.
 
-    :ivar limit: Number of entries to fetch in each page request.
+    :keyword limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`Template` object.
 
     """

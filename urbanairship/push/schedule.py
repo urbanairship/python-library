@@ -19,8 +19,9 @@ class ScheduledList(common.IteratorParent):
     """
     Iterator for listing all scheduled messages.
 
-    :ivar limit: Number of entries to fetch in a paginated request.
-    :returns Each ``next`` returns a :py:class:`ScheduledPush` object.
+    :keyword limit: Number of entries to fetch in a paginated request.
+
+    :returns: Each ``next`` returns a :py:class:`ScheduledPush` object.
     """
 
     next_url = None
@@ -58,7 +59,7 @@ def best_time(timestamp):
     """Specify a date to send the push at the best time per-device.
     Only YYYY_MM_DD are needed. Hour/minute/second information is discarded.
 
-    :param timestamp: A ``datetime.datetime object.
+    :param timestamp: A ``datetime.datetime`` object.
     """
 
     return {"best_time": {"send_date": timestamp.strftime("%Y-%m-%d")}}

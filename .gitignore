@@ -15,3 +15,9 @@ nosetests.xml
 .noseids
 /mypython
 ipynb/
+
+# Ignoring venv stuff
+bin/
+lib/
+man/
+pyvenv.cfg

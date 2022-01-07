@@ -25,7 +25,7 @@ class ABTest(object):
         """List experiments, sorted by created_at date/time from newest to oldest
 
         :keyword limit: Positive maximum number of elements to return per page.
-        Default limit is 10. Max: 100 and Min: 1.
+            Default limit is 10. Max: 100 and Min: 1.
         """
         url = self.airship.urls.get("experiments_url")
         return self._get_listing(url)
@@ -55,7 +55,6 @@ class ABTest(object):
         """Delete a scheduled experiment. You can only delete experiments before they start
 
         :keyword experiment_id: The unique identifier of the experiment, type string
-        DELETE /api/experiments/scheduled/{experiment_id}
         """
 
         url = self.airship.urls.get("experiments_schedule_url") + "/" + experiment_id
@@ -68,7 +67,6 @@ class ABTest(object):
         but only parses and validates the payload without creating the experiment.
         An experiment may validate and still fail to be delivered. For example,
         you may have a valid experiment with no devices in your audience.
-            POST /api/experiments/validate
 
         :keyword experiment: Body of the experiment you want to validate
         """

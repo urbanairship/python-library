@@ -9,40 +9,40 @@ logger = logging.getLogger("urbanairship")
 class ChannelInfo(object):
     """Information object for iOS, Android, Amazon, web, and open channels.
 
-    :ivar address: Replaces ``push_address`` for open channels.
-    :ivar alias: Alias associated with this device, if any.
-    :ivar background: Bool; whether the device is opted in to background push.
-    :ivar channel_id: Channel ID for the device.
-    :ivar created: UTC datetime when the system initially saw the device.
-    :ivar device_type: Type of the device, e.g. ``ios``.
-    :ivar installed: Bool; whether the app is installed on the device.
-    :ivar last_registration: UTC datetime when the system last received a
+    :keyword address: Replaces ``push_address`` for open channels.
+    :keyword alias: Alias associated with this device, if any.
+    :keyword background: Bool; whether the device is opted in to background push.
+    :keyword channel_id: Channel ID for the device.
+    :keyword created: UTC datetime when the system initially saw the device.
+    :keyword device_type: Type of the device, e.g. ``ios``.
+    :keyword installed: Bool; whether the app is installed on the device.
+    :keyword last_registration: UTC datetime when the system last received a
         registration call for the device.
-    :ivar named_user_id: Named user associated with this device, if any.
-    :ivar opt_in: Bool; whether the device is opted in to push or other visible
+    :keyword named_user_id: Named user associated with this device, if any.
+    :keyword opt_in: Bool; whether the device is opted in to push or other visible
         notifications.
-    :ivar push_address: Address we use to push to the device (device token,
+    :keyword push_address: Address we use to push to the device (device token,
         GCM registration ID, etc,). Not present for open channels (see
         ``address`` above).
-    :ivar tag_groups: Tags associated with non-"device" tag groups, if any.
-    :ivar tags: List of tags associated with this device, if any.
-    :ivar ios: iOS specific information, e.g. ``badge`` and ``quiet_time``.
-    :ivar open: Open channel specific information, e.g. ``identifiers`` and
+    :keyword tag_groups: Tags associated with non-"device" tag groups, if any.
+    :keyword tags: List of tags associated with this device, if any.
+    :keyword ios: iOS specific information, e.g. ``badge`` and ``quiet_time``.
+    :keyword open: Open channel specific information, e.g. ``identifiers`` and
         ``open_platform_name``.
-    :ivar web: Web notify specific information, e.g. ``subscription``.
-    :ivar named_user_id: A customer-chosen ID that represents the device user.
-    :ivar device_attributes: Native attribute properties that Airship gathers
+    :keyword web: Web notify specific information, e.g. ``subscription``.
+    :keyword named_user_id: A customer-chosen ID that represents the device user.
+    :keyword device_attributes: Native attribute properties that Airship gathers
         automatically assigns to a channel. Varies by channel type.
-    :ivar attributes: A dictionary of attributes that you've associated with the
+    :keyword attributes: A dictionary of attributes that you've associated with the
         channel.
-    :ivar commercial_opted_in: The date-time when a user gave explicit permission
+    :keyword commercial_opted_in: The date-time when a user gave explicit permission
         to receive commercial emails.
-    :ivar commcercial_opted_out: The date-time when a user explicitly denied permission
+    :keyword commcercial_opted_out: The date-time when a user explicitly denied permission
         to receive commercial emails.
-    :ivar transactional_opted_in: The date-time when a user gave explicit permission to
+    :keyword transactional_opted_in: The date-time when a user gave explicit permission to
         receive transactional emails. Users do not need to opt-in to receive
         transactional emails unless they have previously opted out.
-    :ivar transactional_opted_out: The date-time when a user explicitly denied
+    :keyword transactional_opted_out: The date-time when a user explicitly denied
         permission to receive transactional emails.
     """
 
@@ -115,16 +115,16 @@ class ChannelInfo(object):
 class DeviceInfo(object):
     """Information object for a single device.
 
-    :ivar active: bool; Whether the device is opted in to push or other visible
+    :keyword active: bool; Whether the device is opted in to push or other visible
         notifications.
-    :ivar alias: Alias associated with this device, if any.
-    :ivar created: UTC datetime when the system initially saw the device.
-    :ivar device_type: Type of the device, e.g. ``device_token``, ``apid``.
-    :ivar id: Device identifier. Also available at the attribute named by the
+    :keyword alias: Alias associated with this device, if any.
+    :keyword created: UTC datetime when the system initially saw the device.
+    :keyword device_type: Type of the device, e.g. ``device_token``, ``apid``.
+    :keyword id: Device identifier. Also available at the attribute named by the
         ``device_type``.
-    :ivar tags: List of tags associated with this device, if any.
-    :ivar apid: Same as device identifier if apid device type.
-    :ivar device_token: Same as device identifier if device_token device type.
+    :keyword tags: List of tags associated with this device, if any.
+    :keyword apid: Same as device identifier if apid device type.
+    :keyword device_token: Same as device identifier if device_token device type.
 
     """
 
@@ -158,7 +158,7 @@ class DeviceInfo(object):
 class DeviceTokenList(common.IteratorParent):
     """Iterator for listing all device tokens for this application.
 
-    :ivar limit: Number of entries to fetch in each page request.
+    :keyword limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """
@@ -177,8 +177,8 @@ class DeviceTokenList(common.IteratorParent):
 class ChannelList(common.IteratorParent):
     """Iterator for listing all channels for this application.
 
-    :ivar limit: Number of entries to fetch in each page request.
-    :ivar start_channel: uuid representing the channel_id to start with.
+    :keyword limit: Number of entries to fetch in each page request.
+    :keyword start_channel: uuid representing the channel_id to start with.
     :returns: Each ``next`` returns a :py:class:`ChannelInfo` object.
 
     """
@@ -202,7 +202,7 @@ class ChannelList(common.IteratorParent):
 class APIDList(common.IteratorParent):
     """Iterator for listing all APIDs for this application.
 
-    :ivar limit: Number of entries to fetch in each page request.
+    :keyword limit: Number of entries to fetch in each page request.
     :returns: Each ``next`` returns a :py:class:`DeviceInfo` object.
 
     """

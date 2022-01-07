@@ -16,6 +16,7 @@ class StaticList(object):
         self.extra = None
 
     def create(self):
+        """Create a Static List"""
         payload = {"name": self.name}
         if self.description is not None:
             payload["description"] = self.description
@@ -37,6 +38,7 @@ class StaticList(object):
 
         :param csv_file: open file descriptor with two column format:
             identifier_type, identifier
+
         :return: http response
         """
 
@@ -54,6 +56,7 @@ class StaticList(object):
 
     def update(self):
         """Update the metadata in a static list
+
         :return: http response
         """
 
@@ -80,7 +83,7 @@ class StaticList(object):
     def download(cls, airship, list_name):
         """
         Allows you to download the contents of a static list. Alias and named_user
-            values are resolved to channels.
+        values are resolved to channels.
 
         :param airship: Required. An urbanairship.Airship instance.
         :param list_name: Required. Name of an existing list to download.
@@ -108,7 +111,9 @@ class StaticList(object):
 
     def lookup(self):
         """
-        :return: Information about the static list
+        Get Information about the static list
+
+        :return: urbanairship.StaticList objects
         """
 
         url = self.airship.urls.get("lists_url") + self.name
@@ -118,7 +123,7 @@ class StaticList(object):
 
     def delete(self):
         """
-        :return: Delete the static list
+        Delete the static list
         """
         url = self.airship.urls.get("lists_url") + self.name
         return self.airship._request("DELETE", None, url, version=3)
@@ -129,6 +134,7 @@ class StaticLists(common.IteratorParent):
     data_attribute = "lists"
 
     def __init__(self, airship):
+        """Gets an iterable listing of existing static lists"""
         self.next_url = airship.urls.get("lists_url")
         super(StaticLists, self).__init__(airship, None)
 

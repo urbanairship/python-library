@@ -4,6 +4,8 @@ from urbanairship import common
 
 
 class IndividualResponseStats(object):
+    """Returns detailed reports information about a specific push notification."""
+
     def __init__(self, airship):
         self.airship = airship
 
@@ -15,6 +17,10 @@ class IndividualResponseStats(object):
 
 
 class ResponseList(common.IteratorParent):
+    """Get a listing of all pushes, plus basic response information, in a given
+    timeframe. Start and end date times are required parameters.
+    """
+
     next_url = None
     data_attribute = "pushes"
 
@@ -36,6 +42,10 @@ class ResponseList(common.IteratorParent):
 
 
 class DevicesReport(object):
+    """Returns a project's opted-in and installed device counts broken out by device
+    type as a daily snapshot. This endpoint returns the same data that populates the
+    Devices Report on the web dashboard."""
+
     def __init__(self, airship):
         self.airship = airship
 
@@ -51,6 +61,8 @@ class DevicesReport(object):
 
 
 class ReportsList(common.IteratorParent):
+    """Parent class for reports"""
+
     next_url = None
     data_attribute = None
 
@@ -94,32 +106,58 @@ class ReportsList(common.IteratorParent):
 
 
 class OptInList(ReportsList):
+    """Get the number of opted-in Push users who access the app within the specified
+    time period.
+    """
+
     data_attribute = "optins"
 
 
 class OptOutList(ReportsList):
+    """Get the number of opted-out Push users who access the app within the
+    specified time period
+    """
+
     data_attribute = "optouts"
 
 
 class PushList(ReportsList):
+    """Get the number of pushes you have sent within a specified time period."""
+
     data_attribute = "sends"
 
 
 class ResponseReportList(ReportsList):
+    """Get the number of direct and influenced opens of your app."""
+
     data_attribute = "responses"
 
 
 class AppOpensList(ReportsList):
+    """Get the number of users who have opened your app within the specified time period."""
+
     data_attribute = "opens"
 
 
 class TimeInAppList(ReportsList):
+    """Get the average amount of time users have spent in your app within the specified
+    time period.
+    """
+
     data_attribute = "timeinapp"
 
 
 class CustomEventsList(ReportsList):
+    """Get a summary of custom event counts and values, by custom event, within the
+    specified time period.
+    """
+
     data_attribute = "events"
 
 
 class WebResponseReport(ReportsList):
+    """Get the web interaction data for the given app key. Accepts a required start
+    time and optional end time and precision parameters.
+    """
+
     data_attribute = "total_counts"

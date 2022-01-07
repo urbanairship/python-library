@@ -363,6 +363,7 @@ class EmailTags(object):
         """
         commit add, remove and set operations. set cannot be used with
         add and remove.
+
         :return: the response object from the api
         """
         if not self.add_group and not self.remove_group and not self.set_group:

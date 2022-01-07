@@ -3,16 +3,18 @@ import logging
 
 from urbanairship.devices import ChannelTags
 from urbanairship import common
-from urbanairship.push.payload import device_types
 
 logger = logging.getLogger("urbanairship")
 
 
 class NamedUser(object):
-    """Perform various operations on a named user object"""
+    """
+    Perform various operations on a named user object
+
+    :param airship: Required. An instance of urbanairship.Airship.
+    """
 
     def __init__(self, airship, named_user_id=None):
-
         self._airship = airship
         self.named_user_id = named_user_id
         self.channel_id = None
@@ -78,7 +80,7 @@ class NamedUser(object):
 
     def email_associate(self, email_address):
         """Associate an email_address with a named user id. This call is for a literal
-            email address.
+        email address.
 
         :param email_address: Required. The email address to associate.
 
@@ -149,7 +151,8 @@ class NamedUser(object):
         return response.json()
 
     def tag(self, group, add=None, remove=None, set=None):
-        """Add, remove, or set tags on a named user
+        """Add, remove, or set tags on a named user.
+
         :param add: A list of tags to add
         :param remove: A list of tags to remove
         :param set: A list of tags to set
@@ -195,13 +198,14 @@ class NamedUser(object):
     def update(self, associate=None, disassociate=None, tags=None, attributes=None):
         """
         Create or update a named user by associating/disassociating channels
-            and adding/removing tags and attributes in a single request.
+        and adding/removing tags and attributes in a single request.
+
         If a channel has an assigned named user and you make an additional call to
-            associate that same channel with a new named user, the original named user
-            association will be removed and the new named user and associated data will
-            take its place. Additionally, all tags associated to the original named
-            user cannot be used to address this channel unless they are also associated
-            with the new named user.
+        associate that same channel with a new named user, the original named user
+        association will be removed and the new named user and associated data will
+        take its place. Additionally, all tags associated to the original named
+        user cannot be used to address this channel unless they are also associated
+        with the new named user.
 
         Please see https://docs.airship.com/api/ua/#operation-api-named_users-named_user_id-post
 
@@ -250,7 +254,7 @@ class NamedUser(object):
         Airship returns a 200 with a warning in containing a list of attributes that
         failed to update.
         Please see https://docs.airship.com/api/ua/#operation-api-named_users-named_user_id-attributes-post
-            for more about using Airship attributes.
+        for more about using Airship attributes.
 
         :params attributes: Required. A list of attribute objects to set or remove on
             the named user.
@@ -303,8 +307,8 @@ class NamedUser(object):
     def from_payload(cls, payload):
         """
         Create NamedUser object based on results from a NamedUserList iterator.
-        :param payload: Payload used to create the NamedUser object
 
+        :param payload: Payload used to create the NamedUser object
         """
         for key in payload:
             setattr(cls, key, payload[key])
@@ -331,4 +335,8 @@ class NamedUserTags(ChannelTags):
         self.url = airship.urls.get("named_user_tag_url")
 
     def set_audience(self, user_ids):
+        """Set the named user ids to be modified.
+
+        :param user_ids: A list of named user ids.
+        """
         self.audience["named_user_id"] = user_ids

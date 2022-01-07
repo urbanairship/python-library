@@ -58,7 +58,8 @@ def apid(uuid):
 
 
 def channel(uuid):
-    """Select a single Web Channel"""
+    """Select a single channel.
+    This selector may be used for any channel_id, regardless of device type"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid Channel")
     return {"channel": uuid.lower().strip()}
@@ -72,12 +73,14 @@ def open_channel(uuid):
 
 
 def sms_sender(sender):
+    """Select an SMS Sender"""
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
         raise ValueError("sms_sender value must be a numeric string.")
     return {"sms_sender": sender}
 
 
 def sms_id(msisdn, sender):
+    """Select an SMS MSISDN"""
     if not (isinstance(msisdn, string_type) or SMS_MSISDN_FORMAT.match(msisdn)):
         raise ValueError("msisdn value must be a numeric string.")
     if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
@@ -93,7 +96,7 @@ def wns(uuid):
 
 
 def tag(tag):
-    """Select a single tag."""
+    """Select a single device tag."""
     return {"tag": tag}
 
 
@@ -114,14 +117,17 @@ def segment(segment):
 
 
 def named_user(name):
+    """Select a Named User ID"""
     return {"named_user": name}
 
 
 def subscription_list(list_id):
+    """Select a subscription list"""
     return {"subscription_lists": list_id}
 
 
 def static_list(list_id):
+    """Select a static list"""
     return {"static_list": list_id}
 
 

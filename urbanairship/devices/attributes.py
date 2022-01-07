@@ -1,7 +1,6 @@
 import json
 import logging
 from datetime import datetime
-import re
 
 from .static_lists import GzipCompressReadStream
 
@@ -136,7 +135,7 @@ class ModifyAttributes(object):
         Makes the call to Airship APIs to modify the channel_id or named_user passed
         on init.
 
-        :return AttributeResponse object
+        :return: AttributeResponse object
         """
         response = self.airship.request(
             method="POST",
@@ -154,7 +153,7 @@ class AttributeList(object):
 
     :param airship: Required. An unbanairship.Airship instance.
     :param list_name: Required. The name of your list. Must be prefixed
-        with "ua_attributes_"
+        with ``ua_attributes_``
     :param description: Required. A description of your list.
     :param extra: Optional. An optional dict of up to 100 key-value (string-to-string)
         pairs associated with the list.
@@ -176,6 +175,7 @@ class AttributeList(object):
         return payload
 
     def create(self):
+        """Create the Attribute List"""
         response = self.airship.request(
             method="POST",
             url=self.airship.urls.get("attributes_list_url"),
@@ -189,9 +189,9 @@ class AttributeList(object):
     def upload(self, file_path):
         """
         Upload a CSV that will set attribute values on the specified channels or
-            named users. Please see the documentation at
-            https://docs.airship.com/api/ua/#operation-api-attribute-lists-list_name-csv-put
-            for details about list formatting, size limits, and error responses.
+        named users. Please see the documentation at
+        https://docs.airship.com/api/ua/#operation-api-attribute-lists-list_name-csv-put
+        for details about list formatting, size limits, and error responses.
 
         :param file_path: Required. Local path to the csv file to be uploaded.
         """
@@ -212,9 +212,9 @@ class AttributeList(object):
     def get_errors(self):
         """
         Returns csv of attribute list processing errors. During processing, after a
-            list is uploaded, errors can occur. Depending on the type of list
-            processing, an error file may be created, showing a user exactly what
-            went wrong.
+        list is uploaded, errors can occur. Depending on the type of list
+        processing, an error file may be created, showing a user exactly what
+        went wrong.
         """
         response = self.airship.request(
             method="GET",
@@ -228,6 +228,10 @@ class AttributeList(object):
 
     @classmethod
     def list(cls, airship):
+        """Lists existing attribute lists.
+
+        :param airship: An urbanairship.Airship instance.
+        """
         response = airship._request(
             method="GET",
             url=airship.urls.get("attributes_list_url"),

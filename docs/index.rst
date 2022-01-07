@@ -1,33 +1,30 @@
 Airship Python Library
-======================
+***********************
 
 ``urbanairship`` is a Python library for using the `Airship
-<http://airship.com/>`_ web service in support of our messaging product 
+<http://airship.com/>`_ web service in support of our messaging product
 lines and related features.
 
 Installation
-------------
+=============
 
 Using ``pip``::
 
    $ pip install urbanairship
 
 Using the library
------------------
+==================
 
 The library is intended to be used with the small footprint of a single
 import. To get started, import the package, and create an
-:py:class:`Airship` object representing a single UA application.
-
-Note that channels are preferred over `device_token` and `apid`. See:
-`documentation on channels <channels>`_.
+:py:class:`Airship` object representing a single Airship project.
 
 .. code-block:: python
 
    import urbanairship as ua
    airship = ua.Airship('<app key>', '<master secret>')
 
-   push = airship.create_push()
+   push = airship.Push(airship=airship)
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
    push.notification = ua.notification(ios=ua.ios(alert='Hello from Python', badge=1))
    push.device_types = ua.device_types('ios')
@@ -42,13 +39,13 @@ EU Base URL
 -----------
 
 When creating an instance of ``urbanairship.Airship``, an optional argument
-may be added to specify use of Airship's EU data center. If no location
-argument is passed, the US data center will be used.
+may be added to specify use of Airship's EU data center. This is required for projects
+based in our EU data center. If no location argument is passed, the US data center will be used.
 
 .. code-block:: python
 
    import urbanairship as ua
-   eu_airship = ua.Airship('<app_key>', '<master_secret>', location='eu')
+   eu_airship = ua.Airship(key='<app_key>', secret='<master_secret>', location='eu')
 
 Logging
 -------
@@ -77,8 +74,17 @@ default. To enable them, use the ``warnings`` module:
    import warnings
    warnings.simplefilter('default')
 
+
+Exceptions
+==========
+
+.. autoclass:: urbanairship.AirshipFailure
+
+.. autoclass:: urbanairship.Unauthorized
+
+
 Development
------------
+============
 
 The library source code is `available on GitHub <github>`_.
 
@@ -88,24 +94,16 @@ Tests can be run with nose_:
 
    nosetests --with-doctest
 
-Contents:
+Contents
+=========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    push.rst
    devices.rst
-   channel_uninstall.rst
-   segment.rst
-   tags.rst
+   audience.rst
    reports.rst
-   named_user.rst
-   static_lists.rst
-   sms.rst
-   email.rst
-   location.rst
-   exceptions.rst
-   examples.rst
 
 
 Indices and tables
@@ -116,7 +114,7 @@ Indices and tables
 * :ref:`search`
 
 
-.. _channels: https://docs.airship.com/api/ua/#tag/channels
+.. _channels: https://docs.airship.com/api/ua/?python#tag-channels
 .. _requests: http://python-requests.org
 .. _github: https://github.com/urbanairship/python-library
 .. _nose: https://nose.readthedocs.org/en/latest/

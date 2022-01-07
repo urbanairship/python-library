@@ -5,7 +5,10 @@ logger = logging.getLogger("urbanairship")
 
 
 class ChannelTags(object):
-    """Modify the tags for a channel"""
+    """Modify the tags for a channel
+
+    :param airship: An urbanairship.Airship instance.
+    """
 
     def __init__(self, airship):
         self.url = airship.urls.get("channel_url") + "tags/"
@@ -16,6 +19,12 @@ class ChannelTags(object):
         self.set_group = {}
 
     def set_audience(self, ios=None, android=None, amazon=None, web=None):
+        """Sets the audience to be modified
+        :param ios: an ios channel
+        :param android: an android channel
+        :param amazon: an amazon channel
+        :param web: a web channel
+        """
         if ios is not None:
             self.audience["ios_channel"] = ios
         if android is not None:
@@ -26,15 +35,35 @@ class ChannelTags(object):
             self.audience["channel"] = web
 
     def add(self, group_name, tags):
+        """Sets group and tags to add
+
+        :param group_name: The name of the tag group to add
+        :param tags: The tags to add
+        """
         self.add_group[group_name] = tags
 
     def remove(self, group_name, tags):
+        """Sets group and tags to remove
+
+        :param group_name: The name of the tag group to remove
+        :param tags: The tags to addremove
+        """
         self.remove_group[group_name] = tags
 
     def set(self, group_name, tags):
+        """
+        Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
+
+        :param group_name: The name of the tag group to set
+        :param tags: The tags to set
+        """
         self.set_group[group_name] = tags
 
     def send(self):
+        """Perform the Channel Tag operations.
+
+        :returns: JSON response from the API
+        """
         payload = {}
 
         if not self.audience:
@@ -80,18 +109,43 @@ class OpenChannelTags(object):
         self.set_group = {}
 
     def set_audience(self, address, open_platform):
+        """Sets the audience to be modified.
+
+        :param address: the open channel to be modified
+        :param open_platform: the name of the open platform the channel belongs to.
+        """
         self.audience = {"address": address, "open_platform_name": open_platform}
 
     def add(self, group_name, tags):
+        """Sets group and tags to add
+
+        :param group_name: The name of the tag group to add
+        :param tags: The tags to add
+        """
         self.add_group[group_name] = tags
 
     def remove(self, group_name, tags):
+        """Sets group and tags to remove
+
+        :param group_name: The name of the tag group to remove
+        :param tags: The tags to addremove
+        """
         self.remove_group[group_name] = tags
 
     def set(self, group_name, tags):
+        """
+        Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
+
+        :param group_name: The name of the tag group to set
+        :param tags: The tags to set
+        """
         self.set_group[group_name] = tags
 
     def send(self):
+        """Perform the Open Channel Tag operations.
+
+        :returns: JSON response from the API
+        """
         payload = {}
 
         if not self.audience:

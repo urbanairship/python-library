@@ -9,6 +9,14 @@ VALID_UUID = re.compile(r"[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\Z")
 
 
 class OpenChannel(object):
+    """
+    Represents an open channel.
+
+    :param channel_id: The Airship generated channel_id value for the open channel
+    :param address: The open channel's address
+    :param open_platform: The open platform associated with the channel
+    """
+
     channel_id = None
     address = None
     open_platform = None

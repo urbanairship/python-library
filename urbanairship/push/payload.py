@@ -122,7 +122,7 @@ def ios(
     :keyword alert: iOS format alert, as either a string or dictionary. If
         a dictionary, the accepted keys must match those in
         `Apple's Payload Key Reference
-        <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html>_.
+        <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html>`_.
         Some options are only available with certain iOS versions on the device being
         sent to.
     :keyword badge: An integer badge value or an *autobadge* string.
@@ -181,6 +181,7 @@ def ios(
     {'sound': 'cat.caf', 'extra': {'articleid': '12345'}, 'alert': 'Hello!'}
 
     """
+
     payload = {}
     if alert is not None:
         if not (isinstance(alert, (string_type, dict))):
@@ -606,10 +607,10 @@ def mms(
 ):
     """
     Provides the content for a push to MMS channels. If sms is in the `device_type`
-        array, your request may include this object. It cannot be combined with an
-        SMS Platform Override as a single push can only include either an SMS or MMS
-        payload.
-        Please see the documentation here: https://docs.airship.com/api/ua/#schemas-mmsoverrideobject
+    array, your request may include this object. It cannot be combined with an
+    SMS Platform Override as a single push can only include either an SMS or MMS
+    payload.
+    Please see the documentation here: https://docs.airship.com/api/ua/#schemas-mmsoverrideobject
 
     :param fallback_text: Required. If a member of your audience cannot receive MMS
         messages, they will receive your fallback text with a link to the
@@ -670,7 +671,7 @@ def email(
     fields are not used in the email if included.
 
     See https://docs.airship.com/api/ua/#schemas-emailoverrideobject
-        for additional caveats.
+    for additional caveats.
 
     :param message_type: Required. One of transactional or commercial.
     :param plaintext_body: Required. The plain text body of the email. May include
@@ -1061,10 +1062,11 @@ def actions(add_tag=None, remove_tag=None, open_=None, share=None, app_defined=N
 
 def interactive(type=None, button_actions=None):
     """Interactive payload creation.
+
     :keyword type: The name of one of the predefined interactive notifications
-    or a custom defined interactive notification. Expects a string.
+        or a custom defined interactive notification. Expects a string.
     :keyword button_actions: A button_actions object that maps button IDs to
-    valid action objects. Expects a dictionary.
+        valid action objects. Expects a dictionary.
     """
 
     payload = {}
@@ -1179,9 +1181,9 @@ def localization(
 ):
     """
     Localized content for a push notification, message center message, or in app
-        message. Localization must include at least one of language or country.
-        Localization content must include at least one of notificaiton, message, or
-        in_app.
+    message. Localization must include at least one of language or country.
+    Localization content must include at least one of notificaiton, message, or
+    in_app.
 
     :param language: Optional. The ISO 639-1 two-letter language code for this
         localization.
