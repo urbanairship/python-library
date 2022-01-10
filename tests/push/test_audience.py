@@ -90,32 +90,6 @@ class TestAudience(unittest.TestCase):
 
         self.assertEqual(ua.not_(ua.tag("foo")), {"not": {"tag": "foo"}})
 
-    def test_time_period_selector(self):
-        self.assertEqual(ua.recent_date(days=4), {"recent": {"days": 4}})
-        self.assertEqual(
-            ua.absolute_date(resolution="days", start="2012-01-01", end="2012-01-15"),
-            {"days": {"start": "2012-01-01", "end": "2012-01-15"}},
-        )
-        self.assertEqual(
-            ua.absolute_date(resolution="weeks", start="2012-01-01", end="2012-01-15"),
-            {"weeks": {"start": "2012-01-01", "end": "2012-01-15"}},
-        )
-
-        # Invalid time periods
-        self.assertRaises(ValueError, ua.recent_date, hours=1, minutes=1)
-        self.assertRaises(ValueError, ua.recent_date, eons=1)
-        self.assertRaises(ValueError, ua.absolute_date, "eons", "alpha", "omega")
-
-    def test_location_selector(self):
-        self.assertEqual(
-            ua.location(id="a_location_id", date=ua.recent_date(days=4)),
-            {"location": {"id": "a_location_id", "date": {"recent": {"days": 4}}}},
-        )
-
-        self.assertRaises(ValueError, ua.location)
-        self.assertRaises(ValueError, ua.location, alias=1, id=1)
-        self.assertRaises(ValueError, ua.location, date=None, id="foobar")
-
 
 class TestAttributeSelectors(unittest.TestCase):
     def test_date_incorrect_operator_raises(self):

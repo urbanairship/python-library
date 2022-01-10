@@ -32,7 +32,6 @@ class Urls(object):
         self.segments_url = self.base_url + "segments/"
         self.reports_url = self.base_url + "reports/"
         self.lists_url = self.base_url + "lists/"
-        self.location_url = self.base_url + "location/"
         self.attributes_url = self.channel_url + "attributes/"
         self.attributes_list_url = self.base_url + "attribute-lists/"
         self.message_center_delete_url = self.base_url + "user/messages/"
