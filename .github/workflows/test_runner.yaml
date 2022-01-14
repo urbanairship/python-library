@@ -24,3 +24,7 @@ jobs:
       - name: Test with pytest
         run: |
           nosetests -v --with-doctest
+      - name: Build Sphinx Docs
+        run: |
+          cd docs/
+          make clean html

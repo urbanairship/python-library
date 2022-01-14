@@ -1,7 +1,5 @@
 import logging
 import re
-import sys
-import warnings
 
 import requests
 
@@ -36,34 +34,27 @@ class Urls(object):
         self.attributes_list_url = self.base_url + "attribute-lists/"
         self.message_center_delete_url = self.base_url + "user/messages/"
         self.subscription_lists_url = self.channel_url + "subscription_lists/"
-
         self.templates_url = self.base_url + "templates/"
         self.schedule_template_url = self.templates_url + "schedules/"
-
         self.pipelines_url = self.base_url + "pipelines/"
-
         self.named_user_url = self.base_url + "named_users/"
         self.named_user_tag_url = self.named_user_url + "tags/"
         self.named_user_disassociate_url = self.named_user_url + "disassociate/"
         self.named_user_associate_url = self.named_user_url + "associate/"
         self.named_user_uninstall_url = self.named_user_url + "uninstall/"
-
         self.sms_url = self.channel_url + "sms/"
         self.sms_opt_out_url = self.sms_url + "opt-out/"
         self.sms_uninstall_url = self.sms_url + "uninstall/"
-
         self.email_url = self.channel_url + "email/"
         self.email_tags_url = self.email_url + "tags/"
         self.email_uninstall_url = self.email_url + "uninstall/"
-
         self.create_and_send_url = self.base_url + "create-and-send/"
         self.schedule_create_and_send_url = self.schedules_url + "create-and-send/"
-
         self.experiments_url = self.base_url + "experiments/"
         self.experiments_schedule_url = self.experiments_url + "scheduled/"
         self.experiments_validate = self.experiments_url + "validate/"
-
         self.attachment_url = self.base_url + "attachments/"
+        self.custom_events_url = self.base_url + "custom-events/"
 
     def get(self, endpoint):
         url = getattr(self, endpoint, None)

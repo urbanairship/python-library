@@ -4,6 +4,7 @@ import logging
 from .automation import Automation, Pipeline
 from .common import AirshipFailure, Unauthorized
 from .core import Airship
+from .custom_events import CustomEvent
 from .devices import (
     APIDList,
     Attribute,
@@ -210,6 +211,7 @@ __all__ = [
     ExperimentReport,
     KeywordInteraction,
     SubscriptionList,
+    CustomEvent,
 ]
 
 

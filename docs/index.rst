@@ -104,6 +104,7 @@ Contents
    devices.rst
    audience.rst
    reports.rst
+   custom_events.rst
 
 
 Indices and tables
