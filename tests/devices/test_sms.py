@@ -6,7 +6,7 @@ import unittest
 import requests
 
 import urbanairship as ua
-from tests import TEST_KEY, TEST_SECRET
+from tests import TEST_KEY, TEST_SECRET, TEST_TOKEN
 
 
 class TestSMS(unittest.TestCase):
@@ -173,3 +173,70 @@ class TestSmsKeywordInteraction(unittest.TestCase):
             self.interaction.url,
             "https://go.urbanairship.com/api/sms/15035556789/keywords",
         )
+
+
+class TestSmsCustomResponse(unittest.TestCase):
+    def setUp(self) -> None:
+        self.maxDiff = 2000
+        airship = ua.Airship(key=TEST_KEY, token=TEST_TOKEN)
+        self.mo_id = "886f53d4-3e0f-46d7-930e-c2792dac6e0a"
+        self.custom_response = ua.SmsCustomResponse(
+            airship=airship,
+            mobile_originated_id=self.mo_id,
+        )
+
+    def test_mms_payload(self):
+        self.custom_response.mms = ua.mms(
+            fallback_text="mms alert",
+            url="http://www.airship.com",
+            content_type="image/gif",
+            content_length=12345,
+            shorten_links=True,
+        )
+
+        self.assertEqual(
+            self.custom_response._payload,
+            {
+                "mobile_originated_id": self.mo_id,
+                "mms": {
+                    "fallback_text": "mms alert",
+                    "slides": [
+                        {
+                            "media": {
+                                "content_type": "image/gif",
+                                "url": "http://www.airship.com",
+                                "content_length": 12345,
+                            }
+                        }
+                    ],
+                    "shorten_links": True,
+                },
+            },
+        )
+
+    def test_sms_payload(self):
+        self.custom_response.sms = ua.sms(alert="sms alert", shorten_links=False)
+
+        self.assertEqual(
+            self.custom_response._payload,
+            {
+                "sms": {"alert": "sms alert", "shorten_links": False},
+                "mobile_originated_id": self.mo_id,
+            },
+        )
+
+    def test_neither_payload_raises(self):
+        with self.assertRaises(ValueError, msg="One of mms or sms must be set."):
+            self.custom_response._payload
+
+    def test_both_payloads_raises(self):
+        self.custom_response.sms = ua.sms(alert="test_alert")
+        self.custom_response.mms = ua.mms(
+            content_length=12345,
+            content_type="image/png",
+            fallback_text="test mms",
+            url="url",
+        )
+
+        with self.assertRaises(ValueError, msg="Cannot use both mms and sms."):
+            self.custom_response._payload

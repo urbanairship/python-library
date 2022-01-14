@@ -3,6 +3,7 @@ import json
 import logging
 import re
 import sys
+from typing import Dict, Optional
 
 logger = logging.getLogger("urbanairship")
 
@@ -347,3 +348,82 @@ class KeywordInteraction(object):
         )
 
         return response
+
+
+class SmsCustomResponse:
+    """Respond to a mobile originated message based on a keyword consumed by your
+    custom response webhook, using a mobile-originated ID. Please see the documentation
+    at https://docs.airship.com/api/ua/?http#operation-api-sms-custom-response-post for
+    details on use of this feature.
+
+    One of `mms` or `sms` is required.
+
+    :param airship: [required] An urbanairship.Airship instance, created with
+        bearer token authentication.
+    :param mobile_originated_id: [required] The identifier that you received through
+        your SMS webhook corresponding to the mobile-originated message that you're
+        issuing a custom response to.
+    :param sms: [optional] An SMS platform override object, created using
+        `ua.sms()`. This defines the message sent in response.
+    :param mms: [optional] An MMS platform override object, created using
+        `us.mms()`. The defines the message sent in response.
+    """
+
+    def __init__(
+        self,
+        airship,
+        mobile_originated_id: str,
+        sms: Optional[Dict] = None,
+        mms: Optional[Dict] = None,
+    ) -> None:
+        self.airship = airship
+        self.mobile_originated_id = mobile_originated_id
+        self.sms = sms
+        self.mms = mms
+
+    @property
+    def sms(self) -> Optional[Dict]:
+        return self._sms
+
+    @sms.setter
+    def sms(self, value: Optional[Dict]) -> None:
+        self._sms = value
+
+    @property
+    def mms(self) -> Optional[Dict]:
+        return self._mms
+
+    @mms.setter
+    def mms(self, value: Optional[Dict]) -> None:
+        self._mms = value
+
+    @property
+    def _payload(self) -> Dict:
+        if all((self.mms, self.sms)):
+            raise ValueError("Cannot use both mms and sms.")
+        if all((self.sms is None, self.mms is None)):
+            raise ValueError("One of mms or sms must be set.")
+
+        payload = {"mobile_originated_id": self.mobile_originated_id}
+
+        if self.sms is not None:
+            payload["sms"] = self.sms
+        if self.mms is not None:
+            payload.update(self.mms)
+
+        return payload
+
+    def send(self) -> Dict:
+        """Sends the response using the mobile_originated_id value
+
+        :return: An API response dictionary
+        """
+        response = self.airship.request(
+            method="POST",
+            body=json.dumps(self._payload),
+            url=self.airship.urls.get("sms_custom_response_url"),
+            content_type="application/json",
+            version=3,
+        )
+
+        return response.json()

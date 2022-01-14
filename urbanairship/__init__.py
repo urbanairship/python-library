@@ -29,6 +29,7 @@ from .devices import (
     Segment,
     SegmentList,
     Sms,
+    SmsCustomResponse,
     StaticList,
     StaticLists,
     SubscriptionList,

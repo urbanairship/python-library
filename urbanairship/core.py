@@ -45,6 +45,7 @@ class Urls(object):
         self.sms_url = self.channel_url + "sms/"
         self.sms_opt_out_url = self.sms_url + "opt-out/"
         self.sms_uninstall_url = self.sms_url + "uninstall/"
+        self.sms_custom_response_url = self.base_url + "sms/custom-response/"
         self.email_url = self.channel_url + "email/"
         self.email_tags_url = self.email_url + "tags/"
         self.email_uninstall_url = self.email_url + "uninstall/"
