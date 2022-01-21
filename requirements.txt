@@ -3,3 +3,4 @@ six
 nose
 mock
 sphinx-rtd-theme
+backoff>=1.11

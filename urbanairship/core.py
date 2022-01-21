@@ -1,6 +1,7 @@
 import logging
 import re
 
+import backoff
 import requests
 
 from . import __about__, common
@@ -67,7 +68,9 @@ class Urls(object):
 
 
 class Airship(object):
-    def __init__(self, key, secret=None, token=None, location="us", timeout=None):
+    def __init__(
+        self, key, secret=None, token=None, location="us", timeout=None, retries=0
+    ):
         """Main client class for interacting with the Airship API.
 
         :param key: [required] An Airship project key used to authenticate
@@ -77,13 +80,17 @@ class Airship(object):
         :param location: [optional] The Airship cloud site your project is associated
         with. Possible values: 'us', 'eu'. Defaults to 'us'.
         :param: timeout: [optional] An integer specifying the number of seconds used
-        for a timeout threshold
+        for a response timeout threshold
+        :param retries: [optional] An integer specifying the number of times to retry a
+        failed request. Retried requests use exponential backoff between requests.
+        Defaults to 0, no retry.
         """
         self.key = key
         self.secret = secret
         self.token = token
         self.location = location
         self.timeout = timeout
+        self.retries = retries
         self.urls = Urls(self.location)
 
         if all([secret, token]):
@@ -98,6 +105,14 @@ class Airship(object):
             self.session.auth = (key, secret)
         else:
             raise ValueError("Either token or secret must be included")
+
+    @property
+    def retries(self):
+        return self._retries
+
+    @retries.setter
+    def retries(self, value):
+        self._retries = value
 
     @property
     def timeout(self):
@@ -182,33 +197,46 @@ class Airship(object):
         if encoding:
             headers["Content-Encoding"] = encoding
 
-        logger.debug(
-            "Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
-            method,
-            url,
-            "\n\t".join("%s: %s" % (key, value) for (key, value) in headers.items()),
-            body,
+        @backoff.on_exception(
+            backoff.expo, common.AirshipFailure, max_tries=(self.retries + 1)
         )
+        def make_retryable_request(method, url, body, params, headers):
+            response = self.session.request(
+                method,
+                url,
+                data=body,
+                params=params,
+                headers=headers,
+                timeout=self.timeout,
+            )
 
-        response = self.session.request(
-            method, url, data=body, params=params, headers=headers, timeout=self.timeout
-        )
+            logger.debug(
+                "Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
+                method,
+                url,
+                "\n\t".join(
+                    "%s: %s" % (key, value) for (key, value) in headers.items()
+                ),
+                body,
+            )
 
-        logger.debug(
-            "Received %s response. Headers:\n\t%s\nBody:\n\t%s",
-            response.status_code,
-            "\n\t".join(
-                "%s: %s" % (key, value) for (key, value) in response.headers.items()
-            ),
-            response.content,
-        )
+            logger.debug(
+                "Received %s response. Headers:\n\t%s\nBody:\n\t%s",
+                response.status_code,
+                "\n\t".join(
+                    "%s: %s" % (key, value) for (key, value) in response.headers.items()
+                ),
+                response.content,
+            )
 
-        if response.status_code == 401:
-            raise common.Unauthorized
-        elif not (200 <= response.status_code < 300):
-            raise common.AirshipFailure.from_response(response)
+            if response.status_code == 401:
+                raise common.Unauthorized
+            elif not (200 <= response.status_code < 300):
+                raise common.AirshipFailure.from_response(response)
 
-        return response
+            return response
+
+        return make_retryable_request(method, url, body, params, headers)
 
     def create_push(self):
         """Create a Push notification."""

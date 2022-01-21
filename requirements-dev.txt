@@ -6,3 +6,4 @@ tox
 black
 pre-commit
 sphinx-rtd-theme
+backoff>=1.11

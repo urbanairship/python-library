@@ -25,6 +25,13 @@ class TestAirshipCore(unittest.TestCase):
         with self.assertRaises(ValueError):
             ua.Airship(key=TEST_KEY, secret=TEST_SECRET, timeout=timeout_str)
 
+    def test_airship_retry(self):
+        retry_int = 5
+
+        airship_w_retry = ua.Airship(TEST_KEY, TEST_SECRET, retries=retry_int)
+
+        self.assertEqual(retry_int, airship_w_retry.retries)
+
     def test_airship_location(self):
         location = "eu"
 
