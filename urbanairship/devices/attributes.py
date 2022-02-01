@@ -1,6 +1,11 @@
 import json
 import logging
 from datetime import datetime
+from typing import Dict, List, Optional, Union, Any
+
+from requests import Response
+
+from urbanairship import Airship
 
 from .static_lists import GzipCompressReadStream
 
@@ -12,17 +17,23 @@ class Attribute(object):
     Creates an attribute object for use with the ModifyAttributes class to set or remove
     attributes from channel_ids and named_user_ids.
 
-    :keyword action: required. The action that will be taken with the supplied
+    :keyword action: [required] The action that will be taken with the supplied
         attributes. Must be one of 'set' or 'remove'.
-    :keyword key: Required. The attribute key to be set.
-    :keyword value: Required, a string or int. If action is 'set', the value to set on
+    :keyword key: [required] The attribute key to be set.
+    :keyword value: [required] a string or int. If action is 'set', the value to set on
         the key.
-    :keyword timestamp: Optional. a datetime.datetime object representing the time the
+    :keyword timestamp: [optional] a datetime.datetime object representing the time the
         attribute was modified. If not included, the time of modification call will be
         used.
     """
 
-    def __init__(self, action, key, value=None, timestamp=None):
+    def __init__(
+        self,
+        action: str,
+        key: str,
+        value: Optional[Union[str, int]] = None,
+        timestamp: Optional[datetime] = None,
+    ) -> None:
         self.action = action
         self.key = key
         self.value = value
@@ -32,46 +43,68 @@ class Attribute(object):
             raise ValueError("A value must be included with 'set' actions")
 
     @property
-    def action(self):
+    def action(self) -> str:
         return self._action
 
     @action.setter
-    def action(self, value):
+    def action(self, value: str) -> None:
         if value not in ["set", "remove"]:
             raise ValueError("Action must be one of 'set' or 'remove'")
         self._action = value
 
     @property
-    def key(self):
+    def key(self) -> str:
         return self._key
 
     @key.setter
-    def key(self, value):
+    def key(self, value: str) -> None:
         self._key = str(value)
 
     @property
-    def timestamp(self):
-        if not self._timestamp:
-            return self._timestamp
-        return self._timestamp.replace(microsecond=0).isoformat()
+    def timestamp(self) -> Optional[datetime]:
+        return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: datetime) -> None:
         if value is not None and type(value) is not datetime:
             raise ValueError("timestamp must be a datetime.datetime object")
         self._timestamp = value
 
     @property
-    def payload(self):
-        data = {}
+    def payload(self) -> Dict:
+        data: Dict = {}
         data["action"] = self.action
         data["key"] = self.key
         if self.value:
             data["value"] = self.value
-        if self.timestamp:
-            data["timestamp"] = self.timestamp
+        if isinstance(self.timestamp, datetime):
+            data["timestamp"] = self.timestamp.replace(microsecond=0).isoformat()
 
         return data
+
+
+class AttributeResponse(object):
+    def __init__(self, response: Response):
+        self.response = response
+
+    def __str__(self) -> str:
+        return "Response Payload: {0}".format(self.response)
+
+    @property
+    def response(self):
+        return self._response.json()
+
+    @response.setter
+    def response(self, value):
+        self._response = value
+
+    @property
+    def ok(self):
+        return self.response.get("ok")
+
+    @property
+    def warning(self):
+        return self.response.get("warning")
 
 
 class ModifyAttributes(object):
@@ -86,7 +119,13 @@ class ModifyAttributes(object):
     :keyword named_user: optional. An existing named_user_id
     """
 
-    def __init__(self, airship, attributes, channel=None, named_user=None):
+    def __init__(
+        self,
+        airship: Airship,
+        attributes: List[Attribute],
+        channel: Optional[str] = None,
+        named_user: Optional[str] = None,
+    ) -> None:
         self.airship = airship
         self.attributes = attributes
         self.channel = channel
@@ -99,38 +138,38 @@ class ModifyAttributes(object):
             raise ValueError("Either channel or named_user must be included, not both")
 
     @property
-    def attributes(self):
-        return [attribute.payload for attribute in self._attributes]
+    def attributes(self) -> List[Attribute]:
+        return self._attributes
 
     @attributes.setter
-    def attributes(self, value):
+    def attributes(self, value: List[Attribute]):
         if type(value) is not list:
             raise ValueError("attributes must be a list of Attribute objects")
         self._attributes = value
 
     @property
-    def channel(self):
+    def channel(self) -> Optional[str]:
         return self._channel
 
     @channel.setter
-    def channel(self, value):
+    def channel(self, value: Optional[str]) -> None:
         self._channel = value
 
     @property
-    def payload(self):
-        data = {}
-        audience = {}
+    def payload(self) -> Dict[str, Any]:
+        data: Dict = {}
+        audience: Dict = {}
         if self.channel:
             audience["channel"] = [self.channel]
         elif self.named_user:
             audience["named_user_id"] = [self.named_user]
 
         data["audience"] = audience
-        data["attributes"] = self.attributes
+        data["attributes"] = [attribute.payload for attribute in self.attributes]
 
         return data
 
-    def send(self):
+    def send(self) -> AttributeResponse:
         """
         Makes the call to Airship APIs to modify the channel_id or named_user passed
         on init.
@@ -159,22 +198,28 @@ class AttributeList(object):
         pairs associated with the list.
     """
 
-    def __init__(self, airship, list_name, description, extra=None):
+    def __init__(
+        self,
+        airship: Airship,
+        list_name: str,
+        description: str,
+        extra: Optional[Dict[str, str]] = None,
+    ):
         self.airship = airship
         self.list_name = list_name
         self.description = description
         self.extra = extra
 
     @property
-    def _create_payload(self):
-        payload = {"name": self.list_name, "description": self.description}
+    def _create_payload(self) -> Dict:
+        payload: Dict = {"name": self.list_name, "description": self.description}
 
         if self.extra:
             payload["extra"] = self.extra
 
         return payload
 
-    def create(self):
+    def create(self) -> Response:
         """Create the Attribute List"""
         response = self.airship.request(
             method="POST",
@@ -186,7 +231,7 @@ class AttributeList(object):
 
         return response
 
-    def upload(self, file_path):
+    def upload(self, file_path: str) -> Response:
         """
         Upload a CSV that will set attribute values on the specified channels or
         named users. Please see the documentation at
@@ -209,7 +254,7 @@ class AttributeList(object):
 
         return response
 
-    def get_errors(self):
+    def get_errors(self) -> Response:
         """
         Returns csv of attribute list processing errors. During processing, after a
         list is uploaded, errors can occur. Depending on the type of list
@@ -227,7 +272,7 @@ class AttributeList(object):
         return response
 
     @classmethod
-    def list(cls, airship):
+    def list(cls, airship: Airship) -> Response:
         """Lists existing attribute lists.
 
         :param airship: An urbanairship.Airship instance.
@@ -240,27 +285,3 @@ class AttributeList(object):
         )
 
         return response
-
-
-class AttributeResponse(object):
-    def __init__(self, response):
-        self.response = response
-
-    def __str__(self):
-        return "Response Payload: {0}".format(self.response)
-
-    @property
-    def response(self):
-        return self._response.json()
-
-    @response.setter
-    def response(self, value):
-        self._response = value
-
-    @property
-    def ok(self):
-        return self.response.get("ok")
-
-    @property
-    def warning(self):
-        return self.response.get("warning")

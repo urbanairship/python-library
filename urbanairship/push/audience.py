@@ -1,7 +1,5 @@
-import datetime
 import re
-import sys
-import warnings
+from typing import Any, Dict, Optional, Union
 
 DEVICE_TOKEN_FORMAT = re.compile(r"^[0-9a-fA-F]{64}$")
 UUID_FORMAT = re.compile(
@@ -10,39 +8,29 @@ UUID_FORMAT = re.compile(
 SMS_SENDER_FORMAT = re.compile(r"^[0-9]*$")
 SMS_MSISDN_FORMAT = re.compile(r"^[0-9]*$")
 
-# Python coarse version differentiation
-PY2 = sys.version_info[0] == 2
-PY3 = sys.version_info[0] == 3
-
-# Set version string type
-if PY3:
-    string_type = str
-elif PY2:
-    string_type = basestring
-
 # Value selectors; device IDs, aliases, tags, etc.
-def ios_channel(uuid):
+def ios_channel(uuid: str) -> Dict[str, str]:
     """Select a single iOS Channel"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid iOS Channel")
     return {"ios_channel": uuid.lower().strip()}
 
 
-def android_channel(uuid):
+def android_channel(uuid: str) -> Dict[str, str]:
     """Select a single Android Channel"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid Android Channel")
     return {"android_channel": uuid.lower().strip()}
 
 
-def amazon_channel(uuid):
+def amazon_channel(uuid: str) -> Dict[str, str]:
     """Select a single Amazon Channel"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid Amazon Channel")
     return {"amazon_channel": uuid.lower().strip()}
 
 
-def device_token(token):
+def device_token(token: str) -> Dict[str, str]:
     """Select a single iOS device token"""
     # Ensure the device token is valid
     if not DEVICE_TOKEN_FORMAT.match(token):
@@ -50,14 +38,14 @@ def device_token(token):
     return {"device_token": token.upper().strip()}
 
 
-def apid(uuid):
+def apid(uuid: str) -> Dict[str, str]:
     """Select a single Android APID"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid APID")
     return {"apid": uuid.lower().strip()}
 
 
-def channel(uuid):
+def channel(uuid: str) -> Dict[str, str]:
     """Select a single channel.
     This selector may be used for any channel_id, regardless of device type"""
     if not UUID_FORMAT.match(uuid):
@@ -65,74 +53,79 @@ def channel(uuid):
     return {"channel": uuid.lower().strip()}
 
 
-def open_channel(uuid):
+def open_channel(uuid: str) -> Dict[str, str]:
     """Select a single Open Channel"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid Open Channel")
     return {"open_channel": uuid.lower().strip()}
 
 
-def sms_sender(sender):
+def sms_sender(sender: str) -> Dict[str, str]:
     """Select an SMS Sender"""
-    if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
+    if not (isinstance(sender, str) or SMS_SENDER_FORMAT.match(sender)):
         raise ValueError("sms_sender value must be a numeric string.")
     return {"sms_sender": sender}
 
 
-def sms_id(msisdn, sender):
+def sms_id(msisdn: str, sender: str) -> Dict[str, Dict]:
     """Select an SMS MSISDN"""
-    if not (isinstance(msisdn, string_type) or SMS_MSISDN_FORMAT.match(msisdn)):
+    if not (isinstance(msisdn, str) or SMS_MSISDN_FORMAT.match(msisdn)):
         raise ValueError("msisdn value must be a numeric string.")
-    if not (isinstance(sender, string_type) or SMS_SENDER_FORMAT.match(sender)):
+    if not (isinstance(sender, str) or SMS_SENDER_FORMAT.match(sender)):
         raise ValueError("sender value must be a numeric string.")
     return {"sms_id": {"sender": sender, "msisdn": msisdn}}
 
 
-def wns(uuid):
+def wns(uuid: str) -> Dict[str, str]:
     """Select a single Windows 8 APID"""
     if not UUID_FORMAT.match(uuid):
         raise ValueError("Invalid wns")
     return {"wns": uuid.lower().strip()}
 
 
-def tag(tag):
+def tag(tag: str) -> Dict[str, str]:
     """Select a single device tag."""
     return {"tag": tag}
 
 
-def tag_group(tag_group, tag):
+def tag_group(tag_group: str, tag: str) -> Dict[str, str]:
     """Select a tag group and a tag."""
     payload = {"group": tag_group, "tag": tag}
     return payload
 
 
-def alias(alias):
+def alias(alias: str) -> Dict[str, str]:
     """Select a single alias."""
     return {"alias": alias}
 
 
-def segment(segment):
+def segment(segment: str) -> Dict[str, str]:
     """Select a single segment."""
     return {"segment": segment}
 
 
-def named_user(name):
+def named_user(name: str) -> Dict[str, str]:
     """Select a Named User ID"""
     return {"named_user": name}
 
 
-def subscription_list(list_id):
+def subscription_list(list_id: str) -> Dict[str, str]:
     """Select a subscription list"""
     return {"subscription_lists": list_id}
 
 
-def static_list(list_id):
+def static_list(list_id: str) -> Dict[str, str]:
     """Select a static list"""
     return {"static_list": list_id}
 
 
 # Attribute selectors
-def date_attribute(attribute, operator, precision=None, value=None):
+def date_attribute(
+    attribute: str,
+    operator: str,
+    precision: Optional[str] = None,
+    value: Optional[Union[str, int]] = None,
+) -> Dict[str, Any]:
     """
     Select an audience to send to based on an attribute object with a DATE schema type,
     including predefined and device attributes.
@@ -146,7 +139,7 @@ def date_attribute(attribute, operator, precision=None, value=None):
             "operator must be one of: 'is_empty', 'before', 'after', 'range', 'equals'"
         )
 
-    selector = {"attribute": attribute, "operator": operator}
+    selector: Dict[str, Any] = {"attribute": attribute, "operator": operator}
 
     if operator == "range":
         if value is None:
@@ -174,7 +167,7 @@ def date_attribute(attribute, operator, precision=None, value=None):
     return selector
 
 
-def text_attribute(attribute, operator, value):
+def text_attribute(attribute: str, operator: str, value: str) -> Dict[str, Any]:
     """
     Select an audience to send to based on an attribute object with a TEXT schema type,
     including predefined and device attributes.
@@ -196,7 +189,7 @@ def text_attribute(attribute, operator, value):
     return {"attribute": attribute, "operator": operator, "value": value}
 
 
-def number_attribute(attribute, operator, value):
+def number_attribute(attribute: str, operator: str, value: int) -> Dict[str, Any]:
     """
     Select an audience to send to based on an attribute object with a INTEGER schema
     type, including predefined and device attributes.
@@ -219,7 +212,7 @@ def number_attribute(attribute, operator, value):
 
 
 # Compound selectors
-def or_(*children):
+def or_(*children: Any) -> Dict[str, Any]:
     """Select devices that match at least one of the given selectors.
 
     >>> or_(tag('sports'), tag('business'))
@@ -229,7 +222,7 @@ def or_(*children):
     return {"or": [child for child in children]}
 
 
-def and_(*children):
+def and_(*children: Any) -> Dict[str, Any]:
     """Select devices that match all of the given selectors.
 
     >>> and_(tag('sports'), tag('business'))
@@ -239,7 +232,7 @@ def and_(*children):
     return {"and": [child for child in children]}
 
 
-def not_(child):
+def not_(child: Any) -> Dict[str, Any]:
     """Select devices that does not match the given selectors.
 
     >>> not_(and_(tag('sports'), tag('business')))

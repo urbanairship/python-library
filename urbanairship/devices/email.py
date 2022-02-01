@@ -2,6 +2,11 @@ import base64
 import json
 import logging
 import re
+from typing import Any, Dict, List, Optional
+
+from requests import Response
+
+from urbanairship import Airship
 
 logger = logging.getLogger("urbanairship")
 
@@ -49,19 +54,19 @@ class Email(object):
 
     def __init__(
         self,
-        airship,
-        address,
-        commercial_opted_in=None,
-        commercial_opted_out=None,
-        transactional_opted_in=None,
-        transactional_opted_out=None,
-        locale_country=None,
-        locale_language=None,
-        opt_in_mode=None,
-        properties=None,
-        timezone=None,
-        template_fields=None,
-    ):
+        airship: Airship,
+        address: str,
+        commercial_opted_in: Optional[str] = None,
+        commercial_opted_out: Optional[str] = None,
+        transactional_opted_in: Optional[str] = None,
+        transactional_opted_out: Optional[str] = None,
+        locale_country: Optional[str] = None,
+        locale_language: Optional[str] = None,
+        opt_in_mode: Optional[str] = None,
+        properties: Optional[Dict] = None,
+        timezone: Optional[str] = None,
+        template_fields: Optional[Dict] = None,
+    ) -> None:
         self.airship = airship
         self.address = address
         self.commercial_opted_in = commercial_opted_in
@@ -75,88 +80,88 @@ class Email(object):
         self.timezone = timezone
         self.template_fields = template_fields
         self._email_type = "email"  # only acceptable value at this time
-        self.channel_id = None
+        self.channel_id: Optional[str] = None
 
     @property
-    def template_fields(self):
+    def template_fields(self) -> Optional[Dict]:
         return self._template_fields
 
     @template_fields.setter
-    def template_fields(self, value):
+    def template_fields(self, value: Optional[Dict]) -> None:
         if not isinstance(value, (dict, type(None))):
             raise TypeError("template_fields must be a dict")
 
         self._template_fields = value
 
     @property
-    def opt_in_mode(self):
+    def opt_in_mode(self) -> Optional[str]:
         return self._opt_in_mode
 
     @opt_in_mode.setter
-    def opt_in_mode(self, value):
+    def opt_in_mode(self, value: Optional[str]) -> None:
         if value not in ["classic", "double"] and value is not None:
             raise ValueError("opt_in_mode must be one of: 'classic' or 'double'")
 
         self._opt_in_mode = value
 
     @property
-    def address(self):
+    def address(self) -> str:
         return self._address
 
     @address.setter
-    def address(self, value):
+    def address(self, value: str) -> None:
         if not VALID_EMAIL.match(value) and value is not None:
             raise ValueError("Invalid email address")
         self._address = value
 
     @property
-    def commercial_opted_in(self):
+    def commercial_opted_in(self) -> Optional[str]:
         return self._commercial_opted_in
 
     @commercial_opted_in.setter
-    def commercial_opted_in(self, value):
+    def commercial_opted_in(self, value: Optional[str]) -> None:
         if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError("Must use ISO 8601 timestamp format")
         self._commercial_opted_in = value
 
     @property
-    def commercial_opted_out(self):
+    def commercial_opted_out(self) -> Optional[str]:
         return self._commercial_opted_out
 
     @commercial_opted_out.setter
-    def commercial_opted_out(self, value):
+    def commercial_opted_out(self, value: Optional[str]) -> None:
         if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError("Must use ISO 8601 timestamp format")
         self._commercial_opted_out = value
 
     @property
-    def transactional_opted_in(self):
+    def transactional_opted_in(self) -> Optional[str]:
         return self._transactional_opted_in
 
     @transactional_opted_in.setter
-    def transactional_opted_in(self, value):
+    def transactional_opted_in(self, value: Optional[str]) -> None:
         if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError("Must use ISO 8601 timestamp format")
         self._transactional_opted_in = value
 
     @property
-    def transactional_opted_out(self):
+    def transactional_opted_out(self) -> Optional[str]:
         return self._transactional_opted_out
 
     @transactional_opted_out.setter
-    def transactional_opted_out(self, value):
+    def transactional_opted_out(self, value: Optional[str]) -> None:
         if value is not None and not VALID_ISO_8601.match(value):
             raise ValueError("Must use ISO 8601 timestamp format")
         self._transactional_opted_out = value
 
     @property
-    def _full_payload(self):
+    def _full_payload(self) -> Dict[str, Any]:
         if self.address == None:
             raise ValueError(
                 "address must be set to register or update an email channel"
             )
 
-        payload = {"type": self._email_type}
+        payload: Dict[str, Any] = {"type": self._email_type}
 
         reg_payload_keys = [
             "address",
@@ -178,7 +183,7 @@ class Email(object):
         return payload
 
     @property
-    def _registration_payload(self):
+    def _registration_payload(self) -> Dict:
         full_payload = self._full_payload
         opt_in_mode = full_payload.pop("opt_in_mode", None)
         properties = full_payload.pop("properties", None)
@@ -192,7 +197,7 @@ class Email(object):
         return payload
 
     @property
-    def _update_payload(self):
+    def _update_payload(self) -> Dict:
         payload = self._full_payload
 
         payload.pop("opt_in_mode", None)
@@ -201,7 +206,7 @@ class Email(object):
         return {"channel": payload}
 
     @property
-    def create_and_send_audience(self):
+    def create_and_send_audience(self) -> Dict:
         audience = {"ua_address": self.address}
         if self.commercial_opted_in:
             audience["ua_commercial_opted_in"] = self.commercial_opted_in
@@ -212,7 +217,7 @@ class Email(object):
 
         return audience
 
-    def register(self):
+    def register(self) -> Response:
         """Create a new email channel or unsubscribe an existing email
         channel from receiving commercial emails.
         To unsubscribe an existing channel, set email_opt_in_level
@@ -242,7 +247,7 @@ class Email(object):
 
         return response
 
-    def update(self, channel_id=None):
+    def update(self, channel_id: Optional[str] = None) -> Response:
         """
         Updates an existing email channel.
 
@@ -267,7 +272,7 @@ class Email(object):
 
         return response
 
-    def uninstall(self):
+    def uninstall(self) -> Response:
         """Removes an email address from Urban Airship. Use with caution.
         If the uninstalled email address opts-in again, it will generate
         a new channel_id.
@@ -289,7 +294,7 @@ class Email(object):
         return response
 
     @classmethod
-    def lookup(cls, airship, address):
+    def lookup(cls, airship: Airship, address: str) -> Response:
         if not VALID_EMAIL.match(address) and address is not None:
             raise ValueError("Invalid email address format")
 
@@ -306,36 +311,36 @@ class EmailTags(object):
     :param address: an email address to mutate tags for
     """
 
-    def __init__(self, airship, address):
+    def __init__(self, airship: Airship, address: str):
         self.airship = airship
         self.url = airship.urls.get("email_tags_url")
         self.address = address
-        self.add_group = {}
-        self.remove_group = {}
-        self.set_group = {}
-        self._payload = {}
+        self.add_group: Dict[str, Any] = {}
+        self.remove_group: Dict[str, Any] = {}
+        self.set_group: Dict[str, Any] = {}
+        self._payload: Dict[str, Any] = {}
 
     @property
-    def address(self):
+    def address(self) -> str:
         return self._address
 
     @address.setter
-    def address(self, value):
+    def address(self, value: str) -> None:
         if not VALID_EMAIL.match(value):
             raise ValueError("addresses must be and email address")
         self._address = value
 
     @property
-    def tags(self):
+    def tags(self) -> List[str]:
         return self._tags
 
     @tags.setter
-    def tags(self, value):
+    def tags(self, value: List[str]) -> None:
         if not isinstance(value, list):
             raise ValueError("tags must be input as a list")
         self._tags = value
 
-    def add(self, group, tags):
+    def add(self, group: str, tags: List[str]) -> None:
         """
         add tags to a given tag group
         :param group: the tag group to add to
@@ -343,7 +348,7 @@ class EmailTags(object):
         """
         self.add_group[group] = tags
 
-    def remove(self, group, tags):
+    def remove(self, group: str, tags: List[str]) -> None:
         """
         remove tags from a given tag group
         :param group: the tag group to remove tags from
@@ -351,7 +356,7 @@ class EmailTags(object):
         """
         self.remove_group[group] = tags
 
-    def set(self, group, tags):
+    def set(self, group: str, tags: List[str]) -> None:
         """
         replace all tags on the given tag group with these tags
         :param group: the tag group to set tags on
@@ -359,7 +364,7 @@ class EmailTags(object):
         """
         self.set_group[group] = tags
 
-    def send(self):
+    def send(self) -> Response:
         """
         commit add, remove and set operations. set cannot be used with
         add and remove.
@@ -407,20 +412,22 @@ class EmailAttachment(object):
         be used in the email override object.
     """
 
-    def __init__(self, airship, filename, content_type, filepath):
+    def __init__(
+        self, airship: Airship, filename: str, content_type: str, filepath: str
+    ) -> None:
         self.airship = airship
         self.filename = filename
         self.content_type = content_type
         self.filepath = filepath
 
-    def _encode_attachment(self, filepath):
+    def _encode_attachment(self, filepath: str) -> str:
         file = open(filepath, "rb").read()
         enc = base64.urlsafe_b64encode(file)
 
         return str(enc)
 
     @property
-    def req_payload(self):
+    def req_payload(self) -> Dict:
         attachment_payload = {
             "filename": self.filename,
             "content_type": self.content_type,
@@ -429,7 +436,7 @@ class EmailAttachment(object):
 
         return attachment_payload
 
-    def post(self):
+    def post(self) -> Dict:
         response = self.airship.request(
             method="POST",
             body=json.dumps(self.req_payload),

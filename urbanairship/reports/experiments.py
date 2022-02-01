@@ -1,12 +1,17 @@
+from typing import Dict, Any
+
+from urbanairship import Airship
+
+
 class ExperimentReport(object):
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         """Access reporting related to A/B Tests (experiments)
 
         :param airship: An urbanairship.Airship instance.
         """
         self.airship = airship
 
-    def get_overview(self, push_id):
+    def get_overview(self, push_id: str) -> Dict[str, Any]:
         """Returns statistics and metadata about an experiment (A/B Test).
 
         :param push_id:  A UUID representing an A/B test of the requested experiment.
@@ -21,7 +26,7 @@ class ExperimentReport(object):
 
         return response.json()
 
-    def get_variant(self, push_id, variant_id):
+    def get_variant(self, push_id: str, variant_id: str) -> Dict[str, Any]:
         """Returns statistics and metadata about a specific variant in an experiment (A/B Test).
 
         :param push_id: A UUID representing an A/B test of the requested experiment.

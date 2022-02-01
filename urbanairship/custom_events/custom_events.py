@@ -9,8 +9,8 @@ class CustomEvent:
     def __init__(
         self,
         airship: Airship,
-        name: Optional[str] = None,
-        user: Optional[Dict] = None,
+        name: str,
+        user: Dict,
         interaction_type: Optional[str] = None,
         interaction_id: Optional[str] = None,
         properties: Optional[Dict] = None,
@@ -44,7 +44,7 @@ class CustomEvent:
             single transaction, use the transaction field to tie events together.
         :param value: [optional] If the event is associated with a count or amount,
             the 'value' field carries that information.
-        :param occurred: [optional The date and time when the event occurred. Events
+        :param occurred: [optional] The date and time when the event occurred. Events
             must have occurred within the past 90 days. You cannot provide
             a future datetime.
         """
@@ -111,10 +111,10 @@ class CustomEvent:
         self._session_id = value
 
     @property
-    def transaciton(self) -> Optional[str]:
+    def transaction(self) -> Optional[str]:
         return self._transaction
 
-    @transaciton.setter
+    @transaction.setter
     def transaction(self, value: Optional[str]) -> None:
         self._transaction = value
 
@@ -127,10 +127,8 @@ class CustomEvent:
         self._value = value
 
     @property
-    def occurred(self) -> Optional[str]:
-        if not isinstance(self._occurred, datetime.datetime):
-            return self._occurred
-        return self._occurred.strftime("%Y-%m-%dT%H:%M:%S")
+    def occurred(self) -> Optional[datetime.datetime]:
+        return self._occurred
 
     @occurred.setter
     def occurred(self, value: Optional[datetime.datetime]) -> None:
@@ -138,12 +136,14 @@ class CustomEvent:
 
     @property
     def _payload(self) -> Dict:
-        event_payload = {"user": self.user}
-        body = {"name": self.name}
+        event_payload: Dict = {"user": self.user}
+        body: Dict = {"name": self.name}
 
         for payload_attr in ["occurred"]:
             if getattr(self, payload_attr) is not None:
-                event_payload[payload_attr] = getattr(self, payload_attr)
+                event_payload[payload_attr] = getattr(self, payload_attr).strftime(
+                    "%Y-%m-%dT%H:%M:%S"
+                )
 
         for body_attr in [
             "value",

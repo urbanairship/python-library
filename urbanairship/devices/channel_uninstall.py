@@ -1,5 +1,10 @@
 import json
 import logging
+from typing import List
+
+from requests import Response
+
+from urbanairship import Airship
 
 logger = logging.getLogger("urbanairship")
 
@@ -8,27 +13,25 @@ class ChannelUninstall(object):
     """
     Uninstalls a channel id.
 
-    :param airship: Required. An urbanairshi.Airship instance
+    :param airship: Required. An urbanairship.Airship instance
     """
 
-    _airship = None
-
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self._airship = airship
 
-    def uninstall(self, channels):
+    def uninstall(self, channels: List[str]) -> Response:
         """
         Perform the channel unistall on a list of channel UUIDs.
 
         :param channels: Required. A list of channel_id UUIDs.
         """
-        chan_num = len(channels)
+        chan_num: int = len(channels)
 
         if chan_num > 200:
             raise ValueError(
-                (
-                    "Maximum of 200 channel uninstalls exceeded. " "({0} channels)"
-                ).format(chan_num)
+                ("Maximum of 200 channel uninstalls exceeded. ({0} channels)").format(
+                    chan_num
+                )
             )
 
         body = json.dumps(channels)

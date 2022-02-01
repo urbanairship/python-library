@@ -1,9 +1,12 @@
 import datetime
 import logging
+from typing import Any, Dict, Optional, List, Generic, TypeVar
 
-from urbanairship import common
+from urbanairship import common, Airship
 
 logger = logging.getLogger("urbanairship")
+
+ChannelInfoType = TypeVar("ChannelInfoType", bound="ChannelInfo")
 
 
 class ChannelInfo(object):
@@ -46,35 +49,34 @@ class ChannelInfo(object):
         permission to receive transactional emails.
     """
 
-    airship = None
-    address = None
-    alias = None
-    background = None
-    channel_id = None
-    created = None
-    device_type = None
-    installed = None
-    last_registration = None
-    opt_in = None
-    push_address = None
-    tag_groups = None
-    tags = None
-    ios = None
-    open = None
-    web = None
-    named_user_id = None
-    device_attributes = None
-    attributes = None
-    commercial_opted_in = None
-    commercial_opted_out = None
-    transactional_opted_in = None
-    transactional_opted_out = None
+    address: Optional[str] = None
+    alias: Optional[str] = None
+    background: Optional[bool] = None
+    channel_id: Optional[str] = None
+    created: Optional[str] = None
+    device_type: Optional[str] = None
+    installed: Optional[bool] = None
+    last_registration: Optional[str] = None
+    opt_in: Optional[bool] = None
+    push_address: Optional[str] = None
+    tag_groups: Optional[str] = None
+    tags: Optional[List] = None
+    ios: Optional[Dict] = None
+    open: Optional[Dict] = None
+    web: Optional[Dict] = None
+    named_user_id: Optional[str] = None
+    device_attributes: Optional[Dict] = None
+    attributes: Optional[Dict] = None
+    commercial_opted_in: Optional[str] = None
+    commercial_opted_out: Optional[str] = None
+    transactional_opted_in: Optional[str] = None
+    transactional_opted_out: Optional[str] = None
 
     def __init__(self, airship):
         self.airship = airship
 
     @classmethod
-    def from_payload(cls, payload, device_key, airship):
+    def from_payload(cls, payload: Dict, device_key: str, airship: Airship):
         """Create based on results from a ChannelList iterator."""
         obj = cls(airship)
         obj.channel_id = payload[device_key]
@@ -98,12 +100,12 @@ class ChannelInfo(object):
             setattr(obj, key, payload[key])
         return obj
 
-    def lookup(self, channel_id):
+    def lookup(self, channel_id: str):
         """Fetch metadata from a channel ID"""
         start_url = self.airship.urls.get("channel_url")
         data_attribute = "channel"
         id_key = "channel_id"
-        params = {}
+        params: Dict[str, Any] = {}
         url = start_url + channel_id
         response = self.airship._request(
             method="GET", body=None, url=url, version=3, params=params
@@ -128,17 +130,17 @@ class DeviceInfo(object):
 
     """
 
-    id = None
-    device_type = None
-    active = None
-    tags = None
-    alias = None
+    id: Optional[str] = None
+    device_type: Optional[str] = None
+    active: Optional[bool] = None
+    tags: Optional[List] = None
+    alias: Optional[str] = None
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship):
         self.airship = airship
 
     @classmethod
-    def from_payload(cls, payload, device_key, airship):
+    def from_payload(cls, payload: Dict, device_key: str, airship: Airship):
         """Create based on results from a DeviceTokenList or APIDList iterator."""
         obj = cls(airship)
         obj.id = payload[device_key]
@@ -163,9 +165,9 @@ class DeviceTokenList(common.IteratorParent):
 
     """
 
-    next_url = None
-    data_attribute = "device_tokens"
-    id_key = "device_token"
+    next_url: Optional[str] = None
+    data_attribute: str = "device_tokens"
+    id_key: str = "device_token"
     instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):
@@ -183,9 +185,9 @@ class ChannelList(common.IteratorParent):
 
     """
 
-    next_url = None
-    data_attribute = "channels"
-    id_key = "channel_id"
+    next_url: Optional[str] = None
+    data_attribute: str = "channels"
+    id_key: str = "channel_id"
     instance_class = ChannelInfo
 
     def __init__(self, airship, limit=None, start_channel=None):
@@ -207,9 +209,9 @@ class APIDList(common.IteratorParent):
 
     """
 
-    next_url = None
-    data_attribute = "apids"
-    id_key = "apid"
+    next_url: Optional[str] = None
+    data_attribute: str = "apids"
+    id_key: str = "apid"
     instance_class = DeviceInfo
 
     def __init__(self, airship, limit=None):

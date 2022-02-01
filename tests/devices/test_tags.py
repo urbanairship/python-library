@@ -25,7 +25,7 @@ class TestChannelTags(unittest.TestCase):
         ua.Airship._request.side_effect = [self.mock_response]
 
     def test_ios_audience(self):
-        self.channel_tags.set_audience("ios_audience")
+        self.channel_tags.set_audience(ios="ios_audience")
         self.channel_tags.add("group_name", "tag1")
         result = self.channel_tags.send()
 

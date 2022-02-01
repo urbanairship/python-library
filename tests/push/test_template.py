@@ -416,31 +416,6 @@ class TestTemplate(unittest.TestCase):
 
         self.assertRaises(ValueError, template.create)
 
-    def test_create_template_no_message(self):
-        airship = ua.Airship(TEST_KEY, TEST_SECRET)
-        template = ua.Template(airship)
-        template.name = "Cat sound"
-        template.description = "The cat says..."
-        template.variables = [
-            {
-                "key": "SOUND",
-                "name": "Sound",
-                "description": "A sound",
-                "default_value": "Meow",
-            }
-        ]
-        # Set message center (not allowed)
-        template.push = {
-            "notification": {"alert": "The cat says {{SOUND}}"},
-            "message": {
-                "title": "Message title",
-                "body": "Message body",
-                "content_type": "text/html",
-            },
-        }
-
-        self.assertRaises(ValueError, template.create)
-
     def test_update_template(self):
         template_id = "ef34a8d9-0ad7-491c-86b0-aea74da15161"
         name = "Goodbye Message"
@@ -466,22 +441,6 @@ class TestTemplate(unittest.TestCase):
             template.update(template_id)
 
             self.assertEqual(template.template_id, template_id)
-
-    def test_update_template_no_message(self):
-        airship = ua.Airship(TEST_KEY, TEST_SECRET)
-        template_id = "ef34a8d9-0ad7-491c-86b0-aea74da15161"
-        template = ua.Template(airship)
-        # Set message center (not allowed)
-        template.push = {
-            "notification": {"alert": "The cat says {{SOUND}}"},
-            "message": {
-                "title": "Message title",
-                "body": "Message body",
-                "content_type": "text/html",
-            },
-        }
-
-        self.assertRaises(ValueError, template.update, template_id)
 
     def test_update_template_needs_something(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)

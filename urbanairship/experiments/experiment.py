@@ -1,3 +1,8 @@
+from typing import Dict, Any, Optional, List
+
+from urbanairship.experiments.variant import Variant
+
+
 class Experiment(object):
     """An experiment object describes an A/B test,
     including the audience and variant portions.
@@ -5,18 +10,18 @@ class Experiment(object):
 
     def __init__(
         self,
-        audience,
-        device_types,
-        variants,
-        name=None,
-        description=None,
-        weight=None,
-        campaigns=None,
-        control=None,
-    ):
+        audience: Dict[str, Any],
+        device_types: List[str],
+        variants: List[Variant],
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        weight: Optional[int] = None,
+        campaigns: Optional[Dict[str, Any]] = None,
+        control: Optional[float] = None,
+    ) -> None:
         """
         :keyword audience: [required] The audience for the experiment
-        :keyword device_types: An array containing one or more strings identifying
+        :keyword device_types: A list containing one or more strings identifying
             targeted platforms. Accepted platforms are ios, android, amazon, wns, web,
             sms, email, and open::<open_platform_name>
         :keyword variants: [required] The variants for the experiment. An experiment
@@ -39,13 +44,13 @@ class Experiment(object):
         self.weight = weight
 
     @property
-    def payload(self):
+    def payload(self) -> Dict[str, Any]:
         """JSON serialized experiment object"""
 
-        variants_data = []
+        variants_data: List = []
         for variant in self.variants:
-            variant_data = {}
-            push_options = {}
+            variant_data: Dict[str, Any] = {}
+            push_options: Dict[str, Any] = {}
 
             if getattr(variant, "description", None):
                 variant_data["description"] = variant.description
@@ -66,7 +71,7 @@ class Experiment(object):
             variant_data["push"] = push_options
             variants_data.append(variant_data)
 
-        data = {
+        data: Dict[str, Any] = {
             "audience": self.audience,
             "device_types": self.device_types,
             "variants": variants_data,
@@ -87,39 +92,39 @@ class Experiment(object):
         return data
 
     @property
-    def name(self):
+    def name(self) -> Optional[str]:
         if not self._name:
             return None
         return self._name
 
     @name.setter
-    def name(self, value):
+    def name(self, value: Optional[str]) -> None:
         if not isinstance(value, str):
             TypeError("the name must be a string type")
 
         self._name = value
 
     @property
-    def description(self):
+    def description(self) -> Optional[str]:
         if not self._description:
             return None
         return self._description
 
     @description.setter
-    def description(self, value):
+    def description(self, value: Optional[str]) -> None:
         if not isinstance(value, str):
             TypeError("the description must be type string")
 
         self._description = value
 
     @property
-    def control(self):
+    def control(self) -> Optional[float]:
         if not self._control:
             return None
         return self._control
 
     @control.setter
-    def control(self, value):
+    def control(self, value: Optional[float]) -> None:
         if not isinstance(value, float):
             TypeError("the control must be type float")
         if value is not None:

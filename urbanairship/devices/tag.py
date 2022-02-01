@@ -1,5 +1,8 @@
 import json
 import logging
+from typing import Dict, Optional, List, Any
+
+from urbanairship import Airship
 
 logger = logging.getLogger("urbanairship")
 
@@ -10,15 +13,22 @@ class ChannelTags(object):
     :param airship: An urbanairship.Airship instance.
     """
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self.url = airship.urls.get("channel_url") + "tags/"
         self._airship = airship
-        self.audience = {}
-        self.add_group = {}
-        self.remove_group = {}
-        self.set_group = {}
+        self.audience: Dict[str, Any] = {}
+        self.add_group: Dict[str, Any] = {}
+        self.remove_group: Dict[str, Any] = {}
+        self.set_group: Dict[str, Any] = {}
 
-    def set_audience(self, ios=None, android=None, amazon=None, web=None):
+    def set_audience(
+        self,
+        user_ids: Optional[List[str]] = None,
+        ios: Optional[str] = None,
+        android: Optional[str] = None,
+        amazon: Optional[str] = None,
+        web: Optional[str] = None,
+    ) -> None:
         """Sets the audience to be modified
         :param ios: an ios channel
         :param android: an android channel
@@ -34,7 +44,7 @@ class ChannelTags(object):
         if web is not None:
             self.audience["channel"] = web
 
-    def add(self, group_name, tags):
+    def add(self, group_name: str, tags: List[str]) -> None:
         """Sets group and tags to add
 
         :param group_name: The name of the tag group to add
@@ -42,7 +52,7 @@ class ChannelTags(object):
         """
         self.add_group[group_name] = tags
 
-    def remove(self, group_name, tags):
+    def remove(self, group_name: str, tags: List[str]) -> None:
         """Sets group and tags to remove
 
         :param group_name: The name of the tag group to remove
@@ -50,7 +60,7 @@ class ChannelTags(object):
         """
         self.remove_group[group_name] = tags
 
-    def set(self, group_name, tags):
+    def set(self, group_name: str, tags: List[str]) -> None:
         """
         Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
 
@@ -59,7 +69,7 @@ class ChannelTags(object):
         """
         self.set_group[group_name] = tags
 
-    def send(self):
+    def send(self) -> Dict:
         """Perform the Channel Tag operations.
 
         :returns: JSON response from the API
@@ -100,15 +110,15 @@ class ChannelTags(object):
 class OpenChannelTags(object):
     """Modify the tags for an open channel"""
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self.url = airship.urls.get("open_channel_url") + "tags/"
         self._airship = airship
-        self.audience = {}
-        self.add_group = {}
-        self.remove_group = {}
-        self.set_group = {}
+        self.audience: Dict = {}
+        self.add_group: Dict = {}
+        self.remove_group: Dict = {}
+        self.set_group: Dict = {}
 
-    def set_audience(self, address, open_platform):
+    def set_audience(self, address: str, open_platform: str) -> None:
         """Sets the audience to be modified.
 
         :param address: the open channel to be modified
@@ -116,7 +126,7 @@ class OpenChannelTags(object):
         """
         self.audience = {"address": address, "open_platform_name": open_platform}
 
-    def add(self, group_name, tags):
+    def add(self, group_name: str, tags: List[str]) -> None:
         """Sets group and tags to add
 
         :param group_name: The name of the tag group to add
@@ -124,7 +134,7 @@ class OpenChannelTags(object):
         """
         self.add_group[group_name] = tags
 
-    def remove(self, group_name, tags):
+    def remove(self, group_name: str, tags: List[str]) -> None:
         """Sets group and tags to remove
 
         :param group_name: The name of the tag group to remove
@@ -132,7 +142,7 @@ class OpenChannelTags(object):
         """
         self.remove_group[group_name] = tags
 
-    def set(self, group_name, tags):
+    def set(self, group_name: str, tags: List[str]) -> None:
         """
         Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
 
@@ -141,7 +151,7 @@ class OpenChannelTags(object):
         """
         self.set_group[group_name] = tags
 
-    def send(self):
+    def send(self) -> Dict:
         """Perform the Open Channel Tag operations.
 
         :returns: JSON response from the API
@@ -158,7 +168,7 @@ class OpenChannelTags(object):
         if self.set_group:
             if self.add_group or self.remove_group:
                 raise ValueError(
-                    'A "set" tag request cannot contain ' '"add" or "remove" fields'
+                    'A "set" tag request cannot contain "add" or "remove" fields'
                 )
             payload["set"] = self.set_group
 

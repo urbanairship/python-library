@@ -1,11 +1,13 @@
 import logging
 import re
+import warnings
+from typing import Optional, Dict, Any
 
-import backoff
+import backoff  # type: ignore
 import requests
 
 from . import __about__, common
-from .push import Push, ScheduledPush, TemplatePush
+import urbanairship
 
 logger = logging.getLogger("urbanairship")
 
@@ -14,7 +16,7 @@ VALID_LOCATIONS = ["eu", "us", None]
 
 
 class Urls(object):
-    def __init__(self, location=None):
+    def __init__(self, location: Optional[str] = None) -> None:
         if not location or location.lower() == "us":
             self.base_url = "https://go.urbanairship.com/api/"
         elif location.lower() == "eu":
@@ -58,8 +60,8 @@ class Urls(object):
         self.attachment_url = self.base_url + "attachments/"
         self.custom_events_url = self.base_url + "custom-events/"
 
-    def get(self, endpoint):
-        url = getattr(self, endpoint, None)
+    def get(self, endpoint: str) -> str:
+        url: str = getattr(self, endpoint)
 
         if not url:
             raise AttributeError("No url for endpoint %s" % endpoint)
@@ -69,7 +71,13 @@ class Urls(object):
 
 class Airship(object):
     def __init__(
-        self, key, secret=None, token=None, location="us", timeout=None, retries=0
+        self,
+        key: str,
+        secret: Optional[str] = None,
+        token: Optional[str] = None,
+        location: str = "us",
+        timeout: Optional[int] = None,
+        retries: int = 0,
     ):
         """Main client class for interacting with the Airship API.
 
@@ -85,107 +93,107 @@ class Airship(object):
         failed request. Retried requests use exponential backoff between requests.
         Defaults to 0, no retry.
         """
-        self.key = key
-        self.secret = secret
-        self.token = token
-        self.location = location
-        self.timeout = timeout
+        self.key: str = key
+        self.secret: Optional[str] = secret
+        self.token: Optional[str] = token
+        self.location: str = location
+        self.timeout: Optional[int] = timeout
         self.retries = retries
-        self.urls = Urls(self.location)
+        self.urls: Urls = Urls(self.location)
 
         if all([secret, token]):
             raise ValueError("One of token or secret must be used, not both")
 
         self.session = requests.Session()
-        if self.token:
+        if isinstance(token, str):
             self.session.headers.update(
                 {"X-UA-Appkey": key, "Authorization": f"Bearer {self.token}"}
             )
-        elif self.secret:
+        elif isinstance(secret, str):
             self.session.auth = (key, secret)
         else:
             raise ValueError("Either token or secret must be included")
 
     @property
-    def retries(self):
+    def retries(self) -> int:
         return self._retries
 
     @retries.setter
-    def retries(self, value):
+    def retries(self, value: int):
         self._retries = value
 
     @property
-    def timeout(self):
+    def timeout(self) -> Optional[int]:
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value):
+    def timeout(self, value: Optional[int]) -> None:
         if not isinstance(value, int) and value is not None:
             raise ValueError("Timeout must be an integer")
         self._timeout = value
 
     @property
-    def key(self):
+    def key(self) -> str:
         return self._key
 
     @key.setter
-    def key(self, value):
+    def key(self, value: str) -> None:
         if not VALID_KEY.match(value):
             raise ValueError("keys must be 22 characters")
         self._key = value
 
     @property
-    def location(self):
+    def location(self) -> str:
         return self._location
 
     @location.setter
-    def location(self, value):
+    def location(self, value: str):
         if value not in VALID_LOCATIONS:
             raise ValueError("location must be one of {}".format(VALID_LOCATIONS))
         self._location = value
 
     @property
-    def secret(self):
+    def secret(self) -> Optional[str]:
         return self._secret
 
     @secret.setter
-    def secret(self, value):
+    def secret(self, value: Optional[str]) -> None:
         if isinstance(value, str) and not VALID_KEY.match(value):
             raise ValueError("secrets must be 22 characters")
         self._secret = value
 
     @property
-    def token(self):
+    def token(self) -> Optional[str]:
         return self._token
 
     @token.setter
-    def token(self, value):
+    def token(self, value: Optional[str]) -> None:
         self._token = value
 
     def request(
         self,
-        method,
-        body,
-        url,
-        content_type=None,
-        version=None,
-        params=None,
-        encoding=None,
-    ):
+        method: str,
+        body: Any,
+        url: str,
+        content_type: Optional[str] = None,
+        version: Optional[int] = None,
+        params: Optional[Dict[str, Any]] = None,
+        encoding: Optional[str] = None,
+    ) -> requests.Response:
         return self._request(method, body, url, content_type, version, params, encoding)
 
     def _request(
         self,
-        method,
-        body,
-        url,
-        content_type=None,
-        version=None,
-        params=None,
-        encoding=None,
-    ):
+        method: str,
+        body: Any,
+        url: str,
+        content_type: Optional[str] = None,
+        version: Optional[int] = None,
+        params: Optional[Dict[str, Any]] = None,
+        encoding: Optional[str] = None,
+    ) -> requests.Response:
 
-        headers = {
+        headers: Dict[str, str] = {
             "User-agent": "UAPythonLib/{0} {1}".format(__about__.__version__, self.key)
         }
         if content_type:
@@ -200,8 +208,14 @@ class Airship(object):
         @backoff.on_exception(
             backoff.expo, common.AirshipFailure, max_tries=(self.retries + 1)
         )
-        def make_retryable_request(method, url, body, params, headers):
-            response = self.session.request(
+        def make_retryable_request(
+            method: str,
+            url: str,
+            body: Any,
+            params: Optional[Dict[str, Any]],
+            headers: Dict[str, Any],
+        ) -> requests.Response:
+            response: requests.Response = self.session.request(
                 method,
                 url,
                 data=body,
@@ -240,12 +254,24 @@ class Airship(object):
 
     def create_push(self):
         """Create a Push notification."""
-        return Push(self)
+        warnings.warn(
+            category=DeprecationWarning,
+            message="the create_push function is deprecated. please use urbanairship.Push. This will be removed in version 7.0",
+        )
+        return urbanairship.Push(self)
 
     def create_scheduled_push(self):
         """Create a Scheduled Push notification."""
-        return ScheduledPush(self)
+        warnings.warn(
+            category=DeprecationWarning,
+            message="the create_scheduled_push function is deprecated. please use urbanairship.ScheduledPush. This will be removed in version 7.0",
+        )
+        return urbanairship.ScheduledPush(self)
 
     def create_template_push(self):
         """Create a Scheduled Push notification."""
-        return TemplatePush(self)
+        warnings.warn(
+            category=DeprecationWarning,
+            message="the create_template_push function is deprecated. please use urbanairship.TemplatePush. This will be removed in version 7.0",
+        )
+        return urbanairship.TemplatePush(self)

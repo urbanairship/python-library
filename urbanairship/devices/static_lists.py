@@ -2,20 +2,24 @@ import json
 import gzip
 import collections
 import datetime
+from typing import Dict, TypeVar, Optional, Type
+from io import TextIOWrapper
 
-from urbanairship import common
+from requests import Response
+
+from urbanairship import common, Airship
 
 CHUNK = 16 * 1024
 
 
-class StaticList(object):
-    def __init__(self, airship, name):
+class StaticList:
+    def __init__(self, airship: Airship, name: str) -> None:
         self.airship = airship
         self.name = name
         self.description = None
         self.extra = None
 
-    def create(self):
+    def create(self) -> Dict:
         """Create a Static List"""
         payload = {"name": self.name}
         if self.description is not None:
@@ -23,17 +27,17 @@ class StaticList(object):
         if self.extra is not None:
             payload["extra"] = self.extra
 
-        body = json.dumps(payload).encode("utf-8")
+        body = json.dumps(payload)
         response = self.airship._request(
-            "POST",
-            body,
-            self.airship.urls.get("lists_url"),
-            "application/json",
+            method="POST",
+            body=body,
+            url=self.airship.urls.get("lists_url"),
+            content_type="application/json",
             version=3,
         )
         return response.json()
 
-    def upload(self, csv_file):
+    def upload(self, csv_file: TextIOWrapper) -> Dict:
         """Upload a CSV file to a static list
 
         :param csv_file: open file descriptor with two column format:
@@ -54,7 +58,7 @@ class StaticList(object):
         )
         return response.json()
 
-    def update(self):
+    def update(self) -> Dict:
         """Update the metadata in a static list
 
         :return: http response
@@ -80,7 +84,7 @@ class StaticList(object):
         return response.json()
 
     @classmethod
-    def download(cls, airship, list_name):
+    def download(cls, airship: Airship, list_name: str) -> Response:
         """
         Allows you to download the contents of a static list. Alias and named_user
         values are resolved to channels.
@@ -99,15 +103,14 @@ class StaticList(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload, airship):
-        obj = cls(airship, payload["name"])
+    def from_payload(cls, payload: Dict, airship: Airship):
         for key in payload:
             if key in "created" or key in "last_updated":
                 payload[key] = datetime.datetime.strptime(
                     payload[key], "%Y-%m-%dT%H:%M:%S"
                 )
-            setattr(obj, key, payload[key])
-        return obj
+            setattr(cls, key, payload[key])
+        return cls
 
     def lookup(self):
         """
@@ -121,7 +124,7 @@ class StaticList(object):
         payload = response.json()
         return self.from_payload(payload, self.airship)
 
-    def delete(self):
+    def delete(self) -> Response:
         """
         Delete the static list
         """
@@ -130,8 +133,8 @@ class StaticList(object):
 
 
 class StaticLists(common.IteratorParent):
-    next_url = None
-    data_attribute = "lists"
+    next_url: Optional[str] = None
+    data_attribute: str = "lists"
 
     def __init__(self, airship):
         """Gets an iterable listing of existing static lists"""

@@ -2,22 +2,16 @@ from datetime import datetime
 import json
 import logging
 import re
-import sys
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Union, Any
+
+from requests import Response
+
+from urbanairship import Airship
 
 logger = logging.getLogger("urbanairship")
 
 VALID_MSISDN = re.compile(r"[0-9]*$")
 VALID_SENDER = re.compile(r"[0-9]*$")
-
-PY2 = sys.version_info[0] == 2
-PY3 = sys.version_info[0] == 3
-
-# Set version string type
-if sys.version_info[0] == 2:
-    string_type = basestring
-else:
-    string_type = str
 
 
 class Sms(object):
@@ -30,7 +24,7 @@ class Sms(object):
         notifications from. This must match your Urban Airship configuration.
     :param msisdn: Required. The mobile phone number you want to register as
         an SMS channel (or send a request to opt-in).
-    :param opted_in: The UTC datetime in ISO 8601 format that represents the
+    :param opted_in: A datetime.datetime object that represents the
         date and time when explicit permission was received from the user to
         receive messages. This is required for use with CreateAndSend.
     :param template_fields: For use with CreateAndSend with inline templates.
@@ -45,15 +39,15 @@ class Sms(object):
 
     def __init__(
         self,
-        airship,
-        sender,
-        msisdn,
-        opted_in=None,
-        template_fields=None,
-        locale_country=None,
-        locale_language=None,
-        timezone=None,
-    ):
+        airship: Airship,
+        sender: str,
+        msisdn: str,
+        opted_in: Optional[datetime] = None,
+        template_fields: Optional[Dict] = None,
+        locale_country: Optional[str] = None,
+        locale_language: Optional[str] = None,
+        timezone: Optional[str] = None,
+    ) -> None:
         self.airship = airship
         self.sender = sender
         self.msisdn = msisdn
@@ -65,87 +59,84 @@ class Sms(object):
         self.channel_id = None
 
     @property
-    def locale_country(self):
+    def locale_country(self) -> Optional[str]:
         return self._locale_country
 
     @locale_country.setter
-    def locale_country(self, value):
-        if not isinstance(value, (string_type, type(None))) and len(value) != 2:
+    def locale_country(self, value: Optional[str]) -> None:
+        if not isinstance(value, (str, type(None))):
             raise ValueError("locale_country must be a 2 character string")
 
         self._locale_country = value
 
     @property
-    def opted_in(self):
-        if not self._opted_in:
-            return self._opted_in
-
-        return self._opted_in.strftime("%Y-%m-%dT%H:%M:%S")
+    def opted_in(self) -> Optional[datetime]:
+        return self._opted_in
 
     @opted_in.setter
-    def opted_in(self, value):
+    def opted_in(self, value: Optional[datetime]) -> None:
         if not value:
             self._opted_in = None
             return
 
-        self._opted_in = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        self._opted_in = value
 
     @property
-    def locale_language(self):
+    def locale_language(self) -> Optional[str]:
         return self._locale_language
 
     @locale_language.setter
-    def locale_language(self, value):
-        if not isinstance(value, (str, type(None))) and len(value) != 2:
+    def locale_language(self, value: Optional[str]) -> None:
+        if not isinstance(value, (str, type(None))):
             raise ValueError("locale_language must be a 2 character string")
 
         self._locale_language = value
 
     @property
-    def timezone(self):
+    def timezone(self) -> Optional[str]:
         return self._timezone
 
     @timezone.setter
-    def timezone(self, value):
+    def timezone(self, value: Optional[str]) -> None:
         self._timezone = value
 
     @property
-    def template_fields(self):
+    def template_fields(self) -> Optional[Dict]:
         return self._template_fields
 
     @template_fields.setter
-    def template_fields(self, value):
+    def template_fields(self, value: Optional[Dict]):
         if not isinstance(value, (dict, type(None))):
             raise TypeError("template_fields must be a dict")
 
         self._template_fields = value
 
     @property
-    def sender(self):
+    def sender(self) -> str:
         return self._sender
 
     @sender.setter
-    def sender(self, value):
+    def sender(self, value: str) -> None:
         if not VALID_SENDER.match(value):
             raise ValueError("sender must be a numeric string")
         self._sender = value
 
     @property
-    def msisdn(self):
+    def msisdn(self) -> str:
         return self._msisdn
 
     @msisdn.setter
-    def msisdn(self, value):
+    def msisdn(self, value: str) -> None:
         if not VALID_MSISDN.match(value):
             raise ValueError("msisdn must be a numeric string")
         self._msisdn = value
 
     @property
-    def common_payload(self):
+    def common_payload(self) -> Dict:
         return {"sender": self.sender, "msisdn": self.msisdn}
 
     @property
-    def _registration_payload(self):
+    def _registration_payload(self) -> Dict:
         payload = self.common_payload
 
         reg_payload_keys = [
@@ -158,13 +149,18 @@ class Sms(object):
 
         for key in reg_payload_keys:
             if getattr(self, key) is not None:
-                payload[key] = getattr(self, key)
+                if isinstance(getattr(self, key), datetime):
+                    payload[key] = datetime.strptime(
+                        getattr(self, key), "%Y-%m-%dT%H:%M:%S"
+                    )
+                else:
+                    payload[key] = getattr(self, key)
 
         return payload
 
     @property
-    def create_and_send_audience(self):
-        audience = {"ua_sender": self.sender, "ua_msisdn": self.msisdn}
+    def create_and_send_audience(self) -> Dict:
+        audience: Dict[str, Any] = {"ua_sender": self.sender, "ua_msisdn": self.msisdn}
 
         if self.template_fields:
             audience.update(self.template_fields)
@@ -177,7 +173,7 @@ class Sms(object):
             )
         return audience
 
-    def register(self, opted_in=None):
+    def register(self, opted_in: Optional[datetime] = None) -> Response:
         """
         Register an Sms channel with the sender ID and MSISDN
 
@@ -211,7 +207,7 @@ class Sms(object):
 
         return response
 
-    def update(self, channel_id=None):
+    def update(self, channel_id: Optional[str] = None) -> Response:
         """
         Updates properties of an existing SMS channel.
 
@@ -222,11 +218,11 @@ class Sms(object):
 
         :return: The response object from the API
         """
-        if channel_id is not None:
-            self.channel_id = channel_id
 
         if self.channel_id is None:
             raise ValueError("SMS Channel must have a channel id to update.")
+
+        self.channel_id = channel_id
 
         response = self.airship.request(
             method="PUT",
@@ -237,7 +233,7 @@ class Sms(object):
 
         return response
 
-    def opt_out(self):
+    def opt_out(self) -> Response:
         """
         Mark an sms channel at opted-out by sender ID and MSISDN
 
@@ -260,7 +256,7 @@ class Sms(object):
 
         return response
 
-    def uninstall(self):
+    def uninstall(self) -> Response:
         """
         Uninstall and remove all associated data from Airship
         systems. Channel cannot be opted-in again. Use with caution.
@@ -283,7 +279,7 @@ class Sms(object):
 
         return response
 
-    def lookup(self):
+    def lookup(self) -> Response:
         """
         Look up Sms channel information
 
@@ -310,7 +306,14 @@ class KeywordInteraction(object):
     :param timestamp: Optional. A datetime.datetime representing the time of the interaction.
     """
 
-    def __init__(self, airship, keyword, msisdn, sender_ids, timestamp=None):
+    def __init__(
+        self,
+        airship: Airship,
+        keyword: str,
+        msisdn: str,
+        sender_ids: List[str],
+        timestamp: Optional[datetime] = None,
+    ) -> None:
         self.airship = airship
         self.keyword = keyword
         self.msisdn = msisdn
@@ -321,27 +324,33 @@ class KeywordInteraction(object):
             raise ValueError("sender_ids must be a list")
 
     @property
-    def timestamp(self):
-        return self._timestamp.replace(microsecond=0).isoformat()
+    def timestamp(self) -> Optional[datetime]:
+        return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: Optional[datetime]) -> None:
         if type(value) is not datetime and value is not None:
             raise ValueError("timestamp must be a datetime object")
 
         self._timestamp = value
 
     @property
-    def payload(self):
-        return {"keyword": self.keyword, "sender_ids": self.sender_ids}
+    def payload(self) -> Dict:
+        data: Dict = {"keyword": self.keyword, "sender_ids": self.sender_ids}
+        if self.timestamp:
+            data.update(
+                {"timestamp": self.timestamp.replace(microsecond=0).isoformat()}
+            )
+
+        return data
 
     @property
-    def url(self):
+    def url(self) -> str:
         return "{base_url}sms/{msisdn}/keywords".format(
             base_url=self.airship.urls.get("base_url"), msisdn=self.msisdn
         )
 
-    def post(self):
+    def post(self) -> Response:
         """Send the interaction"""
         response = self.airship.request(
             method="POST", url=self.url, body=self.payload, version=3
@@ -371,7 +380,7 @@ class SmsCustomResponse:
 
     def __init__(
         self,
-        airship,
+        airship: Airship,
         mobile_originated_id: str,
         sms: Optional[Dict] = None,
         mms: Optional[Dict] = None,
@@ -404,7 +413,7 @@ class SmsCustomResponse:
         if all((self.sms is None, self.mms is None)):
             raise ValueError("One of mms or sms must be set.")
 
-        payload = {"mobile_originated_id": self.mobile_originated_id}
+        payload: Dict[str, Any] = {"mobile_originated_id": self.mobile_originated_id}
 
         if self.sms is not None:
             payload["sms"] = self.sms

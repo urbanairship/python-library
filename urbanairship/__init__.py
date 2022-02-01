@@ -1,9 +1,10 @@
 """Python package for using the Airship API"""
 import logging
+from typing import Any, List
 
+from .core import Airship
 from .automation import Automation, Pipeline
 from .common import AirshipFailure, Unauthorized
-from .core import Airship
 from .custom_events import CustomEvent
 from .devices import (
     APIDList,
@@ -110,7 +111,7 @@ from .reports import (
     WebResponseReport,
 )
 
-__all__ = [
+__all__: List[Any] = [
     Airship,
     AirshipFailure,
     Unauthorized,

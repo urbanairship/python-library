@@ -1,3 +1,5 @@
+from typing import List, Any
+
 from .audience import (
     alias,
     amazon_channel,
@@ -59,14 +61,14 @@ from .template import Template, TemplateList, merge_data
 
 # Common selector for audience & device_types
 
-all_ = "all"
+all_: str = "all"
 """Select all, to do a broadcast.
 
 Used in both ``audience`` and ``device_types``.
 """
 
 
-__all__ = [
+__all__: List[Any] = [
     all_,
     Push,
     ScheduledPush,

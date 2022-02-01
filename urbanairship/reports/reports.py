@@ -1,17 +1,20 @@
 from datetime import datetime
+from typing import Dict, Any, Optional
 
-from urbanairship import common
+from urbanairship import common, Airship
+
+DATE_FORMAT_STR: str = "%Y-%m-%d %H:%M:%S"
 
 
 class IndividualResponseStats(object):
     """Returns detailed reports information about a specific push notification."""
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self.airship = airship
 
-    def get(self, push_id):
+    def get(self, push_id: str) -> common.IteratorDataObj:
         url = self.airship.urls.get("reports_url") + "responses/" + push_id
-        response = self.airship.request("GET", None, url, version=3)
+        response = self.airship.request(method="GET", body="", url=url, version=3)
         payload = response.json()
         return common.IteratorDataObj.from_payload(payload)
 
@@ -21,17 +24,24 @@ class ResponseList(common.IteratorParent):
     timeframe. Start and end date times are required parameters.
     """
 
-    next_url = None
-    data_attribute = "pushes"
+    next_url: Optional[str] = None
+    data_attribute: str = "pushes"
 
-    def __init__(self, airship, start_date, end_date, limit=None, start_id=None):
+    def __init__(
+        self,
+        airship: Airship,
+        start_date: datetime,
+        end_date: datetime,
+        limit: Optional[str] = None,
+        start_id: Optional[str] = None,
+    ):
         if not airship or not start_date or not end_date:
             raise TypeError("airship, start_date, & end_date cannot be empty")
         if not isinstance(start_date, datetime) or not isinstance(end_date, datetime):
             raise TypeError("start_date and end_date must be datetime objects")
         params = {
-            "start": start_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "end": end_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "start": start_date.strftime(DATE_FORMAT_STR),
+            "end": end_date.strftime(DATE_FORMAT_STR),
         }
         if limit:
             params["limit"] = limit
@@ -46,27 +56,31 @@ class DevicesReport(object):
     type as a daily snapshot. This endpoint returns the same data that populates the
     Devices Report on the web dashboard."""
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship):
         self.airship = airship
 
-    def get(self, date):
+    def get(self, date: datetime):
         if not date:
             raise TypeError("date cannot be empty")
         if not isinstance(date, datetime):
             raise ValueError("date must be a datetime object")
         url = self.airship.urls.get("reports_url") + "devices/"
-        params = {"date": date.strftime("%Y-%m-%dT%H:%M:%S")}
-        response = self.airship._request("GET", None, url, version=3, params=params)
+        params = {"date": date.strftime(DATE_FORMAT_STR)}
+        response = self.airship._request(
+            method="GET", body="", url=url, version=3, params=params
+        )
         return response.json()
 
 
 class ReportsList(common.IteratorParent):
     """Parent class for reports"""
 
-    next_url = None
-    data_attribute = None
+    next_url: Optional[str] = None
+    data_attribute: Optional[str] = None
 
-    def __init__(self, airship, start_date, end_date, precision):
+    def __init__(
+        self, airship: Airship, start_date: datetime, end_date: datetime, precision: str
+    ):
         if not airship or not start_date or not end_date or not precision:
             raise TypeError("None of the function parameters can be empty")
 
@@ -79,8 +93,8 @@ class ReportsList(common.IteratorParent):
         base_url = airship.urls.get("reports_url")
 
         params = {
-            "start": start_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "end": end_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "start": start_date.strftime(DATE_FORMAT_STR),
+            "end": end_date.strftime(DATE_FORMAT_STR),
             "precision": precision,
         }
 

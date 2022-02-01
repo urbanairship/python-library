@@ -1,18 +1,21 @@
+from typing import Any, Dict, Optional
 import json
+
+from urbanairship.experiments.experiment import Experiment
 
 
 class ABTest(object):
     def __init__(self, airship):
         self.airship = airship
 
-    def _get_listing(self, url, limit=None):
+    def _get_listing(self, url: str, limit: Optional[int] = None) -> Dict:
         """List experiments
 
         :keyword limit: Optional, maximum number of experiments,
         default is 10, max is 100
         """
 
-        params = {}
+        params: Dict[str, Any] = {}
         if isinstance(limit, int):
             params["limit"] = limit
 
@@ -21,7 +24,7 @@ class ABTest(object):
         )
         return response
 
-    def list_experiments(self):
+    def list_experiments(self) -> Dict:
         """List experiments, sorted by created_at date/time from newest to oldest
 
         :keyword limit: Positive maximum number of elements to return per page.
@@ -30,7 +33,7 @@ class ABTest(object):
         url = self.airship.urls.get("experiments_url")
         return self._get_listing(url)
 
-    def create(self, experiment):
+    def create(self, experiment: Experiment) -> Dict:
         """Create an experiment"""
 
         url = self.airship.urls.get("experiments_url")
@@ -44,14 +47,14 @@ class ABTest(object):
         )
         return response
 
-    def list_scheduled_experiment(self):
+    def list_scheduled_experiment(self) -> Dict:
         """List scheduled experiments in order, from closest to the current
         date-time to farthest"""
 
         url = self.airship.urls.get("experiments_schedule_url")
         return self._get_listing(url)
 
-    def delete(self, experiment_id):
+    def delete(self, experiment_id: str) -> Dict:
         """Delete a scheduled experiment. You can only delete experiments before they start
 
         :keyword experiment_id: The unique identifier of the experiment, type string
@@ -62,7 +65,7 @@ class ABTest(object):
 
         return response
 
-    def validate(self, experiment):
+    def validate(self, experiment: Experiment) -> Dict:
         """Accepts the same range of payloads as /api/experiments,
         but only parses and validates the payload without creating the experiment.
         An experiment may validate and still fail to be delivered. For example,
@@ -82,7 +85,7 @@ class ABTest(object):
 
         return response
 
-    def lookup(self, experiment_id):
+    def lookup(self, experiment_id: str) -> Dict:
         """Look up an experiment (A/B Test)
 
         :keyword experiment_id: The unique identifier of the experiment, type string

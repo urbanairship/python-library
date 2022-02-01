@@ -1,8 +1,12 @@
 import datetime
 import json
 import logging
+from typing import Dict, List, Optional, Any, Type
 
-from urbanairship import common
+from requests import Response
+
+from urbanairship import common, Airship
+from urbanairship.push.core import Push
 
 
 logger = logging.getLogger("urbanairship")
@@ -31,53 +35,52 @@ class Template(object):
 
     """
 
-    def __init__(self, airship, name=None, description=None, variables=None, push=None):
+    def __init__(
+        self,
+        airship: Airship,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        variables: Optional[List[Dict[str, Any]]] = None,
+        push: Optional[Type[Push]] = None,
+    ) -> None:
         self.airship = airship
-        self._template_id = None
-        self._created_at = None
-        self._modified_at = None
-        self._last_used = None
-        if name is not None:
-            self.name = name
-        else:
-            self.name = None
-        if description is not None:
-            self.description = description
-        else:
-            self.description = None
-        if variables is not None:
-            self.variables = variables
-        else:
-            self.variables = []
-        if push is not None:
-            self.push = push
-        else:
-            self.push = {}
+        self._template_id: Optional[str] = None
+        self._created_at: Optional[datetime.datetime] = None
+        self._modified_at: Optional[datetime.datetime] = None
+        self._last_used: Optional[datetime.datetime] = None
+        self.name = name
+        self.description = description
+        self.variables = variables
+        self.push = push
 
     @property
-    def template_id(self):
+    def template_id(self) -> Optional[str]:
         return self._template_id
 
     @property
-    def created_at(self):
+    def created_at(self) -> Optional[datetime.datetime]:
         return self._created_at
 
     @property
-    def modified_at(self):
+    def modified_at(self) -> Optional[datetime.datetime]:
         return self._modified_at
 
     @property
-    def last_used(self):
+    def last_used(self) -> Optional[datetime.datetime]:
         return self._last_used
 
     @property
-    def payload(self):
-        data = {"name": self.name, "variables": self.variables, "push": self.push}
+    def payload(self) -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "name": self.name,
+            "variables": self.variables,
+            "push": self.push,
+        }
         if self.description is not None:
             data["description"] = self.description
         return data
 
-    def create(self):
+    def create(self) -> Response:
         """Create a notification template with the API.
 
         :raises AirshipFailure: Request failed.
@@ -90,9 +93,6 @@ class Template(object):
 
         if not self.push:
             raise ValueError("Must set push before template creation.")
-
-        if "message" in self.push.keys():
-            raise ValueError("Message center is not supported by templates.")
 
         body = json.dumps(self.payload)
         response = self.airship._request(
@@ -107,7 +107,7 @@ class Template(object):
 
         return response
 
-    def update(self, template_id=None):
+    def update(self, template_id: Optional[str] = None) -> Response:
         """Update a template with the API.
 
         :raises AirshipFailure: Request failed.
@@ -115,7 +115,7 @@ class Template(object):
 
         """
 
-        update_payload = {}
+        update_payload: Dict[str, Any] = {}
 
         if (
             not self.name
@@ -134,9 +134,6 @@ class Template(object):
         if self.description:
             update_payload["description"] = self.description
 
-        if "message" in self.push.keys():
-            raise ValueError("Message center is not supported by templates.")
-
         if self.push:
             update_payload["push"] = self.push
 
@@ -152,7 +149,7 @@ class Template(object):
         response = self.airship._request(
             method="POST",
             body=body,
-            url=self.airship.urls.get("templates_url") + self.template_id,
+            url=f"{self.airship.urls.get('templates_url')}{self.template_id}",
             content_type="application/json",
             version=3,
         )
@@ -160,7 +157,7 @@ class Template(object):
 
         return response
 
-    def delete(self, template_id=None):
+    def delete(self, template_id: Optional[str] = None) -> Response:
         """Delete a previously created template.
 
         :raises AirshipFailure: Request failed.
@@ -176,7 +173,7 @@ class Template(object):
         response = self.airship._request(
             method="DELETE",
             body=None,
-            url=self.airship.urls.get("templates_url") + self.template_id,
+            url=f'{self.airship.urls.get("templates_url")}{self.template_id}',
             version=3,
         )
         logger.info("Successful template delete for template %s", self.template_id)
@@ -225,10 +222,10 @@ class TemplateList(common.IteratorParent):
 
     """
 
-    next_url = None
-    data_attribute = "templates"
-    id_key = "id"
-    instance_class = Template
+    next_url: Optional[str] = None
+    data_attribute: str = "templates"
+    id_key: str = "id"
+    instance_class: Type[Template] = Template
 
     def __init__(self, airship, limit=None):
         params = {"limit": limit} if limit else {}
@@ -236,7 +233,7 @@ class TemplateList(common.IteratorParent):
         super(TemplateList, self).__init__(airship, params)
 
 
-def merge_data(template_id, substitutions):
+def merge_data(template_id: str, substitutions: Dict[str, Any]) -> Dict[str, Any]:
     """Template push merge_data creation.
 
     :param template_id: Required, UUID.
@@ -245,7 +242,7 @@ def merge_data(template_id, substitutions):
 
     """
 
-    md = {}
+    md: Dict[str, Any] = {}
 
     md["template_id"] = template_id
     md["substitutions"] = {

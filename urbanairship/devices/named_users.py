@@ -1,8 +1,11 @@
 import json
 import logging
+from typing import Any, Dict, List, Optional, Union, TypeVar
+
+from requests import Response
 
 from urbanairship.devices import ChannelTags
-from urbanairship import common
+from urbanairship import common, Airship
 
 logger = logging.getLogger("urbanairship")
 
@@ -14,15 +17,15 @@ class NamedUser(object):
     :param airship: Required. An instance of urbanairship.Airship.
     """
 
-    def __init__(self, airship, named_user_id=None):
+    def __init__(self, airship: Airship, named_user_id: Optional[str] = None) -> None:
         self._airship = airship
         self.named_user_id = named_user_id
-        self.channel_id = None
-        self.email_address = None
-        self.device_type = None
+        self.channel_id: Optional[str] = None
+        self.email_address: Optional[str] = None
+        self.device_type: Optional[str] = None
 
     @property
-    def _channel_associate_payload(self):
+    def _channel_associate_payload(self) -> Dict:
         """
         creates the paylaod for channel_id associate and disassociate calls
         """
@@ -34,7 +37,7 @@ class NamedUser(object):
         return payload
 
     @property
-    def _email_associate_payload(self):
+    def _email_associate_payload(self) -> Dict:
         """
         creates the payload for email_address associate and disassociate calls
         """
@@ -43,7 +46,7 @@ class NamedUser(object):
             "email_address": self.email_address,
         }
 
-    def _dis_associate(self, url, body):
+    def _dis_associate(self, url: str, body: Dict) -> Response:
         response = self._airship.request(
             method="POST",
             body=json.dumps(body),
@@ -54,7 +57,7 @@ class NamedUser(object):
 
         return response
 
-    def associate(self, channel_id, device_type=None):
+    def associate(self, channel_id: str, device_type: Optional[str] = None) -> Response:
         """Associate a channel_id  with a named user ID.
         Either channel_id and device_type OR email_address must be included.
 
@@ -78,7 +81,7 @@ class NamedUser(object):
             body=self._channel_associate_payload,
         )
 
-    def email_associate(self, email_address):
+    def email_associate(self, email_address: str) -> Response:
         """Associate an email_address with a named user id. This call is for a literal
         email address.
 
@@ -96,7 +99,9 @@ class NamedUser(object):
             body=self._email_associate_payload,
         )
 
-    def disassociate(self, channel_id, device_type=None):
+    def disassociate(
+        self, channel_id: str, device_type: Optional[str] = None
+    ) -> Response:
         """Disassociate a channel with a named user ID
 
         :param channel_id: The ID of the channel you would like to disassociate
@@ -118,7 +123,7 @@ class NamedUser(object):
             body=self._channel_associate_payload,
         )
 
-    def email_disassociate(self, email_address):
+    def email_disassociate(self, email_address: str) -> Response:
         """Disassociate an email_address with a named user ID
 
         :param channel_id: The email_address you would like to disassociate
@@ -135,7 +140,7 @@ class NamedUser(object):
             body=self._email_associate_payload,
         )
 
-    def lookup(self):
+    def lookup(self) -> Union[Dict, str]:
         """Lookup a single named user
 
         :return: The named user payload for the named user ID
@@ -150,7 +155,13 @@ class NamedUser(object):
         )
         return response.json()
 
-    def tag(self, group, add=None, remove=None, set=None):
+    def tag(
+        self,
+        group: str,
+        add: Optional[List] = None,
+        remove: Optional[List] = None,
+        set: Optional[List] = None,
+    ) -> Dict:
         """Add, remove, or set tags on a named user.
 
         :param add: A list of tags to add
@@ -159,7 +170,9 @@ class NamedUser(object):
         :param group: The Tag group for the add, remove, and set operations
         """
         if self.named_user_id:
-            payload = {"audience": {"named_user_id": self.named_user_id}}
+            payload: Dict[str, Any] = {
+                "audience": {"named_user_id": self.named_user_id}
+            }
         else:
             raise ValueError("A named user ID is required for modifying tags")
 
@@ -195,7 +208,13 @@ class NamedUser(object):
 
         return response.json()
 
-    def update(self, associate=None, disassociate=None, tags=None, attributes=None):
+    def update(
+        self,
+        associate: Optional[List] = None,
+        disassociate: Optional[List] = None,
+        tags: Optional[Dict] = None,
+        attributes: Optional[List] = None,
+    ) -> Response:
         """
         Create or update a named user by associating/disassociating channels
         and adding/removing tags and attributes in a single request.
@@ -223,7 +242,7 @@ class NamedUser(object):
                 "At least one of associate, disassociate, tags, or attributes must be included"
             )
 
-        body = {}
+        body: Dict[str, Any] = {}
 
         if associate:
             body["associate"] = associate
@@ -237,14 +256,14 @@ class NamedUser(object):
         response = self._airship.request(
             method="POST",
             body=json.dumps(body),
-            url=self._airship.urls.get("named_user_url") + self.named_user_id,
+            url=f'{self._airship.urls.get("named_user_url")}{self.named_user_id}',
             content_type="application/json",
             version=3,
         )
 
         return response
 
-    def attributes(self, attributes):
+    def attributes(self, attributes: Optional[List]) -> Response:
         """
         Set or remove attributes on a named user.
         A single request body may contain a set or remove field, or both, or a single
@@ -265,9 +284,7 @@ class NamedUser(object):
         response = self._airship.request(
             method="POST",
             body=json.dumps({"attributes": attributes}),
-            url=self._airship.urls.get("named_user_url")
-            + self.named_user_id
-            + "attributes",
+            url=f'{self._airship.urls.get("named_user_url")}{self.named_user_id}{attributes}',
             content_type="application/json",
             version=3,
         )
@@ -275,7 +292,7 @@ class NamedUser(object):
         return response
 
     @classmethod
-    def uninstall(cls, airship, named_users):
+    def uninstall(cls, airship: Airship, named_users: List[str]) -> Response:
         """
         Disassociate and delete all channels associated with the named_user_id(s) and
         also delete the named_user_id(s). This call removes all channels associated
@@ -304,7 +321,7 @@ class NamedUser(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload):
+    def from_payload(cls, payload: Dict):
         """
         Create NamedUser object based on results from a NamedUserList iterator.
 
@@ -319,10 +336,10 @@ class NamedUser(object):
 class NamedUserList(common.IteratorParent):
     """Retrieves a list of NamedUsers"""
 
-    next_url = None
-    data_attribute = "named_users"
+    next_url: Optional[str] = None
+    data_attribute: str = "named_users"
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship):
         self.next_url = airship.urls.get("named_user_url")
         super(NamedUserList, self).__init__(airship, None)
 
@@ -330,11 +347,18 @@ class NamedUserList(common.IteratorParent):
 class NamedUserTags(ChannelTags):
     """Modify the tags for named users"""
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         super(NamedUserTags, self).__init__(airship)
         self.url = airship.urls.get("named_user_tag_url")
 
-    def set_audience(self, user_ids):
+    def set_audience(
+        self,
+        user_ids: Optional[List[str]] = None,
+        ios: Optional[str] = None,
+        android: Optional[str] = None,
+        amazon: Optional[str] = None,
+        web: Optional[str] = None,
+    ) -> None:
         """Set the named user ids to be modified.
 
         :param user_ids: A list of named user ids.

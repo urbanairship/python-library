@@ -1,8 +1,12 @@
 from datetime import datetime
-from urbanairship import common
-from urbanairship.push import ScheduledPush
 
-VALID_DAYS = [
+from typing import Any, List, Dict, Optional, Type
+
+from urbanairship import common, Airship
+from urbanairship.push.core import ScheduledPush
+
+
+VALID_DAYS: List[str] = [
     "monday",
     "tuesday",
     "wednesday",
@@ -12,7 +16,8 @@ VALID_DAYS = [
     "sunday",
 ]
 
-VALID_RECURRING_TYPES = ["hourly", "daily", "weekly", "monthly", "yearly"]
+VALID_RECURRING_TYPES: List[str] = ["hourly", "daily", "weekly", "monthly", "yearly"]
+DT_FORMAT_STR: str = "%Y-%m-%dT%H:%M:%S"
 
 
 class ScheduledList(common.IteratorParent):
@@ -24,38 +29,38 @@ class ScheduledList(common.IteratorParent):
     :returns: Each ``next`` returns a :py:class:`ScheduledPush` object.
     """
 
-    next_url = None
-    data_attribute = "schedules"
-    id_key = "url"
-    instance_class = ScheduledPush
+    next_url: Optional[str] = None
+    data_attribute: str = "schedules"
+    id_key: str = "url"
+    instance_class: Type[ScheduledPush] = ScheduledPush
 
-    def __init__(self, airship, limit=None):
+    def __init__(self, airship: Airship, limit: int = None) -> None:
         self.next_url = airship.urls.get("schedules_url")
         params = {"limit": limit} if limit else {}
         super(ScheduledList, self).__init__(airship, params)
 
 
-def scheduled_time(timestamp):
+def scheduled_time(timestamp: datetime) -> Dict[str, Any]:
     """Specify a time for the delivery of this push.
 
     :param timestamp: A ``datetime.datetime`` object.
 
     """
 
-    return {"scheduled_time": timestamp.strftime("%Y-%m-%dT%H:%M:%S")}
+    return {"scheduled_time": timestamp.strftime(DT_FORMAT_STR)}
 
 
-def local_scheduled_time(timestamp):
+def local_scheduled_time(timestamp: datetime) -> Dict[str, Any]:
     """Specify a time for the delivery of this push in device local time.
 
     :param timestamp: A ``datetime.datetime`` object.
 
     """
 
-    return {"local_scheduled_time": timestamp.strftime("%Y-%m-%dT%H:%M:%S")}
+    return {"local_scheduled_time": timestamp.strftime(DT_FORMAT_STR)}
 
 
-def best_time(timestamp):
+def best_time(timestamp: datetime) -> Dict[str, Any]:
     """Specify a date to send the push at the best time per-device.
     Only YYYY_MM_DD are needed. Hour/minute/second information is discarded.
 
@@ -66,8 +71,12 @@ def best_time(timestamp):
 
 
 def schedule_exclusion(
-    start_hour=None, end_hour=None, start_date=None, end_date=None, days_of_week=None
-):
+    start_hour: Optional[int] = None,
+    end_hour: Optional[int] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+    days_of_week: Optional[List[str]] = None,
+) -> Dict[str, Any]:
     """
     Date-time ranges when messages are not sent.
     at least one of start_hour and end_hour, start_date and end_date, or days_of_week
@@ -86,16 +95,18 @@ def schedule_exclusion(
         Possible values: monday, tuesday, wednesday, thursday, friday, saturday, sunday
     """
 
-    exclusion = {}
-    if all([(start_hour < 24), (end_hour < 24)]):
-        exclusion["hour_range"] = "{}-{}".format(start_hour, end_hour)
-    else:
-        raise ValueError("start_date and end_date must be datetime.datetime")
+    exclusion: Dict[str, Any] = {}
 
-    if all([(type(start_date) == datetime), (type(end_date) == datetime)]):
+    if isinstance(start_hour, int) and isinstance(end_hour, int):
+        if not all([0 < start_hour < 24, 0 < end_hour < 24]):
+            raise ValueError("start_hour and end_hour must be int 0-23")
+        else:
+            exclusion["hour_range"] = "{}-{}".format(start_hour, end_hour)
+
+    if isinstance(start_date, datetime) and isinstance(end_date, datetime):
         exclusion["date_range"] = "{}/{}".format(
-            start_date.strftime("%Y-%m-%dT%H:%M:%S"),
-            end_date.strftime("%Y-%m-%dT%H:%M:%S"),
+            start_date.strftime(DT_FORMAT_STR),
+            end_date.strftime(DT_FORMAT_STR),
         )
     else:
         raise ValueError("start_date and end_date must be datetime.datetime")
@@ -111,8 +122,13 @@ def schedule_exclusion(
 
 
 def recurring_schedule(
-    count, type, end_time=None, days_of_week=None, exclusions=None, paused=False
-):
+    count: int,
+    type: str,
+    end_time: Optional[datetime] = None,
+    days_of_week: Optional[List[str]] = None,
+    exclusions: Optional[List[Dict[str, Any]]] = None,
+    paused: Optional[bool] = False,
+) -> Dict[str, Any]:
     """
     Sets the cadence, end time, and excluded times for a recurring scheduled
     message.
@@ -139,12 +155,12 @@ def recurring_schedule(
     if type not in VALID_RECURRING_TYPES:
         raise ValueError("type must be one of {}".format(VALID_RECURRING_TYPES))
 
-    cadence = {"type": type, "count": count}
+    cadence: Dict[str, Any] = {"type": type, "count": count}
 
     if type == "weekly":
         cadence["days_of_week"] = days_of_week
 
-    recurring = {"cadence": cadence}
+    recurring: Dict[str, Any] = {"cadence": cadence}
 
     if end_time:
         recurring["end_time"] = end_time.strftime("%Y-%m-%dT%H:%M:%S")

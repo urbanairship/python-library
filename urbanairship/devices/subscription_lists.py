@@ -1,4 +1,9 @@
 import json
+from typing import Dict
+
+from requests import Response
+
+from urbanairship import Airship
 
 
 class SubscriptionList(object):
@@ -11,11 +16,11 @@ class SubscriptionList(object):
     :param list_id: Required. The list_id from the Airship web dashboard.
     """
 
-    def __init__(self, airship, list_id):
+    def __init__(self, airship: Airship, list_id: str) -> None:
         self.airship = airship
         self.list_id = list_id
 
-    def unsubscribe(self, audience):
+    def unsubscribe(self, audience: Dict) -> Response:
         """
         Unsubscribe an audience from a subscription list.
 
@@ -29,14 +34,14 @@ class SubscriptionList(object):
 
         response = self.airship.request(
             method="POST",
-            body=json.dumps(payload).encode("utf-8"),
+            body=json.dumps(payload),
             url=self.airship.urls.get("subscription_lists_url"),
             version=3,
         )
 
         return response
 
-    def subscribe(self, audience):
+    def subscribe(self, audience: Dict) -> Response:
         """
         Subscribe an audience from a subscription list.
 
@@ -51,7 +56,7 @@ class SubscriptionList(object):
 
         response = self.airship.request(
             method="POST",
-            body=json.dumps(payload).encode("utf-8"),
+            body=json.dumps(payload),
             url=self.airship.urls.get("subscription_lists_url"),
             version=3,
         )

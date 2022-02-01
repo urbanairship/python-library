@@ -2,10 +2,15 @@ import datetime
 import json
 import logging
 import re
+from typing import Any, Optional, Dict, List
 
-logger = logging.getLogger("urbanairship")
+from requests import Response
+
+from urbanairship import Airship
 
 VALID_UUID = re.compile(r"[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\Z")
+
+logger = logging.getLogger("urbanairship")
 
 
 class OpenChannel(object):
@@ -17,22 +22,22 @@ class OpenChannel(object):
     :param open_platform: The open platform associated with the channel
     """
 
-    channel_id = None
-    address = None
-    open_platform = None
-    identifiers = None
-    opt_in = None
-    installed = None
-    created = None
-    last_registration = None
-    tags = None
-    template_fields = None
+    channel_id: Optional[str] = None
+    address: Optional[str] = None
+    open_platform: Optional[str] = None
+    identifiers: Optional[str] = None
+    opt_in: Optional[bool] = None
+    installed: Optional[bool] = None
+    created: Optional[str] = None
+    last_registration: Optional[str] = None
+    tags: Optional[List] = None
+    template_fields: Optional[Dict] = None
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self.airship = airship
 
     @property
-    def create_and_send_audience(self):
+    def create_and_send_audience(self) -> Dict:
         if not self.address:
             raise ValueError("open channel address must be set")
 
@@ -43,7 +48,7 @@ class OpenChannel(object):
 
         return audience
 
-    def create(self):
+    def create(self) -> Response:
         """Create this OpenChannel object with the API."""
 
         if not self.address:
@@ -60,7 +65,7 @@ class OpenChannel(object):
 
         url = self.airship.urls.get("open_channel_url")
 
-        channel_data = {
+        channel_data: Dict[str, Any] = {
             "type": "open",
             "address": self.address,
             "opt_in": self.opt_in,
@@ -83,7 +88,7 @@ class OpenChannel(object):
 
         return response
 
-    def update(self):
+    def update(self) -> Response:
         """Update this OpenChannel object."""
 
         if not self.address and not self.channel_id:
@@ -100,7 +105,7 @@ class OpenChannel(object):
 
         url = self.airship.urls.get("open_channel_url")
 
-        channel_data = {
+        channel_data: Dict[str, Any] = {
             "type": "open",
             "open": {"open_platform_name": self.open_platform},
             "opt_in": self.opt_in,
@@ -126,7 +131,7 @@ class OpenChannel(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload, airship):
+    def from_payload(cls, payload: Dict, airship: Airship):
         """Instantiate an OpenChannel from a payload."""
         obj = cls(airship)
         for key in payload:
@@ -147,7 +152,7 @@ class OpenChannel(object):
 
         return obj
 
-    def lookup(self, channel_id):
+    def lookup(self, channel_id: str):
         """Retrieves an open channel from the provided channel ID."""
         url = self.airship.urls.get("channel_url") + channel_id
         response = self.airship._request(method="GET", body=None, url=url, version=3)
@@ -155,7 +160,7 @@ class OpenChannel(object):
 
         return self.from_payload(payload, self.airship)
 
-    def uninstall(self):
+    def uninstall(self) -> Response:
         """Mark this OpenChannel object uninstalled"""
         url = self.airship.urls.get("open_channel_url") + "uninstall/"
         if self.address is None or self.open_platform is None:

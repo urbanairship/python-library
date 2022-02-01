@@ -1,4 +1,9 @@
 import json
+from typing import List, Union, Optional
+
+from urbanairship import Airship
+from urbanairship.automation.pipeline import Pipeline
+from requests import Response
 
 
 class Automation(object):
@@ -9,10 +14,10 @@ class Automation(object):
          to use.
     """
 
-    def __init__(self, airship):
+    def __init__(self, airship: Airship) -> None:
         self.airship = airship
 
-    def create(self, pipelines):
+    def create(self, pipelines: Union[Pipeline, List[Pipeline]]) -> Response:
         """Create an automation with one or more Pipeline payloads
 
         :keyword pipelines: A single Pipeline payload or list of Pipeline payloads
@@ -29,7 +34,7 @@ class Automation(object):
 
         return response
 
-    def validate(self, pipelines):
+    def validate(self, pipelines: Union[Pipeline, List[Pipeline]]) -> Response:
         """Validate a Pipeline payloads
 
         :keyword pipelines: A single Pipeline payload or list of Pipeline payloads
@@ -46,7 +51,7 @@ class Automation(object):
 
         return response
 
-    def update(self, pipeline_id, pipeline):
+    def update(self, pipeline_id: str, pipeline: Pipeline) -> Response:
         """Update an existing Automation Pipeline
 
         :keyword pipeline_id: A Pipeline ID
@@ -60,7 +65,7 @@ class Automation(object):
 
         return response
 
-    def delete(self, pipeline_id):
+    def delete(self, pipeline_id: str) -> Response:
         """Delete an existing Automation Pipeline
 
         :keyword pipeline_id: A Pipeline ID
@@ -70,7 +75,7 @@ class Automation(object):
 
         return response
 
-    def lookup(self, pipeline_id):
+    def lookup(self, pipeline_id: str) -> Response:
         """Lookup an Automation Pipeline
 
         :keyword pipeline_id: A Pipeline ID
@@ -80,7 +85,9 @@ class Automation(object):
 
         return response
 
-    def list_automations(self, limit=None, enabled=False):
+    def list_automations(
+        self, limit: Optional[int] = None, enabled: bool = False
+    ) -> Response:
         """List active Automations
 
         :keyword limit: Optional, maximum pipelines to return
@@ -100,7 +107,7 @@ class Automation(object):
 
         return response
 
-    def list_deleted_automations(self, start=None):
+    def list_deleted_automations(self, start: Optional[str] = None) -> Response:
         """List deleted Automation Pipelines
 
         :keyword start: Optional starting timestamp for limiting results in ISO-8601

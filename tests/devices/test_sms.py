@@ -165,7 +165,11 @@ class TestSmsKeywordInteraction(unittest.TestCase):
     def test_payload(self):
         self.assertEqual(
             self.interaction.payload,
-            {"keyword": self.keyword, "sender_ids": self.sender_ids},
+            {
+                "keyword": self.keyword,
+                "sender_ids": self.sender_ids,
+                "timestamp": "2014-10-08T12:00:00",
+            },
         )
 
     def test_url(self):

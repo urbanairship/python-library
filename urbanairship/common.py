@@ -1,6 +1,8 @@
 import logging
 import datetime
 import six
+from typing import Dict, Optional, Any, TypeVar, Union
+
 
 logger = logging.getLogger("urbanairship")
 
@@ -17,12 +19,19 @@ class AirshipFailure(Exception):
 
     """
 
-    error = None
-    error_code = None
-    details = None
-    response = None
+    error: Optional[str] = None
+    error_code: Union[int, str, None] = None
+    details: Optional[str] = None
+    response: Optional[str] = None
 
-    def __init__(self, error, error_code, details, response, *args):
+    def __init__(
+        self,
+        error: Optional[str],
+        error_code: Union[str, int, None],
+        details: Optional[str],
+        response: Optional[str],
+        *args: Any
+    ) -> None:
         self.error = error
         self.error_code = error_code
         self.details = details
@@ -58,10 +67,19 @@ class AirshipFailure(Exception):
         )
 
 
-@six.python_2_unicode_compatible
 class IteratorDataObj(object):
+    airship = None
+    payload: Optional[Dict[str, Any]] = None
+    device_type: Optional[str] = None
+    id: Optional[str] = None
+
     @classmethod
-    def from_payload(cls, payload, device_key=None, airship=None):
+    def from_payload(
+        cls,
+        payload: Dict[str, Any],
+        device_key: Optional[str] = None,
+        airship=None,
+    ):
         obj = cls()
         if device_key:
             obj.device_type = device_key
@@ -77,7 +95,7 @@ class IteratorDataObj(object):
             setattr(obj, key, val)
         return obj
 
-    def __str__(self):
+    def __str__(self) -> str:
         print_str = ""
         for attr in dir(self):
             if not attr.startswith("__") and not hasattr(
@@ -88,12 +106,12 @@ class IteratorDataObj(object):
 
 
 class IteratorParent(six.Iterator):
-    next_url = None
-    data_attribute = None
-    data_list = None
-    params = None
-    id_key = None
-    instance_class = IteratorDataObj
+    next_url: Optional[str] = None
+    data_attribute: Optional[str] = None
+    data_list: Optional[Any] = None
+    params: Optional[Any] = None
+    id_key: Optional[Any] = None
+    instance_class: Any = IteratorDataObj
 
     def __init__(self, airship, params):
         self.airship = airship
@@ -116,7 +134,7 @@ class IteratorParent(six.Iterator):
             else:
                 raise StopIteration
 
-    def _load_page(self):
+    def _load_page(self) -> bool:
         if not self.next_url:
             return False
         response = self.airship.request(
