@@ -1,5 +1,17 @@
 # urbanairship changelog
 
+## 6.0.0
+
+- Removes support for Python 2. New minimum Python versions is 3.6
+- Removes support for location APIs
+- Removes LocationFinder class
+- Removes location-based audience selectors: location, recent_date, absolute_date
+- Adds `token` property to `urbanairship.Airship` to support bearer token API authentication
+- Adds optional `retries` property to urbanairship.Airship to specify number of times to retry failed API requests
+- Adds CustomEvent class for sending custom events
+- Adds SmsCustomResponse class
+- Adds type annotations for function and method signatures
+
 ## 5.7.0
 
 - Adds Custom Event Reports

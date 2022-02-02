@@ -15,7 +15,6 @@ Please include link to open issue if applicable.
 
 * Tests pass in the GitHub Actions CI for the following Python versions:
 
-- [ ] 2.7
 - [ ] 3.6
 - [ ] 3.7
 - [ ] 3.8

@@ -74,6 +74,7 @@ Web Push to a tag
 History
 =======
 
+* 6.0 Support for Bearer Token Authentication. Removes support for Python 2.
 * 5.0 Support for SMS and Email messages. See changelog for other updates.
 * 4.0 Support for Automation, removed Feedback
 * 3.0 Support for Open Channels, several other significant changes
