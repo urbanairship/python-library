@@ -34,5 +34,5 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries",
     ],
-    install_requires=["requests>=1.2", "six"],
+    install_requires=["requests>=1.2", "six", "backoff>=1.11"],
 )
