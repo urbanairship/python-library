@@ -1,0 +1,50 @@
+name: Make Sphinx Docs and Upload to GCS
+
+on:
+  workflow_dispatch:
+    inputs:
+      libVersion:
+        description: Library Version
+        required: true
+        default: x.x.x
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Build & Zip Sphinx HTML Docs
+      run: |
+        cd docs/
+        make clean html
+        cd _build/html
+        tar -czvf ../${{ github.event.inputs.libVersion }}.tar.gz .
+
+  job_id:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - id: 'GCS Authentication'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+    - id: "GCS File Upload"
+      uses: 'google-github-actions/upload-cloud-storage@v0'
+      with:
+        path: '../${{ github.event.inputs.libVersion }}.tar.gz'
+        destination: 'ua-web-ci-prod-docs-transfer/libraries/python/${{ github.event.inputs.libVersion }}.tar.gz'
