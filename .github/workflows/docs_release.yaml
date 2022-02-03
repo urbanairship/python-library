@@ -23,6 +23,12 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.9
+    - name: Setup Gcloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        version: '340.0.0' # This version isn't special, just setting it to make builds stable
+        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -32,15 +38,9 @@ jobs:
         cd docs/
         make clean html
         cd _build/html
-        tar -czvf ../${{ github.event.inputs.libVersion }}.tar.gz .
-    - name: Setup Gcloud SDK
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        version: '340.0.0' # This version isn't special, just setting it to make builds stable
-        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        tar -czvf ${{ github.event.inputs.libVersion }}.tar.gz .
     - id: "gcs-upload"
       uses: 'google-github-actions/upload-cloud-storage@v0'
       with:
-        path: '../${{ github.event.inputs.libVersion }}.tar.gz'
+        path: '${{ github.event.inputs.libVersion }}.tar.gz'
         destination: 'ua-web-ci-prod-docs-transfer/libraries/python/${{ github.event.inputs.libVersion }}.tar.gz'
