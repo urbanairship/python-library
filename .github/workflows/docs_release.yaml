@@ -38,9 +38,9 @@ jobs:
         cd docs/
         make clean html
         cd _build/html
-        tar -czvf ${{ github.event.inputs.libVersion }}.tar.gz .
+        tar -czvf ../../${{ github.event.inputs.libVersion }}.tar.gz .
     - id: "gcs-upload"
       uses: 'google-github-actions/upload-cloud-storage@v0'
       with:
-        path: '${{ github.event.inputs.libVersion }}.tar.gz'
+        path: 'docs/${{ github.event.inputs.libVersion }}.tar.gz'
         destination: 'ua-web-ci-prod-docs-transfer/libraries/python/${{ github.event.inputs.libVersion }}.tar.gz'
