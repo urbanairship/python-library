@@ -2,7 +2,7 @@ import json
 import gzip
 import collections
 import datetime
-from typing import Dict, TypeVar, Optional, Type
+from typing import Dict, Optional
 from io import TextIOWrapper
 
 from requests import Response

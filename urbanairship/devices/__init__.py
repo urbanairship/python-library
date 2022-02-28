@@ -9,3 +9,4 @@ from .segment import Segment, SegmentList
 from .sms import Sms, KeywordInteraction, SmsCustomResponse
 from .static_lists import StaticList, StaticLists
 from .subscription_lists import SubscriptionList
+from .tag_lists import TagList
