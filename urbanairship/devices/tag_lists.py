@@ -1,7 +1,5 @@
 import json
 from typing import Dict, Optional, Any, List
-from io import TextIOWrapper
-from unicodedata import name
 
 from requests import Response
 

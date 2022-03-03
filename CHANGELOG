@@ -1,5 +1,9 @@
 # urbanairship changelog
 
+## 6.1.0
+
+- Adds Support for Tag Lists using the `urbanairship.TagList` class
+
 ## 6.0.0
 
 - Removes support for Python 2. New minimum Python versions is 3.6
