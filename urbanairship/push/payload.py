@@ -1,5 +1,5 @@
 # coding=utf-8
-import collections
+import collections.abc
 import re
 import warnings
 from typing import List, Dict, Optional, Any, Union
@@ -993,7 +993,7 @@ def campaigns(categories: Union[Dict, List, None] = None) -> Dict[str, Any]:
     """
     payload: Dict[str, Any] = {}
     if categories is not None:
-        if not isinstance(categories, collections.Sequence):
+        if not isinstance(categories, collections.abc.Sequence):
             raise TypeError("Each category must be a string")
         if isinstance(categories, list):
             if not categories or len(categories) > 10:
@@ -1039,13 +1039,13 @@ def actions(
     """
     payload: Dict[str, Any] = {}
     if add_tag is not None:
-        if not (isinstance(add_tag, (collections.Sequence))):
+        if not (isinstance(add_tag, (collections.abc.Sequence))):
             raise TypeError("add_tag must be a string or a list of strings")
         if isinstance(add_tag, list) and not add_tag:
             raise ValueError("add_tag list cannot be empty")
         payload["add_tag"] = add_tag
     if remove_tag is not None:
-        if not (isinstance(remove_tag, (collections.Sequence))):
+        if not (isinstance(remove_tag, (collections.abc.Sequence))):
             raise TypeError("remove_tag must be a string or a list of strings")
         if isinstance(remove_tag, list) and not remove_tag:
             raise ValueError("remove_tag list cannot be empty")
