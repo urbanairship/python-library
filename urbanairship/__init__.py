@@ -2,7 +2,7 @@
 import logging
 from typing import Any, List
 
-from .core import Airship
+from .core import Airship, Urls
 from .automation import Automation, Pipeline
 from .common import AirshipFailure, Unauthorized
 from .custom_events import CustomEvent
