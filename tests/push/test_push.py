@@ -1211,7 +1211,7 @@ class TestPush(unittest.TestCase):
 
     def test_missing_name_live_activity(self):
         with self.assertRaises(ValueError):
-            ua.live_activity(event=LiveActivityEvent.END, priority=10)
+            ua.live_activity(name="test", event=LiveActivityEvent.END, priority=10)
 
     def test_valid_live_update(self):
         result = ua.live_update(
@@ -1231,4 +1231,4 @@ class TestPush(unittest.TestCase):
 
     def test_missing_name_live_update(self):
         with self.assertRaises(ValueError):
-            ua.live_update(event=LiveUpdateEvent.END)
+            ua.live_update(name="test", event=LiveUpdateEvent.END)
