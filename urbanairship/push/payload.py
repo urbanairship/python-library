@@ -4,6 +4,8 @@ import re
 import warnings
 from typing import List, Dict, Optional, Any, Union
 
+from urbanairship.enums import LiveActivityEvent, LiveUpdateEvent
+
 # Valid autobadge values: auto, +N, -N
 VALID_AUTOBADGE = re.compile(r"^(auto|[+-][\d]+)$")
 VALID_ICON_COLOR = re.compile(r"^#[0-9a-f]{6}$")
@@ -106,6 +108,7 @@ def ios(
     interruption_level: Optional[str] = None,
     relevance_score: Optional[float] = None,
     target_content_id: Optional[str] = None,
+    live_activity: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """iOS specific platform override payload.
 
@@ -165,6 +168,8 @@ def ios(
     :target_content_id: Optional, a string. The identifier of the window to bring
         forward when the notification is opened. Used for multi-window content, such as
         App Clips.
+    :keyword live_activity: Optional, JSON object that represents the content sent
+        to a Live Activity Notification.
 
     >>> ios(alert='Hello!', sound='cat.caf',
     ...     extra={'articleid': '12345'}) # doctest: +SKIP
@@ -242,6 +247,8 @@ def ios(
         if not isinstance(target_content_id, str):
             raise ValueError("target_content_id must be a string")
         payload["target_content_id"] = target_content_id
+    if live_activity is not None:
+        payload["live_activity"] = live_activity
 
     return payload
 
@@ -268,6 +275,7 @@ def android(
     notification_channel: Optional[str] = None,
     icon: Optional[str] = None,
     icon_color: Optional[str] = None,
+    live_update: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Android specific platform override payload.
 
@@ -308,6 +316,8 @@ def android(
         application’s resource directory.
     :keyword icon_color: Optional. A string in the format of #rrggbb that
         defines the notification accent color.
+    :keyword live_update: Optional, a JSON object that represents the content sent
+        to a Live Update notification.
 
     See
     `GCM Advanced Topics <http://developer.android.com/google/gcm/adv.html>`_
@@ -394,6 +404,8 @@ def android(
         if isinstance(icon_color, str) and not VALID_ICON_COLOR.match(icon_color):
             raise ValueError("icon_color must be in format #rrggbb")
         payload["icon_color"] = icon_color
+    if live_update is not None:
+        payload["live_update"] = live_update
 
     return payload
 
@@ -706,7 +718,7 @@ def email(
         alert_payload["html_body"] = html_body
 
     if attachments is not None:
-        if type(attachments) is not list:
+        if not isinstance(attachments, list):
             raise ValueError("attachments must be a list.")
         payload["attachments"] = [{"id": id} for id in attachments]
 
@@ -717,12 +729,12 @@ def email(
         alert_payload["bypass_opt_in_level"] = bypass_opt_in_level
 
     if click_tracking is not None:
-        if type(click_tracking) is not bool:
+        if not isinstance(click_tracking, bool):
             raise ValueError("click_tracking must be a boolean value.")
         alert_payload["click_tracking"] = click_tracking
 
     if open_tracking is not None:
-        if type(open_tracking) is not bool:
+        if not isinstance(open_tracking, bool):
             raise ValueError("open_tracking must be a boolean value.")
         alert_payload["open_tracking"] = open_tracking
 
@@ -967,20 +979,64 @@ def device_types(*types: Any) -> Union[str, List[str]]:
     return [t for t in types]
 
 
-def options(expiry: Union[str, int, None] = None) -> Dict[str, Any]:
-    """Options payload creation.
-
-    :keyword expiry: time at which push will no longer be sent.
-        Int or UTC time
-
+def options(
+    expiry: Optional[Union[str, int, None]] = None,
+    bypass_frequency_limits: Optional[bool] = None,
+    bypass_holdout_groups: Optional[bool] = None,
+    no_throttle: Optional[bool] = None,
+    omit_from_activity_log: Optional[bool] = None,
+    personalization: Optional[bool] = None,
+    redact_payload: Optional[bool] = None,
+) -> Dict[str, Any]:
     """
+    Options payload creation.
+
+    :param expiry: If true, Delivery expiration, as either absolute ISO UTC timestamp,
+                   or number of seconds from now.
+    :param bypass_frequency_limits: If true, the push ignores any message
+                                    limits that would otherwise apply to your message.
+    :param bypass_holdout_groups: Indicates whether users that are part of a
+                                  holdout group should be included in a push
+                                  if a holdout experiment is active at send time.
+    :param no_throttle: If true, the push will ignore global throttling rates
+                        that have been configured for the application.
+    :param omit_from_activity_log: If true, the push is omitted from the
+                                   Activity Log.
+    :param personalization: If true, enables Handlebars-style template syntax
+                            for eligible fields in a notification or message center objects.
+    :param redact_payload: If true, the push payload will not appear in
+                           Airship’s logs.
+
+    :return: A dictionary representing the options payload.
+    """
+
     payload: Dict[str, Any] = {}
+
     if expiry is not None:
+        if not isinstance(expiry, (str, int)):
+            raise ValueError(
+                "Expiry value must be an integer or time set in UTC as a string"
+            )
         payload["expiry"] = expiry
-    if not (isinstance(expiry, (str, int))):
-        raise ValueError(
-            "Expiry value must be an " "integer or time set in UTC as a string"
-        )
+
+    if bypass_frequency_limits is not None:
+        payload["bypass_frequency_limits"] = bypass_frequency_limits
+
+    if bypass_holdout_groups is not None:
+        payload["bypass_holdout_groups"] = bypass_holdout_groups
+
+    if no_throttle is not None:
+        payload["no_throttle"] = no_throttle
+
+    if omit_from_activity_log is not None:
+        payload["omit_from_activity_log"] = omit_from_activity_log
+
+    if personalization is not None:
+        payload["personalization"] = personalization
+
+    if redact_payload is not None:
+        payload["redact_payload"] = redact_payload
+
     return payload
 
 
@@ -1261,3 +1317,124 @@ def localization(
         data["in_app"] = in_app
 
     return data
+
+
+def live_activity(
+    event: LiveActivityEvent,
+    alert: Optional[Dict[str, Any]] = None,
+    name: str = None,
+    priority: int = 10,
+    content_state: Optional[Dict[str, Any]] = None,
+    relevance_score: Optional[float] = None,
+    stale_date: Optional[int] = None,
+    dismissal_date: Optional[int] = None,
+    timestamp: Optional[int] = None,
+) -> Dict[str, Any]:
+    """Generates the Live Activity payload.
+
+    :param event: The event type. Expected values: "update" or "end".
+    :param alert: The alert object. Expects a dictionary with keys "body", "sound",
+        and "title".
+    :param name: The name of the Live Activity.
+    :param priority: The APNs priority. Valid values: 5 or 10.
+    :param content_state: A dictionary of string keys to arbitrary JSON values that
+        represents the content state to be updated by the Live Activity notification.
+    :param dismissal_date: Optional epoch timestamp for ending the Live Activity.
+    :param relevance_score: Optional relevance score.
+    :param stale_date: Optional timestamp indicating when the Live Activity becomes
+        outdated.
+    :param timestamp: Optional timestamp for the Live Activity update.
+    :return: A dictionary representing the Live Activity payload.
+    """
+
+    ALLOWED_ALERT_KEYS = {"body", "sound", "title"}
+    payload: Dict[str, Any] = {}
+
+    if alert is not None:
+        if not isinstance(alert, dict):
+            raise TypeError("'alert' must be a dictionary")
+        if not set(alert.keys()).issubset(ALLOWED_ALERT_KEYS):
+            raise ValueError(
+                f"'alert' contains invalid keys. Allowed keys are: {ALLOWED_ALERT_KEYS}"
+            )
+        payload["alert"] = alert
+
+    payload["event"] = event.value
+
+    if not name:
+        raise ValueError("'name' is required")
+    payload["name"] = name
+
+    if priority not in [5, 10]:
+        raise ValueError("'priority' must be 5 or 10")
+    payload["priority"] = priority
+
+    if content_state is not None:
+        if not isinstance(content_state, dict):
+            raise TypeError("'content_state' must be a dictionary")
+        payload["content_state"] = content_state
+
+    if relevance_score is not None:
+        payload["relevance_score"] = relevance_score
+
+    if stale_date is not None:
+        payload["stale_date"] = stale_date
+
+    if dismissal_date is not None:
+        payload["dismissal_date"] = dismissal_date
+
+    if timestamp is not None:
+        payload["timestamp"] = timestamp
+
+    return payload
+
+
+def live_update(
+    event: LiveUpdateEvent,
+    name: str = None,
+    content_state: Optional[Dict[str, Any]] = None,
+    type_: Optional[str] = None,
+    dismissal_date: Optional[int] = None,
+    timestamp: Optional[int] = None,
+) -> Dict[str, Any]:
+    """
+    Generates the Live Update payload.
+
+    :param event: The event type for the Live Update. Expected values are members of
+        the LiveUpdateEvent enum: "start", "update", or "end".
+    :param name: The name of the Live Update to target. When event is "update" or
+        "end", the audience is limited to devices that have a Live Update started for
+        the specified name.
+    :param content_state: A dictionary of string keys to arbitrary JSON values that
+        represents the content state to be updated by the Live Update notification.
+    :param type_: Used to map Live Update events to the corresponding handler in your
+        app. This is required to identify what kind of live update is being sent, so
+        the application knows how to handle it.
+    :param dismissal_date: Optional epoch timestamp for ending the Live Update.
+    :param timestamp: Optional timestamp for the Live Update update.
+    :return: A dictionary representing the Live Update payload.
+    """
+
+    payload: Dict[str, Any] = {}
+
+    payload["event"] = event.value
+
+    if not name:
+        raise ValueError("'name' is required")
+    payload["name"] = name
+
+    if content_state is not None:
+        if not isinstance(content_state, dict):
+            raise TypeError("'content_state' must be a dictionary")
+        payload["content_state"] = content_state
+
+    if type_:
+        payload["type"] = type_
+
+    if dismissal_date is not None:
+        payload["dismissal_date"] = dismissal_date
+
+    if timestamp is not None:
+        payload["timestamp"] = timestamp
+
+    return payload

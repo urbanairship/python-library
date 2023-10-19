@@ -193,7 +193,6 @@ class Airship(object):
         params: Optional[Dict[str, Any]] = None,
         encoding: Optional[str] = None,
     ) -> requests.Response:
-
         headers: Dict[str, str] = {
             "User-agent": "UAPythonLib/{0} {1}".format(__about__.__version__, self.key)
         }
@@ -207,7 +206,9 @@ class Airship(object):
             headers["Content-Encoding"] = encoding
 
         @backoff.on_exception(
-            backoff.expo, common.AirshipFailure, max_tries=(self.retries + 1)
+            backoff.expo,
+            (common.AirshipFailure, requests.exceptions.ConnectionError),
+            max_tries=(self.retries + 1),
         )
         def make_retryable_request(
             method: str,

@@ -48,6 +48,9 @@ from .payload import (
     wearable,
     web,
     wns_payload,
+    live_activity,
+    live_update,
+    media_attachment,
 )
 from .schedule import (
     ScheduledList,
@@ -127,4 +130,7 @@ __all__: List[Any] = [
     localization,
     recurring_schedule,
     schedule_exclusion,
+    live_activity,
+    live_update,
+    media_attachment,
 ]
