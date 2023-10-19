@@ -1323,7 +1323,7 @@ def live_activity(
     event: LiveActivityEvent,
     alert: Optional[Dict[str, Any]] = None,
     name: str = None,
-    priority: int = 10,
+    priority: int = None,
     content_state: Optional[Dict[str, Any]] = None,
     relevance_score: Optional[float] = None,
     stale_date: Optional[int] = None,
@@ -1350,7 +1350,7 @@ def live_activity(
     ALLOWED_ALERT_KEYS = {"body", "sound", "title"}
     payload: Dict[str, Any] = {}
 
-    if alert is not None:
+    if alert:
         if not isinstance(alert, dict):
             raise TypeError("'alert' must be a dictionary")
         if not set(alert.keys()).issubset(ALLOWED_ALERT_KEYS):
@@ -1365,22 +1365,23 @@ def live_activity(
         raise ValueError("'name' is required")
     payload["name"] = name
 
-    if priority not in [5, 10]:
-        raise ValueError("'priority' must be 5 or 10")
-    payload["priority"] = priority
+    if priority:
+        if priority not in [5, 10]:
+            raise ValueError("'priority' must be 5 or 10")
+        payload["priority"] = priority
 
-    if content_state is not None:
+    if content_state:
         if not isinstance(content_state, dict):
             raise TypeError("'content_state' must be a dictionary")
         payload["content_state"] = content_state
 
-    if relevance_score is not None:
+    if relevance_score:
         payload["relevance_score"] = relevance_score
 
-    if stale_date is not None:
+    if stale_date:
         payload["stale_date"] = stale_date
 
-    if dismissal_date is not None:
+    if dismissal_date:
         payload["dismissal_date"] = dismissal_date
 
     if timestamp is not None:
@@ -1423,7 +1424,7 @@ def live_update(
         raise ValueError("'name' is required")
     payload["name"] = name
 
-    if content_state is not None:
+    if content_state:
         if not isinstance(content_state, dict):
             raise TypeError("'content_state' must be a dictionary")
         payload["content_state"] = content_state
@@ -1431,10 +1432,10 @@ def live_update(
     if type_:
         payload["type"] = type_
 
-    if dismissal_date is not None:
+    if dismissal_date:
         payload["dismissal_date"] = dismissal_date
 
-    if timestamp is not None:
+    if timestamp:
         payload["timestamp"] = timestamp
 
     return payload

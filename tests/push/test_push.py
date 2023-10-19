@@ -1159,15 +1159,15 @@ class TestPush(unittest.TestCase):
         with self.assertRaises(ValueError):
             ua.localization(country="us", language="en")
 
-    def test_options_expiry_as_int():
+    def test_options_expiry_as_int(self):
         result = ua.options(expiry=300)
         assert result == {"expiry": 300}
 
-    def test_options_expiry_as_string():
+    def test_options_expiry_as_string(self):
         result = ua.options(expiry="2023-10-19T10:00:00Z")
         assert result == {"expiry": "2023-10-19T10:00:00Z"}
 
-    def test_options_with_multiple_values():
+    def test_options_with_multiple_values(self):
         result = ua.options(
             expiry="2023-10-19T10:00:00Z",
             bypass_frequency_limits=True,
