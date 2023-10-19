@@ -1069,7 +1069,7 @@ def campaigns(categories: Union[Dict, List, None] = None) -> Dict[str, Any]:
 def actions(
     add_tag: Union[str, List[str], None] = None,
     remove_tag: Union[str, List[str], None] = None,
-    open_: Dict[str, Any] = None,
+    open_: Optional[Dict[str, Any]] = None,
     share: Optional[str] = None,
     app_defined: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
@@ -1320,10 +1320,10 @@ def localization(
 
 
 def live_activity(
+    name: str,
     event: LiveActivityEvent,
     alert: Optional[Dict[str, Any]] = None,
-    name: str = None,
-    priority: int = None,
+    priority: Optional[int] = None,
     content_state: Optional[Dict[str, Any]] = None,
     relevance_score: Optional[float] = None,
     stale_date: Optional[int] = None,
@@ -1332,10 +1332,10 @@ def live_activity(
 ) -> Dict[str, Any]:
     """Generates the Live Activity payload.
 
+    :param name: The name of the Live Activity.
     :param event: The event type. Expected values: "update" or "end".
     :param alert: The alert object. Expects a dictionary with keys "body", "sound",
         and "title".
-    :param name: The name of the Live Activity.
     :param priority: The APNs priority. Valid values: 5 or 10.
     :param content_state: A dictionary of string keys to arbitrary JSON values that
         represents the content state to be updated by the Live Activity notification.
@@ -1350,6 +1350,12 @@ def live_activity(
     ALLOWED_ALERT_KEYS = {"body", "sound", "title"}
     payload: Dict[str, Any] = {}
 
+    if not name:
+        raise ValueError("'name' is required")
+    payload["name"] = name
+
+    payload["event"] = event.value
+
     if alert:
         if not isinstance(alert, dict):
             raise TypeError("'alert' must be a dictionary")
@@ -1358,12 +1364,6 @@ def live_activity(
                 f"'alert' contains invalid keys. Allowed keys are: {ALLOWED_ALERT_KEYS}"
             )
         payload["alert"] = alert
-
-    payload["event"] = event.value
-
-    if not name:
-        raise ValueError("'name' is required")
-    payload["name"] = name
 
     if priority:
         if priority not in [5, 10]:
@@ -1391,8 +1391,8 @@ def live_activity(
 
 
 def live_update(
+    name: str,
     event: LiveUpdateEvent,
-    name: str = None,
     content_state: Optional[Dict[str, Any]] = None,
     type_: Optional[str] = None,
     dismissal_date: Optional[int] = None,
@@ -1401,11 +1401,11 @@ def live_update(
     """
     Generates the Live Update payload.
 
-    :param event: The event type for the Live Update. Expected values are members of
-        the LiveUpdateEvent enum: "start", "update", or "end".
     :param name: The name of the Live Update to target. When event is "update" or
         "end", the audience is limited to devices that have a Live Update started for
         the specified name.
+    :param event: The event type for the Live Update. Expected values are members of
+        the LiveUpdateEvent enum: "start", "update", or "end".
     :param content_state: A dictionary of string keys to arbitrary JSON values that
         represents the content state to be updated by the Live Update notification.
     :param type_: Used to map Live Update events to the corresponding handler in your
@@ -1418,11 +1418,11 @@ def live_update(
 
     payload: Dict[str, Any] = {}
 
-    payload["event"] = event.value
-
     if not name:
         raise ValueError("'name' is required")
     payload["name"] = name
+
+    payload["event"] = event.value
 
     if content_state:
         if not isinstance(content_state, dict):
