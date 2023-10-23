@@ -1,5 +1,11 @@
 # urbanairship changelog
 
+## 6.2.0
+
+- Adds Support for iOS Live Activity and Android Live Update
+- Adds new class `ConnectionFailure`
+- Adds `bypass_holdout_groups` parameter for push options
+
 ## 6.1.0
 
 - Adds Support for Tag Lists using the `urbanairship.TagList` class
