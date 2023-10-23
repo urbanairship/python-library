@@ -97,6 +97,9 @@ attributes, the notification is ready for delivery. Use ``Push.send()`` to send 
 If the request is unsuccessful, an :py:class:`AirshipFailure` exception
 will be raised.
 
+If the connection is unsuccessful, an :py:class:`ConnectionFailure` exception
+will be raised.
+
 .. autoclass:: urbanairship.push.core.Push
    :members: send, validate
 

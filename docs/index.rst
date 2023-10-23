@@ -82,6 +82,7 @@ Exceptions
 
 .. autoclass:: urbanairship.Unauthorized
 
+.. autoclass:: urbanairship.ConnectionFailure
 
 Development
 ============

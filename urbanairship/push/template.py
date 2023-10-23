@@ -85,6 +85,7 @@ class Template(object):
 
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
+        :raises ConnectionFailure: Connection failed.
 
         """
 
@@ -112,6 +113,7 @@ class Template(object):
 
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
+        :raises ConnectionFailure: Connection failed.
 
         """
 
@@ -162,6 +164,7 @@ class Template(object):
 
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
+        :raises ConnectionFailure: Connection failed.
 
         """
 

@@ -6,12 +6,11 @@ import mock
 import requests
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
-from urbanairship.push.payload import in_app, localization
+from urbanairship.enums import LiveActivityEvent, LiveUpdateEvent
 
 
 class TestPush(unittest.TestCase):
     def test_full_payload(self):
-
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert="Hello")
@@ -547,6 +546,28 @@ class TestPush(unittest.TestCase):
                 interruption_level="critical",
                 relevance_score=0.75,
                 target_content_id="big day coming",
+                media_attachment=ua.media_attachment(
+                    url="https://www.testurl.com",
+                    content={
+                        "title": "Moustache Twirl",
+                        "body": "Have you ever seen a moustache like this?!",
+                    },
+                    options={
+                        "crop": {"height": 0.5, "width": 0.5, "x": 0.25, "y": 0.25},
+                        "time": 15,
+                    },
+                ),
+                live_activity=ua.live_activity(
+                    event=LiveActivityEvent.UPDATE,
+                    alert={"title": "test", "sound": "test", "body": "test"},
+                    name="test",
+                    priority=5,
+                    content_state={"test": "test"},
+                    relevance_score=1.0,
+                    stale_date=1234,
+                    dismissal_date=1234,
+                    timestamp=1234,
+                ),
             )
         )
         p.options = ua.options(10080)
@@ -570,22 +591,49 @@ class TestPush(unittest.TestCase):
                             "summary-arg": "Matmos",
                             "summary-arg-count": 1,
                         },
+                        "badge": 3,
                         "sound": {
                             "name": "Amplified Synapse",
                             "volume": 0.8,
                             "critical": False,
                         },
-                        "thread_id": "plastic minor",
-                        "priority": 10,
-                        "badge": 3,
                         "extra": {"office": "furniture"},
-                        "mutable_content": False,
                         "title": "this is",
+                        "mutable_content": False,
                         "subtitle": "backwards",
+                        "media_attachment": {
+                            "url": "https://www.testurl.com",
+                            "content": {
+                                "title": "Moustache Twirl",
+                                "body": "Have you ever seen a moustache like this?!",
+                            },
+                            "options": {
+                                "crop": {
+                                    "height": 0.5,
+                                    "width": 0.5,
+                                    "x": 0.25,
+                                    "y": 0.25,
+                                },
+                                "time": 15,
+                            },
+                        },
+                        "priority": 10,
                         "collapse_id": "nugent sand",
+                        "thread_id": "plastic minor",
                         "interruption_level": "critical",
                         "relevance_score": 0.75,
                         "target_content_id": "big day coming",
+                        "live_activity": {
+                            "alert": {"title": "test", "sound": "test", "body": "test"},
+                            "event": "update",
+                            "name": "test",
+                            "priority": 5,
+                            "content_state": {"test": "test"},
+                            "relevance_score": 1.0,
+                            "stale_date": 1234,
+                            "dismissal_date": 1234,
+                            "timestamp": 1234,
+                        },
                     }
                 },
                 "device_types": "ios",
@@ -603,7 +651,7 @@ class TestPush(unittest.TestCase):
         p = ua.Push(None)
         p.audience = ua.all_
         p.notification = ua.notification(alert="Hello")
-        p.options = ua.options(10080)
+        p.options = ua.options(expiry=10080)
         p.device_types = ua.all_
         p.message = ua.message(
             title="Title",
@@ -1110,3 +1158,83 @@ class TestPush(unittest.TestCase):
     def testlocalization_raises_no_content(self):
         with self.assertRaises(ValueError):
             ua.localization(country="us", language="en")
+
+    def test_options_expiry_as_int(self):
+        result = ua.options(expiry=300)
+        assert result == {"expiry": 300}
+
+    def test_options_expiry_as_string(self):
+        result = ua.options(expiry="2023-10-19T10:00:00Z")
+        assert result == {"expiry": "2023-10-19T10:00:00Z"}
+
+    def test_options_with_multiple_values(self):
+        result = ua.options(
+            expiry="2023-10-19T10:00:00Z",
+            bypass_frequency_limits=True,
+            bypass_holdout_groups=True,
+            no_throttle=True,
+            omit_from_activity_log=True,
+            personalization=True,
+            redact_payload=True,
+        )
+        expected_result = {
+            "expiry": "2023-10-19T10:00:00Z",
+            "bypass_frequency_limits": True,
+            "bypass_holdout_groups": True,
+            "no_throttle": True,
+            "omit_from_activity_log": True,
+            "personalization": True,
+            "redact_payload": True,
+        }
+        assert result == expected_result
+
+    def test_valid_live_activity(self):
+        result = ua.live_activity(
+            event=LiveActivityEvent.UPDATE,
+            name="TestActivity",
+            alert={"body": "Test body", "sound": "default", "title": "Test Title"},
+            priority=10,
+        )
+        self.assertIn("alert", result)
+        self.assertEqual(result["event"], "update")
+        self.assertEqual(result["name"], "TestActivity")
+        self.assertEqual(result["priority"], 10)
+
+    def test_invalid_alert(self):
+        with self.assertRaises(ValueError):
+            ua.live_activity(
+                event=LiveActivityEvent.UPDATE,
+                name="TestActivity",
+                alert={"other_key": "test", "title": "test"},
+                priority=10,
+            )
+
+    def test_missing_name_live_activity(self):
+        with self.assertRaises(ValueError):
+            ua.live_activity(name=None, event=LiveActivityEvent.END, priority=10)
+
+    def test_valid_live_update(self):
+        result = ua.live_update(
+            event=LiveUpdateEvent.START,
+            name="TestUpdate",
+            content_state={"key": "value"},
+        )
+        self.assertEqual(result["event"], "start")
+        self.assertEqual(result["name"], "TestUpdate")
+        self.assertIn("content_state", result)
+
+    def test_invalid_content_state(self):
+        with self.assertRaises(TypeError):
+            ua.live_update(
+                event=LiveUpdateEvent.UPDATE, name="TestUpdate", content_state="invalid"
+            )
+        with self.assertRaises(TypeError):
+            ua.live_update(
+                event=LiveUpdateEvent.UPDATE,
+                name="TestUpdate",
+                content_state={1: "test"},
+            )
+
+    def test_missing_name_live_update(self):
+        with self.assertRaises(ValueError):
+            ua.live_update(name=None, event=LiveUpdateEvent.END)

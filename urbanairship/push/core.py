@@ -105,6 +105,7 @@ class Push(object):
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
         :raises ValueError: Required keys missing or incorrect values included.
+        :raises ConnectionFailure: Connection failed.
         """
         if "email" in self.payload["notification"]:
             if self.payload["device_types"] == "all":
@@ -250,6 +251,7 @@ class ScheduledPush(object):
             other response data.
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
+        :raises ConnectionFailure: Connection failed.
 
         """
         response = self._airship._request(
@@ -366,6 +368,7 @@ class TemplatePush(object):
             other response data.
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
+        :raises ConnectionFailure: Connection failed.
 
         """
 
@@ -506,6 +509,8 @@ class CreateAndSendPush(object):
         :raises AirshipFailure: Request failed.
         :raises Unauthorized: Authentication failed.
         :raises ValueError: Required keys missing or incorrect values included.
+        :raises ConnectionFailure: Connection failed.
+
         """
         body = json.dumps(self.payload)
         response = self._airship._request(

@@ -34,7 +34,7 @@ class ScheduledList(common.IteratorParent):
     id_key: str = "url"
     instance_class: Type[ScheduledPush] = ScheduledPush
 
-    def __init__(self, airship: Airship, limit: int = None) -> None:
+    def __init__(self, airship: Airship, limit: Optional[int] = None) -> None:
         self.next_url = airship.urls.get("schedules_url")
         params = {"limit": limit} if limit else {}
         super(ScheduledList, self).__init__(airship, params)

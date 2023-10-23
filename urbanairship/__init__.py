@@ -4,7 +4,7 @@ from typing import Any, List
 
 from .core import Airship
 from .automation import Automation, Pipeline
-from .common import AirshipFailure, Unauthorized
+from .common import AirshipFailure, ConnectionFailure, Unauthorized
 from .custom_events import CustomEvent
 from .devices import (
     APIDList,
@@ -65,8 +65,11 @@ from .push import (
     interactive,
     ios,
     ios_channel,
+    live_activity,
+    live_update,
     local_scheduled_time,
     localization,
+    media_attachment,
     merge_data,
     message,
     mms,
@@ -115,6 +118,7 @@ from .reports import (
 __all__: List[Any] = [
     Airship,
     AirshipFailure,
+    ConnectionFailure,
     Unauthorized,
     all_,
     Push,
@@ -167,6 +171,9 @@ __all__: List[Any] = [
     static_list,
     subscription_list,
     localization,
+    live_activity,
+    live_update,
+    media_attachment,
     ChannelList,
     ChannelInfo,
     OpenChannel,

@@ -11,6 +11,10 @@ class Unauthorized(Exception):
     """Raised when we get a 401 from the server"""
 
 
+class ConnectionFailure(Exception):
+    """Raised when there's a connection failure."""
+
+
 class AirshipFailure(Exception):
     """Raised when we get an error response from the server.
 
