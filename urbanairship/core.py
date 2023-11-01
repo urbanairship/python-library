@@ -16,12 +16,16 @@ VALID_LOCATIONS = ["eu", "us", None]
 
 
 class Urls(object):
-    def __init__(self, location: Optional[str] = None) -> None:
+    def __init__(self, location: Optional[str] = None,
+                 base_url: Optional[str] = None) -> None:
         if not location or location.lower() == "us":
             self.base_url = "https://go.urbanairship.com/api/"
         elif location.lower() == "eu":
             self.base_url = "https://go.airship.eu/api/"
-
+        
+        if base_url is not None:
+            self.base_url = base_url
+    
         self.channel_url = self.base_url + "channels/"
         self.open_channel_url = self.channel_url + "open/"
         self.device_token_url = self.base_url + "device_tokens/"
