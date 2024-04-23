@@ -1,7 +1,8 @@
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Optional
 
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 
 DATE_FORMAT_STR: str = "%Y-%m-%d %H:%M:%S"
 
@@ -9,7 +10,7 @@ DATE_FORMAT_STR: str = "%Y-%m-%d %H:%M:%S"
 class IndividualResponseStats(object):
     """Returns detailed reports information about a specific push notification."""
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self.airship = airship
 
     def get(self, push_id: str) -> common.IteratorDataObj:
@@ -29,7 +30,7 @@ class ResponseList(common.IteratorParent):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         start_date: datetime,
         end_date: datetime,
         limit: Optional[str] = None,
@@ -56,7 +57,7 @@ class DevicesReport(object):
     type as a daily snapshot. This endpoint returns the same data that populates the
     Devices Report on the web dashboard."""
 
-    def __init__(self, airship: Airship):
+    def __init__(self, airship: BaseClient):
         self.airship = airship
 
     def get(self, date: datetime):
@@ -79,7 +80,11 @@ class ReportsList(common.IteratorParent):
     data_attribute: Optional[str] = None
 
     def __init__(
-        self, airship: Airship, start_date: datetime, end_date: datetime, precision: str
+        self,
+        airship: BaseClient,
+        start_date: datetime,
+        end_date: datetime,
+        precision: str,
     ):
         if not airship or not start_date or not end_date or not precision:
             raise TypeError("None of the function parameters can be empty")

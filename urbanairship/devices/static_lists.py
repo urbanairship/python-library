@@ -1,19 +1,20 @@
-import json
-import gzip
 import collections
 import datetime
-from typing import Dict, Optional
+import gzip
+import json
 from io import TextIOWrapper
+from typing import Dict, Optional
 
 from requests import Response
 
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 
 CHUNK = 16 * 1024
 
 
 class StaticList:
-    def __init__(self, airship: Airship, name: str) -> None:
+    def __init__(self, airship: BaseClient, name: str) -> None:
         self.airship = airship
         self.name = name
         self.description = None
@@ -84,7 +85,7 @@ class StaticList:
         return response.json()
 
     @classmethod
-    def download(cls, airship: Airship, list_name: str) -> Response:
+    def download(cls, airship: BaseClient, list_name: str) -> Response:
         """
         Allows you to download the contents of a static list. Alias and named_user
         values are resolved to channels.
@@ -103,7 +104,7 @@ class StaticList:
         return response
 
     @classmethod
-    def from_payload(cls, payload: Dict, airship: Airship):
+    def from_payload(cls, payload: Dict, airship: BaseClient):
         for key in payload:
             if key in "created" or key in "last_updated":
                 payload[key] = datetime.datetime.strptime(

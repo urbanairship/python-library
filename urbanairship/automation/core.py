@@ -1,9 +1,14 @@
-import json
-from typing import List, Union, Optional
+from __future__ import annotations
 
-from urbanairship import Airship
-from urbanairship.automation.pipeline import Pipeline
+import json
+from typing import TYPE_CHECKING, List, Optional, Union
+
 from requests import Response
+
+from urbanairship.automation.pipeline import Pipeline
+
+if TYPE_CHECKING:
+    from urbanairship.client import BaseClient
 
 
 class Automation(object):
@@ -14,7 +19,7 @@ class Automation(object):
          to use.
     """
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self.airship = airship
 
     def create(self, pipelines: Union[Pipeline, List[Pipeline]]) -> Response:

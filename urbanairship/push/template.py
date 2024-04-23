@@ -1,13 +1,13 @@
 import datetime
 import json
 import logging
-from typing import Dict, List, Optional, Any, Type
+from typing import Any, Dict, List, Optional, Type
 
 from requests import Response
 
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 from urbanairship.push.core import Push
-
 
 logger = logging.getLogger("urbanairship")
 
@@ -37,7 +37,7 @@ class Template(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         name: Optional[str] = None,
         description: Optional[str] = None,
         variables: Optional[List[Dict[str, Any]]] = None,
@@ -194,7 +194,7 @@ class Template(object):
                     payload[key] = datetime.datetime.strptime(
                         payload[key], "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
-                except:
+                except (KeyError, ValueError, TypeError):
                     payload[key] = "UNKNOWN"
                 setattr(obj, "_" + key, payload[key])
             elif key == "template_id":

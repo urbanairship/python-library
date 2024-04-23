@@ -1,12 +1,13 @@
-from datetime import datetime
 import json
 import logging
 import re
-from typing import Dict, Optional, List, Union, Any
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from requests import Response
 
-from urbanairship import Airship
+
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -39,7 +40,7 @@ class Sms(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         sender: str,
         msisdn: str,
         opted_in: Optional[datetime] = None,
@@ -308,7 +309,7 @@ class KeywordInteraction(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         keyword: str,
         msisdn: str,
         sender_ids: List[str],
@@ -380,7 +381,7 @@ class SmsCustomResponse:
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         mobile_originated_id: str,
         sms: Optional[Dict] = None,
         mms: Optional[Dict] = None,

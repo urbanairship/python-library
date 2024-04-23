@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -54,7 +54,7 @@ class Email(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         address: str,
         commercial_opted_in: Optional[str] = None,
         commercial_opted_out: Optional[str] = None,
@@ -156,7 +156,7 @@ class Email(object):
 
     @property
     def _full_payload(self) -> Dict[str, Any]:
-        if self.address == None:
+        if self.address is None:
             raise ValueError(
                 "address must be set to register or update an email channel"
             )
@@ -294,7 +294,7 @@ class Email(object):
         return response
 
     @classmethod
-    def lookup(cls, airship: Airship, address: str) -> Response:
+    def lookup(cls, airship: BaseClient, address: str) -> Response:
         if not VALID_EMAIL.match(address) and address is not None:
             raise ValueError("Invalid email address format")
 
@@ -311,7 +311,7 @@ class EmailTags(object):
     :param address: an email address to mutate tags for
     """
 
-    def __init__(self, airship: Airship, address: str):
+    def __init__(self, airship: BaseClient, address: str):
         self.airship = airship
         self.url = airship.urls.get("email_tags_url")
         self.address = address
@@ -413,7 +413,7 @@ class EmailAttachment(object):
     """
 
     def __init__(
-        self, airship: Airship, filename: str, content_type: str, filepath: str
+        self, airship: BaseClient, filename: str, content_type: str, filepath: str
     ) -> None:
         self.airship = airship
         self.filename = filename

@@ -1,13 +1,11 @@
 import json
-from lib2to3.pgen2.token import OP
 import logging
-import warnings
-from typing import Any, Dict, Optional, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 from requests import Response
 
-from urbanairship import Airship, devices
-
+from urbanairship import devices
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -44,7 +42,7 @@ class PushResponse(object):
 class Push(object):
     """A push notification. Set audience, message, etc, and send."""
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self._airship = airship
         self.audience: Optional[Union[Dict, List[Dict]]] = None
         self.notification: Optional[Dict[str, Any]] = None
@@ -141,7 +139,7 @@ class Push(object):
         return PushResponse(response)
 
     @classmethod
-    def message_center_delete(cls, airship: Airship, push_id: str) -> Response:
+    def message_center_delete(cls, airship: BaseClient, push_id: str) -> Response:
         """
         Delete a Message Center message completely, removing it from every user's inbox.
         This is an asynchronous call; a success response means that the deletion has
@@ -172,7 +170,7 @@ class Push(object):
 class ScheduledPush(object):
     """A scheduled push notification. Set schedule, push, and send."""
 
-    def __init__(self, airship: Airship):
+    def __init__(self, airship: BaseClient):
         self._airship = airship
         self.schedule: Optional[Dict[str, Any]] = None
         self.recurring: Optional[Dict[str, Any]] = None
@@ -181,7 +179,7 @@ class ScheduledPush(object):
         self.url: Optional[str] = None
 
     @classmethod
-    def from_url(cls, airship: Airship, url: str):
+    def from_url(cls, airship: BaseClient, url: str):
         """Load an existing scheduled push from its URL."""
 
         sched = cls(airship)
@@ -201,7 +199,7 @@ class ScheduledPush(object):
         return sched
 
     @classmethod
-    def from_payload(cls, payload: Dict, id_key: str, airship: Airship):
+    def from_payload(cls, payload: Dict, id_key: str, airship: BaseClient):
         """Create based on results from a ScheduledList iterator."""
         obj = cls(airship)
         for key in payload:
@@ -346,7 +344,7 @@ class TemplatePush(object):
     """A personalized push notification. Set details and send."""
 
     def __init__(self, airship):
-        self._airship: Airship = airship
+        self._airship: BaseClient = airship
         self.audience: Optional[Dict] = None
         self.device_types: Optional[List] = None
         self.merge_data: Optional[Dict] = None
@@ -409,7 +407,7 @@ class CreateAndSendPush(object):
         CreateAndSend.device_types.
     """
 
-    def __init__(self, airship: Airship, channels: List):
+    def __init__(self, airship: BaseClient, channels: List):
         self._airship = airship
         self.channels = channels
         self.notification: Optional[Dict] = None

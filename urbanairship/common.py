@@ -1,8 +1,8 @@
-import logging
 import datetime
-import six
-from typing import Dict, Optional, Any, TypeVar, Union
+import logging
+from typing import Any, Dict, Optional, Union
 
+import six
 
 logger = logging.getLogger("urbanairship")
 

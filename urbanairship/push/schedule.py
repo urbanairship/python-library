@@ -1,10 +1,9 @@
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Type
 
-from typing import Any, List, Dict, Optional, Type
-
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 from urbanairship.push.core import ScheduledPush
-
 
 VALID_DAYS: List[str] = [
     "monday",
@@ -34,7 +33,7 @@ class ScheduledList(common.IteratorParent):
     id_key: str = "url"
     instance_class: Type[ScheduledPush] = ScheduledPush
 
-    def __init__(self, airship: Airship, limit: Optional[int] = None) -> None:
+    def __init__(self, airship: BaseClient, limit: Optional[int] = None) -> None:
         self.next_url = airship.urls.get("schedules_url")
         params = {"limit": limit} if limit else {}
         super(ScheduledList, self).__init__(airship, params)

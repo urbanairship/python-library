@@ -2,7 +2,7 @@
 import collections
 import re
 import warnings
-from typing import List, Dict, Optional, Any, Union
+from typing import Any, Dict, List, Optional, Union
 
 from urbanairship.enums import LiveActivityEvent, LiveUpdateEvent
 
@@ -956,7 +956,7 @@ def in_app(
     return payload
 
 
-def device_types(*types: Any) -> Union[str, List[str]]:
+def device_types(*types: Any) -> List[str]:
     """Create a device type specifier.
 
     >>> device_types('ios', 'wns')
@@ -968,9 +968,9 @@ def device_types(*types: Any) -> Union[str, List[str]]:
 
     """
     valid_device_types = ("ios", "android", "amazon", "wns", "web", "sms", "email")
-    if types == "all" or (len(types) == 1 and types[0] == "all"):
+    if len(types) == 1 and types[0] == "all":
         warnings.warn("The device type 'all' has been deprecated.", DeprecationWarning)
-        return "all"
+        return ["all"]
 
     for t in types:
         is_open = isinstance(t, str) and t.startswith("open::")

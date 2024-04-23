@@ -1,9 +1,4 @@
-requests>=1.2
-six
-backoff>=1.11
-nose
-mock
+-r requirements.txt
 tox
 black
 pre-commit
-sphinx-rtd-theme

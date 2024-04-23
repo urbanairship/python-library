@@ -8,6 +8,7 @@ UUID_FORMAT = re.compile(
 SMS_SENDER_FORMAT = re.compile(r"^[0-9]*$")
 SMS_MSISDN_FORMAT = re.compile(r"^[0-9]*$")
 
+
 # Value selectors; device IDs, aliases, tags, etc.
 def ios_channel(uuid: str) -> Dict[str, str]:
     """Select a single iOS Channel"""

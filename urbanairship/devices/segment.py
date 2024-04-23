@@ -1,10 +1,11 @@
 import json
 import logging
-from typing import Optional, Dict, TypeVar
+from typing import Dict, Optional
 
 from requests import Response
 
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -18,7 +19,7 @@ class Segment(object):
     criteria: Optional[str] = None
     data: Optional[Dict] = None
 
-    def create(self, airship: Airship) -> Response:
+    def create(self, airship: BaseClient) -> Response:
         """Create a Segment object and return it."""
 
         url = airship.urls.get("segments_url")
@@ -38,7 +39,7 @@ class Segment(object):
         return response
 
     @classmethod
-    def from_id(cls, airship: Airship, seg_id: str):
+    def from_id(cls, airship: BaseClient, seg_id: str):
         """Retrieve a segment based on the provided ID."""
 
         url = airship.urls.get("segments_url") + seg_id
@@ -59,7 +60,7 @@ class Segment(object):
 
         return cls
 
-    def update(self, airship: Airship) -> Response:
+    def update(self, airship: BaseClient) -> Response:
         """Updates the segment associated with data in the current object."""
 
         data = {}
@@ -73,7 +74,7 @@ class Segment(object):
 
         return response
 
-    def delete(self, airship: Airship) -> Response:
+    def delete(self, airship: BaseClient) -> Response:
         url = f'{airship.urls.get("segments_url")}{self.id}'
         res = airship._request(method="DELETE", body=None, url=url, version=3)
         logger.info("Successful segment deletion: '{0}'".format(self.display_name))
@@ -90,7 +91,7 @@ class SegmentList(common.IteratorParent):
     next_url: Optional[str] = None
     data_attribute: str = "segments"
 
-    def __init__(self, airship: Airship, limit: Optional[int] = None):
+    def __init__(self, airship: BaseClient, limit: Optional[int] = None):
         self.next_url = airship.urls.get("segments_url")
         params = {"limit": limit} if limit else {}
         super(SegmentList, self).__init__(airship, params)

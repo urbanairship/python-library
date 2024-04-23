@@ -431,7 +431,7 @@ class TestMessage(unittest.TestCase):
         )
 
     def test_all_device_types(self):
-        self.assertEqual(ua.device_types(ua.all_), "all")
+        self.assertEqual(ua.device_types(ua.all_), ["all"])
 
     def options(self):
         push = ua.Push(None)

@@ -2,11 +2,11 @@ import datetime
 import json
 import logging
 import re
-from typing import Any, Optional, Dict, List
+from typing import Any, Dict, List, Optional
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 VALID_UUID = re.compile(r"[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\Z")
 
@@ -33,7 +33,7 @@ class OpenChannel(object):
     tags: Optional[List] = None
     template_fields: Optional[Dict] = None
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self.airship = airship
 
     @property
@@ -131,7 +131,7 @@ class OpenChannel(object):
         return response
 
     @classmethod
-    def from_payload(cls, payload: Dict, airship: Airship):
+    def from_payload(cls, payload: Dict, airship: BaseClient):
         """Instantiate an OpenChannel from a payload."""
         obj = cls(airship)
         for key in payload:

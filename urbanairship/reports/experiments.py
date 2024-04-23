@@ -1,10 +1,10 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 
 class ExperimentReport(object):
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         """Access reporting related to A/B Tests (experiments)
 
         :param airship: An urbanairship.Airship instance.

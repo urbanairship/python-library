@@ -1,8 +1,9 @@
 import datetime
 import logging
-from typing import Any, Dict, Optional, List, Generic, TypeVar
+from typing import Any, Dict, List, Optional, TypeVar
 
-from urbanairship import common, Airship
+from urbanairship import common
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -76,7 +77,7 @@ class ChannelInfo(object):
         self.airship = airship
 
     @classmethod
-    def from_payload(cls, payload: Dict, device_key: str, airship: Airship):
+    def from_payload(cls, payload: Dict, device_key: str, airship: BaseClient):
         """Create based on results from a ChannelList iterator."""
         obj = cls(airship)
         obj.channel_id = payload[device_key]
@@ -95,7 +96,7 @@ class ChannelInfo(object):
                     payload[key] = datetime.datetime.strptime(
                         payload[key], "%Y-%m-%dT%H:%M:%S"
                     )
-                except:
+                except (KeyError, ValueError):
                     payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj
@@ -136,11 +137,11 @@ class DeviceInfo(object):
     tags: Optional[List] = None
     alias: Optional[str] = None
 
-    def __init__(self, airship: Airship):
+    def __init__(self, airship: BaseClient):
         self.airship = airship
 
     @classmethod
-    def from_payload(cls, payload: Dict, device_key: str, airship: Airship):
+    def from_payload(cls, payload: Dict, device_key: str, airship: BaseClient):
         """Create based on results from a DeviceTokenList or APIDList iterator."""
         obj = cls(airship)
         obj.id = payload[device_key]
@@ -151,7 +152,7 @@ class DeviceInfo(object):
                     payload[key] = datetime.datetime.strptime(
                         payload[key], "%Y-%m-%d %H:%M:%S"
                     )
-                except:
+                except (KeyError, ValueError):
                     payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
         return obj

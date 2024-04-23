@@ -22,7 +22,7 @@ import. To get started, import the package, and create an
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.Airship('<app key>', '<master secret>')
+   airship = ua.client.BasicAuthClient('<app key>', '<master secret>')
 
    push = airship.Push(airship=airship)
    push.audience = ua.ios_channel('074e84a2-9ed9-4eee-9ca4-cc597bfdbef3')
@@ -34,6 +34,17 @@ The library uses `requests`_ for communication with the Airship API,
 providing connection pooling and strict SSL checking. The ``Airship``
 object is threadsafe, and can be instantiated once and reused in
 multiple threads.
+
+Authentication Clients
+----------------------
+
+The library supports authentication via 1 of 3 client classes:
+
+* BasicAuthClient - This is the same as the deprecated `Airship` client class for using Key/Secret authentication.
+* BearerTokenClient - This client takes a `token` argument with an Airship-generated bearer token in addition to the key and other configuration options.
+* OAuthClient - This client requests an OAuth bearer token using the `client_id` and JWT assertion and automatically refreshes tokens as needed from the Airship OAuth2 provider. Please see the OAuth2 section of the Airship API documentation for more on this authentication method.  If you prefer to handle token refresh yourself, the `access_token` returned from the Airship OAuth2 proivder can be used with the `BearerTokenClient`.
+
+More about these methods, including examples of instantiation can be found on the Airship docs site.
 
 EU Base URL
 -----------

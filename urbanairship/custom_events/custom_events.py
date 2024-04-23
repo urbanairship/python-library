@@ -1,14 +1,14 @@
 import datetime
-from typing import Dict, Optional, Union
 import json
+from typing import Dict, Optional, Union
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 
 class CustomEvent:
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         name: str,
         user: Dict,
         interaction_type: Optional[str] = None,

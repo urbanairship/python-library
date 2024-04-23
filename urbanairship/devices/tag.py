@@ -1,8 +1,8 @@
 import json
 import logging
-from typing import Dict, Optional, List, Any
+from typing import Any, Dict, List, Optional
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -13,7 +13,7 @@ class ChannelTags(object):
     :param airship: An urbanairship.Airship instance.
     """
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self.url = airship.urls.get("channel_url") + "tags/"
         self._airship = airship
         self.audience: Dict[str, Any] = {}
@@ -62,7 +62,8 @@ class ChannelTags(object):
 
     def set(self, group_name: str, tags: List[str]) -> None:
         """
-        Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
+        Sets group and tags to set. Note that a ``set`` operation replaces all
+        tags on the audience upon send.
 
         :param group_name: The name of the tag group to set
         :param tags: The tags to set
@@ -110,7 +111,7 @@ class ChannelTags(object):
 class OpenChannelTags(object):
     """Modify the tags for an open channel"""
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self.url = airship.urls.get("open_channel_url") + "tags/"
         self._airship = airship
         self.audience: Dict = {}
@@ -144,7 +145,8 @@ class OpenChannelTags(object):
 
     def set(self, group_name: str, tags: List[str]) -> None:
         """
-        Sets group and tags to set. Note that a ``set`` operation replaces all tags on the audience upon send.
+        Sets group and tags to set. Note that a ``set`` operation replaces all tags on
+        the audience upon send.
 
         :param group_name: The name of the tag group to set
         :param tags: The tags to set

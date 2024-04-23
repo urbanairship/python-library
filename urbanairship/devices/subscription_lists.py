@@ -3,7 +3,7 @@ from typing import Dict
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 
 class SubscriptionList(object):
@@ -16,7 +16,7 @@ class SubscriptionList(object):
     :param list_id: Required. The list_id from the Airship web dashboard.
     """
 
-    def __init__(self, airship: Airship, list_id: str) -> None:
+    def __init__(self, airship: BaseClient, list_id: str) -> None:
         self.airship = airship
         self.list_id = list_id
 

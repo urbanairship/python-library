@@ -1,16 +1,19 @@
 """Python package for using the Airship API"""
+
 import logging
 from typing import Any, List
 
-from .core import Airship
-from .automation import Automation, Pipeline
+from .automation.core import Automation
+from .automation.pipeline import Pipeline
+from .client import BasicAuthClient, BearerTokenClient, OAuthClient
 from .common import AirshipFailure, ConnectionFailure, Unauthorized
+from .core import Airship
 from .custom_events import CustomEvent
 from .devices import (
     APIDList,
     Attribute,
-    AttributeResponse,
     AttributeList,
+    AttributeResponse,
     ChannelInfo,
     ChannelList,
     ChannelTags,
@@ -84,14 +87,14 @@ from .push import (
     public_notification,
     recurring_schedule,
     schedule_exclusion,
-    static_list,
-    subscription_list,
     scheduled_time,
     segment,
     sms,
     sms_id,
     sms_sender,
+    static_list,
     style,
+    subscription_list,
     tag,
     tag_group,
     text_attribute,
@@ -116,6 +119,9 @@ from .reports import (
 )
 
 __all__: List[Any] = [
+    BasicAuthClient,
+    BearerTokenClient,
+    OAuthClient,
     Airship,
     AirshipFailure,
     ConnectionFailure,

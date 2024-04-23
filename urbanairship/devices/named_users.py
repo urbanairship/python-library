@@ -1,11 +1,12 @@
 import json
 import logging
-from typing import Any, Dict, List, Optional, Union, TypeVar
+from typing import Any, Dict, List, Optional, Union
 
 from requests import Response
 
+from urbanairship import common
+from urbanairship.client import BaseClient
 from urbanairship.devices import ChannelTags
-from urbanairship import common, Airship
 
 logger = logging.getLogger("urbanairship")
 
@@ -17,7 +18,9 @@ class NamedUser(object):
     :param airship: Required. An instance of urbanairship.Airship.
     """
 
-    def __init__(self, airship: Airship, named_user_id: Optional[str] = None) -> None:
+    def __init__(
+        self, airship: BaseClient, named_user_id: Optional[str] = None
+    ) -> None:
         self._airship = airship
         self.named_user_id = named_user_id
         self.channel_id: Optional[str] = None
@@ -272,7 +275,8 @@ class NamedUser(object):
         If an attribute request is partially valid, i.e. at least one attribute exists,
         Airship returns a 200 with a warning in containing a list of attributes that
         failed to update.
-        Please see https://docs.airship.com/api/ua/#operation-api-named_users-named_user_id-attributes-post
+        Please see
+        https://docs.airship.com/api/ua/#operation-api-named_users-named_user_id-attributes-post
         for more about using Airship attributes.
 
         :params attributes: Required. A list of attribute objects to set or remove on
@@ -292,7 +296,7 @@ class NamedUser(object):
         return response
 
     @classmethod
-    def uninstall(cls, airship: Airship, named_users: List[str]) -> Response:
+    def uninstall(cls, airship: BaseClient, named_users: List[str]) -> Response:
         """
         Disassociate and delete all channels associated with the named_user_id(s) and
         also delete the named_user_id(s). This call removes all channels associated
@@ -339,7 +343,7 @@ class NamedUserList(common.IteratorParent):
     next_url: Optional[str] = None
     data_attribute: str = "named_users"
 
-    def __init__(self, airship: Airship):
+    def __init__(self, airship: BaseClient):
         self.next_url = airship.urls.get("named_user_url")
         super(NamedUserList, self).__init__(airship, None)
 
@@ -347,7 +351,7 @@ class NamedUserList(common.IteratorParent):
 class NamedUserTags(ChannelTags):
     """Modify the tags for named users"""
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         super(NamedUserTags, self).__init__(airship)
         self.url = airship.urls.get("named_user_tag_url")
 

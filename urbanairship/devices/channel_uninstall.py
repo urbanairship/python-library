@@ -4,7 +4,7 @@ from typing import List
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")
 
@@ -16,7 +16,7 @@ class ChannelUninstall(object):
     :param airship: Required. An urbanairship.Airship instance
     """
 
-    def __init__(self, airship: Airship) -> None:
+    def __init__(self, airship: BaseClient) -> None:
         self._airship = airship
 
     def uninstall(self, channels: List[str]) -> Response:

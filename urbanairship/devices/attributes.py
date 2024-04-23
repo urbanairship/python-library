@@ -1,11 +1,11 @@
 import json
 import logging
 from datetime import datetime
-from typing import Dict, List, Optional, Union, Any
+from typing import Any, Dict, List, Optional, Union
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 
 from .static_lists import GzipCompressReadStream
 
@@ -121,7 +121,7 @@ class ModifyAttributes(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         attributes: List[Attribute],
         channel: Optional[str] = None,
         named_user: Optional[str] = None,
@@ -200,7 +200,7 @@ class AttributeList(object):
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         list_name: str,
         description: str,
         extra: Optional[Dict[str, str]] = None,
@@ -272,7 +272,7 @@ class AttributeList(object):
         return response
 
     @classmethod
-    def list(cls, airship: Airship) -> Response:
+    def list(cls, airship: BaseClient) -> Response:
         """Lists existing attribute lists.
 
         :param airship: An urbanairship.Airship instance.

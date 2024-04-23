@@ -1,9 +1,9 @@
 import json
-from typing import Dict, Optional, Any, List
+from typing import Any, Dict, List, Optional
 
 from requests import Response
 
-from urbanairship import Airship
+from urbanairship.client import BaseClient
 from urbanairship.devices.static_lists import GzipCompressReadStream
 
 
@@ -27,7 +27,7 @@ class TagList:
 
     def __init__(
         self,
-        airship: Airship,
+        airship: BaseClient,
         list_name: str,
         description: Optional[str] = None,
         extra: Optional[Dict[str, str]] = None,
@@ -109,7 +109,7 @@ class TagList:
         return response
 
     @classmethod
-    def list(cls, airship: Airship) -> Response:
+    def list(cls, airship: BaseClient) -> Response:
         """Returns a json string with details on all tag lists associated with
         an Airship instance / project.
 
