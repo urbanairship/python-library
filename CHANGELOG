@@ -1,5 +1,11 @@
 # urbanairship changelog
 
+## 6.3.0
+
+- Adds Support for OAuth2 Authentication
+- Adds new client classes for BasicAuth, BearerTokenAuth, and OAuth
+- Deprecates the Airship client class in favor of the new client classes
+
 ## 6.2.0
 
 - Adds Support for iOS Live Activity and Android Live Update
