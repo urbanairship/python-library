@@ -91,13 +91,13 @@ class Automation(object):
         return response
 
     def list_automations(
-        self, limit: Optional[int] = None, enabled: bool = False
+        self, limit: Optional[int] = None, enabled: bool = True
     ) -> Response:
         """List active Automations
 
         :keyword limit: Optional, maximum pipelines to return
-        :keyword enabled: Optional, boolean limiter for results to only enabled
-            Pipelines
+        :keyword enabled: Optional, boolean limits results to enabled or not enabled
+            Pipelines (defaults to True)
         """
         params = {}
         if isinstance(limit, int):
