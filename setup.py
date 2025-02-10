@@ -1,6 +1,6 @@
 try:
     from setuptools import setup
-except (ImportError):
+except ImportError:
     from distutils.core import setup
 
 __about__ = {}
@@ -34,5 +34,8 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries",
     ],
-    install_requires=["requests>=1.2", "six", "backoff>=1.11"],
+    install_requires=["requests>=2.32", "six", "backoff>=2.2.1", "pyjwt>=2.8.0"],
+    package_data={
+        "urbanairship": ["py.typed"],
+    },
 )
