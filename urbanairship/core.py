@@ -25,6 +25,7 @@ class Airship(client.BaseClient):
         token: Optional[str] = None,
         location: str = "us",
         timeout: Optional[int] = None,
+        base_url: Optional[str] = None,
         retries: int = 0,
     ):
         """Main client class for interacting with the Airship API.
@@ -37,6 +38,8 @@ class Airship(client.BaseClient):
         with. Possible values: 'us', 'eu'. Defaults to 'us'.
         :param: timeout: [optional] An integer specifying the number of seconds used
         for a response timeout threshold
+        :param base_url: [optional] A string defining an arbitrary base_url to use
+        for requests to the Airship API. To be used in place of location.
         :param retries: [optional] An integer specifying the number of times to retry a
         failed request. Retried requests use exponential backoff between requests.
         Defaults to 0, no retry.
@@ -44,7 +47,7 @@ class Airship(client.BaseClient):
         warnings.warn(
             category=DeprecationWarning,
             message="The Airship client class is deprecated. Use a client class from \
-                the client module. This class will be removed in version 7.0",
+                the client module. This class will be removed in version 8.0",
         )
 
         self.key: str = key
@@ -53,7 +56,7 @@ class Airship(client.BaseClient):
         self.location: str = location
         self.timeout: Optional[int] = timeout
         self.retries = retries
-        self.urls: Urls = Urls(self.location)
+        self.urls: Urls = Urls(location=self.location, base_url=base_url)
 
         if all([secret, token]):
             raise ValueError("One of token or secret must be used, not both")

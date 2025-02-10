@@ -3,9 +3,14 @@ from typing import Optional
 
 class Urls:
     def __init__(
-        self, location: Optional[str] = None, oauth_base: bool = False
+        self,
+        location: Optional[str] = None,
+        base_url: Optional[str] = None,
+        oauth_base: bool = False,
     ) -> None:
-        if not location or location.lower() == "us":
+        if base_url:
+            self.base_url = base_url
+        elif not location or location.lower() == "us":
             if oauth_base:
                 self.base_url = "https://api.asnapius.com/api/"
             else:

@@ -32,6 +32,8 @@ class BaseClient:
         May be 'us' or 'eu'. Defaults to 'us'.
     :param timeout: [optional]  An integer specifying the number of seconds used
         for a response timeout threshold
+    :param base_url: [optional] A string defining an arbitrary base_url to use
+        for requests to the Airship API. To be used in place of location.
     :param retries: [optional] An integer specifying the number of times to retry a
         failed request. Retried requests use exponential backoff between requests.
         Defaults to 0, no retry.
@@ -43,12 +45,14 @@ class BaseClient:
         location: str = "us",
         timeout: int = DEFAULT_REQ_TIMEOUT_S,
         retries: int = 0,
+        base_url: Optional[str] = None,
     ) -> None:
         self.key = key
         self.location = location
         self.timeout = timeout
         self.retries = retries
-        self.urls: Urls = Urls(self.location)
+        self.base_url = base_url
+        self.urls: Urls = Urls(location=self.location, base_url=self.base_url)
         self.session = requests.Session()
 
     @property
