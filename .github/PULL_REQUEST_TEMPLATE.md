@@ -15,10 +15,10 @@ Please include link to open issue if applicable.
 
 * Tests pass in the GitHub Actions CI for the following Python versions:
 
-- [ ] 3.6
-- [ ] 3.7
-- [ ] 3.8
-- [ ] 3.9
+- [ ] 3.10
+- [ ] 3.11
+- [ ] 3.12
+- [ ] 3.13
 
 ### Airship Contribution Agreement
 [Link here](https://docs.google.com/forms/d/e/1FAIpQLScErfiz-fXSPpVZ9r8Di2Tr2xDFxt5MgzUel0__9vqUgvko7Q/viewform)

@@ -1,5 +1,5 @@
 # coding=utf-8
-import collections
+import collections.abc as collections
 import re
 import warnings
 from typing import Any, Dict, List, Optional, Union

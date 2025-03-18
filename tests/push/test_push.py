@@ -742,7 +742,7 @@ class TestPush(unittest.TestCase):
             mock_request.return_value = response
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
-            push = airship.create_push()
+            push = ua.Push(airship)
             push.audience = ua.all_
             push.notification = ua.notification(alert="Hello")
             push.options = ua.options(expiry=10080)
@@ -768,7 +768,7 @@ class TestPush(unittest.TestCase):
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush(airship)
-            push = airship.create_push()
+            push = ua.Push(airship)
             push.audience = ua.all_
             push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
@@ -776,7 +776,7 @@ class TestPush(unittest.TestCase):
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
             sched.send()
 
-            self.assertEquals(
+            self.assertEqual(
                 sched.url,
                 (
                     "https://go.urbanairship.com/api/schedules/"
@@ -801,7 +801,7 @@ class TestPush(unittest.TestCase):
             sched = ua.ScheduledPush(airship)
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
 
-            template_push = airship.create_template_push()
+            template_push = ua.TemplatePush(airship)
             template_push.audience = ua.ios_channel(
                 "780ba0c5-45be-4f29-befa-39135cb05b59"
             )
@@ -837,7 +837,7 @@ class TestPush(unittest.TestCase):
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
             sched = ua.ScheduledPush(airship)
-            push = airship.create_push()
+            push = ua.Push(airship)
             push.audience = ua.all_
             push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
@@ -845,7 +845,7 @@ class TestPush(unittest.TestCase):
             sched.schedule = ua.local_scheduled_time(datetime.datetime.now())
             sched.send()
 
-            self.assertEquals(
+            self.assertEqual(
                 sched.url,
                 (
                     "https://go.urbanairship.com/api/schedules/"
@@ -936,7 +936,7 @@ class TestPush(unittest.TestCase):
             mock_request.return_value = response
 
             sched.url = url
-            push = airship.create_push()
+            push = ua.Push(airship)
             push.audience = ua.all_
             push.notification = ua.notification(alert="Hello")
             push.device_types = ua.all_
@@ -1034,11 +1034,11 @@ class TestPush(unittest.TestCase):
             for schedule in ua.ScheduledList(airship):
                 schedule_listing.append(schedule)
 
-            self.assertEquals(schedule_listing[0].url, self.url1)
-            self.assertEquals(schedule_listing[1].url, self.url2)
+            self.assertEqual(schedule_listing[0].url, self.url1)
+            self.assertEqual(schedule_listing[1].url, self.url2)
 
-            self.assertEquals(len(schedule_listing[0].push_ids), 1)
-            self.assertEquals(len(schedule_listing[1].push_ids), 42)
+            self.assertEqual(len(schedule_listing[0].push_ids), 1)
+            self.assertEqual(len(schedule_listing[1].push_ids), 42)
 
     def test_options_int_expiry(self):
         opt = ua.options(expiry=10080)

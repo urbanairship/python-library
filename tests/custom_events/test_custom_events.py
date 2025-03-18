@@ -9,7 +9,7 @@ from tests import TEST_KEY, TEST_TOKEN
 
 class TestCustomEvent(unittest.TestCase):
     def setUp(self):
-        airship = ua.Airship(key=TEST_KEY, token=TEST_TOKEN)
+        airship = ua.BearerTokenClient(key=TEST_KEY, token=TEST_TOKEN)
 
         self.event = ua.CustomEvent(
             airship=airship, name="test_event", user=ua.named_user("test_named_user")

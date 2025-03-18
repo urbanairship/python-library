@@ -254,22 +254,22 @@ class TestTemplate(unittest.TestCase):
             for template in ua.TemplateList(airship):
                 template_responses.append(template)
 
-            self.assertEquals(template_responses[0].template_id, self.template1)
-            self.assertEquals(template_responses[1].template_id, self.template2)
+            self.assertEqual(template_responses[0].template_id, self.template1)
+            self.assertEqual(template_responses[1].template_id, self.template2)
 
-            self.assertEquals(
+            self.assertEqual(
                 template_responses[0].created_at,
                 datetime.datetime.strptime(
                     "2017-08-30T23:04:54.014Z", "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             )
-            self.assertEquals(
+            self.assertEqual(
                 template_responses[1].modified_at,
                 datetime.datetime.strptime(
                     "2017-08-31T20:18:10.924Z", "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             )
-            self.assertEquals(template_responses[0].last_used, "UNKNOWN")
+            self.assertEqual(template_responses[0].last_used, "UNKNOWN")
 
     def test_template_creation_payload(self):
         airship = ua.Airship(TEST_KEY, TEST_SECRET)

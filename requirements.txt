@@ -6,8 +6,7 @@ types-six
 sphinx-rtd-theme
 mypy
 mypy-extensions
-nose
-mock
-types-mock
 pyjwt==2.8.0
 cryptography==42.0.5
+types-mock
+mock>=5.1.0

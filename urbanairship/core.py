@@ -46,8 +46,11 @@ class Airship(client.BaseClient):
         """
         warnings.warn(
             category=DeprecationWarning,
-            message="The Airship client class is deprecated. Use a client class from \
-                the client module. This class will be removed in version 8.0",
+            message="The Airship client class is deprecated. The Airship class has been "
+            "aliased to clients.BasicAuthClient. "
+            "This class will be removed in version 8.0. If you are importing this "
+            "directly, please migrate to clients.BasicAuthClient which should be "
+            "a drop-in replacement.",
         )
 
         self.key: str = key
@@ -212,30 +215,3 @@ class Airship(client.BaseClient):
             return response
 
         return make_retryable_request(method, url, body, params, headers)
-
-    def create_push(self):
-        """Create a Push notification."""
-        warnings.warn(
-            category=DeprecationWarning,
-            message="the create_push function is deprecated. please use \
-            urbanairship.Push. This will be removed in version 7.0",
-        )
-        return urbanairship.Push(self)
-
-    def create_scheduled_push(self):
-        """Create a Scheduled Push notification."""
-        warnings.warn(
-            category=DeprecationWarning,
-            message="the create_scheduled_push function is deprecated. please \
-                use urbanairship.ScheduledPush. This will be removed in version 7.0",
-        )
-        return urbanairship.ScheduledPush(self)
-
-    def create_template_push(self):
-        """Create a Scheduled Push notification."""
-        warnings.warn(
-            category=DeprecationWarning,
-            message="the create_template_push function is deprecated. please use \
-                  urbanairship.TemplatePush. This will be removed in version 7.0",
-        )
-        return urbanairship.TemplatePush(self)

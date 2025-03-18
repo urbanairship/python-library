@@ -7,7 +7,7 @@ from .automation.core import Automation
 from .automation.pipeline import Pipeline
 from .client import BasicAuthClient, BearerTokenClient, OAuthClient
 from .common import AirshipFailure, ConnectionFailure, Unauthorized
-from .core import Airship
+from .core import Airship as _DeprecatedAirship
 from .custom_events import CustomEvent
 from .devices import (
     APIDList,
@@ -117,6 +117,8 @@ from .reports import (
     TimeInAppList,
     WebResponseReport,
 )
+
+Airship = BasicAuthClient
 
 __all__: List[Any] = [
     BasicAuthClient,

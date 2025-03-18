@@ -11,6 +11,7 @@ from tests import TEST_KEY, TEST_SECRET
 
 class TestExperiment(unittest.TestCase):
     def setUp(self):
+        self.maxDiff = None
         self.airship = ua.Airship(TEST_KEY, TEST_SECRET)
         self.name = "Experiment Test"
         self.audience = "all"
@@ -21,19 +22,20 @@ class TestExperiment(unittest.TestCase):
         self.experiment_id = "f0c975e4-c01a-436b-92a0-2a360f87b211"
         self.push_id = "0edb9e6f-2198-4c42-aada-5a49eb03bcbb"
 
-        push_1 = self.airship.create_push()
+        # push_1 = self.airship.create_push()
+        push_1 = ua.Push(self.airship)
         push_1.notification = ua.notification(alert="test message 1")
 
-        push_2 = self.airship.create_push()
+        push_2 = ua.Push(self.airship)
         push_2.notification = ua.notification(alert="test message 2")
 
-        push_3 = self.airship.create_push()
+        push_3 = ua.Push(self.airship)
         push_3.notification = ua.notification(alert="test message 1")
         push_3.in_app = ua.in_app(
             alert="This part appears in-app!", display_type="banner"
         )
 
-        push_4 = self.airship.create_push()
+        push_4 = ua.Push
         push_4.notification = ua.notification(alert="test message 2")
         push_4.in_app = ua.in_app(
             alert="This part appears in-app!",
@@ -103,7 +105,7 @@ class TestExperiment(unittest.TestCase):
                     {"push": {"notification": {"alert": "test message 2"}}},
                 ],
             }
-            self.assertEqual(experiment_object.payload, experiment_payload)
+            self.assertDictEqual(experiment_object.payload, experiment_payload)
 
     def test_full_experiment(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:

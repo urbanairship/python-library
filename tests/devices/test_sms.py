@@ -182,7 +182,7 @@ class TestSmsKeywordInteraction(unittest.TestCase):
 class TestSmsCustomResponse(unittest.TestCase):
     def setUp(self) -> None:
         self.maxDiff = 2000
-        airship = ua.Airship(key=TEST_KEY, token=TEST_TOKEN)
+        airship = ua.BearerTokenClient(key=TEST_KEY, token=TEST_TOKEN)
         self.mo_id = "886f53d4-3e0f-46d7-930e-c2792dac6e0a"
         self.custom_response = ua.SmsCustomResponse(
             airship=airship,

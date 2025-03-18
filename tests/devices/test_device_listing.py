@@ -124,24 +124,24 @@ class TestDeviceListing(unittest.TestCase):
             for channel in ua.ChannelList(airship):
                 channel_responses.append(channel)
 
-            self.assertEquals(channel_responses[0].channel_id, self.channel1)
-            self.assertEquals(channel_responses[1].channel_id, self.channel2)
-            self.assertEquals(channel_responses[2].channel_id, self.channel3)
+            self.assertEqual(channel_responses[0].channel_id, self.channel1)
+            self.assertEqual(channel_responses[1].channel_id, self.channel2)
+            self.assertEqual(channel_responses[2].channel_id, self.channel3)
 
-            self.assertEquals(channel_responses[0].push_address, self.push_address1)
-            self.assertEquals(channel_responses[1].push_address, self.push_address2)
-            self.assertEquals(channel_responses[2].push_address, self.push_address3)
+            self.assertEqual(channel_responses[0].push_address, self.push_address1)
+            self.assertEqual(channel_responses[1].push_address, self.push_address2)
+            self.assertEqual(channel_responses[2].push_address, self.push_address3)
 
-            self.assertEquals(channel_responses[0].device_type, "ios")
-            self.assertEquals(channel_responses[1].device_type, "android")
-            self.assertEquals(channel_responses[2].device_type, "open")
+            self.assertEqual(channel_responses[0].device_type, "ios")
+            self.assertEqual(channel_responses[1].device_type, "android")
+            self.assertEqual(channel_responses[2].device_type, "open")
 
-            self.assertEquals(
+            self.assertEqual(
                 channel_responses[0].created,
                 datetime.datetime.strptime("2016-08-17T23:29:52", "%Y-%m-%dT%H:%M:%S"),
             )
-            self.assertEquals(channel_responses[1].created, "UNKNOWN")
-            self.assertEquals(
+            self.assertEqual(channel_responses[1].created, "UNKNOWN")
+            self.assertEqual(
                 channel_responses[2].created,
                 datetime.datetime.strptime("2017-08-11T19:17:33", "%Y-%m-%dT%H:%M:%S"),
             )
@@ -153,9 +153,9 @@ class TestDeviceListing(unittest.TestCase):
             airship=airship, limit=self.limit, start_channel=self.start_channel
         )
 
-        self.assertEquals(listing.next_url, airship.urls.get("channel_url"))
+        self.assertEqual(listing.next_url, airship.urls.get("channel_url"))
 
-        self.assertEquals(
+        self.assertEqual(
             listing.params, {"limit": self.limit, "start": self.start_channel}
         )
 
@@ -196,17 +196,17 @@ class TestDeviceListing(unittest.TestCase):
             for dt in ua.DeviceTokenList(airship):
                 dt_responses.append(dt)
 
-            self.assertEquals(dt_responses[0].device_token, self.device_token1)
-            self.assertEquals(dt_responses[1].device_token, self.device_token2)
-            self.assertEquals(dt_responses[0].alias, None)
-            self.assertEquals(dt_responses[1].alias, "an_alias")
-            self.assertEquals(dt_responses[0].active, False)
-            self.assertEquals(dt_responses[1].active, True)
-            self.assertEquals(
+            self.assertEqual(dt_responses[0].device_token, self.device_token1)
+            self.assertEqual(dt_responses[1].device_token, self.device_token2)
+            self.assertEqual(dt_responses[0].alias, None)
+            self.assertEqual(dt_responses[1].alias, "an_alias")
+            self.assertEqual(dt_responses[0].active, False)
+            self.assertEqual(dt_responses[1].active, True)
+            self.assertEqual(
                 dt_responses[0].created,
                 datetime.datetime.strptime("2013-07-17 21:17:42", "%Y-%m-%d %H:%M:%S"),
             )
-            self.assertEquals(
+            self.assertEqual(
                 dt_responses[1].created,
                 datetime.datetime.strptime("2016-02-05 22:55:54", "%Y-%m-%d %H:%M:%S"),
             )
@@ -248,17 +248,17 @@ class TestDeviceListing(unittest.TestCase):
             for apid in ua.APIDList(airship):
                 apid_responses.append(apid)
 
-            self.assertEquals(apid_responses[0].apid, self.apid1)
-            self.assertEquals(apid_responses[1].apid, self.apid2)
-            self.assertEquals(apid_responses[0].active, False)
-            self.assertEquals(apid_responses[1].active, True)
-            self.assertEquals(apid_responses[0].alias, None)
-            self.assertEquals(apid_responses[1].alias, "alias1")
-            self.assertEquals(
+            self.assertEqual(apid_responses[0].apid, self.apid1)
+            self.assertEqual(apid_responses[1].apid, self.apid2)
+            self.assertEqual(apid_responses[0].active, False)
+            self.assertEqual(apid_responses[1].active, True)
+            self.assertEqual(apid_responses[0].alias, None)
+            self.assertEqual(apid_responses[1].alias, "alias1")
+            self.assertEqual(
                 apid_responses[0].created,
                 datetime.datetime.strptime("2015-04-25 23:01:53", "%Y-%m-%d %H:%M:%S"),
             )
-            self.assertEquals(
+            self.assertEqual(
                 apid_responses[1].created,
                 datetime.datetime.strptime("2013-01-25 00:55:06", "%Y-%m-%d %H:%M:%S"),
             )
