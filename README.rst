@@ -10,7 +10,7 @@ center messages, email, and SMS.
 Requirements
 ============
 
-Python 2.7, 3.6, 3.7, 3.8, or 3.9 is required. Other requirements can be found in requirements.txt.
+Python 3.6 or higher is required. Other requirements can be found in requirements.txt.
 
 Questions
 =========
@@ -26,33 +26,38 @@ See the `full documentation for this library
 `Airship API Documentation
 <https://docs.airship.com/api/ua/>`_.
 
-Simple iOS Push
----------------
+Simple Push Notification
+-----------------------
 
     >>> import urbanairship as ua
-    >>> airship = ua.Airship('application_key', 'master_secret')
-    >>> push = airship.create_push()
-    >>> push.audience = ua.or_(ua.alias('adam'), ua.ios_channel('some_ios_channel'))
-    >>> push.notification = ua.notification(alert='Hello')
-    >>> push.device_types = ua.device_types('ios')
-    >>> push.send()
-
-Broadcast to iOS and Android devices
-------------------------------------
+    >>> airship = ua.client.BasicAuthClient('application_key', 'master_secret')
     >>> push = airship.create_push()
     >>> push.audience = ua.all_
-    >>> push.notification = ua.notification(
-    ...     ios=ua.ios(alert='Hello iOS'),
-    ...     android=ua.android(alert='Hello Android'))
+    >>> push.notification = ua.notification(alert='Hello, world!')
     >>> push.device_types = ua.device_types('ios', 'android')
     >>> push.send()
 
-Sending a message center message to a single iOS device
---------------------------------------------------------
+Using OAuth2 Authentication
+-------------------------
     >>> import urbanairship as ua
-    >>> airship = ua.Airship('application_key', 'master_secret')
+    >>> airship = ua.client.OAuthClient(
+    ...     key='application_key',
+    ...     client_id='client_id',
+    ...     private_key='private_key',
+    ...     scope=['push:write']
+    ... )
     >>> push = airship.create_push()
-    >>> push.audience = ua.ios_channel('some_ios_channel')
+    >>> push.audience = ua.all_
+    >>> push.notification = ua.notification(alert='Hello, world!')
+    >>> push.device_types = ua.device_types('ios', 'android')
+    >>> push.send()
+
+Sending a Message Center Message
+------------------------------
+    >>> import urbanairship as ua
+    >>> airship = ua.client.BasicAuthClient('application_key', 'master_secret')
+    >>> push = airship.create_push()
+    >>> push.audience = ua.ios_channel('channel_id')
     >>> push.notification = ua.notification(alert='Hello')
     >>> push.device_types = ua.device_types('ios')
     >>> push.message = ua.message(
@@ -60,11 +65,10 @@ Sending a message center message to a single iOS device
     ...     '<html><h1>Hello!</h1><p>Goodbye.</p></html>')
     >>> push.send()
 
-Web Push to a tag
------------------
-
+Web Push to a Tag
+----------------
     >>> import urbanairship as ua
-    >>> airship = ua.Airship('application_key', 'master_secret')
+    >>> airship = ua.client.BasicAuthClient('application_key', 'master_secret')
     >>> push = airship.create_push()
     >>> push.audience = ua.tag('web_tag')
     >>> push.notification = ua.notification(alert='Hello')
@@ -74,6 +78,7 @@ Web Push to a tag
 History
 =======
 
+* 7.0 Update to client classes and authentication methods
 * 6.3 Support for OAuth2 Authentication. Adds new clients module and class.
 * 6.0 Support for Bearer Token Authentication. Removes support for Python 2.
 * 5.0 Support for SMS and Email messages. See changelog for other updates.

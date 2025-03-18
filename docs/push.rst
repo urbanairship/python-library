@@ -9,16 +9,16 @@ for specifying notifications. When creating a notification, you:
 
 #. Select the audience
 #. Define the notification payload
-#. Specify device types.
-#. Deliver the notification.
+#. Specify device types
+#. Deliver the notification
 
 This example performs a broadcast with the same alert to all recipients
-to a specific device type which can be list of types:
+to a specific device type which can be a list of types:
 
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.Airship(app_key, master_secret)
+   airship = ua.client.BasicAuthClient(app_key, master_secret)
 
    push = airship.create_push()
    push.audience = ua.all_
@@ -47,7 +47,6 @@ combined with ``and_``, ``or_``, and ``not_``.
    :members:
    :noindex:
 
-
 Notification Payload
 --------------------
 
@@ -60,12 +59,19 @@ single piece of text:
 
    push.notification = ua.notification(alert='Hello, world!')
 
-You can override the payload with platform-specific values as well.
+You can override the payload with platform-specific values as well:
+
+.. code-block:: python
+
+   push.notification = ua.notification(
+       ios=ua.ios(alert='Hello iOS', badge=1),
+       android=ua.android(alert='Hello Android'),
+       web=ua.web(alert='Hello Web')
+   )
 
 .. automodule:: urbanairship.push.payload
    :members:
    :exclude-members: device_types
-
 
 Device Types
 ------------
@@ -82,7 +88,6 @@ you wish to target with one or more strings:
    push.device_types = ua.device_types('android', 'ios', 'web')
 
 .. autofunction:: urbanairship.push.payload.device_types
-
 
 Immediate Delivery
 -------------------
@@ -102,7 +107,6 @@ will be raised.
 
 .. autoclass:: urbanairship.push.core.Push
    :members: send, validate
-
 
 Scheduled Delivery
 ==================
@@ -125,14 +129,12 @@ Scheduled Time Builders
 .. autofunction:: urbanairship.push.schedule.recurring_schedule
 .. autofunction:: urbanairship.push.schedule.schedule_exclusion
 
-
 List Scheduled Notifications
 -----------------------------
 
 .. autoclass:: urbanairship.push.schedule.ScheduledList
    :members:
    :exclude-members: instance_class
-
 
 Personalization
 ================
@@ -151,7 +153,6 @@ Template
    :exclude-members: lookup, from_payload
    :noindex:
 
-
 Template Lookup
 ---------------
 
@@ -160,7 +161,6 @@ Template Lookup
    :exclude-members: from_payload
    :noindex:
 
-
 Template Listing
 ----------------
 
@@ -168,12 +168,10 @@ Template Listing
    :members:
    :exclude-members: instance_class
 
-
 Merge Data
 -----------
 
 .. autofunction:: urbanairship.push.template.merge_data
-
 
 Create and Send
 ================
@@ -197,7 +195,6 @@ events. For more information, see `the documentation on Automation
    :members:
    :noindex:
 
-
 Pipeline
 --------
 
@@ -209,7 +206,7 @@ A pipeline object encapsulates the complete set of objects that define an Automa
 
 A/B Tests
 ==========
-An A/B test is a set of distinct push notification variants sent to subsets of an audience. You can create up to 26 notification variants and send each variant to an audience subset
+An A/B test is a set of distinct push notification variants sent to subsets of an audience. You can create up to 26 notification variants and send each variant to an audience subset.
 
 Examples can be found in `the A/B Tests documentation here. <https://docs.airship.com/api/ua/?python#tag-a-b-tests>`_
 
