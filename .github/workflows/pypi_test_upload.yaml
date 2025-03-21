@@ -25,7 +25,7 @@ jobs:
         twine check dist/*
     - name: Publish to Test PyPI
       if: ${{github.repository == 'urbanairship/python-library-dev'}}
-      uses: pypa/gh-action-pypi-publish@v1
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_TEST_TOKEN }}
         repository-url: https://test.pypi.org/legacy/

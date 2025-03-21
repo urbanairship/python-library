@@ -1,8 +1,13 @@
 name: Release Publish and Upload
 
 on:
-  release:
-    types: [released]
+  workflow_dispatch:
+    inputs:
+      libVersion:
+        description: Library Version
+        required: true
+        default: x.x.x
+        type: string
 
 jobs:
   build:
@@ -25,6 +30,6 @@ jobs:
         twine check dist/*
     - name: Publish to PyPI
       if: ${{github.repository == 'urbanairship/python-library-dev'}}
-      uses: pypa/gh-action-pypi-publish@v1
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_TOKEN_URBANAIRSHIP }}
