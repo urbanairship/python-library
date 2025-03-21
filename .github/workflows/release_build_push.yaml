@@ -13,7 +13,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      pages: write
+      actions: read
       id-token: write
+      contents: read
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
