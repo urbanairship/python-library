@@ -24,10 +24,10 @@ Example usage:
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.client.BasicAuthClient('<app key>', '<master secret>')
+   client = ua.client.BasicAuthClient('<app key>', '<master secret>')
 
    # Create and send a push notification
-   push = airship.create_push()
+   push = ua.Push(client)
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.device_types('ios', 'android')
@@ -47,10 +47,10 @@ Example usage:
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.client.BearerTokenClient('<app key>', '<bearer token>')
+   client = ua.client.BearerTokenClient('<app key>', '<bearer token>')
 
    # Create and send a push notification
-   push = airship.create_push()
+   push = ua.Push(client)
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.device_types('ios', 'android')
@@ -72,7 +72,7 @@ Example usage:
    import urbanairship as ua
 
    # Initialize with OAuth credentials
-   airship = ua.client.OAuthClient(
+   client = ua.client.OAuthClient(
        key='<app key>',
        client_id='<client id>',
        private_key='<private key>',
@@ -80,7 +80,7 @@ Example usage:
    )
 
    # Create and send a push notification
-   push = airship.create_push()
+   push = ua.Push(client)
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.device_types('ios', 'android')

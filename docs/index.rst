@@ -22,9 +22,9 @@ representing a single Airship project.
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.client.BasicAuthClient('<app key>', '<master secret>')
+   client = ua.client.BasicAuthClient('<app key>', '<master secret>')
 
-   push = airship.create_push()
+   push = ua.Push(client)
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.device_types('ios', 'android')

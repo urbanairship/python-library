@@ -1,11 +1,11 @@
-``urbanairship`` is a Python library for using the `Airship
-<http://airship.com/>`_ REST API for push notifications, message
+``urbanairship`` is a Python library for using the Airship REST
+API for push notifications, message
 center messages, email, and SMS.
 
 Requirements
 ============
 
-Python 3.6 or higher is required. Other requirements can be found in requirements.txt.
+Python 3.10 or higher is required. Other requirements can be found in requirements.txt.
 
 Questions
 =========

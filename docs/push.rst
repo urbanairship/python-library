@@ -18,9 +18,9 @@ to a specific device type which can be a list of types:
 .. code-block:: python
 
    import urbanairship as ua
-   airship = ua.client.BasicAuthClient(app_key, master_secret)
+   client = ua.client.BasicAuthClient(app_key, master_secret)
 
-   push = airship.create_push()
+   push = ua.Push(client)
    push.audience = ua.all_
    push.notification = ua.notification(alert='Hello, world!')
    push.device_types = ua.device_types('android', 'ios')
