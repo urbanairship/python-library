@@ -3,8 +3,9 @@ import unittest
 from datetime import datetime
 
 import requests
-import urbanairship as ua
 from mock import Mock
+
+import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 
 

@@ -129,9 +129,9 @@ class TestMessage(unittest.TestCase):
         self.assertEqual(
             ua.notification(
                 ios=ua.ios(
-                    alert=u"Hello",
-                    badge=u"+1",
-                    expiry=u"time",
+                    alert="Hello",
+                    badge="+1",
+                    expiry="time",
                 )
             ),
             {"ios": {"alert": "Hello", "badge": "+1", "expiry": "time"}},
@@ -270,8 +270,8 @@ class TestMessage(unittest.TestCase):
         self.assertEqual(
             ua.notification(
                 android=ua.android(
-                    alert=u"Hello",
-                    time_to_live=u"100",
+                    alert="Hello",
+                    time_to_live="100",
                 )
             ),
             {
@@ -340,8 +340,8 @@ class TestMessage(unittest.TestCase):
         self.assertEqual(
             ua.notification(
                 amazon=ua.amazon(
-                    alert=u"Amazon test",
-                    expires_after=u"100",
+                    alert="Amazon test",
+                    expires_after="100",
                 )
             ),
             {

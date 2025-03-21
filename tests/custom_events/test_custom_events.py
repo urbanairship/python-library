@@ -1,7 +1,5 @@
 import datetime
-import json
 import unittest
-import uuid
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_TOKEN

@@ -1,22 +1,53 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
     -   id: no-commit-to-branch
         args: ["--branch", "master", "--branch", "main"]
+    -   id: check-added-large-files
+    -   id: check-json
+    -   id: check-toml
 -   repo: https://github.com/psf/black
-    rev: 24.4.0
+    rev: 24.2.0
     hooks:
     -   id: black
+        language_version: python3.13
+-   repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+    -   id: isort
+-   repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: [flake8-bugbear>=24.2.6]
+        args: [
+            "--max-line-length=99",
+            "--extend-ignore=E203,W503,E501,C901",  # Ignore style errors that conflict with Black, line length, and complexity
+            "--exclude=.git,__pycache__,build,dist",
+            "--per-file-ignores=*/__init__.py:F401"
+        ]
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.2.6
     hooks:
-      - id: codespell
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.9.0
-  hooks:
-    - id: mypy
-      additional_dependencies: [types-requests, types-six, types-urllib3, types-mock]
+    -   id: codespell
+        args: [--ignore-words=.codespell-ignore]
+        exclude: >
+            (?x)^(
+                .*\.lock|
+                \.git/.*|
+                .*/build/.*
+            )$
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+    -   id: mypy
+        additional_dependencies:
+            - types-requests>=2.31.0.20240311
+            - types-six>=1.16.21.20240311
+            - types-mock>=5.1.0.20240311
+            - types-urllib3
+        exclude: ^(docs/|tests/)

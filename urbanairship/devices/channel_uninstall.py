@@ -21,7 +21,7 @@ class ChannelUninstall(object):
 
     def uninstall(self, channels: List[str]) -> Response:
         """
-        Perform the channel unistall on a list of channel UUIDs.
+        Perform the channel uninstall on a list of channel UUIDs.
 
         :param channels: Required. A list of channel_id UUIDs.
         """

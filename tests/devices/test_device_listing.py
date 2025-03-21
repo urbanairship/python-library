@@ -1,12 +1,12 @@
+import datetime
 import json
 import unittest
-import mock
-import requests
-import datetime
 import uuid
 
+import mock
+import requests
+
 import urbanairship as ua
-from urbanairship import common
 from tests import TEST_KEY, TEST_SECRET
 
 

@@ -1,8 +1,8 @@
 import datetime
 import json
-import mock
 import unittest
 
+import mock
 import requests
 
 import urbanairship as ua

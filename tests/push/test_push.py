@@ -4,6 +4,7 @@ import unittest
 
 import mock
 import requests
+
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
 from urbanairship.enums import LiveActivityEvent, LiveUpdateEvent

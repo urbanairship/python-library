@@ -43,8 +43,8 @@ master_doc = "index"
 
 # General information about the project.
 year = datetime.now().year
-project = u"Airship Python Library"
-copyright = u"%d, Airship Group, Inc" % year
+project = "Airship Python Library"
+copyright = "%d, Airship Group, Inc" % year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -182,11 +182,11 @@ htmlhelp_basename = "UrbanAirshipPythonLibrarydoc"
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -195,8 +195,8 @@ latex_documents = [
     (
         "index",
         "UrbanAirshipPythonLibrary.tex",
-        u"Urban Airship Python Library Documentation",
-        u"Urban Airship",
+        "Urban Airship Python Library Documentation",
+        "Urban Airship",
         "manual",
     )
 ]
@@ -230,8 +230,8 @@ man_pages = [
     (
         "index",
         "airshippythonlibrary",
-        u"Airship Python Library Documentation",
-        [u"Airship"],
+        "Airship Python Library Documentation",
+        ["Airship"],
         1,
     )
 ]
@@ -249,8 +249,8 @@ texinfo_documents = [
     (
         "index",
         "AirshipPythonLibrary",
-        u"Airship Python Library Documentation",
-        u"Airship",
+        "Airship Python Library Documentation",
+        "Airship",
         "AirshipPythonLibrary",
         "One line description of project.",
         "Miscellaneous",

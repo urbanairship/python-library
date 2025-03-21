@@ -1,8 +1,9 @@
 import datetime
 import json
+import unittest
+
 import mock
 import requests
-import unittest
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
@@ -37,7 +38,7 @@ class TestTemplatePush(unittest.TestCase):
 
 class TestTemplate(unittest.TestCase):
     def test_template_lookup1(self):
-        with mock.patch.object(ua.Airship, "_request") as mock_request:
+        with mock.patch.object(ua.Airship, "_request"):
             response = requests.Response()
             response._content = json.dumps(
                 {

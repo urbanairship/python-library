@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional
 
 from requests import Response
 
-
 from urbanairship.client import BaseClient
 
 logger = logging.getLogger("urbanairship")

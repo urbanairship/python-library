@@ -1,12 +1,12 @@
 import json
-import mock
 import unittest
 import uuid
 
+import mock
 import requests
 
 import urbanairship as ua
-from tests import TEST_SECRET, TEST_KEY, TEST_TOKEN
+from tests import TEST_KEY, TEST_SECRET
 
 
 class TestAirshipCore(unittest.TestCase):

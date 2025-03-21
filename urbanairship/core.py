@@ -6,10 +6,8 @@ from typing import Any, Dict, Optional
 import backoff  # type: ignore
 import requests
 
-import urbanairship
-from urbanairship.urls import Urls
-
 from . import __about__, client, common
+from .urls import Urls
 
 logger = logging.getLogger("urbanairship")
 
@@ -51,6 +49,7 @@ class Airship(client.BaseClient):
             "This class will be removed in version 8.0. If you are importing this "
             "directly, please migrate to clients.BasicAuthClient which should be "
             "a drop-in replacement.",
+            stacklevel=2,
         )
 
         self.key: str = key

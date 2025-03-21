@@ -15,7 +15,8 @@ nosetests.xml
 .noseids
 /mypython
 ipynb/
-
+.coverage
+.mypy_cache/
 # Ignoring venv stuff
 bin/
 lib/

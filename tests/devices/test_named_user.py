@@ -1,9 +1,9 @@
-import unittest
 import json
+import unittest
 
 import mock
-from mock import Mock
 import requests
+from mock import Mock
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET

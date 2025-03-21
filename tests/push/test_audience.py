@@ -1,4 +1,3 @@
-import datetime
 import unittest
 
 import urbanairship as ua

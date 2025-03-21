@@ -1,6 +1,6 @@
 import unittest
 
-from tests import TEST_KEY, TEST_TOKEN
+from tests import TEST_KEY
 from urbanairship.client import OAuthClient
 
 

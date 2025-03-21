@@ -1,5 +1,12 @@
 # urbanairship changelog
 
+## 7.0.0
+
+- Adds package type annotations
+- Adds ability to specify a custom base url when creating client
+- Updates various dependencies and build process
+- Removes deprecated client classes and create functions. See documentation for new approach.
+
 ## 6.3.0
 
 - Adds Support for OAuth2 Authentication

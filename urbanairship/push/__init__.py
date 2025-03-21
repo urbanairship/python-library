@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any, List
 
 from .audience import (
     alias,
@@ -18,8 +18,8 @@ from .audience import (
     segment,
     sms_id,
     sms_sender,
-    subscription_list,
     static_list,
+    subscription_list,
     tag,
     tag_group,
     text_attribute,
@@ -36,7 +36,10 @@ from .payload import (
     in_app,
     interactive,
     ios,
+    live_activity,
+    live_update,
     localization,
+    media_attachment,
     message,
     mms,
     notification,
@@ -48,17 +51,14 @@ from .payload import (
     wearable,
     web,
     wns_payload,
-    live_activity,
-    live_update,
-    media_attachment,
 )
 from .schedule import (
     ScheduledList,
     best_time,
     local_scheduled_time,
-    scheduled_time,
-    schedule_exclusion,
     recurring_schedule,
+    schedule_exclusion,
+    scheduled_time,
 )
 from .template import Template, TemplateList, merge_data
 

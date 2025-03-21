@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Dict, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 class Pipeline(object):
@@ -255,7 +255,7 @@ class Pipeline(object):
 
             if historical_trigger_object["equals"] != 0:
                 raise ValueError(
-                    'only allowable value of historial trigger "equals" is 0'
+                    'only allowable value of historical trigger "equals" is 0'
                 )
 
             if 0 >= historical_trigger_object["days"] > 90:
@@ -274,7 +274,7 @@ class Pipeline(object):
 
     @constraint.setter
     def constraint(self, constraint_objects: Union[Dict, List]) -> None:
-        """Set Pipline constraints
+        """Set Pipeline constraints
 
         :keyword constraint_objects: One of list of constraint objects
         """

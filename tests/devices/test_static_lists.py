@@ -1,9 +1,9 @@
-import unittest
-import json
-import mock
 import csv
+import json
+import unittest
 from datetime import datetime
 
+import mock
 import requests
 
 import urbanairship as ua

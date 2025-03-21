@@ -1,12 +1,16 @@
 requests==2.32.3
 backoff==2.2.1
-types-requests
-six
-types-six
-sphinx-rtd-theme
-mypy
-mypy-extensions
+six==1.16.0
 pyjwt==2.8.0
 cryptography==42.0.5
-types-mock
-mock>=5.1.0
+
+# Type stubs
+types-requests>=2.31.0
+types-six>=1.16.21
+types-mock>=5.1.0
+
+# Development dependencies
+mypy>=1.9.0
+mypy-extensions>=1.0.0
+build>=1.1.1
+twine>=5.0.0

@@ -6,7 +6,7 @@ from requests import Response
 
 from urbanairship import common
 from urbanairship.client import BaseClient
-from urbanairship.devices import ChannelTags
+from urbanairship.devices.tag import ChannelTags
 
 logger = logging.getLogger("urbanairship")
 
@@ -231,7 +231,7 @@ class NamedUser(object):
 
         Please see https://docs.airship.com/api/ua/#operation-api-named_users-named_user_id-post
 
-        :param assocaite: Optional. List of objects to associate with the named user
+        :param associate: Optional. List of objects to associate with the named user
         :param disassociate: Optional. List of objects to disassociate from the named
             user
         :param tags: Optional. Dictionary of set, add, remove objects to apply to

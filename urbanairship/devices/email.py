@@ -22,7 +22,7 @@ class Email(object):
 
     Please see the email documentation for important information about
     opt-in times and email types.
-    hhttps://docs.airship.com/api/ua/#tag-email
+    https://docs.airship.com/api/ua/#tag-email
 
     :param address: Required. The email address the object represents.
     :param commercial_opted_in: Optional. A string in ISO 8601 format that

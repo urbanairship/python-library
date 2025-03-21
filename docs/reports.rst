@@ -4,7 +4,7 @@ Reports
 Examples can be found in `the reports documentation here. <https://docs.airship.com/api/ua/?python#tag-reports>`_
 
 .. note::
-    ``precision`` needs to be one of 'HOURLY', 'DAILY', or 'MONTHLY'.  
+    ``precision`` needs to be one of 'HOURLY', 'DAILY', or 'MONTHLY'.
     ``start_date`` and ``end_date`` must be ``datetime.datetime`` objects.
 
 .. autoclass:: urbanairship.reports.IndividualResponseStats

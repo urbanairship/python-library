@@ -1,13 +1,11 @@
-import datetime
-import mock
-import unittest
 import json
+import unittest
 
+import mock
 import requests
 
 import urbanairship as ua
 from tests import TEST_KEY, TEST_SECRET
-from urbanairship.push import audience
 
 
 class TestSubscriptionList(unittest.TestCase):

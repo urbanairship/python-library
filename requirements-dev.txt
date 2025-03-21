@@ -1,4 +1,25 @@
 -r requirements.txt
-tox
-black
-pre-commit
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+mock>=5.1.0
+tox>=4.14.0
+
+# Linting and Formatting
+black>=24.2.0
+isort>=5.13.0
+flake8>=7.0.0
+flake8-bugbear>=24.2.6  # Additional bug checks for flake8
+
+# Type checking
+mypy>=1.9.0
+
+# Documentation
+sphinx-rtd-theme>=2.0.0
+sphinx>=7.2.0
+
+# Development tools
+pre-commit>=3.6.0
+build>=1.1.1  # For building packages
+twine>=5.0.0  # For uploading to PyPI

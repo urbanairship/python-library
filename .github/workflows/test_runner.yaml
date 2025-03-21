@@ -4,29 +4,29 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Run mypy checks
+          python -m pip install -r requirements-dev.txt
+      - name: Type check with mypy
         run: |
           mypy urbanairship/
-      - name: Test with unittest
+      - name: Test with pytest
         run: |
-          python -m unittest
-      - name: Build Sphinx Docs
+          python -m pytest
+      - name: Build package
         run: |
-          cd docs/
-          make clean html
+          python -m pip install build twine
+          python -m build
+          twine check dist/*

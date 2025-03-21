@@ -313,7 +313,7 @@ def android(
     :keyword notification_channel: Optional string.  An identifier of a
         notification channel predefined by the application.
     :keyword icon: Optional string. The name of a drawable in the
-        application’s resource directory.
+        application's resource directory.
     :keyword icon_color: Optional. A string in the format of #rrggbb that
         defines the notification accent color.
     :keyword live_update: Optional, a JSON object that represents the content sent
@@ -443,7 +443,7 @@ def amazon(
     :keyword notification_channel: Optional string. An identifier of a
         notification channel predefined by the application.
     :keyword icon: Optional string. The name of a drawable in the
-        application’s resource directory.
+        application's resource directory.
     :keyword icon_color: Optional. A string in the format of #rrggbb that
         defines the notification icon accent color.
 
@@ -698,7 +698,7 @@ def email(
         will be sent to your entire audience, ignoring `transactional_opted_out` status.
     :param click_tracking: Optional. `True` by default. Set to `False` to prevent click
         tracking for GDPR compliance.
-    :param open_tracking: Optional. `True` by default. Set to `False` to prevent “open”
+    :param open_tracking: Optional. `True` by default. Set to `False` to prevent "open"
         tracking for GDPR compliance.
     """
     if message_type not in ("transactional", "commercial"):
@@ -969,7 +969,11 @@ def device_types(*types: Any) -> List[str]:
     """
     valid_device_types = ("ios", "android", "amazon", "wns", "web", "sms", "email")
     if len(types) == 1 and types[0] == "all":
-        warnings.warn("The device type 'all' has been deprecated.", DeprecationWarning)
+        warnings.warn(
+            "The device type 'all' has been deprecated.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return ["all"]
 
     for t in types:
@@ -1005,7 +1009,7 @@ def options(
     :param personalization: If true, enables Handlebars-style template syntax
                             for eligible fields in a notification or message center objects.
     :param redact_payload: If true, the push payload will not appear in
-                           Airship’s logs.
+                           Airship's logs.
 
     :return: A dictionary representing the options payload.
     """
