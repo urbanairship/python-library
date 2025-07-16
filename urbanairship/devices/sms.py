@@ -2,7 +2,7 @@ import json
 import logging
 import re
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from requests import Response
 
@@ -150,9 +150,7 @@ class Sms(object):
         for key in reg_payload_keys:
             if getattr(self, key) is not None:
                 if isinstance(getattr(self, key), datetime):
-                    payload[key] = datetime.strptime(
-                        getattr(self, key), "%Y-%m-%dT%H:%M:%S"
-                    )
+                    payload[key] = datetime.strptime(getattr(self, key), "%Y-%m-%dT%H:%M:%S")
                 else:
                     payload[key] = getattr(self, key)
 
@@ -168,9 +166,7 @@ class Sms(object):
         if self.opted_in:
             audience["ua_opted_in"] = self.opted_in
         else:
-            raise ValueError(
-                "sms objects for create and send must include opt-in datestamps"
-            )
+            raise ValueError("sms objects for create and send must include opt-in datestamps")
         return audience
 
     def register(self, opted_in: Optional[datetime] = None) -> Response:
@@ -193,14 +189,11 @@ class Sms(object):
         response = self.airship.request(method="POST", body=body, url=url, version=3)
 
         if response.json().get("status") == "pending":
-            logger.info(
-                "Channel creation for msisdn %s pending user opt-in" % (self.msisdn)
-            )
+            logger.info("Channel creation for msisdn %s pending user opt-in" % (self.msisdn))
         elif response.json().get("channel_id") is not None:
             self.channel_id = response.json().get("channel_id")
             logger.info(
-                "Successfully registered Sms channel with channel_id %s"
-                % (self.channel_id)
+                "Successfully registered Sms channel with channel_id %s" % (self.channel_id)
             )
         else:
             logger.info("Channel not yet created.")
@@ -221,8 +214,8 @@ class Sms(object):
 
         if self.channel_id is None:
             raise ValueError("SMS Channel must have a channel id to update.")
-
-        self.channel_id = channel_id
+        if channel_id is not None:
+            self.channel_id = channel_id
 
         response = self.airship.request(
             method="PUT",
@@ -250,8 +243,7 @@ class Sms(object):
         )
 
         logger.info(
-            "Opted out Sms channel with sender: %s and msisdn: %s"
-            % (self.sender, self.msisdn)
+            "Opted out Sms channel with sender: %s and msisdn: %s" % (self.sender, self.msisdn)
         )
 
         return response
@@ -273,8 +265,7 @@ class Sms(object):
         )
 
         logger.info(
-            "Uninstalled Sms channel with sender: %s and msisdn: %s"
-            % (self.sender, self.msisdn)
+            "Uninstalled Sms channel with sender: %s and msisdn: %s" % (self.sender, self.msisdn)
         )
 
         return response
@@ -338,9 +329,7 @@ class KeywordInteraction(object):
     def payload(self) -> Dict:
         data: Dict = {"keyword": self.keyword, "sender_ids": self.sender_ids}
         if self.timestamp:
-            data.update(
-                {"timestamp": self.timestamp.replace(microsecond=0).isoformat()}
-            )
+            data.update({"timestamp": self.timestamp.replace(microsecond=0).isoformat()})
 
         return data
 
@@ -352,9 +341,7 @@ class KeywordInteraction(object):
 
     def post(self) -> Response:
         """Send the interaction"""
-        response = self.airship.request(
-            method="POST", url=self.url, body=self.payload, version=3
-        )
+        response = self.airship.request(method="POST", url=self.url, body=self.payload, version=3)
 
         return response
 
@@ -435,4 +422,4 @@ class SmsCustomResponse:
             version=3,
         )
 
-        return response.json()
+        return cast(Dict[Any, Any], response.json())

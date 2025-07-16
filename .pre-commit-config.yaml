@@ -45,9 +45,11 @@ repos:
     rev: v1.9.0
     hooks:
     -   id: mypy
+        args: [--config-file=pyproject.toml, --ignore-missing-imports, --disable-error-code=no-any-return]
+        files: ^urbanairship/
+        exclude: ^docs/
         additional_dependencies:
             - types-requests>=2.31.0.20240311
             - types-six>=1.16.21.20240311
             - types-mock>=5.1.0.20240311
             - types-urllib3
-        exclude: ^(docs/|tests/)

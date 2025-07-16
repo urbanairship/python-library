@@ -122,9 +122,7 @@ class BaseClient:
         if content_type:
             headers["Content-type"] = content_type
         if version:
-            headers["Accept"] = (
-                "application/vnd.urbanairship+json; " f"version={version};"
-            )
+            headers["Accept"] = "application/vnd.urbanairship+json; " f"version={version};"
         if encoding:
             headers["Content-Encoding"] = encoding
         self.session.headers.update(headers)
@@ -146,9 +144,7 @@ class BaseClient:
                 "Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
                 method,
                 url,
-                "\n\t".join(
-                    "%s: %s" % (key, value) for (key, value) in headers.items()
-                ),
+                "\n\t".join("%s: %s" % (key, value) for (key, value) in headers.items()),
                 body,
             )
             try:
@@ -165,9 +161,7 @@ class BaseClient:
             logger.debug(
                 "Received %s response. Headers:\n\t%s\nBody:\n\t%s",
                 response.status_code,
-                "\n\t".join(
-                    "%s: %s" % (key, value) for (key, value) in response.headers.items()
-                ),
+                "\n\t".join("%s: %s" % (key, value) for (key, value) in response.headers.items()),
                 response.content,
             )
 
@@ -176,7 +170,8 @@ class BaseClient:
             elif not (200 <= response.status_code < 300):
                 raise common.AirshipFailure.from_response(response)
 
-            return response
+            result: requests.Response = response
+            return result
 
         return make_retryable_request(method, url, body, params, headers)
 
@@ -247,9 +242,7 @@ class BearerTokenClient(BaseClient):
         super().__init__(key=key, location=location, timeout=timeout, retries=retries)
         self.token = token
 
-        self.session.headers.update(
-            {"X-UA-Appkey": key, "Authorization": f"Bearer {self.token}"}
-        )
+        self.session.headers.update({"X-UA-Appkey": key, "Authorization": f"Bearer {self.token}"})
 
     @property
     def token(self) -> Optional[str]:
@@ -301,9 +294,7 @@ class OAuthClient(BaseClient):
         self.scope = scope
         self.ip_addr = ip_addr
         self.private_key = private_key
-        self.token_url: str = (
-            f"{US_OAUTH_URL if self.location == 'us' else EU_OAUTH_URL}/token"
-        )
+        self.token_url: str = f"{US_OAUTH_URL if self.location == 'us' else EU_OAUTH_URL}/token"
         self.token: Optional[str] = None
         self.urls = Urls(location=self.location, oauth_base=True)
         self.access_token_expires_at: int = 0
@@ -354,20 +345,20 @@ class OAuthClient(BaseClient):
             )
             resp_data = resp.json()
             self.token = resp_data.get("access_token")
-            self.access_token_expires_at = int(time.time()) + int(
-                resp_data.get("expires_in")
-            )
+            self.access_token_expires_at = int(time.time()) + int(resp_data.get("expires_in"))
             self.session.headers.update(
                 {"X-UA-Appkey": self.key, "Authorization": f"Bearer {self.token}"}
             )
 
         if not self.token:
             logger.debug("No OAuth2 access token found. Getting new token.")
-            return _get_or_refresh_token()
+            _get_or_refresh_token()
+            return
 
         if self.access_token_expires_at < int(time.time()):
             logger.debug("OAuth access token expired. Refreshing token.")
-            return _get_or_refresh_token()
+            _get_or_refresh_token()
+            return
 
     def _request(
         self,
@@ -380,6 +371,4 @@ class OAuthClient(BaseClient):
         encoding: Optional[str] = None,
     ) -> requests.Response:
         self._update_session_oauth_token()
-        return super()._request(
-            method, body, url, content_type, version, params, encoding
-        )
+        return super()._request(method, body, url, content_type, version, params, encoding)

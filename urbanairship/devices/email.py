@@ -2,7 +2,7 @@ import base64
 import json
 import logging
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from requests import Response
 
@@ -157,9 +157,7 @@ class Email(object):
     @property
     def _full_payload(self) -> Dict[str, Any]:
         if self.address is None:
-            raise ValueError(
-                "address must be set to register or update an email channel"
-            )
+            raise ValueError("address must be set to register or update an email channel")
 
         payload: Dict[str, Any] = {"type": self._email_type}
 
@@ -236,14 +234,10 @@ class Email(object):
 
         if response.status_code == 201:
             self.channel_id = response.json().get("channel_id")
-            logger.info(
-                "Successfully created channel with channel_id %s" % (self.channel_id)
-            )
+            logger.info("Successfully created channel with channel_id %s" % (self.channel_id))
         elif response.status_code == 200:
             self.channel_id = response.json().get("channel_id")
-            logger.info(
-                "Successful registration call made to channel_id %s" % (self.channel_id)
-            )
+            logger.info("Successful registration call made to channel_id %s" % (self.channel_id))
 
         return response
 
@@ -388,9 +382,7 @@ class EmailTags(object):
 
         body = json.dumps(self._payload).encode("utf-8")
 
-        response = self.airship.request(
-            method="POST", body=body, url=self.url, version=3
-        )
+        response = self.airship.request(method="POST", body=body, url=self.url, version=3)
 
         return response
 
@@ -405,25 +397,48 @@ class EmailAttachment(object):
         Multiple files with the same name are allowed in separate requests.
     :param content_type: Required: The mimetype of the uploaded file including the
         charset parameter, if needed.
-    :param filepath: Required. A path to the file to be uploaded and attached. File must
+    :param filepath: Optional. A string path to the file to be uploaded and attached. File must
         have permissions set to be opened in 'rb' (binary) mode.
+    :param file_data: Optional. A string representation of the file to be uploaded and attached.
 
     :return: the response object from the API including the 'attachment_ids' uuid to
         be used in the email override object.
     """
 
     def __init__(
-        self, airship: BaseClient, filename: str, content_type: str, filepath: str
+        self,
+        airship: BaseClient,
+        filename: str,
+        content_type: str,
+        filepath: None | str = None,
+        file_data: None | bytes = None,
     ) -> None:
         self.airship = airship
         self.filename = filename
         self.content_type = content_type
         self.filepath = filepath
+        self.file_data = file_data
+        self.validate_init_args()
 
-    def _encode_attachment(self, filepath: str) -> str:
-        file = open(filepath, "rb").read()
-        enc = base64.urlsafe_b64encode(file)
+    def validate_init_args(self) -> None:
+        if not any([self.filepath, self.file_data]):
+            raise ValueError("filepath or file_data must be provided")
 
+        if self.filepath and self.file_data:
+            raise ValueError("filepath and file_data cannot both be provided")
+
+    def _encode_attachment(
+        self, filepath: str | None = None, file_data: bytes | None = None
+    ) -> str:
+        if filepath:
+            with open(filepath, "rb") as f:
+                file_bytes = f.read()
+        elif file_data:
+            file_bytes = file_data
+        else:
+            raise ValueError("filepath or file_data must be provided")
+
+        enc = base64.urlsafe_b64encode(file_bytes)
         return str(enc)
 
     @property
@@ -431,7 +446,7 @@ class EmailAttachment(object):
         attachment_payload = {
             "filename": self.filename,
             "content_type": self.content_type,
-            "data": self._encode_attachment(self.filepath),
+            "data": self._encode_attachment(self.filepath, self.file_data),
         }
 
         return attachment_payload
@@ -445,4 +460,4 @@ class EmailAttachment(object):
             version=3,
         )
 
-        return response.json()
+        return cast(Dict[Any, Any], response.json())

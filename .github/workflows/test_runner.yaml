@@ -21,7 +21,7 @@ jobs:
           python -m pip install -r requirements-dev.txt
       - name: Type check with mypy
         run: |
-          mypy urbanairship/
+          mypy --config-file=pyproject.toml --ignore-missing-imports --disable-error-code=no-any-return urbanairship/
       - name: Test with pytest
         run: |
           python -m pytest

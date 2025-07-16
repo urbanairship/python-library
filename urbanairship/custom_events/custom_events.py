@@ -1,6 +1,6 @@
 import datetime
 import json
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, cast
 
 from urbanairship.client import BaseClient
 
@@ -83,7 +83,7 @@ class CustomEvent:
         return self._interaction_id
 
     @interaction_id.setter
-    def interaction_id(self, value: str) -> None:
+    def interaction_id(self, value: Optional[str]) -> None:
         self._interaction_id = value
 
     @property
@@ -91,7 +91,7 @@ class CustomEvent:
         return self._interaction_type
 
     @interaction_type.setter
-    def interaction_type(self, value: str) -> None:
+    def interaction_type(self, value: Optional[str]) -> None:
         self._interaction_type = value
 
     @property
@@ -173,4 +173,4 @@ class CustomEvent:
             version=3,
         )
 
-        return response.json()
+        return cast(Dict[Any, Any], response.json())

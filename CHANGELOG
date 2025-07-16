@@ -1,5 +1,9 @@
 # urbanairship changelog
 
+## 7.1.0
+
+- Adds file_data argument to the EmailAttachment class fir passing stringified file data.
+
 ## 7.0.0
 
 - Adds package type annotations

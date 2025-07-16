@@ -3,7 +3,7 @@ import re
 import warnings
 from typing import Any, Dict, Optional
 
-import backoff  # type: ignore
+import backoff
 import requests
 
 from . import __about__, client, common
@@ -157,9 +157,7 @@ class Airship(client.BaseClient):
         if content_type:
             headers["Content-type"] = content_type
         if version:
-            headers["Accept"] = (
-                "application/vnd.urbanairship+json; " "version=%d;" % version
-            )
+            headers["Accept"] = "application/vnd.urbanairship+json; " "version=%d;" % version
         if encoding:
             headers["Content-Encoding"] = encoding
 
@@ -191,18 +189,14 @@ class Airship(client.BaseClient):
                 "Making %s request to %s. Headers:\n\t%s\nBody:\n\t%s",
                 method,
                 url,
-                "\n\t".join(
-                    "%s: %s" % (key, value) for (key, value) in headers.items()
-                ),
+                "\n\t".join("%s: %s" % (key, value) for (key, value) in headers.items()),
                 body,
             )
 
             logger.debug(
                 "Received %s response. Headers:\n\t%s\nBody:\n\t%s",
                 response.status_code,
-                "\n\t".join(
-                    "%s: %s" % (key, value) for (key, value) in response.headers.items()
-                ),
+                "\n\t".join("%s: %s" % (key, value) for (key, value) in response.headers.items()),
                 response.content,
             )
 
@@ -211,6 +205,7 @@ class Airship(client.BaseClient):
             elif not (200 <= response.status_code < 300):
                 raise common.AirshipFailure.from_response(response)
 
-            return response
+            result: requests.Response = response
+            return result
 
         return make_retryable_request(method, url, body, params, headers)

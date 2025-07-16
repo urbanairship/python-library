@@ -63,16 +63,16 @@ def open_channel(uuid: str) -> Dict[str, str]:
 
 def sms_sender(sender: str) -> Dict[str, str]:
     """Select an SMS Sender"""
-    if not (isinstance(sender, str) or SMS_SENDER_FORMAT.match(sender)):
+    if not (isinstance(sender, str) and SMS_SENDER_FORMAT.match(sender)):
         raise ValueError("sms_sender value must be a numeric string.")
     return {"sms_sender": sender}
 
 
 def sms_id(msisdn: str, sender: str) -> Dict[str, Dict]:
     """Select an SMS MSISDN"""
-    if not (isinstance(msisdn, str) or SMS_MSISDN_FORMAT.match(msisdn)):
+    if not (isinstance(msisdn, str) and SMS_MSISDN_FORMAT.match(msisdn)):
         raise ValueError("msisdn value must be a numeric string.")
-    if not (isinstance(sender, str) or SMS_SENDER_FORMAT.match(sender)):
+    if not (isinstance(sender, str) and SMS_SENDER_FORMAT.match(sender)):
         raise ValueError("sender value must be a numeric string.")
     return {"sms_id": {"sender": sender, "msisdn": msisdn}}
 
@@ -157,9 +157,7 @@ def date_attribute(
             )
         if precision is None:
             raise ValueError(
-                "precision must be included when using the '{0}' operator".format(
-                    operator
-                )
+                "precision must be included when using the '{0}' operator".format(operator)
             )
 
         selector["value"] = value

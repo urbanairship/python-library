@@ -3,7 +3,7 @@ import datetime
 import gzip
 import json
 from io import TextIOWrapper
-from typing import Dict, Optional
+from typing import Any, Dict, Optional, cast
 
 from requests import Response
 
@@ -20,12 +20,12 @@ class StaticList:
         self.description = None
         self.extra = None
 
-    def create(self) -> Dict:
+    def create(self) -> Dict[Any, Any]:
         """Create a Static List"""
         payload = {"name": self.name}
-        if self.description is not None:
+        if self.description:
             payload["description"] = self.description
-        if self.extra is not None:
+        if self.extra:
             payload["extra"] = self.extra
 
         body = json.dumps(payload)
@@ -36,9 +36,10 @@ class StaticList:
             content_type="application/json",
             version=3,
         )
-        return response.json()
+        result = response.json()
+        return cast(Dict[Any, Any], result)
 
-    def upload(self, csv_file: TextIOWrapper) -> Dict:
+    def upload(self, csv_file: TextIOWrapper) -> Dict[Any, Any]:
         """Upload a CSV file to a static list
 
         :param csv_file: open file descriptor with two column format:
@@ -57,9 +58,9 @@ class StaticList:
             version=3,
             encoding="gzip",
         )
-        return response.json()
+        return cast(Dict[Any, Any], response.json())
 
-    def update(self) -> Dict:
+    def update(self) -> Dict[Any, Any]:
         """Update the metadata in a static list
 
         :return: http response
@@ -78,11 +79,9 @@ class StaticList:
         body = json.dumps(payload).encode("utf-8")
         url = self.airship.urls.get("lists_url") + self.name
 
-        response = self.airship._request(
-            "PUT", body, url, "application/json", version=3
-        )
-
-        return response.json()
+        response = self.airship._request("PUT", body, url, "application/json", version=3)
+        result = response.json()
+        return cast(Dict[Any, Any], result)
 
     @classmethod
     def download(cls, airship: BaseClient, list_name: str) -> Response:
@@ -104,12 +103,10 @@ class StaticList:
         return response
 
     @classmethod
-    def from_payload(cls, payload: Dict, airship: BaseClient):
+    def from_payload(cls, payload: Dict[Any, Any], airship: BaseClient):
         for key in payload:
-            if key in "created" or key in "last_updated":
-                payload[key] = datetime.datetime.strptime(
-                    payload[key], "%Y-%m-%dT%H:%M:%S"
-                )
+            if key == "created" or key == "last_updated":
+                payload[key] = datetime.datetime.strptime(payload[key], "%Y-%m-%dT%H:%M:%S")
             setattr(cls, key, payload[key])
         return cls
 
@@ -197,7 +194,7 @@ class GzipCompressReadStream(object):
         return self
 
     def __next__(self):
-        if self.is_finished is True:
+        if self.is_finished:
             raise StopIteration
         else:
             return self.read(CHUNK)

@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, cast
 
 from urbanairship.client import BaseClient
 
@@ -18,13 +18,11 @@ class ExperimentReport(object):
 
         :returns: JSON from the API
         """
-        url = self.airship.urls.get("reports_url") + "experiment/overview/{0}".format(
-            push_id
-        )
+        url = self.airship.urls.get("reports_url") + "experiment/overview/{0}".format(push_id)
 
         response = self.airship._request("GET", None, url, version=3)
 
-        return response.json()
+        return cast(Dict[str, Any], response.json())
 
     def get_variant(self, push_id: str, variant_id: str) -> Dict[str, Any]:
         """Returns statistics and metadata about a specific variant in an experiment (A/B Test).
@@ -40,4 +38,4 @@ class ExperimentReport(object):
 
         response = self.airship._request("GET", None, url, version=3)
 
-        return response.json()
+        return cast(Dict[str, Any], response.json())

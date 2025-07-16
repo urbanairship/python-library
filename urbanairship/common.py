@@ -66,9 +66,7 @@ class AirshipFailure(Exception):
             details,
         )
 
-        return cls(
-            error, error_code, details, response, response.status_code, response.content
-        )
+        return cls(error, error_code, details, response, response.status_code, response.content)
 
 
 class IteratorDataObj(object):
@@ -83,7 +81,7 @@ class IteratorDataObj(object):
         payload: Dict[str, Any],
         device_key: Optional[str] = None,
         airship=None,
-    ):
+    ) -> "IteratorDataObj":
         obj = cls()
         if device_key and payload[device_key]:
             obj.id = payload[device_key]

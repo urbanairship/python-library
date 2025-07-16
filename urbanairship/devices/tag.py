@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from urbanairship.client import BaseClient
 
@@ -70,7 +70,7 @@ class ChannelTags(object):
         """
         self.set_group[group_name] = tags
 
-    def send(self) -> Dict:
+    def send(self) -> Dict[Any, Any]:
         """Perform the Channel Tag operations.
 
         :returns: JSON response from the API
@@ -102,10 +102,8 @@ class ChannelTags(object):
             raise ValueError("An add, remove, or set field was not set")
 
         body = json.dumps(payload)
-        response = self._airship._request(
-            "POST", body, self.url, "application/json", version=3
-        )
-        return response.json()
+        response = self._airship._request("POST", body, self.url, "application/json", version=3)
+        return cast(Dict[Any, Any], response.json())
 
 
 class OpenChannelTags(object):
@@ -153,7 +151,7 @@ class OpenChannelTags(object):
         """
         self.set_group[group_name] = tags
 
-    def send(self) -> Dict:
+    def send(self) -> Dict[Any, Any]:
         """Perform the Open Channel Tag operations.
 
         :returns: JSON response from the API
@@ -169,9 +167,7 @@ class OpenChannelTags(object):
 
         if self.set_group:
             if self.add_group or self.remove_group:
-                raise ValueError(
-                    'A "set" tag request cannot contain "add" or "remove" fields'
-                )
+                raise ValueError('A "set" tag request cannot contain "add" or "remove" fields')
             payload["set"] = self.set_group
 
         if self.add_group:
@@ -181,7 +177,5 @@ class OpenChannelTags(object):
             payload["remove"] = self.remove_group
 
         body = json.dumps(payload)
-        response = self._airship._request(
-            "POST", body, self.url, "application/json", version=3
-        )
-        return response.json()
+        response = self._airship._request("POST", body, self.url, "application/json", version=3)
+        return cast(Dict[Any, Any], response.json())

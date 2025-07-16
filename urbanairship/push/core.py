@@ -107,20 +107,11 @@ class Push(object):
         """
         if "email" in self.payload["notification"]:
             if self.payload["device_types"] == "all":
-                raise ValueError(
-                    "device_types cannot be all when including an email override"
-                )
+                raise ValueError("device_types cannot be all when including an email override")
             if "email" not in self.payload["device_types"]:
-                raise ValueError(
-                    "email must be in device_types if email override is included"
-                )
-        if (
-            "email" in self.payload["device_types"]
-            and "email" not in self.payload["notification"]
-        ):
-            raise ValueError(
-                "email override must be included when email is in device_types"
-            )
+                raise ValueError("email must be in device_types if email override is included")
+        if "email" in self.payload["device_types"] and "email" not in self.payload["notification"]:
+            raise ValueError("email override must be included when email is in device_types")
 
         body = json.dumps(self.payload)
         response = self._airship._request(
@@ -132,9 +123,7 @@ class Push(object):
         )
 
         data = response.json()
-        logger.info(
-            "Push successful. push_ids: %s", ", ".join(data.get("push_ids", []))
-        )
+        logger.info("Push successful. push_ids: %s", ", ".join(data.get("push_ids", [])))
 
         return PushResponse(response)
 
@@ -175,7 +164,7 @@ class ScheduledPush(object):
         self.schedule: Optional[Dict[str, Any]] = None
         self.recurring: Optional[Dict[str, Any]] = None
         self.name: Optional[str] = None
-        self.push: Optional[Push] = None
+        self.push: Optional[Union[Push, "CreateAndSendPush"]] = None
         self.url: Optional[str] = None
 
     @classmethod
@@ -215,10 +204,8 @@ class ScheduledPush(object):
             data: Dict = self.push.payload
             data["schedule"] = self.schedule
         elif isinstance(self.push, CreateAndSendPush):  # create create and send payload
-            if "scheduled_time" not in self.schedule:
-                raise ValueError(
-                    "only scheduled_time supported with create and send schedules"
-                )
+            if self.schedule is None or "scheduled_time" not in self.schedule:
+                raise ValueError("only scheduled_time supported with create and send schedules")
             data = {"schedule": self.schedule, "push": self.push.payload}
         else:
             data = {"schedule": self.schedule, "push": self.push.payload}
@@ -313,9 +300,7 @@ class ScheduledPush(object):
         if not self.url:
             raise ValueError("Cannot cancel ScheduledPush without url.")
 
-        response = self._airship._request(
-            method="DELETE", body=None, url=self.url, version=3
-        )
+        response = self._airship._request(method="DELETE", body=None, url=self.url, version=3)
 
         return response
 
@@ -343,7 +328,7 @@ class ScheduledPush(object):
 class TemplatePush(object):
     """A personalized push notification. Set details and send."""
 
-    def __init__(self, airship):
+    def __init__(self, airship: BaseClient) -> None:
         self._airship: BaseClient = airship
         self.audience: Optional[Dict] = None
         self.device_types: Optional[List] = None
@@ -386,9 +371,7 @@ class TemplatePush(object):
         )
 
         data = response.json()
-        logger.info(
-            "Push successful. push_ids: %s", ", ".join(data.get("push_ids", []))
-        )
+        logger.info("Push successful. push_ids: %s", ", ".join(data.get("push_ids", [])))
 
         return PushResponse(response)
 
@@ -469,9 +452,7 @@ class CreateAndSendPush(object):
         addresses: List = []
         for email in self.channels:
             if not isinstance(email, devices.Email):
-                raise TypeError(
-                    "Can only use email channels when device_types is email"
-                )
+                raise TypeError("Can only use email channels when device_types is email")
             addresses.append(email.create_and_send_audience)
         audience: Dict[str, Any] = {"create_and_send": addresses}
 
@@ -491,9 +472,7 @@ class CreateAndSendPush(object):
         addresses: List = []
         for open_channel in self.channels:
             if not isinstance(open_channel, devices.OpenChannel):
-                raise TypeError(
-                    "Can only use OpenChannel objects when device_types is open::"
-                )
+                raise TypeError("Can only use OpenChannel objects when device_types is open::")
             addresses.append(open_channel.create_and_send_audience)
         audience: Dict[str, Any] = {"create_and_send": addresses}
 

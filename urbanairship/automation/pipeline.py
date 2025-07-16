@@ -11,13 +11,13 @@ class Pipeline(object):
         self,
         enabled: Optional[bool] = None,
         name: Optional[str] = None,
-        historical_trigger: Optional[Dict] = None,
-        timing: Optional[Dict] = None,
-        immediate_trigger: Optional[Union[Dict, List]] = None,
-        cancellation_trigger: Optional[Union[Dict, List]] = None,
-        constraint: Optional[Union[Dict, List]] = None,
-        condition: Optional[Union[Dict, List]] = None,
-        outcome: Optional[Union[Dict, List]] = None,
+        historical_trigger: Optional[Dict[str, Any]] = None,
+        timing: Optional[Dict[str, Any]] = None,
+        immediate_trigger: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
+        cancellation_trigger: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
+        constraint: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
+        condition: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
+        outcome: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
     ) -> None:
         """Create Pipeline object for Automation payload
 
@@ -40,6 +40,18 @@ class Pipeline(object):
         :keyword timing: [optional] a timing object defining times allowable
             for outcome delivery
         """
+        # Initialize instance variables with proper types
+        self._outcomes: List[Dict[str, Any]] = []
+        self._immediate_trigger: List[Dict[str, Any]] = []
+        self._cancellation_trigger: List[Dict[str, Any]] = []
+        self._constraints: List[Dict[str, Any]] = []
+        self._condition_sets: List[Dict[str, Any]] = []
+        self._historical_trigger: Optional[Dict[str, Any]] = None
+        self._timing: Optional[Dict[str, Any]] = None
+        self._name: Optional[str] = None
+        self._enabled: Optional[bool] = None
+
+        # Set values using properties
         self.enabled = enabled
         self.outcome = outcome
         self.name = name
@@ -51,21 +63,37 @@ class Pipeline(object):
         self.timing = timing
 
     @property
-    def payload(self) -> Dict:
+    def enabled(self) -> Optional[bool]:
+        return self._enabled
+
+    @enabled.setter
+    def enabled(self, value: Optional[bool]) -> None:
+        self._enabled = value
+
+    @property
+    def payload(self) -> Dict[str, Any]:
         """JSON serialized Pipeline object"""
         if not isinstance(self.enabled, bool):
             raise TypeError("enabled is required and must be a boolean value")
         if not self.outcome:
             raise ValueError("outcome is required for automation pipelines")
 
-        data: Dict[str, Any] = {"enabled": self.enabled, "outcome": self.outcome}
+        outcome_value = self.outcome
+        if outcome_value is None:
+            raise ValueError("outcome is required for automation pipelines")
+
+        data: Dict[str, Any] = {"enabled": self.enabled, "outcome": outcome_value}
 
         if self.name is not None:
             data["name"] = self.name
         if self.immediate_trigger is not None:
-            data["immediate_trigger"] = self.immediate_trigger
+            immediate_trigger_value = self.immediate_trigger
+            assert immediate_trigger_value is not None
+            data["immediate_trigger"] = immediate_trigger_value
         if self.cancellation_trigger is not None:
-            data["cancellation_trigger"] = self.cancellation_trigger
+            cancellation_trigger_value = self.cancellation_trigger
+            assert cancellation_trigger_value is not None
+            data["cancellation_trigger"] = cancellation_trigger_value
         if self.historical_trigger is not None:
             data["historical_trigger"] = self.historical_trigger
         if self.constraint is not None:
@@ -77,12 +105,12 @@ class Pipeline(object):
 
         return data
 
-    def from_dict(self, pipeline_dict: Dict) -> None:
+    def from_dict(self, pipeline_dict: Dict[str, Any]) -> None:
         for k in pipeline_dict:
             setattr(self, k, pipeline_dict[k])
 
     @property
-    def outcome(self) -> Optional[Union[List, Dict]]:
+    def outcome(self) -> Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]:
         if not self._outcomes:
             return None
         if len(self._outcomes) == 1:
@@ -91,7 +119,9 @@ class Pipeline(object):
         return self._outcomes
 
     @outcome.setter
-    def outcome(self, outcome_object: Optional[Union[Dict, List]]) -> None:
+    def outcome(
+        self, outcome_object: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]
+    ) -> None:
         """Set outcome object
 
         :keyword outcome_object: Single outcome object or list of outcome objects.
@@ -116,7 +146,7 @@ class Pipeline(object):
         else:
             raise TypeError("outcome must be outcome object or list of outcome objects")
 
-    def append_outcome_object(self, push_object: Dict) -> None:
+    def append_outcome_object(self, push_object: Dict[str, Any]) -> None:
         """Append outcome object to current Pipeline outcome
 
         :keyword push_object: A push object that will be an outcome for this Pipeline
@@ -124,7 +154,7 @@ class Pipeline(object):
 
         """
         if not isinstance(push_object, dict):
-            TypeError("outcome object requires a push object as a dictionary")
+            raise TypeError("outcome object requires a push object as a dictionary")
 
         to_append = {}
         if isinstance(push_object, dict):
@@ -132,7 +162,7 @@ class Pipeline(object):
 
         self._outcomes.append(to_append)
 
-    def remove_outcome_object(self, push_object: Dict) -> None:
+    def remove_outcome_object(self, push_object: Dict[str, Any]) -> None:
         """Remove outcome push object from current outcome
 
         :keyword push_object: A push object to remove from the outcome of this Pipeline
@@ -142,7 +172,7 @@ class Pipeline(object):
         self._outcomes.remove(push_object)
 
     @property
-    def immediate_trigger(self) -> Optional[Union[Dict, List]]:
+    def immediate_trigger(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
         if not self._immediate_trigger:
             return None
         if len(self._immediate_trigger) == 1:
@@ -151,7 +181,9 @@ class Pipeline(object):
         return self._immediate_trigger
 
     @immediate_trigger.setter
-    def immediate_trigger(self, event_identifiers: Optional[Union[Dict, List]]) -> None:
+    def immediate_trigger(
+        self, event_identifiers: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]
+    ) -> None:
         """Set immediate trigger for Pipeline
 
         :keyword event_identifiers: One or list of event identifiers
@@ -159,7 +191,7 @@ class Pipeline(object):
         """
         if event_identifiers:
             if not isinstance(event_identifiers, (dict, list)):
-                TypeError(
+                raise TypeError(
                     "immediate trigger must be an event identifier dictionary "
                     "or list of event identifier dictionaries"
                 )
@@ -172,7 +204,7 @@ class Pipeline(object):
         else:
             self._immediate_trigger = []
 
-    def append_immediate_trigger_identifier(self, event_identifier: Dict) -> None:
+    def append_immediate_trigger_identifier(self, event_identifier: Dict[str, Any]) -> None:
         """Append event identifier to immediate triggers for Pipeline
 
         :keyword event_identifier: Event identifier object
@@ -180,7 +212,7 @@ class Pipeline(object):
         """
         self._immediate_trigger.append(event_identifier)
 
-    def remove_immediate_trigger_identifier(self, event_identifier: Dict) -> None:
+    def remove_immediate_trigger_identifier(self, event_identifier: Dict[str, Any]) -> None:
         """Remove event identifier to immediate triggers for Pipeline
 
         :keyword event_identifier: Even identifier object
@@ -189,7 +221,7 @@ class Pipeline(object):
         self._immediate_trigger.remove(event_identifier)
 
     @property
-    def cancellation_trigger(self) -> Optional[Union[Dict, List]]:
+    def cancellation_trigger(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
         if not self._cancellation_trigger:
             return None
         if len(self._cancellation_trigger) == 1:
@@ -199,7 +231,7 @@ class Pipeline(object):
 
     @cancellation_trigger.setter
     def cancellation_trigger(
-        self, event_identifiers: Optional[Union[Dict, List]]
+        self, event_identifiers: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]
     ) -> None:
         """Set Pipeline cancellation trigger
 
@@ -208,9 +240,8 @@ class Pipeline(object):
         """
         if event_identifiers:
             if not isinstance(event_identifiers, (str, dict, list)):
-                TypeError(
-                    "immediate trigger must be an event identifier or "
-                    "list of event identifiers"
+                raise TypeError(
+                    "immediate trigger must be an event identifier or " "list of event identifiers"
                 )
 
             if isinstance(event_identifiers, list):
@@ -220,14 +251,14 @@ class Pipeline(object):
         else:
             self._cancellation_trigger = []
 
-    def append_cancellation_trigger_identifier(self, event_identifier: Dict) -> None:
+    def append_cancellation_trigger_identifier(self, event_identifier: Dict[str, Any]) -> None:
         """Append event identifier to immediate triggers for Pipeline
 
         :keyword event_identifier: Event identifier object
         """
         self._cancellation_trigger.append(event_identifier)
 
-    def remove_cancellation_trigger_identifier(self, event_identifier: Dict) -> None:
+    def remove_cancellation_trigger_identifier(self, event_identifier: Dict[str, Any]) -> None:
         """Remove event identifier from immediate triggers for Pipeline
 
         :keyword event_identifier: Event identifier object
@@ -236,11 +267,11 @@ class Pipeline(object):
         self._cancellation_trigger.remove(event_identifier)
 
     @property
-    def historical_trigger(self) -> Optional[Dict]:
+    def historical_trigger(self) -> Optional[Dict[str, Any]]:
         return self._historical_trigger
 
     @historical_trigger.setter
-    def historical_trigger(self, historical_trigger_object: Optional[Dict]) -> None:
+    def historical_trigger(self, historical_trigger_object: Optional[Dict[str, Any]]) -> None:
         """Set historical trigger for Pipeline
 
         :keyword historical_trigger_object: Historical trigger object for
@@ -249,14 +280,10 @@ class Pipeline(object):
         """
         if historical_trigger_object:
             if historical_trigger_object["event"] != "open":
-                raise ValueError(
-                    'only allowable value of historical trigger "event" is "open"'
-                )
+                raise ValueError('only allowable value of historical trigger "event" is "open"')
 
             if historical_trigger_object["equals"] != 0:
-                raise ValueError(
-                    'only allowable value of historical trigger "equals" is 0'
-                )
+                raise ValueError('only allowable value of historical trigger "equals" is 0')
 
             if 0 >= historical_trigger_object["days"] > 90:
                 raise ValueError("days of inactivity must be between 1 and 90")
@@ -264,7 +291,7 @@ class Pipeline(object):
         self._historical_trigger = historical_trigger_object
 
     @property
-    def constraint(self) -> Optional[Union[Dict, List]]:
+    def constraint(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
         if not self._constraints:
             return None
         if len(self._constraints) == 1:
@@ -273,14 +300,16 @@ class Pipeline(object):
         return self._constraints
 
     @constraint.setter
-    def constraint(self, constraint_objects: Union[Dict, List]) -> None:
+    def constraint(
+        self, constraint_objects: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]
+    ) -> None:
         """Set Pipeline constraints
 
         :keyword constraint_objects: One of list of constraint objects
         """
         if constraint_objects:
             if not isinstance(constraint_objects, (dict, list)):
-                TypeError(
+                raise TypeError(
                     "constraint must be single constraint object or list of constraint objects"
                 )
 
@@ -291,22 +320,22 @@ class Pipeline(object):
         else:
             self._constraints = []
 
-    def append_constraint_object(self, constraint_object: Dict) -> None:
+    def append_constraint_object(self, constraint_object: Dict[str, Any]) -> None:
         """Append constraint object to constraint for Pipeline
 
         :keyword constraint_object: Constraint object to append to Pipeline constraint
 
         """
         if not isinstance(constraint_object, dict):
-            TypeError("a single constraint object must be a dictionary")
+            raise TypeError("a single constraint object must be a dictionary")
 
         self._constraints.append(constraint_object)
 
-    def remove_constraint_object(self, constraint_object: Dict) -> None:
+    def remove_constraint_object(self, constraint_object: Dict[str, Any]) -> None:
         self._constraints.remove(constraint_object)
 
     @property
-    def condition(self) -> Optional[Union[Dict, List]]:
+    def condition(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
         if not self._condition_sets:
             return None
         if len(self._condition_sets) == 1:
@@ -315,7 +344,9 @@ class Pipeline(object):
         return self._condition_sets
 
     @condition.setter
-    def condition(self, condition_sets: Union[List, Dict]) -> None:
+    def condition(
+        self, condition_sets: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]
+    ) -> None:
         """Set condition for Pipeline
 
         :keyword condition_sets: One or list of condition sets
@@ -324,8 +355,7 @@ class Pipeline(object):
         if condition_sets:
             if not isinstance(condition_sets, (list, dict)):
                 raise TypeError(
-                    "condition_sets must be a condition set "
-                    "or list of condition sets"
+                    "condition_sets must be a condition set " "or list of condition sets"
                 )
 
             if isinstance(condition_sets, list):
@@ -340,19 +370,19 @@ class Pipeline(object):
         else:
             self._condition_sets = []
 
-    def append_condition_set(self, condition_set: Dict) -> None:
+    def append_condition_set(self, condition_set: Dict[str, Any]) -> None:
         """Append condition set to Pipeline condition
 
         :keyword condition_set: One or list of condition sets
 
         """
         if not isinstance(condition_set, dict):
-            TypeError("a single condition set object must be a dictionary")
+            raise TypeError("a single condition set object must be a dictionary")
 
         if self._validate_condition_set(condition_set):
             self._condition_sets.append(condition_set)
 
-    def remove_condition_set(self, condition_set: Dict) -> None:
+    def remove_condition_set(self, condition_set: Dict[str, Any]) -> None:
         """Remove condition set from Pipeline condition
 
         :keyword condition_set: One or list of condition sets
@@ -360,7 +390,7 @@ class Pipeline(object):
         """
         self._condition_sets.remove(condition_set)
 
-    def _validate_condition_set(self, condition_sets: Union[Dict, List]) -> bool:
+    def _validate_condition_set(self, condition_sets: Union[Dict[str, Any], List[Any]]) -> bool:
         invalid_operators = []
         if isinstance(condition_sets, list):
             for condition_set in condition_sets:
@@ -374,19 +404,17 @@ class Pipeline(object):
 
         if invalid_operators:
             raise KeyError(
-                'invalid operators: {}, must be "and" or "or"'.format(
-                    ", ".join(invalid_operators)
-                )
+                'invalid operators: {}, must be "and" or "or"'.format(", ".join(invalid_operators))
             )
 
         return True
 
     @property
-    def timing(self) -> Optional[Dict]:
+    def timing(self) -> Optional[Dict[str, Any]]:
         return self._timing
 
     @timing.setter
-    def timing(self, timing_object: Optional[Dict]) -> None:
+    def timing(self, timing_object: Optional[Dict[str, Any]]) -> None:
         """Set timing object for available send times for Pipeline
 
         :keyword timing_object: Single timing object defining allowable
@@ -410,7 +438,7 @@ class Pipeline(object):
                 if "dayparts" not in schedule:
                     raise KeyError('"dayparts" is required for a timing schedule')
 
-            self._timing: Optional[Dict] = timing_object
+            self._timing = timing_object
         else:
             self._timing = None
 

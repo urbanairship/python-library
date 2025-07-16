@@ -65,7 +65,7 @@ class Attribute(object):
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: datetime) -> None:
+    def timestamp(self, value: Optional[datetime]) -> None:
         if value is not None and type(value) is not datetime:
             raise ValueError("timestamp must be a datetime.datetime object")
         self._timestamp = value
@@ -244,9 +244,7 @@ class AttributeList(object):
             response = self.airship._request(
                 method="PUT",
                 body=GzipCompressReadStream(open_file),
-                url=self.airship.urls.get("attributes_list_url")
-                + self.list_name
-                + "/csv/",
+                url=self.airship.urls.get("attributes_list_url") + self.list_name + "/csv/",
                 content_type="text/csv",
                 version=3,
                 encoding="gzip",
@@ -264,9 +262,7 @@ class AttributeList(object):
         response = self.airship.request(
             method="GET",
             body={},
-            url=self.airship.urls.get("attributes_list_url")
-            + self.list_name
-            + "/errors/",
+            url=self.airship.urls.get("attributes_list_url") + self.list_name + "/errors/",
         )
 
         return response

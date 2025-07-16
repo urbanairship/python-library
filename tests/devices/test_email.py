@@ -81,9 +81,9 @@ class TestEmail(unittest.TestCase):
     def test_email_reg(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": self.channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": self.channel_id}).encode(
+                "utf-8"
+            )
             response.status_code = 201
             mock_request.return_value = response
 
@@ -98,9 +98,9 @@ class TestEmail(unittest.TestCase):
         test_date = "2018-11-06T12:00:00Z"
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": self.channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": self.channel_id}).encode(
+                "utf-8"
+            )
             response.status_code = 201
             mock_request.return_value = response
 
@@ -121,9 +121,9 @@ class TestEmail(unittest.TestCase):
     def test_email_update(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": self.channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": self.channel_id}).encode(
+                "utf-8"
+            )
             response.status_code = 200
             mock_request.return_value = response
 
@@ -137,9 +137,9 @@ class TestEmail(unittest.TestCase):
     def test_email_reg_w_opts(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": self.channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": self.channel_id}).encode(
+                "utf-8"
+            )
             response.status_code = 201
             mock_request.return_value = response
 
@@ -161,9 +161,9 @@ class TestEmail(unittest.TestCase):
     def test_email_uninstall(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": self.channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": self.channel_id}).encode(
+                "utf-8"
+            )
             response.status_code = 200
             mock_request.return_value = response
 
@@ -188,9 +188,7 @@ class TestEmail(unittest.TestCase):
             lookup = ua.Email.lookup(airship=self.airship, address=self.address)
 
             self.assertEqual(200, lookup.status_code)
-            self.assertEqual(
-                "email", json.loads(lookup.content)["channel"]["device_type"]
-            )
+            self.assertEqual("email", json.loads(lookup.content)["channel"]["device_type"])
 
 
 class TestEmailTags(unittest.TestCase):
@@ -256,19 +254,30 @@ class TestEmailTags(unittest.TestCase):
 
 class TestEmailAttachment(unittest.TestCase):
     def setUp(self):
+        with open("tests/data/logo.png", "rb") as f:
+            self.file_bytes = f.read()
+        self.encoded = str(base64.urlsafe_b64encode(self.file_bytes))
+
         self.attachment = ua.EmailAttachment(
             airship=ua.Airship(TEST_KEY, TEST_SECRET),
             filename="test_file.png",
             content_type='image/png; charset="UTF-8"',
             filepath="tests/data/logo.png",
         )
-        file = open("tests/data/logo.png", "rb").read()
-        self.encoded = str(base64.urlsafe_b64encode(file))
 
-    def test_encoding(self):
+    def test_encoding_with_filepath(self):
         self.assertEqual(self.encoded, self.attachment.req_payload.get("data"))
 
-    def test_payload(self):
+    def test_encoding_with_file_data(self):
+        attachment_with_data = ua.EmailAttachment(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            filename="test_file.png",
+            content_type='image/png; charset="UTF-8"',
+            file_data=self.file_bytes,
+        )
+        self.assertEqual(self.encoded, attachment_with_data.req_payload.get("data"))
+
+    def test_payload_with_filepath(self):
         self.assertDictEqual(
             self.attachment.req_payload,
             {
@@ -277,3 +286,53 @@ class TestEmailAttachment(unittest.TestCase):
                 "data": self.encoded,
             },
         )
+
+    def test_payload_with_file_data(self):
+        attachment_with_data = ua.EmailAttachment(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            filename="test_file.png",
+            content_type='image/png; charset="UTF-8"',
+            file_data=self.file_bytes,
+        )
+        self.assertDictEqual(
+            attachment_with_data.req_payload,
+            {
+                "filename": "test_file.png",
+                "content_type": 'image/png; charset="UTF-8"',
+                "data": self.encoded,
+            },
+        )
+
+    def test_validation_no_parameters(self):
+        with self.assertRaises(ValueError) as context:
+            ua.EmailAttachment(
+                airship=ua.Airship(TEST_KEY, TEST_SECRET),
+                filename="test_file.png",
+                content_type='image/png; charset="UTF-8"',
+            )
+        self.assertIn("filepath or file_data must be provided", str(context.exception))
+
+    def test_validation_both_parameters(self):
+        with self.assertRaises(ValueError) as context:
+            ua.EmailAttachment(
+                airship=ua.Airship(TEST_KEY, TEST_SECRET),
+                filename="test_file.png",
+                content_type='image/png; charset="UTF-8"',
+                filepath="tests/data/logo.png",
+                file_data=self.file_bytes,
+            )
+        self.assertIn("filepath and file_data cannot both be provided", str(context.exception))
+
+    def test_post_method(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({"ok": True, "attachment_ids": ["test-id"]}).encode(
+                "utf-8"
+            )
+            response.status_code = 200
+            mock_request.return_value = response
+
+            result = self.attachment.post()
+
+            self.assertEqual({"ok": True, "attachment_ids": ["test-id"]}, result)
+            mock_request.assert_called_once()

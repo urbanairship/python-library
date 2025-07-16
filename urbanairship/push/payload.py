@@ -337,8 +337,7 @@ def android(
         payload["time_to_live"] = time_to_live
         if not (isinstance(time_to_live, (str, int))):
             raise ValueError(
-                "Android time_to_live value must be an "
-                "integer or time set in UTC as a string"
+                "Android time_to_live value must be an " "integer or time set in UTC as a string"
             )
     if delay_while_idle:
         payload["delay_while_idle"] = True
@@ -356,9 +355,7 @@ def android(
         payload["wearable"] = wearable
     if delivery_priority is not None:
         if delivery_priority not in {"high", "normal"}:
-            raise ValueError(
-                "delivery_priority must be set to one of 'high' or 'normal'."
-            )
+            raise ValueError("delivery_priority must be set to one of 'high' or 'normal'.")
         payload["delivery_priority"] = delivery_priority
     if style is not None:
         payload["style"] = style
@@ -379,9 +376,7 @@ def android(
     if category is not None:
         if category not in VALID_ANDROID_CATEGORIES:
             raise ValueError(
-                "category must be set to one of {}.".format(
-                    ", ".join(VALID_ANDROID_CATEGORIES)
-                )
+                "category must be set to one of {}.".format(", ".join(VALID_ANDROID_CATEGORIES))
             )
         payload["category"] = category
     if visibility is not None:
@@ -462,8 +457,7 @@ def amazon(
         payload["expires_after"] = expires_after
         if not (isinstance(expires_after, (str, int))):
             raise ValueError(
-                "Amazon time_to_live value must be an "
-                "integer or time set in UTC as a string"
+                "Amazon time_to_live value must be an " "integer or time set in UTC as a string"
             )
     if extra is not None:
         payload["extra"] = extra
@@ -891,9 +885,7 @@ def message(
     if expiry is not None:
         payload["expiry"] = expiry
         if not (isinstance(expiry, (str, int))):
-            raise ValueError(
-                "Expiry value must be an " "integer or time set in UTC as a string"
-            )
+            raise ValueError("Expiry value must be an " "integer or time set in UTC as a string")
     if icons is not None:
         if not isinstance(icons, dict):
             raise TypeError("icons must be a dictionary")
@@ -1018,9 +1010,7 @@ def options(
 
     if expiry is not None:
         if not isinstance(expiry, (str, int)):
-            raise ValueError(
-                "Expiry value must be an integer or time set in UTC as a string"
-            )
+            raise ValueError("Expiry value must be an integer or time set in UTC as a string")
         payload["expiry"] = expiry
 
     if bypass_frequency_limits is not None:
@@ -1044,29 +1034,27 @@ def options(
     return payload
 
 
-def campaigns(categories: Union[Dict, List, None] = None) -> Dict[str, Any]:
+def campaigns(categories: Union[str, List[str], None] = None) -> Dict[str, Any]:
     """Campaigns payload creation.
 
-    >>> campaigns(categories=['kittens', 'tacos', 'horse_racing'])
-    {'categories': ['kittens', 'tacos', 'horse_racing']}
-
+    :keyword categories: List of category strings or a single string.
     """
     payload: Dict[str, Any] = {}
     if categories is not None:
-        if not isinstance(categories, collections.Sequence):
-            raise TypeError("Each category must be a string")
-        if isinstance(categories, list):
-            if not categories or len(categories) > 10:
-                raise ValueError("Categories list must contain between 1 and 10 items")
         if isinstance(categories, str):
-            categories = [categories]
-
-        for c in categories:
-            if not (isinstance(c, str)):
-                raise ValueError("Invalid category type '%s'" % c)
+            categories_list = [categories]
+        elif isinstance(categories, list):
+            categories_list = categories
+        else:
+            raise TypeError("categories must be a string or a list of strings")
+        if not categories_list or len(categories_list) > 10:
+            raise ValueError("Categories list must contain between 1 and 10 items")
+        for c in categories_list:
+            if not isinstance(c, str):
+                raise ValueError(f"Invalid category type '{c}'")
             if not len(c) or len(c) > 64:
-                raise ValueError("Invalid category name '%s'" % c)
-        payload["categories"] = [c for c in categories]
+                raise ValueError(f"Invalid category name '{c}'")
+        payload["categories"] = categories_list
     return payload
 
 
@@ -1209,9 +1197,7 @@ def style(
         "inbox": "lines",
     }
     if style_type not in mapping.keys():
-        raise ValueError(
-            "style_type must be one of {}.".format(", ".join(mapping.keys()))
-        )
+        raise ValueError("style_type must be one of {}.".format(", ".join(mapping.keys())))
     payload: Dict[str, Any] = {
         "type": style_type,
         mapping[style_type]: content,
@@ -1304,9 +1290,7 @@ def localization(
     if language is None and country is None:
         raise ValueError("One of language or country must be included.")
     if all([notification is None, message is None, in_app is None]):
-        raise ValueError(
-            "At least one of notification, message, or in_app must be included."
-        )
+        raise ValueError("At least one of notification, message, or in_app must be included.")
 
     data: Dict[str, Any] = {}
     if language:

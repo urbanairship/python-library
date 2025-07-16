@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 from requests import Response
 
@@ -18,9 +18,7 @@ class NamedUser(object):
     :param airship: Required. An instance of urbanairship.Airship.
     """
 
-    def __init__(
-        self, airship: BaseClient, named_user_id: Optional[str] = None
-    ) -> None:
+    def __init__(self, airship: BaseClient, named_user_id: Optional[str] = None) -> None:
         self._airship = airship
         self.named_user_id = named_user_id
         self.channel_id: Optional[str] = None
@@ -102,9 +100,7 @@ class NamedUser(object):
             body=self._email_associate_payload,
         )
 
-    def disassociate(
-        self, channel_id: str, device_type: Optional[str] = None
-    ) -> Response:
+    def disassociate(self, channel_id: str, device_type: Optional[str] = None) -> Response:
         """Disassociate a channel with a named user ID
 
         :param channel_id: The ID of the channel you would like to disassociate
@@ -156,7 +152,7 @@ class NamedUser(object):
             version=3,
             params={"id": self.named_user_id},
         )
-        return response.json()
+        return cast(Union[Dict, str], response.json())
 
     def tag(
         self,
@@ -173,9 +169,7 @@ class NamedUser(object):
         :param group: The Tag group for the add, remove, and set operations
         """
         if self.named_user_id:
-            payload: Dict[str, Any] = {
-                "audience": {"named_user_id": self.named_user_id}
-            }
+            payload: Dict[str, Any] = {"audience": {"named_user_id": self.named_user_id}}
         else:
             raise ValueError("A named user ID is required for modifying tags")
 
@@ -209,7 +203,7 @@ class NamedUser(object):
             version=3,
         )
 
-        return response.json()
+        return cast(Dict[Any, Any], response.json())
 
     def update(
         self,
