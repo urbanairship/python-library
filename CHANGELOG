@@ -1,8 +1,12 @@
 # urbanairship changelog
 
+## 7.1.1
+
+- Fixes a bug where the EmailAttachment class was not properly encoding file data.
+
 ## 7.1.0
 
-- Adds file_data argument to the EmailAttachment class fir passing stringified file data.
+- Adds file_data argument to the EmailAttachment class for passing stringified file data.
 
 ## 7.0.0
 

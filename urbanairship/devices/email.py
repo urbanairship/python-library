@@ -439,7 +439,7 @@ class EmailAttachment(object):
             raise ValueError("filepath or file_data must be provided")
 
         enc = base64.urlsafe_b64encode(file_bytes)
-        return str(enc)
+        return enc.decode("utf-8")
 
     @property
     def req_payload(self) -> Dict:

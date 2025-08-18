@@ -256,7 +256,7 @@ class TestEmailAttachment(unittest.TestCase):
     def setUp(self):
         with open("tests/data/logo.png", "rb") as f:
             self.file_bytes = f.read()
-        self.encoded = str(base64.urlsafe_b64encode(self.file_bytes))
+        self.encoded = base64.urlsafe_b64encode(self.file_bytes).decode("utf-8")
 
         self.attachment = ua.EmailAttachment(
             airship=ua.Airship(TEST_KEY, TEST_SECRET),
@@ -336,3 +336,62 @@ class TestEmailAttachment(unittest.TestCase):
 
             self.assertEqual({"ok": True, "attachment_ids": ["test-id"]}, result)
             mock_request.assert_called_once()
+
+    def test_base64_encoding_correctness(self):
+        """Test that base64 encoding produces valid base64 without bytes prefix."""
+        # Test with simple text data
+        test_data = b"Hello, World!"
+        expected_base64 = "SGVsbG8sIFdvcmxkIQ=="
+
+        attachment = ua.EmailAttachment(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            filename="test.txt",
+            content_type="text/plain",
+            file_data=test_data,
+        )
+
+        # Verify the encoded data is valid base64 without bytes prefix
+        encoded_data = attachment.req_payload["data"]
+        self.assertEqual(encoded_data, expected_base64)
+        self.assertFalse(encoded_data.startswith("b'"))
+        self.assertFalse(encoded_data.endswith("'"))
+
+        # Verify the base64 can be decoded back to original data
+        decoded_data = base64.urlsafe_b64decode(encoded_data)
+        self.assertEqual(decoded_data, test_data)
+
+    def test_base64_encoding_with_filepath(self):
+        """Test that base64 encoding works correctly with filepath."""
+        # Create a simple test file
+        test_content = b"Test file content for base64 encoding"
+        test_file_path = "tests/data/test_encoding.txt"
+
+        try:
+            with open(test_file_path, "wb") as f:
+                f.write(test_content)
+
+            expected_base64 = base64.urlsafe_b64encode(test_content).decode("utf-8")
+
+            attachment = ua.EmailAttachment(
+                airship=ua.Airship(TEST_KEY, TEST_SECRET),
+                filename="test.txt",
+                content_type="text/plain",
+                filepath=test_file_path,
+            )
+
+            # Verify the encoded data is correct
+            encoded_data = attachment.req_payload["data"]
+            self.assertEqual(encoded_data, expected_base64)
+            self.assertFalse(encoded_data.startswith("b'"))
+            self.assertFalse(encoded_data.endswith("'"))
+
+            # Verify the base64 can be decoded back to original data
+            decoded_data = base64.urlsafe_b64decode(encoded_data)
+            self.assertEqual(decoded_data, test_content)
+
+        finally:
+            # Clean up test file
+            import os
+
+            if os.path.exists(test_file_path):
+                os.remove(test_file_path)
