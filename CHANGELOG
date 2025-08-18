@@ -1,5 +1,16 @@
 # urbanairship changelog
 
+## 7.2.0
+
+- Adds new fields to the SMS class for enhanced opt-in management:
+  - `opted_out`: Optional datetime for tracking when users opt out of SMS messages
+  - `opt_in_mode`: Optional string ("classic" or "double") for opt-in mode configuration
+  - `properties`: Optional dict for event properties used with double opt-in
+- Updates SMS payload structure to properly handle different API contexts:
+  - Registration payloads exclude opt_in_mode, properties, and opted_out
+  - Update payloads include opted_out but exclude opt_in_mode and properties
+  - Create-and-send audience includes all fields including ua_opted_out
+
 ## 7.1.1
 
 - Fixes a bug where the EmailAttachment class was not properly encoding file data.

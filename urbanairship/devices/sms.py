@@ -27,6 +27,16 @@ class Sms(object):
     :param opted_in: A datetime.datetime object that represents the
         date and time when explicit permission was received from the user to
         receive messages. This is required for use with CreateAndSend.
+    :param opted_out: Optional. A datetime.datetime object that represents the
+        date and time when a user opted out of SMS messages.
+    :param opt_in_mode: Optional. The opt-in mode for registering the channel.
+        `classic` is the default when unspecified, `double` creates a
+        `double_opt_in` event.
+    :param properties: Optional. An object containing event properties. You can
+        use these properties to filter the double opt-in event and reference
+        them in your message content by using handlebars. Items in the
+        `properties` object are limited to a 255-character maximum string
+        length.
     :param template_fields: For use with CreateAndSend with inline templates.
         A dict of template field names and their substitution values.
     :param locale_country: The ISO 3166 two-character country code. The value for this
@@ -43,6 +53,9 @@ class Sms(object):
         sender: str,
         msisdn: str,
         opted_in: Optional[datetime] = None,
+        opted_out: Optional[datetime] = None,
+        opt_in_mode: Optional[str] = None,
+        properties: Optional[Dict] = None,
         template_fields: Optional[Dict] = None,
         locale_country: Optional[str] = None,
         locale_language: Optional[str] = None,
@@ -52,6 +65,9 @@ class Sms(object):
         self.sender = sender
         self.msisdn = msisdn
         self.opted_in = opted_in
+        self.opted_out = opted_out
+        self.opt_in_mode = opt_in_mode
+        self.properties = properties
         self.template_fields = template_fields
         self.locale_country = locale_country
         self.locale_language = locale_language
@@ -80,6 +96,40 @@ class Sms(object):
             return
 
         self._opted_in = value
+
+    @property
+    def opted_out(self) -> Optional[datetime]:
+        return self._opted_out
+
+    @opted_out.setter
+    def opted_out(self, value: Optional[datetime]) -> None:
+        if not value:
+            self._opted_out = None
+            return
+
+        self._opted_out = value
+
+    @property
+    def opt_in_mode(self) -> Optional[str]:
+        return self._opt_in_mode
+
+    @opt_in_mode.setter
+    def opt_in_mode(self, value: Optional[str]) -> None:
+        if value not in ["classic", "double"] and value is not None:
+            raise ValueError("opt_in_mode must be one of: 'classic' or 'double'")
+
+        self._opt_in_mode = value
+
+    @property
+    def properties(self) -> Optional[Dict]:
+        return self._properties
+
+    @properties.setter
+    def properties(self, value: Optional[Dict]) -> None:
+        if not isinstance(value, (dict, type(None))):
+            raise TypeError("properties must be a dict")
+
+        self._properties = value
 
     @property
     def locale_language(self) -> Optional[str]:
@@ -136,21 +186,65 @@ class Sms(object):
         return {"sender": self.sender, "msisdn": self.msisdn}
 
     @property
+    def _full_payload(self) -> Dict[str, Any]:
+        payload: Dict[str, Any] = {"sender": self.sender, "msisdn": self.msisdn}
+
+        reg_payload_keys = [
+            "locale_language",
+            "locale_country",
+            "timezone",
+            "opted_in",
+            "opt_in_mode",
+            "properties",
+        ]
+
+        for key in reg_payload_keys:
+            if getattr(self, key) is not None:
+                if isinstance(getattr(self, key), datetime):
+                    payload[key] = getattr(self, key).strftime("%Y-%m-%dT%H:%M:%S")
+                else:
+                    payload[key] = getattr(self, key)
+
+        return payload
+
+    @property
     def _registration_payload(self) -> Dict:
+        # SMS API registration only supports basic fields
         payload = self.common_payload
 
         reg_payload_keys = [
             "locale_language",
             "locale_country",
             "timezone",
-            "template_fields",
             "opted_in",
         ]
 
         for key in reg_payload_keys:
             if getattr(self, key) is not None:
                 if isinstance(getattr(self, key), datetime):
-                    payload[key] = datetime.strptime(getattr(self, key), "%Y-%m-%dT%H:%M:%S")
+                    payload[key] = getattr(self, key).strftime("%Y-%m-%dT%H:%M:%S")
+                else:
+                    payload[key] = getattr(self, key)
+
+        return payload
+
+    @property
+    def _update_payload(self) -> Dict:
+        # SMS API update supports opted_out but not opt_in_mode/properties
+        payload = self.common_payload
+
+        update_payload_keys = [
+            "locale_language",
+            "locale_country",
+            "timezone",
+            "opted_in",
+            "opted_out",
+        ]
+
+        for key in update_payload_keys:
+            if getattr(self, key) is not None:
+                if isinstance(getattr(self, key), datetime):
+                    payload[key] = getattr(self, key).strftime("%Y-%m-%dT%H:%M:%S")
                 else:
                     payload[key] = getattr(self, key)
 
@@ -160,12 +254,14 @@ class Sms(object):
     def create_and_send_audience(self) -> Dict:
         audience: Dict[str, Any] = {"ua_sender": self.sender, "ua_msisdn": self.msisdn}
 
+        if self.opted_in:
+            audience["ua_opted_in"] = self.opted_in
+        if self.opted_out:
+            audience["ua_opted_out"] = self.opted_out
         if self.template_fields:
             audience.update(self.template_fields)
 
-        if self.opted_in:
-            audience["ua_opted_in"] = self.opted_in
-        else:
+        if not self.opted_in:
             raise ValueError("sms objects for create and send must include opt-in datestamps")
         return audience
 
@@ -219,7 +315,7 @@ class Sms(object):
 
         response = self.airship.request(
             method="PUT",
-            body=json.dumps(self._registration_payload).encode("utf-8"),
+            body=json.dumps(self._update_payload).encode("utf-8"),
             url=self.airship.urls.get("sms_url") + self.channel_id,
             version=3,
         )

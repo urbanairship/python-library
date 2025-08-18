@@ -17,9 +17,7 @@ class TestSMS(unittest.TestCase):
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps({"ok": True, "status": "pending"}).encode(
-                "utf-8"
-            )
+            response._content = json.dumps({"ok": True, "status": "pending"}).encode("utf-8")
             response.status_code = 202
             mock_request.return_value = response
 
@@ -38,9 +36,7 @@ class TestSMS(unittest.TestCase):
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
-            response._content = json.dumps(
-                {"ok": True, "channel_id": channel_id}
-            ).encode("utf-8")
+            response._content = json.dumps({"ok": True, "channel_id": channel_id}).encode("utf-8")
             response.status_code = 201
             mock_request.return_value = response
 
@@ -90,7 +86,7 @@ class TestSMS(unittest.TestCase):
             airship=ua.Airship(TEST_KEY, TEST_SECRET),
             sender="12345",
             msisdn="15035556789",
-            opted_in="2018-02-13T11:58:59",
+            opted_in=datetime(2018, 2, 13, 11, 58, 59),
             locale_country="us",
             locale_language="en",
             timezone="America/Los_Angeles",
@@ -145,6 +141,157 @@ class TestSMS(unittest.TestCase):
             r = sms_obj.lookup()
 
             self.assertTrue(r.ok)
+
+    def test_sms_registration_payload_with_new_fields(self):
+        """Test SMS registration payload with new fields: opted_out, opt_in_mode, properties."""
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            opted_in=datetime(2018, 2, 13, 11, 58, 59),
+            opted_out=datetime(2018, 3, 15, 14, 30, 0),
+            opt_in_mode="double",
+            properties={"source": "web_form", "campaign": "summer_2023"},
+            locale_country="us",
+            locale_language="en",
+            timezone="America/Los_Angeles",
+        )
+
+        self.assertEqual(
+            sms._registration_payload,
+            {
+                "sender": "12345",
+                "msisdn": "15035556789",
+                "locale_language": "en",
+                "locale_country": "us",
+                "timezone": "America/Los_Angeles",
+                "opted_in": "2018-02-13T11:58:59",
+            },
+        )
+
+    def test_sms_update_payload(self):
+        """Test SMS update payload excludes opt_in_mode and properties."""
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            opted_in=datetime(2018, 2, 13, 11, 58, 59),
+            opted_out=datetime(2018, 3, 15, 14, 30, 0),
+            opt_in_mode="double",
+            properties={"source": "web_form"},
+            locale_country="us",
+            locale_language="en",
+            timezone="America/Los_Angeles",
+        )
+
+        self.assertEqual(
+            sms._update_payload,
+            {
+                "sender": "12345",
+                "msisdn": "15035556789",
+                "locale_language": "en",
+                "locale_country": "us",
+                "timezone": "America/Los_Angeles",
+                "opted_in": "2018-02-13T11:58:59",
+                "opted_out": "2018-03-15T14:30:00",
+            },
+        )
+
+    def test_sms_create_and_send_audience_with_new_fields(self):
+        """Test SMS create and send audience includes new fields."""
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            opted_in=datetime(2018, 2, 13, 11, 58, 59),
+            opted_out=datetime(2018, 3, 15, 14, 30, 0),
+            template_fields={"name": "John Doe", "preference": "text"},
+        )
+
+        audience = sms.create_and_send_audience
+        self.assertEqual(audience["ua_sender"], "12345")
+        self.assertEqual(audience["ua_msisdn"], "15035556789")
+        self.assertEqual(audience["ua_opted_in"], datetime(2018, 2, 13, 11, 58, 59))
+        self.assertEqual(audience["ua_opted_out"], datetime(2018, 3, 15, 14, 30, 0))
+        self.assertEqual(audience["name"], "John Doe")
+        self.assertEqual(audience["preference"], "text")
+
+    def test_sms_create_and_send_audience_without_opted_in_raises(self):
+        """Test SMS create and send audience raises error without opted_in."""
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+        )
+
+        with self.assertRaises(ValueError) as context:
+            sms.create_and_send_audience
+
+        self.assertIn("must include opt-in datestamps", str(context.exception))
+
+    def test_sms_opt_in_mode_validation(self):
+        """Test SMS opt_in_mode validation."""
+        # Valid values
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            opt_in_mode="classic",
+        )
+        self.assertEqual(sms.opt_in_mode, "classic")
+
+        sms.opt_in_mode = "double"
+        self.assertEqual(sms.opt_in_mode, "double")
+
+        sms.opt_in_mode = None
+        self.assertIsNone(sms.opt_in_mode)
+
+        # Invalid value
+        with self.assertRaises(ValueError) as context:
+            sms.opt_in_mode = "invalid"
+        self.assertIn("must be one of: 'classic' or 'double'", str(context.exception))
+
+    def test_sms_properties_validation(self):
+        """Test SMS properties validation."""
+        # Valid dict
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+            properties={"key": "value"},
+        )
+        self.assertEqual(sms.properties, {"key": "value"})
+
+        # None value
+        sms.properties = None
+        self.assertIsNone(sms.properties)
+
+        # Invalid type
+        with self.assertRaises(TypeError) as context:
+            sms.properties = "not_a_dict"
+        self.assertIn("must be a dict", str(context.exception))
+
+    def test_sms_opted_out_datetime_handling(self):
+        """Test SMS opted_out datetime handling."""
+        sms = ua.Sms(
+            airship=ua.Airship(TEST_KEY, TEST_SECRET),
+            sender="12345",
+            msisdn="15035556789",
+        )
+
+        # Set opted_out
+        opted_out_dt = datetime(2018, 3, 15, 14, 30, 0)
+        sms.opted_out = opted_out_dt
+        self.assertEqual(sms.opted_out, opted_out_dt)
+
+        # Clear opted_out
+        sms.opted_out = None
+        self.assertIsNone(sms.opted_out)
+
+        # Test in update payload (opted_out is only included in updates, not registration)
+        sms.opted_out = opted_out_dt
+        update_payload = sms._update_payload
+        self.assertEqual(update_payload["opted_out"], "2018-03-15T14:30:00")
 
 
 class TestSmsKeywordInteraction(unittest.TestCase):
