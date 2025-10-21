@@ -59,6 +59,8 @@ class ChannelInfo(object):
     installed: Optional[bool] = None
     last_registration: Optional[str] = None
     opt_in: Optional[bool] = None
+    opt_in_date: Optional[str] = None
+    opt_out_date: Optional[str] = None
     push_address: Optional[str] = None
     tag_groups: Optional[str] = None
     tags: Optional[List] = None
@@ -91,11 +93,16 @@ class ChannelInfo(object):
                 "commercial_opted_out",
                 "transactional_opted_in",
                 "transactional_opted_out",
+                "opt_in_date",
+                "opt_out_date",
             ):
                 try:
-                    payload[key] = datetime.datetime.strptime(
-                        payload[key], "%Y-%m-%dT%H:%M:%S"
-                    )
+                    # Only try to parse if the value is a non-empty string
+                    if payload[key] and isinstance(payload[key], str):
+                        payload[key] = datetime.datetime.strptime(
+                            payload[key], "%Y-%m-%dT%H:%M:%S"
+                        )
+                    # If it's None or empty, leave it as is
                 except (KeyError, ValueError):
                     payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])
@@ -149,9 +156,12 @@ class DeviceInfo(object):
         for key in payload:
             if key in "created":
                 try:
-                    payload[key] = datetime.datetime.strptime(
-                        payload[key], "%Y-%m-%d %H:%M:%S"
-                    )
+                    # Only try to parse if the value is a non-empty string
+                    if payload[key] and isinstance(payload[key], str):
+                        payload[key] = datetime.datetime.strptime(
+                            payload[key], "%Y-%m-%d %H:%M:%S"
+                        )
+                    # If it's None or empty, leave it as is
                 except (KeyError, ValueError):
                     payload[key] = "UNKNOWN"
             setattr(obj, key, payload[key])

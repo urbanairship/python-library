@@ -15,17 +15,11 @@ class TestDeviceListing(unittest.TestCase):
         self.channel1 = "2ce7bb20-03a1-417d-bef5-61306e3755d7"
         self.channel2 = "4c3b6679-16f9-450a-9781-938cb3e9db7c"
         self.channel3 = "aaabf77c-432e-4468-8b4a-0a173685e58f"
-        self.push_address1 = (
-            "28A97947F08FF0E0026EF38D157E0B1777B8DDD33D3B16130679288CEED645AF"
-        )
+        self.push_address1 = "28A97947F08FF0E0026EF38D157E0B1777B8DDD33D3B16130679288CEED645AF"
         self.push_address2 = "dBxM9bDfoBc:APA91bEVEmD6qDehBmYz7xHDwxuv9dYZN9iegJGUBUpV17P51JafpjYrCmSZQkJUkBuKKmizk0eXwxT3UT_gpReFs2aXnp3UdjJ_DhuH1DYBmw_HuOQjI0oklU8DWVr1aurIP2Q3K5We"
         self.push_address3 = None
-        self.device_token1 = (
-            "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB"
-        )
-        self.device_token2 = (
-            "07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13"
-        )
+        self.device_token1 = "0101F9929660BAD9FFF31A0B5FA32620FA988507DFFA52BD6C1C1F4783EDA2DB"
+        self.device_token2 = "07AAFE44CD82C2F4E3FBAB8962A95B95F90A54857FB8532A155DE3510B481C13"
         self.apid1 = "00000000-0000-0000-0000-000000000000"
         self.apid2 = "11111111-1111-1111-1111-111111111111"
         self.limit = 500
@@ -155,9 +149,7 @@ class TestDeviceListing(unittest.TestCase):
 
         self.assertEqual(listing.next_url, airship.urls.get("channel_url"))
 
-        self.assertEqual(
-            listing.params, {"limit": self.limit, "start": self.start_channel}
-        )
+        self.assertEqual(listing.params, {"limit": self.limit, "start": self.start_channel})
 
     def test_device_token_listing(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
@@ -264,3 +256,93 @@ class TestDeviceListing(unittest.TestCase):
             )
             self.assertListEqual(apid_responses[0].tags, [])
             self.assertListEqual(apid_responses[1].tags, ["tag1"])
+
+    def test_channel_list_with_none_datetime_values(self):
+        """Test that ChannelList iteration handles None datetime values without ValueError."""
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "ok": "true",
+                    "channels": [
+                        {
+                            "channel_id": "test-channel-1",
+                            "device_type": "ios",
+                            "installed": "true",
+                            "opt_in": "true",
+                            "background": "true",
+                            "push_address": "test-push-address",
+                            "created": "2023-01-01T12:00:00",
+                            "last_registration": None,  # This should not cause ValueError
+                            "commercial_opted_in": None,
+                            "commercial_opted_out": None,
+                            "transactional_opted_in": None,
+                            "transactional_opted_out": None,
+                            "named_user_id": "null",
+                            "alias": "null",
+                            "tags": ["test_tag"],
+                        },
+                        {
+                            "channel_id": "test-channel-2",
+                            "device_type": "android",
+                            "installed": "true",
+                            "opt_in": "true",
+                            "background": "false",
+                            "push_address": "test-push-address-2",
+                            "created": "2023-01-02T12:00:00",
+                            "last_registration": "2023-01-02T13:00:00",  # Valid datetime
+                            "commercial_opted_in": "2023-01-02T14:00:00",  # Valid datetime
+                            "commercial_opted_out": None,
+                            "transactional_opted_in": None,
+                            "transactional_opted_out": None,
+                            "named_user_id": "null",
+                            "alias": "null",
+                            "tags": ["test_tag2"],
+                        },
+                    ],
+                }
+            ).encode("utf-8")
+            response.status_code = 200
+            mock_request.return_value = response
+
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
+            channel_list = ua.ChannelList(airship)
+            channel_responses = []
+
+            # This should not raise a ValueError even with None datetime values
+            for channel in channel_list:
+                channel_responses.append(channel)
+
+            self.assertEqual(len(channel_responses), 2)
+
+            # First channel with None values
+            self.assertEqual(channel_responses[0].channel_id, "test-channel-1")
+            self.assertEqual(channel_responses[0].device_type, "ios")
+            self.assertEqual(
+                channel_responses[0].created,
+                datetime.datetime.strptime("2023-01-01T12:00:00", "%Y-%m-%dT%H:%M:%S"),
+            )
+            self.assertIsNone(channel_responses[0].last_registration)
+            self.assertIsNone(channel_responses[0].commercial_opted_in)
+            self.assertIsNone(channel_responses[0].commercial_opted_out)
+            self.assertIsNone(channel_responses[0].transactional_opted_in)
+            self.assertIsNone(channel_responses[0].transactional_opted_out)
+
+            # Second channel with valid datetime values
+            self.assertEqual(channel_responses[1].channel_id, "test-channel-2")
+            self.assertEqual(channel_responses[1].device_type, "android")
+            self.assertEqual(
+                channel_responses[1].created,
+                datetime.datetime.strptime("2023-01-02T12:00:00", "%Y-%m-%dT%H:%M:%S"),
+            )
+            self.assertEqual(
+                channel_responses[1].last_registration,
+                datetime.datetime.strptime("2023-01-02T13:00:00", "%Y-%m-%dT%H:%M:%S"),
+            )
+            self.assertEqual(
+                channel_responses[1].commercial_opted_in,
+                datetime.datetime.strptime("2023-01-02T14:00:00", "%Y-%m-%dT%H:%M:%S"),
+            )
+            self.assertIsNone(channel_responses[1].commercial_opted_out)
+            self.assertIsNone(channel_responses[1].transactional_opted_in)
+            self.assertIsNone(channel_responses[1].transactional_opted_out)

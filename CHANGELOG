@@ -1,5 +1,10 @@
 # urbanairship changelog
 
+## 7.3.0
+
+- Adds new opt_in_date and opt_out_date fields to device listing and lookup for SMS channels.
+- Fixes an issue related to attempted datetime conversion from non-string types.
+
 ## 7.2.0
 
 - Adds new fields to the SMS class for enhanced opt-in management:
