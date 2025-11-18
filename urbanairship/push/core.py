@@ -56,9 +56,10 @@ class Push(object):
     def payload(self) -> Dict[str, Any]:
         data: Dict[str, Any] = {
             "audience": self.audience,
-            "notification": self.notification,
             "device_types": self.device_types,
         }
+        if self.notification is not None:
+            data["notification"] = self.notification
         if self.options is not None:
             data["options"] = self.options
         if self.campaigns is not None:
@@ -105,12 +106,14 @@ class Push(object):
         :raises ValueError: Required keys missing or incorrect values included.
         :raises ConnectionFailure: Connection failed.
         """
-        if "email" in self.payload["notification"]:
+        if self.notification is not None and "email" in self.notification:
             if self.payload["device_types"] == "all":
                 raise ValueError("device_types cannot be all when including an email override")
             if "email" not in self.payload["device_types"]:
                 raise ValueError("email must be in device_types if email override is included")
-        if "email" in self.payload["device_types"] and "email" not in self.payload["notification"]:
+        if "email" in self.payload["device_types"] and (
+            self.notification is None or "email" not in self.notification
+        ):
             raise ValueError("email override must be included when email is in device_types")
 
         body = json.dumps(self.payload)

@@ -709,9 +709,7 @@ class TestPush(unittest.TestCase):
         sched = ua.ScheduledPush(None)
         sched.push = p
         sched.name = "a schedule in device local time"
-        sched.schedule = ua.local_scheduled_time(
-            datetime.datetime(2015, 1, 1, 12, 0, 0)
-        )
+        sched.schedule = ua.local_scheduled_time(datetime.datetime(2015, 1, 1, 12, 0, 0))
 
         self.assertEqual(
             sched.payload,
@@ -750,6 +748,50 @@ class TestPush(unittest.TestCase):
             push.device_types = ua.all_
             pr = push.send()
             self.assertEqual(pr.push_ids, ["0492662a-1b52-4343-a1f9-c6b0c72931c0"])
+
+    def test_push_with_message_only_no_notification(self):
+        """Test that sending a push with only a message (no notification) works correctly."""
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "ok": True,
+                    "operation_id": "780f6697-6b4e-49ea-ac91-b5c184516a15",
+                    "push_ids": ["0b4b5180-b990-11f0-a452-000a1acef8dc"],
+                    "message_ids": ["C0tRgLmQEfCkUgAKGs743A"],
+                    "content_urls": [],
+                    "localized_ids": [],
+                }
+            ).encode("utf-8")
+            response.status_code = 202
+            mock_request.return_value = response
+
+            airship = ua.Airship(TEST_KEY, TEST_SECRET)
+            push = ua.Push(airship)
+            push.audience = ua.named_user("123abc")
+            push.device_types = ua.device_types("ios")
+            push.message = ua.message(
+                "Hello",
+                "Hello World",
+                content_type="plain/text",
+            )
+            # Verify the payload structure (notification should be omitted when None)
+            self.assertEqual(
+                push.payload,
+                {
+                    "audience": {"named_user": "123abc"},
+                    "device_types": ["ios"],
+                    "message": {
+                        "title": "Hello",
+                        "body": "Hello World",
+                        "content_type": "plain/text",
+                    },
+                },
+            )
+            # This should not raise a TypeError
+            pr = push.send()
+            self.assertEqual(pr.push_ids, ["0b4b5180-b990-11f0-a452-000a1acef8dc"])
+            self.assertEqual(pr.payload.get("message_ids"), ["C0tRgLmQEfCkUgAKGs743A"])
 
     def test_schedule_success(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
@@ -803,9 +845,7 @@ class TestPush(unittest.TestCase):
             sched.schedule = ua.scheduled_time(datetime.datetime.now())
 
             template_push = ua.TemplatePush(airship)
-            template_push.audience = ua.ios_channel(
-                "780ba0c5-45be-4f29-befa-39135cb05b59"
-            )
+            template_push.audience = ua.ios_channel("780ba0c5-45be-4f29-befa-39135cb05b59")
             template_push.device_types = ua.device_types("ios")
             template_push.merge_data = ua.merge_data(
                 template_id="780ba0c5-45be-4f29-befa-39135cb05b59",
@@ -880,8 +920,7 @@ class TestPush(unittest.TestCase):
             mock_request.return_value = response
 
             url = (
-                "https://go.urbanairship.com/api/schedules/"
-                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                "https://go.urbanairship.com/api/schedules/" "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
 
             airship = ua.Airship(TEST_KEY, TEST_SECRET)
@@ -902,8 +941,7 @@ class TestPush(unittest.TestCase):
             mock_request.return_value = response
 
             url = (
-                "https://go.urbanairship.com/api/schedules/"
-                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                "https://go.urbanairship.com/api/schedules/" "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
             sched.url = url
 
@@ -917,8 +955,7 @@ class TestPush(unittest.TestCase):
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             url = (
-                "https://go.urbanairship.com/api/schedules/"
-                "0492662a-1b52-4343-a1f9-c6b0c72931c0"
+                "https://go.urbanairship.com/api/schedules/" "0492662a-1b52-4343-a1f9-c6b0c72931c0"
             )
 
             response = requests.Response()
@@ -947,8 +984,12 @@ class TestPush(unittest.TestCase):
             sched.update()
 
     def test_schedules_listing(self):
-        self.url1 = "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc"
-        self.url2 = "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c"
+        self.url1 = (
+            "https://go.urbanairship.com/api/schedules/16153636-4434-441f-bad4-86ab0f1778bc"
+        )
+        self.url2 = (
+            "https://go.urbanairship.com/api/schedules/ee03b71b-5b88-4b87-93cf-2d9dc8b87e7c"
+        )
 
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
