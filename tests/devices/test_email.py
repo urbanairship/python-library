@@ -173,6 +173,17 @@ class TestEmail(unittest.TestCase):
 
             self.assertEqual(200, r.status_code)
 
+    def test_email_address_with_special_chars(self):
+        # Addresses with apostrophes and other valid-but-previously-blocked chars
+        for addr in ["o'reilly@example.com", "test+tag@example.co.uk", "user.name@sub.domain.com"]:
+            email_obj = ua.Email(airship=self.airship, address=addr)
+            self.assertEqual(addr, email_obj.address)
+
+    def test_email_address_invalid(self):
+        for addr in ["notanemail", "missing-at-sign.com", "@nodomain", "no-dot@nodot"]:
+            with self.assertRaises(ValueError):
+                ua.Email(airship=self.airship, address=addr)
+
     def test_email_lookup(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
             response = requests.Response()
