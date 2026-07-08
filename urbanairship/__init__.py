@@ -40,6 +40,7 @@ from .devices import (
     TagList,
 )
 from .experiments import ABTest, Experiment, Variant
+from .journeys import Journeys
 from .push import (
     CreateAndSendPush,
     Push,
@@ -235,6 +236,7 @@ __all__: List[Any] = [
     ABTest,
     Experiment,
     Variant,
+    Journeys,
 ]
 
 

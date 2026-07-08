@@ -26,6 +26,7 @@ packages = [
     "urbanairship.automation",
     "urbanairship.experiments",
     "urbanairship.custom_events",
+    "urbanairship.journeys",
 ]
 package-data = { "urbanairship" = ["py.typed"] }
 

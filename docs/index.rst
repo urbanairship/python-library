@@ -96,6 +96,7 @@ Contents
    audience.rst
    reports.rst
    custom_events.rst
+   journeys.rst
 
 
 Indices and tables

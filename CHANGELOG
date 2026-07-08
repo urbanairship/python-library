@@ -1,5 +1,11 @@
 # urbanairship changelog
 
+## 7.4.0
+
+- Adds support for the Journeys API via the `urbanairship.Journeys` class, with
+  `trigger` and `exit` methods for entering and exiting audiences from a
+  Sequence. These endpoints only support OAuth2 authentication.
+
 ## 7.3.0
 
 - Adds new opt_in_date and opt_out_date fields to device listing and lookup for SMS channels.

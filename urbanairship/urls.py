@@ -59,6 +59,8 @@ class Urls:
         self.attachment_url = self.base_url + "attachments/"
         self.custom_events_url = self.base_url + "custom-events/"
         self.tag_lists_url = self.base_url + "tag-lists/"
+        self.journeys_trigger_url = self.base_url + "journeys/trigger/"
+        self.journeys_exit_url = self.base_url + "journeys/exit/"
 
     def get(self, endpoint: str) -> str:
         url: str = getattr(self, endpoint)
