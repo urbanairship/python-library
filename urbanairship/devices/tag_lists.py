@@ -88,7 +88,7 @@ class TagList:
             response = self.airship.request(
                 method="PUT",
                 body=GzipCompressReadStream(open_file),
-                url=f"{self.airship.urls.get('tag_lists_url')}/{self.list_name}/csv",
+                url=f"{self.airship.urls.get('tag_lists_url')}{self.list_name}/csv",
                 content_type="text/csv",
                 version=3,
                 encoding="gzip",
@@ -103,7 +103,7 @@ class TagList:
         response = self.airship.request(
             method="GET",
             body={},
-            url=f"{self.airship.urls.get('tag_lists_url')}/{self.list_name}/errors",
+            url=f"{self.airship.urls.get('tag_lists_url')}{self.list_name}/errors",
             version=3,
         )
         return response

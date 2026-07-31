@@ -1,10 +1,23 @@
 # urbanairship changelog
 
+## 7.4.1
+
+- Fixes a bug where `TagList.upload`, `TagList.get_errors`, `ABTest.delete`, and `ABTest.lookup`
+  were constructing URLs with double slashes (e.g. `tag-lists//name/csv`).
+
 ## 7.4.0
 
 - Adds support for the Journeys API via the `urbanairship.Journeys` class, with
   `trigger` and `exit` methods for entering and exiting audiences from a
   Sequence. These endpoints only support OAuth2 authentication.
+
+## 7.3.2
+
+- Changes email validation to allow for more valid email addresses.
+
+## 7.3.1
+
+- Fixes an issue where a `TypeError` was improperly raised when sending a `message` without a `notification`.
 
 ## 7.3.0
 
@@ -52,6 +65,10 @@
 ## 6.1.0
 
 - Adds Support for Tag Lists using the `urbanairship.TagList` class
+
+## 6.0.1
+
+- Fixes an issue where the `backoff` package was not included in build requirements.
 
 ## 6.0.0
 

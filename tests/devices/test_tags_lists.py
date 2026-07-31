@@ -58,6 +58,9 @@ class TestTagLists(unittest.TestCase):
             result = self.tag_list.upload(file_path=self.file_path)
 
             self.assertEqual(result.json(), {"ok": True})
+            called_url = mock_request.call_args[0][2]
+            self.assertNotIn("//", called_url.replace("https://", ""))
+            self.assertTrue(called_url.endswith(f"tag-lists/{self.list_name}/csv"))
 
     def test_get_errors(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:
@@ -68,6 +71,9 @@ class TestTagLists(unittest.TestCase):
             result = self.tag_list.get_errors()
 
             self.assertEqual(result.json(), {"ok": True})
+            called_url = mock_request.call_args[0][2]
+            self.assertNotIn("//", called_url.replace("https://", ""))
+            self.assertTrue(called_url.endswith(f"tag-lists/{self.list_name}/errors"))
 
     def test_list(self):
         with mock.patch.object(ua.Airship, "_request") as mock_request:

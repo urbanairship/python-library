@@ -22,9 +22,7 @@ class ABTest(object):
         if isinstance(limit, int):
             params["limit"] = limit
 
-        response = self.airship.request(
-            method="GET", body=None, params=params, url=url, version=3
-        )
+        response = self.airship.request(method="GET", body=None, params=params, url=url, version=3)
         return response
 
     def list_experiments(self) -> Response:
@@ -63,7 +61,7 @@ class ABTest(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         """
 
-        url = self.airship.urls.get("experiments_schedule_url") + "/" + experiment_id
+        url = self.airship.urls.get("experiments_schedule_url") + experiment_id
         response = self.airship.request(method="DELETE", body=None, url=url, version=3)
 
         return response
@@ -94,7 +92,7 @@ class ABTest(object):
         :keyword experiment_id: The unique identifier of the experiment, type string
         """
 
-        url = self.airship.urls.get("experiments_url") + "/" + experiment_id
+        url = self.airship.urls.get("experiments_url") + experiment_id
         response = self.airship.request(method="GET", body=None, url=url, version=3)
 
         return response
