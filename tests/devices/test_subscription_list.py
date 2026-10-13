@@ -36,3 +36,42 @@ class TestSubscriptionList(unittest.TestCase):
             results = sub_list.unsubscribe(audience=self.ios_channel)
 
             self.assertEqual(results.json(), {"ok": True})
+
+    def test_list(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps(
+                {
+                    "ok": True,
+                    "subscription_lists": [
+                        {
+                            "list_id": "example_listId-1",
+                            "name": "A nice readable name 1",
+                            "description": "A very nice description for you.",
+                            "scopes": ["email"],
+                            "default_opted_in": False,
+                            "message_type": "transactional",
+                        }
+                    ],
+                }
+            ).encode("utf-8")
+            mock_request.return_value = response
+
+            result = ua.SubscriptionList.list(airship=self.airship)
+
+            body = result.json()
+            self.assertEqual(body["ok"], True)
+
+            first = body["subscription_lists"][0]
+            self.assertEqual(first["list_id"], "example_listId-1")
+            self.assertEqual(first["name"], "A nice readable name 1")
+            self.assertEqual(first["scopes"], ["email"])
+            self.assertEqual(first["default_opted_in"], False)
+            self.assertEqual(first["message_type"], "transactional")
+
+            called_url = mock_request.call_args[1].get("url")
+            if called_url is None:
+                called_url = mock_request.call_args[0][2]
+            self.assertNotIn("//", called_url.replace("https://", ""))
+            self.assertTrue(called_url.endswith("subscription_lists/"))
+            self.assertNotIn("channels/subscription_lists", called_url)
