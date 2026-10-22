@@ -46,7 +46,7 @@ class TestSubscriptionList(unittest.TestCase):
             result = ua.SubscriptionList.list(airship=self.airship)
 
             self.assertEqual(result.json(), {"ok": True})
-self.assertEqual(mock_request.call_args[0][0], "GET")
+            self.assertEqual(mock_request.call_args[0][0], "GET")
             called_url = mock_request.call_args[0][2]
             self.assertNotIn("//", called_url.replace("https://", ""))
             self.assertTrue(called_url.endswith("subscription_lists/"))
