@@ -36,6 +36,7 @@ class Urls:
         self.attributes_list_url = self.base_url + "attribute-lists/"
         self.message_center_delete_url = self.base_url + "user/messages/"
         self.subscription_lists_url = self.channel_url + "subscription_lists/"
+        self.subscription_lists_list_url = self.base_url + "subscription_lists/"
         self.templates_url = self.base_url + "templates/"
         self.schedule_template_url = self.templates_url + "schedules/"
         self.pipelines_url = self.base_url + "pipelines/"

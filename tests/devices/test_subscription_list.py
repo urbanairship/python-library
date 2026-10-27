@@ -36,3 +36,18 @@ class TestSubscriptionList(unittest.TestCase):
             results = sub_list.unsubscribe(audience=self.ios_channel)
 
             self.assertEqual(results.json(), {"ok": True})
+
+    def test_list(self):
+        with mock.patch.object(ua.Airship, "_request") as mock_request:
+            response = requests.Response()
+            response._content = json.dumps({"ok": True}).encode("utf-8")
+            mock_request.return_value = response
+
+            result = ua.SubscriptionList.list(airship=self.airship)
+
+            self.assertEqual(result.json(), {"ok": True})
+            self.assertEqual(mock_request.call_args[0][0], "GET")
+            called_url = mock_request.call_args[0][2]
+            self.assertNotIn("//", called_url.replace("https://", ""))
+            self.assertTrue(called_url.endswith("subscription_lists/"))
+            self.assertNotIn("channels/subscription_lists", called_url)

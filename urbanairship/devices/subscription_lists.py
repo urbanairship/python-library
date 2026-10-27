@@ -8,12 +8,13 @@ from urbanairship.client import BaseClient
 
 class SubscriptionList(object):
     """
-    Subscribe or unsubscribe channels to/from Subscription lists. These lists must
-    be created in the Airship web dashboard prior to making these calls. The
-    value for list_id can be found after creating these lists.
+    Subscribe or unsubscribe channels to/from subscription lists, or list all
+    subscription lists for a project. Lists must be created in the Airship web
+    dashboard. The list_id can be found after creating a list.
 
     :param airship: Required. An urbanairship.Airship instance.
-    :param list_id: Required. The list_id from the Airship web dashboard.
+    :param list_id: Required for subscribe/unsubscribe. The list_id from the
+    Airship web dashboard.
     """
 
     def __init__(self, airship: BaseClient, list_id: str) -> None:
@@ -58,6 +59,23 @@ class SubscriptionList(object):
             method="POST",
             body=json.dumps(payload),
             url=self.airship.urls.get("subscription_lists_url"),
+            version=3,
+        )
+
+        return response
+
+    @classmethod
+    def list(cls, airship: BaseClient) -> Response:
+        """
+        List all subscription lists for this project.
+
+        :param airship: Required. An urbanairship.Airship instance.
+        :return: Response object
+        """
+        response = airship.request(
+            method="GET",
+            body={},
+            url=airship.urls.get("subscription_lists_list_url"),
             version=3,
         )
 

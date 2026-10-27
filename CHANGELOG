@@ -1,5 +1,10 @@
 # urbanairship changelog
 
+## 7.5.0
+
+- Adds support for the Subscription Lists GET via the `urbanairship.SubscriptionList` class, with
+  `list` method for getting subscription lists.
+
 ## 7.4.1
 
 - Fixes a bug where `TagList.upload`, `TagList.get_errors`, `ABTest.delete`, and `ABTest.lookup`
